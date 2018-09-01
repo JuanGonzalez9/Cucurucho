@@ -1,39 +1,32 @@
-#include "SDL2/SDL.h"
-#include <iostream>
-//#include <SDL2/SDL_mixer.h>
-using namespace std;
+/*This source code copyrighted by Lazy Foo' Productions (2004-2015)
+and may not be redistributed without written permission.*/
 
-int main(int argc, char* argv[]) {
+//Using SDL and standard IO
+#include <SDL2/SDL.h>
+#include "SDL2/SDL_image.h"
+#include <stdio.h>
+#include <string>
+#include "Juego.h"
 
-    SDL_Window *window;                    // Declare a pointer
+//esto va en el archivo de configuracion
+int posVentanaX = SDL_WINDOWPOS_CENTERED;
+int posVentanaY = SDL_WINDOWPOS_CENTERED;
+int altoVentana = 600;
+int anchoVentana = 800;
 
-    SDL_Init(SDL_INIT_VIDEO);              // Initialize SDL2
+int main (int argc, char *argv[]){
 
-    // Create an application window with the following settings:
-    window = SDL_CreateWindow(
-        "An SDL2 window",                  // window title
-        SDL_WINDOWPOS_UNDEFINED,           // initial x position
-        SDL_WINDOWPOS_UNDEFINED,           // initial y position
-        640,                               // width, in pixels
-        480,                               // height, in pixels
-        SDL_WINDOW_OPENGL                  // flags - see below
-    );
+	 Juego* miJuego = new Juego();
+	 miJuego->inicializar("CONTRA",posVentanaX,posVentanaY,anchoVentana,altoVentana);
 
-    // Check that the window was successfully created
-    if (window == NULL) {
-        // In the case that the window could not be made...
-        printf("Could not create window: %s\n", SDL_GetError());
-        return 1;
-    }
+	 while(miJuego->jugando()){
+		 miJuego->manejarEventos();
+		 miJuego->actualizar();
+		 miJuego->renderizar();
+	 }
 
-    // The window is open: could enter program loop here (see SDL_PollEvent())
+	 //destruyo las clases
+	 miJuego->limpiar();
 
-    SDL_Delay(3000);  // Pause execution for 3000 milliseconds, for example
-
-    // Close and destroy the window
-    SDL_DestroyWindow(window);
-
-    // Clean up
-    SDL_Quit();
-    return 0;
-}
+	 return 0;
+ }
