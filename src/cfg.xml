@@ -1,0 +1,31 @@
+<configuracion>
+	<debug>
+		<level>
+			DEBUG
+		</level>
+		<levelf>
+			1.69
+		</levelf>
+		<levelll>
+			789
+		</levelll>
+	</debug>
+	<escenarios>
+		<nivel1>
+			<fondo1>/home/file11.bmp</fondo1>
+			<fondo2>/home/file12.bmp</fondo2>
+			<fondo3>/home/file13.bmp</fondo3>
+		</nivel1>
+		<nivel2>
+			<fondo1>/home/file21.bmp</fondo1>
+			<fondo2>/home/file22.bmp</fondo2>
+			<fondo3>/home/file23.bmp</fondo3>
+		</nivel2>
+		<nivel3>
+			<fondo1 brillo="120">/home/file31.bmp</fondo1>
+			<fondo2>/home/file32.bmp</fondo2>
+			<fondo3>/home/file33.bmp</fondo3>
+		</nivel3>
+	</escenarios>
+</configuracion>
+
