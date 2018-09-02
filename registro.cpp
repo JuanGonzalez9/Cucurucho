@@ -2,17 +2,11 @@
 #include <iostream> //Podemos utilizar la consola
 #include <stdlib.h>
 #include <ctime>
+#include "registro.hpp"
 
 using namespace std; // se usa esta linea para no anteponer en cada cout el std
 
-class LogEventos {
-public:
-	const char* tipoLog;
-	void registrar(const char* tipoEvento, const char* evento_ocurrido);
-	void borrarEventos();
-	void definirTipoLog(const char* tipo);
-	void mostrarEventos();
-};
+
 
 void LogEventos::registrar(const char* tipoEvento,const char* evento_ocurrido){
 	if(tipoLog == tipoEvento){
@@ -47,23 +41,12 @@ void LogEventos::definirTipoLog(const char* tipo){
 	return;
 }
 
-void mostrarEventos(){
+void LogEventos::mostrarEventos(){
 	system("cat registro.txt");
 }
 
 
 int main(){
-	LogEventos registro;
-	registro.definirTipoLog("error");
-	
-	registro.registrar("error", "sucedio que tal cosa...");
-	mostrarEventos();
-
-	registro.borrarEventos();
-	
-	mostrarEventos();
-
-
 	return 0;
 }
 
