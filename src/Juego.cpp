@@ -13,6 +13,7 @@ Juego::Juego() {
 	ventana = NULL;
 	renderer = NULL;
 	estaJugando = false;
+	sdlInicializado = 0;
 }
 
 void Juego::inicializar(const char* titulo,int posX,int posY,int ancho,int alto){

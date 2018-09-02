@@ -26,7 +26,7 @@ public:
 
 
 private:
-	const int sdlInicializado = 0;
+	int sdlInicializado;
 	bool estaJugando;
 	SDL_Window* ventana;
 	SDL_Renderer* renderer;
