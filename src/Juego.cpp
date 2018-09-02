@@ -10,13 +10,23 @@
 using namespace std;
 
 SDL_Texture* texturaJugador;
-SDL_Rect rectaDestino;
+SDL_Rect rectaDestino,rectaOrigen;
 
 Juego::Juego() {
 	ventana = NULL;
 	renderer = NULL;
 	estaJugando = false;
 	sdlInicializado = 0;
+
+	rectaDestino.x = 0;
+	rectaDestino.y = 0;
+	rectaDestino.h = 64;
+	rectaDestino.w = 64;
+
+	rectaOrigen.x = 0;
+	rectaOrigen.y = 0;
+	rectaOrigen.h = 204;
+	rectaOrigen.w = 64;
 }
 
 void Juego::inicializar(const char* titulo,int posX,int posY,int ancho,int alto){
@@ -67,12 +77,12 @@ void Juego::inicializar(const char* titulo,int posX,int posY,int ancho,int alto)
 }
 
 void Juego::actualizar(){
-
+	rectaDestino.x++;
 }
 
 void Juego::renderizar(){
 	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer,texturaJugador,NULL,NULL);
+	SDL_RenderCopy(renderer,texturaJugador,&rectaOrigen,&rectaDestino);
 	SDL_RenderPresent(renderer);
 }
 

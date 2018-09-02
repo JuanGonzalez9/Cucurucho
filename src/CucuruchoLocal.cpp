@@ -19,6 +19,8 @@ int main (int argc, char *argv[]){
 		 miJuego->manejarEventos();
 		 miJuego->actualizar();
 		 miJuego->renderizar();
+
+		 SDL_Delay(5);
 	 }
 
 	 //destruyo las clases
