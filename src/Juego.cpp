@@ -9,6 +9,9 @@
 
 using namespace std;
 
+SDL_Texture* texturaJugador;
+SDL_Rect rectaDestino;
+
 Juego::Juego() {
 	ventana = NULL;
 	renderer = NULL;
@@ -58,6 +61,9 @@ void Juego::inicializar(const char* titulo,int posX,int posY,int ancho,int alto)
 		SDL_SetRenderDrawColor(renderer,255,255,255,255);
 	}
 
+	SDL_Surface* temp = IMG_Load("imagenes/foo.png");
+	texturaJugador = SDL_CreateTextureFromSurface(renderer,temp);
+	SDL_FreeSurface(temp);
 }
 
 void Juego::actualizar(){
@@ -66,6 +72,7 @@ void Juego::actualizar(){
 
 void Juego::renderizar(){
 	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer,texturaJugador,NULL,NULL);
 	SDL_RenderPresent(renderer);
 }
 
