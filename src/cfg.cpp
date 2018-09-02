@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <map>
-#include <cfg.hpp>
+#include "cfg.hpp"
 #include "cfg_defaults.cpp"
 
 extern "C"
