@@ -30,7 +30,9 @@ private:
 	std::string gets_from_map (const char *path);
 	template <class t> t get_i_number (const char *path, const char *type_name, t (*i_function) (const std::string&, size_t*, int));
 	template <typename t> t get_fp_number (const char *path, const char *type_name, t (*fp_function) (const std::string&, size_t*));
-	void dump_default ();
+	void dump_defaults ();
+	xmlNode * add_root_node (xmlDoc *doc, std::string & name);
+	xmlNode * add_child_node (xmlDoc *doc, xmlNode *parent_node, std::string & name);
 };
 
 class configure_exception: public std::invalid_argument

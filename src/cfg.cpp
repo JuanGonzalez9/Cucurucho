@@ -3,14 +3,15 @@
 #include <iostream>
 #include <sstream>
 #include <map>
-#include "cfg.hpp"
 #include "cfg_defaults.cpp"
+#include "cfg.hpp"
 
 extern "C"
 {
 	#include <sys/types.h>
 	#include <sys/stat.h>
 	#include <unistd.h>
+	#include <string.h>
 	#include <errno.h>
 }
 
@@ -45,9 +46,9 @@ configure::configure ()
 	LIBXML_TEST_VERSION
 	xmlSetGenericErrorFunc (nullptr, xml_error_handler);
 	struct stat sb;
-	if (stat ("cfg.xml", &sb) == -1 || (sb.st_mode & S_IFREG) == 0) {
+	if (stat ("cfg.xml", &sb) == -1) {
 		// TODO log
-		dump_default ();
+		dump_defaults ();
 	}
 	doc = xmlReadFile ("cfg.xml", NULL, 0);
 	if (doc == nullptr) {
@@ -70,9 +71,77 @@ configure::~configure ()
 	xmlCleanupParser ();
 }
 
-void configure::dump_default ()
+xmlNode * configure::add_root_node (xmlDoc *doc, std::string & name)
 {
-	// TODO implementar
+	xmlNode *node = xmlNewNode (nullptr, (const xmlChar*)name.c_str ());
+	if (node == nullptr) {
+		// TODO log
+		return nullptr;
+	}
+	xmlDocSetRootElement (doc, node);
+	return node;
+}
+
+xmlNode * configure::add_child_node (xmlDoc *doc, xmlNode *parent_node, std::string & name)
+{
+	if (parent_node == nullptr ) {
+		if ((parent_node = xmlDocGetRootElement (doc)) == nullptr) {
+			return add_root_node (doc, name);
+		} else if (strcmp ((const char*)parent_node->name, name.c_str ()) == 0) {
+			return parent_node;
+		} else {
+			// TODO log
+			return nullptr;
+		}
+	} else {
+		for (xmlNode * i = xmlFirstElementChild (parent_node); i != nullptr; i = xmlNextElementSibling (parent_node)) {
+			if (strcmp ((const char*)i->name, name.c_str ()) == 0) {
+				return i;
+			}
+		}
+		xmlNode *node = xmlNewNode (nullptr, (const xmlChar*)name.c_str ());
+		if (node == nullptr) {
+			// TODO log
+			return nullptr;
+		}
+		xmlAddChild (parent_node, node);
+		return node;
+	}
+}
+
+void configure::dump_defaults ()
+{
+	doc = xmlNewDoc ((const xmlChar*)"1.0");
+	if (doc == nullptr) {
+		// TODO log
+		return;
+	}
+	xmlNode *node;
+	std::string s, subs;
+	std::string::size_type f, l;
+	for (std::map<std::string, std::string>::iterator i = defaults.begin(); i != defaults.end(); ++i) {
+		s = i->first;
+		f = s.find ("//", 0);
+		node = nullptr;
+		while (f != std::string::npos && f+2 < s.length()) {
+			f += 2;
+			l = s.find ("//", f);
+			subs = s.substr (f, l-f);
+			if ((node = add_child_node (doc, node, subs)) == nullptr) {
+				break;
+			}
+			f = l;
+		}
+		if (node) {
+			xmlNodeAddContent (node, (const xmlChar*)i->second.c_str());
+		}
+	}
+	xmlKeepBlanksDefault (0);
+	if (xmlSaveFormatFile ("cfg.xml", doc, 1) == -1)
+	{
+		// TODO log
+		return;
+	}
 }
 
 std::string configure::gets_from_xml (const char *path)
