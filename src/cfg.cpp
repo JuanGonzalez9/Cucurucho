@@ -49,6 +49,7 @@ configure::configure ()
 	if (stat ("cfg.xml", &sb) == -1) {
 		// TODO log
 		dump_defaults ();
+		return;
 	}
 	doc = xmlReadFile ("cfg.xml", NULL, 0);
 	if (doc == nullptr) {
@@ -140,8 +141,9 @@ void configure::dump_defaults ()
 	if (xmlSaveFormatFile ("cfg.xml", doc, 1) == -1)
 	{
 		// TODO log
-		return;
 	}
+	xmlFreeDoc (doc);
+	doc = nullptr;
 }
 
 std::string configure::gets_from_xml (const char *path)
