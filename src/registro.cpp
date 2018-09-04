@@ -8,8 +8,8 @@ using namespace std; // se usa esta linea para no anteponer en cada cout el std
 
 
 
-void LogEventos::registrar(const char* tipoEvento,const char* evento_ocurrido){
-	if(tipoLog == tipoEvento){
+void LogEventos::registrar(LogEventos::TipoLog tipoEvento,const char* evento_ocurrido){
+	if(tipoLog >= tipoEvento){
 
 		ofstream archivo("registro.txt",ios::app);
 		string hora, nombre_evento;
@@ -28,25 +28,23 @@ void LogEventos::registrar(const char* tipoEvento,const char* evento_ocurrido){
 
 
 	}
-	return;
+	
 }
 
 void LogEventos::borrarEventos(){
 	ofstream archivo("registro.txt",ios::trunc); 
-	return;
+	
 }
 
-void LogEventos::definirTipoLog(const char* tipo){
+void LogEventos::definirTipoLog(LogEventos::TipoLog tipo){
 	tipoLog = tipo;
-	return;
+	
 }
 
 void LogEventos::mostrarEventos(){
-	system("cat registro.txt");
-}
 
-
-int main(){
-	return 0;
+	if (system("cat registro.txt") == -1){
+		registrar(error,"No se pudo mostrar el registro en pantalla");
+	}
 }
 

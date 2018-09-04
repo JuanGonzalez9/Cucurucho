@@ -7,12 +7,14 @@
 #include <ctime>
 
 
+
 class LogEventos {
 public:
-	const char* tipoLog;
-	void registrar(const char* tipoEvento, const char* evento_ocurrido);
+	typedef enum {error, info, debug}TipoLog;
+	TipoLog tipoLog;
+	void registrar(TipoLog tipoEvento, const char* evento_ocurrido);
 	void borrarEventos();
-	void definirTipoLog(const char* tipo);
+	void definirTipoLog(TipoLog tipo);
 	void mostrarEventos();
 };
 
