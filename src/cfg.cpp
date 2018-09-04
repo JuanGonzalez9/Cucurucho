@@ -186,16 +186,23 @@ std::string configure::gets_from_map (const char *path)
 	return i->second;
 }
 
-std::string configure::gets (const char *path)
+std::string configure::gets (const char *path, std::function<bool(std::string & s, bool trusted)> valid)
 {
 	std::string s = gets_from_xml (path);
-	if (s.empty()) {
+	if (s.empty() || !valid (s, false)) {
 		s = gets_from_map (path);
+		if (!valid (s, true)) {
+			// TODO log
+			std::stringstream ss ;
+			ss << "Opcion por defecto para " << path << " invalida";
+			s.clear();
+			throw configure_exception (ss.str());
+		}
 	}
 	return s;
 }
 
-template <typename t> t configure::get_i_number (const char *path, const char *type_name, t (*f) (const std::string&, size_t*, int))
+template <typename t> t configure::get_i_number (const char *path, typename types<t>::i_function f, std::function<bool(int i, bool trusted)> valid)
 {
 	t n;
 	std::string::size_type size;
@@ -204,23 +211,24 @@ template <typename t> t configure::get_i_number (const char *path, const char *t
 	try{
 		std::string s = gets_from_xml (path);
 		n = f (s, &size, 10);
-		if (size != s.length()) throw 1;
-		return n;
+		if (size == s.length() && valid (n, false)) {
+			return n;
+		}
 	} catch (...){}
 	// La opción por defecto debe estar sí o sí en cfg_defaults.cpp
 	std::string s = gets_from_map (path);
 	n = f (s, &size, 10);
-	if (size != s.length())
+	if (size != s.length() || !valid (n, true))
 	{
   		// TODO log
   		std::stringstream ss ;
-  		ss << "Opcion por defecto para " << path << " invalida, se esperaba un " << type_name;
+  		ss << "Opcion por defecto para " << path << " invalida";
 		throw configure_exception (ss.str());
 	}
 	return n;
 }
 
-template <typename t> t configure::get_fp_number (const char *path, const char *type_name, t (*f) (const std::string&, size_t*))
+template <typename t> t configure::get_fp_number (const char *path, typename types<t>::fp_function f, std::function<bool(int i, bool trusted)> valid)
 {
 	t n;
 	std::string::size_type size;
@@ -229,60 +237,61 @@ template <typename t> t configure::get_fp_number (const char *path, const char *
 	try{
 		std::string s = gets_from_xml (path);
 		n = f (s, &size);
-		if (size != s.length()) throw 1;
-		return n;
+		if (size == s.length() && valid (n, false)) {
+			return n;
+		}
 	} catch (...){}
 	// La opción por defecto debe estar sí o sí en cfg_defaults.cpp
 	std::string s = gets_from_map (path);
 	n = f (s, &size);
-	if (size != s.length())
+	if (size != s.length() || !valid (n, true))
 	{
   		// TODO log
   		std::stringstream ss ;
-  		ss << "Opcion por defecto para " << path << " invalida, se esperaba un " << type_name;
+  		ss << "Opcion por defecto para " << path << " invalida";
 		throw configure_exception (ss.str());
 	}
 	return n;
 }
 
-int configure::geti (const char *path)
+int configure::geti (const char *path, std::function<bool(int, bool)> valid)
 {
-	return get_i_number<int> (path, "int", std::stoi);
+	return get_i_number<int> (path, std::stoi, valid);
 }
 
-long configure::getl (const char *path)
+long configure::getl (const char *path, std::function<bool(long, bool)> valid)
 {
-	return get_i_number<long> (path, "long", std::stol);
+	return get_i_number<long> (path, std::stol, valid);
 }
 
-long long configure::getll (const char *path)
+long long configure::getll (const char *path, std::function<bool(long long, bool)> valid)
 {
-	return get_i_number<long long> (path, "long long", std::stoll);
+	return get_i_number<long long> (path, std::stoll, valid);
 }
 
-unsigned long configure::getul (const char *path)
+unsigned long configure::getul (const char *path, std::function<bool(unsigned long, bool)> valid)
 {
-	return get_i_number<unsigned long> (path, "unsigned long", std::stoul);
+	return get_i_number<unsigned long> (path, std::stoul, valid);
 }
 
-unsigned long long configure::getull (const char *path)
+unsigned long long configure::getull (const char *path, std::function<bool(unsigned long long, bool)> valid)
 {
-	return get_i_number<unsigned long long> (path, "unsigned long long", std::stoull);
+	return get_i_number<unsigned long long> (path, std::stoull, valid);
 }
 
-float configure::getf (const char *path)
+float configure::getf (const char *path, std::function<bool(float, bool)> valid)
 {
-	return get_fp_number<float> (path, "float", std::stof);
+	return get_fp_number<float> (path, std::stof, valid);
 }
 
-double configure::getd (const char *path)
+double configure::getd (const char *path, std::function<bool(double, bool)> valid)
 {
-	return get_fp_number<double> (path, "double", std::stod);
+	return get_fp_number<double> (path, std::stod, valid);
 }
 
-long double configure::getld (const char *path)
+long double configure::getld (const char *path, std::function<bool(long double, bool)> valid)
 {
-	return get_fp_number<long double> (path, "long double", std::stold);
+	return get_fp_number<long double> (path, std::stold, valid);
 }
 
 configure_init::configure_init ()
