@@ -11,11 +11,13 @@
 class LogEventos {
 public:
 	typedef enum {error, info, debug}TipoLog;
-	TipoLog tipoLog;
+	
 	void registrar(TipoLog tipoEvento, const char* evento_ocurrido);
 	void borrarEventos();
 	void definirTipoLog(TipoLog tipo);
 	void mostrarEventos();
+protected:
+	TipoLog tipoLog;
 };
 
 #endif
