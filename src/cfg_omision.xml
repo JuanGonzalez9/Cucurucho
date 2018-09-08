@@ -1,0 +1,13 @@
+R"(<?xml version="1.0"?>
+<configuracion>
+  <debug>
+    <level>ERROR</level>
+  </debug>
+  <escenarios>
+    <nivel1>
+      <fondo1>/home/file11.bmp</fondo1>
+    </nivel1>
+  </escenarios>
+  <nivel>1</nivel>
+</configuracion>
+)"

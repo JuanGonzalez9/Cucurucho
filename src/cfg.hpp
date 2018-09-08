@@ -10,51 +10,50 @@ extern "C"
 	#include <libxml/xpath.h>
 }
 
-class configure
+class configuracion
 {
 public:
-	configure ();
-	~configure ();
-	std::string gets (const char *path, std::function<bool(std::string & string, bool trusted)> valid);
-	int geti (const char *path, std::function<bool(int n, bool trusted)> valid);
-	long getl (const char *path, std::function<bool(long n, bool trusted)> valid);
-	long long getll (const char *path, std::function<bool(long long n, bool trusted)> valid);
-	unsigned long getul (const char *path, std::function<bool(unsigned long n, bool trusted)> valid);
-	unsigned long long getull (const char *path, std::function<bool(unsigned long long n, bool trusted)> valid);
-	float getf (const char *path, std::function<bool(float n, bool trusted)> valid);
-	double getd (const char *path, std::function<bool(double n, bool trusted)> valid);
-	long double getld (const char *path, std::function<bool(long double n, bool trusted)> valid);
+	configuracion ();
+	~configuracion ();
+	std::string obtener_s (const char *camino, std::function<bool(std::string & cadena, bool omision)> validar);
+	int obtener_i (const char *camino, std::function<bool(int n, bool omision)> validar);
+	long obtener_l (const char *camino, std::function<bool(long n, bool omision)> validar);
+	long long obtener_ll (const char *camino, std::function<bool(long long n, bool omision)> validar);
+	unsigned long obtener_ul (const char *camino, std::function<bool(unsigned long n, bool omision)> validar);
+	unsigned long long obtener_ull (const char *camino, std::function<bool(unsigned long long n, bool omision)> validar);
+	float obtener_f (const char *camino, std::function<bool(float n, bool omision)> validar);
+	double obtener_d (const char *camino, std::function<bool(double n, bool omision)> validar);
+	long double obtener_ld (const char *camino, std::function<bool(long double n, bool omision)> validar);
 private:
-	template<typename t> class types
+	template<typename t> class tipos
 	{
 	public:
-		typedef t (*i_function) (const std::string&, size_t*, int);
-		typedef t (*fp_function) (const std::string&, size_t*);
+		typedef t (*funcion_i) (const std::string&, size_t*, int);
+		typedef t (*funcion_pf) (const std::string&, size_t*);
 	};
-	xmlDoc *doc;
-	xmlXPathContextPtr context;
-	std::string gets_from_xml (const char *path);
-	std::string gets_from_map (const char *path);
-	template <class t> t get_i_number (const char *path, typename types<t>::i_function function, std::function<bool(int i, bool trusted)> valid);
-	template <typename t> t get_fp_number (const char *path, typename types<t>::fp_function function, std::function<bool(int i, bool trusted)> valid);
-	void dump_defaults ();
-	xmlNode * add_root_node (xmlDoc *doc, std::string & name);
-	xmlNode * add_child_node (xmlDoc *doc, xmlNode *parent_node, std::string & name);
+	xmlDoc *doc, *doc_omision;
+	xmlXPathContextPtr contexto, contexto_omision;
+	std::string obtener_s_del_xml (const char *camino, xmlXPathContextPtr *contexto);
+	template <class t> t obtener_i_number (const char *camino, typename tipos<t>::funcion_i funcion, std::function<bool(int i, bool omision)> validar);
+	template <typename t> t obtener_fp_number (const char *camino, typename tipos<t>::funcion_pf funcion, std::function<bool(int i, bool omision)> validar);
+	void recrear_archivo_xml ();
+	xmlNode * agregar_nodo_raiz (xmlDoc *doc, std::string & nombre);
+	xmlNode * agregar_nodo_hijo (xmlDoc *doc, xmlNode *nodo_padre, std::string & nombre);
 };
 
-class configure_exception: public std::invalid_argument
+class excepcion_configuracion: public std::invalid_argument
 {
 public:
-	explicit configure_exception (const std::string &what_arg);
+	explicit excepcion_configuracion (const std::string &que_paso);
 };
 
-extern configure &cfg;
+extern configuracion &cfg;
 
-static class configure_init
+static class inicializador_configuracion
 {
 public:
-	configure_init ();
-	~configure_init ();
-} cfg_init;
+	inicializador_configuracion ();
+	~inicializador_configuracion ();
+} ini_cfg;
 
 #endif

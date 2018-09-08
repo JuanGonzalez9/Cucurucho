@@ -3,7 +3,6 @@
 #include <iostream>
 #include <sstream>
 #include <map>
-#include "cfg_defaults.cpp"
 #include "cfg.hpp"
 
 extern "C"
@@ -15,13 +14,17 @@ extern "C"
 	#include <errno.h>
 }
 
+#define como_cadena (x) #x
+static const char * cfg_omision_xml =
+#include "cfg_omision.xml"
+;
 // Uso el idioma Nifty Counter para asegurarme que el objeto se inicialice
 // antes de su primer uso y se destruya luego del último uso.
 static int nifty_counter;
-static typename std::aligned_storage<sizeof (configure), alignof (configure)>::type cfg_buffer;
-configure &cfg = reinterpret_cast<configure&> (cfg_buffer);
+static typename std::aligned_storage<sizeof (configuracion), alignof (configuracion)>::type cfg_buffer;
+configuracion &cfg = reinterpret_cast<configuracion&> (cfg_buffer);
 
-void xml_error_handler (void * context, const char * format, ...)
+void xml_error_handler (void * contexto, const char * format, ...)
 {
 	/* TODO decidir si implementar bien y hacer un log
 	va_list ap;
@@ -36,28 +39,41 @@ void xml_error_handler (void * context, const char * format, ...)
 	*/
 }
 
-configure_exception::configure_exception (const std::string &what_arg):
-	std::invalid_argument (what_arg)
+excepcion_configuracion::excepcion_configuracion (const std::string &que_paso):
+	std::invalid_argument (que_paso)
 {
 }
 
-configure::configure ()
+configuracion::configuracion ()
 {
 	LIBXML_TEST_VERSION
 	xmlSetGenericErrorFunc (nullptr, xml_error_handler);
+					 
+	doc_omision = xmlReadMemory (cfg_omision_xml, strlen (cfg_omision_xml), "sin_nombre", nullptr, 0);
+	if (doc_omision == nullptr) {
+		// TODO log
+		throw excepcion_configuracion ("no pudo crearse el xmlDoc con los valores por omision");
+	}
+	contexto_omision = xmlXPathNewContext (doc_omision);
+	if (contexto_omision == nullptr) {
+		// TODO log
+		xmlFreeDoc (doc_omision);
+		throw excepcion_configuracion ("no pudo crearse el xmlXPathContextPtr del documento con los valores por omision");
+	}
 	struct stat sb;
 	if (stat ("cfg.xml", &sb) == -1) {
 		// TODO log
-		dump_defaults ();
+		recrear_archivo_xml ();
 		return;
 	}
+
 	doc = xmlReadFile ("cfg.xml", NULL, 0);
 	if (doc == nullptr) {
 		// TODO log
 		return;
 	}
-	context = xmlXPathNewContext (doc);
-	if (context == nullptr) {
+	contexto = xmlXPathNewContext (doc);
+	if (contexto == nullptr) {
 		// TODO log
 		xmlFreeDoc (doc);
 		doc = nullptr;
@@ -65,98 +81,69 @@ configure::configure ()
 	}
 }
 
-configure::~configure ()
+configuracion::~configuracion ()
 {
-	xmlXPathFreeContext (context);
+	xmlXPathFreeContext (contexto);
 	xmlFreeDoc (doc);
+	xmlXPathFreeContext (contexto_omision);
+	xmlFreeDoc (doc_omision);
 	xmlCleanupParser ();
 }
 
-xmlNode * configure::add_root_node (xmlDoc *doc, std::string & name)
+xmlNode * configuracion::agregar_nodo_raiz (xmlDoc *doc, std::string & nombre)
 {
-	xmlNode *node = xmlNewNode (nullptr, (const xmlChar*)name.c_str ());
-	if (node == nullptr) {
+	xmlNode *nodo = xmlNewNode (nullptr, (const xmlChar*)nombre.c_str ());
+	if (nodo == nullptr) {
 		// TODO log
 		return nullptr;
 	}
-	xmlDocSetRootElement (doc, node);
-	return node;
+	xmlDocSetRootElement (doc, nodo);
+	return nodo;
 }
 
-xmlNode * configure::add_child_node (xmlDoc *doc, xmlNode *parent_node, std::string & name)
+xmlNode * configuracion::agregar_nodo_hijo (xmlDoc *doc, xmlNode *nodo_padre, std::string & nombre)
 {
-	if (parent_node == nullptr ) {
-		if ((parent_node = xmlDocGetRootElement (doc)) == nullptr) {
-			return add_root_node (doc, name);
-		} else if (strcmp ((const char*)parent_node->name, name.c_str ()) == 0) {
-			return parent_node;
+	if (nodo_padre == nullptr ) {
+		if ((nodo_padre = xmlDocGetRootElement (doc)) == nullptr) {
+			return agregar_nodo_raiz (doc, nombre);
+		} else if (strcmp ((const char*)nodo_padre->name, nombre.c_str ()) == 0) {
+			return nodo_padre;
 		} else {
 			// TODO log
 			return nullptr;
 		}
 	} else {
-		for (xmlNode * i = xmlFirstElementChild (parent_node); i != nullptr; i = xmlNextElementSibling (parent_node)) {
-			if (strcmp ((const char*)i->name, name.c_str ()) == 0) {
+		for (xmlNode * i = xmlFirstElementChild (nodo_padre); i != nullptr; i = xmlNextElementSibling (nodo_padre)) {
+			if (strcmp ((const char*)i->name, nombre.c_str ()) == 0) {
 				return i;
 			}
 		}
-		xmlNode *node = xmlNewNode (nullptr, (const xmlChar*)name.c_str ());
-		if (node == nullptr) {
+		xmlNode *nodo = xmlNewNode (nullptr, (const xmlChar*)nombre.c_str ());
+		if (nodo == nullptr) {
 			// TODO log
 			return nullptr;
 		}
-		xmlAddChild (parent_node, node);
-		return node;
+		xmlAddChild (nodo_padre, nodo);
+		return nodo;
 	}
 }
 
-void configure::dump_defaults ()
+void configuracion::recrear_archivo_xml ()
 {
-	doc = xmlNewDoc ((const xmlChar*)"1.0");
-	if (doc == nullptr) {
-		// TODO log
-		return;
-	}
-	xmlNode *node;
-	std::string s, subs;
-	std::string::size_type f, l;
-	for (std::map<std::string, std::string>::iterator i = defaults.begin(); i != defaults.end(); ++i) {
-		s = i->first;
-		f = s.find ("//", 0);
-		node = nullptr;
-		while (f != std::string::npos && f+2 < s.length()) {
-			f += 2;
-			l = s.find ("//", f);
-			subs = s.substr (f, l-f);
-			if ((node = add_child_node (doc, node, subs)) == nullptr) {
-				break;
-			}
-			f = l;
-		}
-		if (node) {
-			xmlNodeAddContent (node, (const xmlChar*)i->second.c_str());
-		}
-	}
 	xmlKeepBlanksDefault (0);
-	if (xmlSaveFormatFile ("cfg.xml", doc, 1) == -1)
+	if (xmlSaveFormatFile ("cfg.xml", doc_omision, 1) == -1)
 	{
 		// TODO log
 	}
-	xmlFreeDoc (doc);
-	doc = nullptr;
 }
 
-std::string configure::gets_from_xml (const char *path)
+std::string configuracion::obtener_s_del_xml (const char *camino, xmlXPathContextPtr *contexto)
 {
-	if (path == nullptr ){
-  		// TODO log
-		throw configure_exception ("configure::get* espera un camino");
-	}
 	std::string s;
-	if (context != nullptr) {
-		xmlXPathObjectPtr result = xmlXPathEvalExpression ((const xmlChar*)path, context);
-		if (result && !xmlXPathNodeSetIsEmpty (result->nodesetval)) {
-			xmlNode *node = result->nodesetval->nodeTab[0];
+	if (*contexto != nullptr) {
+		xmlXPathObjectPtr resultado = xmlXPathEvalExpression ((const xmlChar*)camino, *contexto);
+		if (resultado && !xmlXPathNodeSetIsEmpty (resultado->nodesetval)) {
+			xmlNode *node = resultado->nodesetval->nodeTab[0];
 			xmlNode *child_node = node->children;
 			if (child_node && child_node->type == XML_TEXT_NODE) {
 				s = (const char*)xmlNodeGetContent(child_node);
@@ -169,139 +156,122 @@ std::string configure::gets_from_xml (const char *path)
 	return s;
 }
 
-std::string configure::gets_from_map (const char *path)
+std::string configuracion::obtener_s (const char *camino, std::function<bool(std::string & s, bool omision)> validar)
 {
-	if (path == nullptr){
-  		// TODO log
-		throw configure_exception ("configure::get* espera un camino");
-	}
-	std::map<std::string, std::string>::iterator i;
-	i = defaults.find(path);
-	if (i == defaults.end()) {
-  		// TODO log
-  		std::stringstream ss ;
-  		ss << "No agregamos una opcion por defecto para " << path;
-		throw configure_exception (ss.str());
-	}
-	return i->second;
-}
-
-std::string configure::gets (const char *path, std::function<bool(std::string & s, bool trusted)> valid)
-{
-	std::string s = gets_from_xml (path);
-	if (s.empty() || !valid (s, false)) {
-		s = gets_from_map (path);
-		if (!valid (s, true)) {
+	std::string s = obtener_s_del_xml (camino, &contexto);
+	if (s.empty() || !validar (s, false)) {
+		s = obtener_s_del_xml (camino, &contexto_omision);
+		if (s.empty() || !validar (s, true)) {
 			// TODO log
 			std::stringstream ss ;
-			ss << "Opcion por defecto para " << path << " invalida";
+			ss << "Opcion por defecto para " << camino << " invalida";
 			s.clear();
-			throw configure_exception (ss.str());
+			throw excepcion_configuracion (ss.str());
 		}
 	}
 	return s;
 }
 
-template <typename t> t configure::get_i_number (const char *path, typename types<t>::i_function f, std::function<bool(int i, bool trusted)> valid)
+template <typename t> t configuracion::obtener_i_number (const char *camino, typename tipos<t>::funcion_i f, std::function<bool(int i, bool omision)> validar)
 {
 	t n;
-	std::string::size_type size;
+	std::string::size_type largo;
 	// Si no está la opción en el archivo xml o no es un número, evito que se lance un excepción;
 	// ya que todavía puedo usar la opción por defecto.
 	try{
-		std::string s = gets_from_xml (path);
-		n = f (s, &size, 10);
-		if (size == s.length() && valid (n, false)) {
+		std::string s = obtener_s_del_xml (camino, &contexto);
+		n = f (s, &largo, 10);
+		if (largo == s.length() && validar (n, false)) {
 			return n;
 		}
 	} catch (...){}
-	// La opción por defecto debe estar sí o sí en cfg_defaults.cpp
-	std::string s = gets_from_map (path);
-	n = f (s, &size, 10);
-	if (size != s.length() || !valid (n, true))
+	// La opción por defecto debe estar sí o sí en cfg_omision.xml
+	std::string s = obtener_s_del_xml (camino, &contexto_omision);
+	n = f (s, &largo, 10);
+	if (largo != s.length() || !validar (n, true))
 	{
   		// TODO log
   		std::stringstream ss ;
-  		ss << "Opcion por defecto para " << path << " invalida";
-		throw configure_exception (ss.str());
+  		ss << "Opcion por defecto para " << camino << " invalida";
+		throw excepcion_configuracion (ss.str());
 	}
 	return n;
 }
 
-template <typename t> t configure::get_fp_number (const char *path, typename types<t>::fp_function f, std::function<bool(int i, bool trusted)> valid)
+template <typename t> t configuracion::obtener_fp_number (const char *camino, typename tipos<t>::funcion_pf f, std::function<bool(int i, bool omision)> validar)
 {
 	t n;
-	std::string::size_type size;
+	std::string::size_type largo;
 	// Si no está la opción en el archivo xml o no es un número, evito que se lance un excepción;
 	// ya que todavía puedo usar la opción por defecto.
 	try{
-		std::string s = gets_from_xml (path);
-		n = f (s, &size);
-		if (size == s.length() && valid (n, false)) {
+		std::string s = obtener_s_del_xml (camino, &contexto);
+		n = f (s, &largo);
+		if (largo == s.length() && validar (n, false)) {
 			return n;
 		}
 	} catch (...){}
 	// La opción por defecto debe estar sí o sí en cfg_defaults.cpp
-	std::string s = gets_from_map (path);
-	n = f (s, &size);
-	if (size != s.length() || !valid (n, true))
+	std::string s = obtener_s_del_xml (camino, &contexto_omision);
+	n = f (s, &largo);
+	if (largo != s.length() || !validar (n, true))
 	{
   		// TODO log
   		std::stringstream ss ;
-  		ss << "Opcion por defecto para " << path << " invalida";
-		throw configure_exception (ss.str());
+  		ss << "Opcion por defecto para " << camino << " invalida";
+		throw excepcion_configuracion (ss.str());
 	}
 	return n;
 }
 
-int configure::geti (const char *path, std::function<bool(int, bool)> valid)
+int configuracion::obtener_i (const char *camino, std::function<bool(int, bool)> validar)
 {
-	return get_i_number<int> (path, std::stoi, valid);
+	return obtener_i_number<int> (camino, std::stoi, validar);
 }
 
-long configure::getl (const char *path, std::function<bool(long, bool)> valid)
+long configuracion::obtener_l (const char *camino, std::function<bool(long, bool)> validar)
 {
-	return get_i_number<long> (path, std::stol, valid);
+	return obtener_i_number<long> (camino, std::stol, validar);
 }
 
-long long configure::getll (const char *path, std::function<bool(long long, bool)> valid)
+long long configuracion::obtener_ll (const char *camino, std::function<bool(long long, bool)> validar)
 {
-	return get_i_number<long long> (path, std::stoll, valid);
+	return obtener_i_number<long long> (camino, std::stoll, validar);
 }
 
-unsigned long configure::getul (const char *path, std::function<bool(unsigned long, bool)> valid)
+unsigned long configuracion::obtener_ul (const char *camino, std::function<bool(unsigned long, bool)> validar)
 {
-	return get_i_number<unsigned long> (path, std::stoul, valid);
+	return obtener_i_number<unsigned long> (camino, std::stoul, validar);
 }
 
-unsigned long long configure::getull (const char *path, std::function<bool(unsigned long long, bool)> valid)
+unsigned long long configuracion::obtener_ull (const char *camino, std::function<bool(unsigned long long, bool)> validar)
 {
-	return get_i_number<unsigned long long> (path, std::stoull, valid);
+	return obtener_i_number<unsigned long long> (camino, std::stoull, validar);
 }
 
-float configure::getf (const char *path, std::function<bool(float, bool)> valid)
+float configuracion::obtener_f (const char *camino, std::function<bool(float, bool)> validar)
 {
-	return get_fp_number<float> (path, std::stof, valid);
+	return obtener_fp_number<float> (camino, std::stof, validar);
 }
 
-double configure::getd (const char *path, std::function<bool(double, bool)> valid)
+double configuracion::obtener_d (const char *camino, std::function<bool(double, bool)> validar)
 {
-	return get_fp_number<double> (path, std::stod, valid);
+	return obtener_fp_number<double> (camino, std::stod, validar);
 }
 
-long double configure::getld (const char *path, std::function<bool(long double, bool)> valid)
+long double configuracion::obtener_ld (const char *camino, std::function<bool(long double, bool)> validar)
 {
-	return get_fp_number<long double> (path, std::stold, valid);
+	return obtener_fp_number<long double> (camino, std::stold, validar);
 }
 
-configure_init::configure_init ()
+inicializador_configuracion::inicializador_configuracion ()
 {
-	if (nifty_counter++ == 0) new (&cfg) configure ();
+	if (nifty_counter++ == 0) new (&cfg) configuracion ();
 }
 
-configure_init::~configure_init ()
+inicializador_configuracion::~inicializador_configuracion ()
 {
-	if (--nifty_counter == 0) (&cfg)->~configure ();
+	if (--nifty_counter == 0) (&cfg)->~configuracion ();
 }
 
 
