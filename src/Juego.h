@@ -19,6 +19,8 @@ public:
 
 	void inicializar(const char* titulo,int posX,int posY,int ancho,int alto);
 	void actualizar();
+	void jugadorAvanzar();
+	void jugadorRetroceder();
 	void renderizar();
 	void manejarEventos();
 	void limpiar();

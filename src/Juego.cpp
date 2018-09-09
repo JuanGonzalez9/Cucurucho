@@ -6,7 +6,6 @@
  */
 
 #include "Juego.h"
-#include "cfg.hpp"
 
 using namespace std;
 
@@ -44,7 +43,7 @@ Juego::Juego() {
 	sprites[3].w = 64;
 
 	rectaDestino.x = 0;
-	rectaDestino.y = 0;
+	rectaDestino.y = 280;
 	rectaDestino.h = 128;
 	rectaDestino.w = 64;
 }
@@ -91,22 +90,27 @@ void Juego::inicializar(const char* titulo,int posX,int posY,int ancho,int alto)
 		SDL_SetRenderDrawColor(renderer,255,255,255,255);
 	}
 
-	#if 0
 	SDL_Surface* temp = IMG_Load("imagenes/foo.png");
 	texturaJugador = SDL_CreateTextureFromSurface(renderer,temp);
 	SDL_FreeSurface(temp);
-	#endif
-	texturaJugador = cfg.obtener_textura( "//configuracion//personaje//sprite", renderer,
-					      [] (SDL_Texture * textura, bool omision) { return true; });
 }
 
 void Juego::actualizar(){
 	cont++;
 	cont %= 4;
 
-	posx += 2;
-	rectaDestino.x = posx;
+}
 
+void Juego::jugadorAvanzar(){
+
+	posx += 4;
+	rectaDestino.x = posx;
+}
+
+void Juego::jugadorRetroceder(){
+
+	posx -= 4;
+	rectaDestino.x = posx;
 }
 
 void Juego::renderizar(){
@@ -120,16 +124,26 @@ bool Juego::jugando(){
 }
 
 void Juego::manejarEventos(){
+
 	SDL_Event evento;
-	SDL_PollEvent(&evento);
+	while(SDL_PollEvent(&evento)){
+		switch(evento.type){
 
-	switch(evento.type){
+			case (SDL_QUIT):
+				estaJugando = false;
+				break;
 
-		case (SDL_QUIT):
-			estaJugando = false;
+			case (SDL_KEYDOWN):
+					if(evento.key.keysym.sym == SDLK_RIGHT){
+						jugadorAvanzar();
+					}
+					if(evento.key.keysym.sym == SDLK_LEFT){
+						jugadorRetroceder();
+					}
+					break;
+			default:
 			break;
-		default:
-			break;
+		}
 	}
 
 }
