@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <map>
+#include <algorithm>
 #include "cfg.hpp"
 
 extern "C"
@@ -23,6 +24,13 @@ static const char * cfg_omision_xml =
 static int nifty_counter;
 static typename std::aligned_storage<sizeof (configuracion), alignof (configuracion)>::type cfg_buffer;
 configuracion &cfg = reinterpret_cast<configuracion&> (cfg_buffer);
+
+#define lanzar(e, msg) \
+	do {\
+		std::stringstream ss; \
+		ss << msg; \
+		throw e (ss.str()); \
+	} while (false)
 
 void xml_error_handler (void * contexto, const char * format, ...)
 {
@@ -46,19 +54,24 @@ excepcion_configuracion::excepcion_configuracion (const std::string &que_paso):
 
 configuracion::configuracion ()
 {
+	dlopen_handle = dlopen (nullptr, RTLD_LOCAL | RTLD_LAZY);
+	if (dlopen_handle == nullptr) {
+		lanzar (excepcion_configuracion, "Fallo dlopen: " << dlerror());
+	}
+
 	LIBXML_TEST_VERSION
 	xmlSetGenericErrorFunc (nullptr, xml_error_handler);
 					 
 	doc_omision = xmlReadMemory (cfg_omision_xml, strlen (cfg_omision_xml), "sin_nombre", nullptr, 0);
 	if (doc_omision == nullptr) {
 		// TODO log
-		throw excepcion_configuracion ("no pudo crearse el xmlDoc con los valores por omision");
+		lanzar (excepcion_configuracion, "no pudo crearse el xmlDoc con los valores por omision");
 	}
 	contexto_omision = xmlXPathNewContext (doc_omision);
 	if (contexto_omision == nullptr) {
 		// TODO log
 		xmlFreeDoc (doc_omision);
-		throw excepcion_configuracion ("no pudo crearse el xmlXPathContextPtr del documento con los valores por omision");
+		lanzar (excepcion_configuracion, "no pudo crearse el xmlXPathContextPtr del documento con los valores por omision");
 	}
 	struct stat sb;
 	if (stat ("cfg.xml", &sb) == -1) {
@@ -88,6 +101,9 @@ configuracion::~configuracion ()
 	xmlXPathFreeContext (contexto_omision);
 	xmlFreeDoc (doc_omision);
 	xmlCleanupParser ();
+	if (dlopen_handle != nullptr) {
+		 dlclose (dlopen_handle);
+	}
 }
 
 xmlNode * configuracion::agregar_nodo_raiz (xmlDoc *doc, std::string & nombre)
@@ -163,13 +179,74 @@ std::string configuracion::obtener_s (const char *camino, std::function<bool(std
 		s = obtener_s_del_xml (camino, &contexto_omision);
 		if (s.empty() || !validar (s, true)) {
 			// TODO log
-			std::stringstream ss ;
-			ss << "Opcion por defecto para " << camino << " invalida";
 			s.clear();
-			throw excepcion_configuracion (ss.str());
+			lanzar (excepcion_configuracion, "Opcion por defecto para " << camino << " invalida");
 		}
 	}
 	return s;
+}
+
+uint8_t *configuracion::obtener_direccion_de_simbolo (std::string &s)
+{
+	uint8_t *direccion = (uint8_t*)dlsym (dlopen_handle, s.c_str ());
+	if (direccion == nullptr) {
+		lanzar (excepcion_configuracion, "Fallo dlsym: " << dlerror());
+	}
+	return direccion;
+}
+
+SDL_Texture *configuracion::obtener_textura (const char *camino, SDL_Renderer *renderer, std::function<bool(SDL_Texture *textura, bool omision)> validar)
+{
+	SDL_Texture *textura = nullptr;
+	std::string s = obtener_s (camino, [renderer, &textura] (std::string & s, bool omision) {
+		SDL_Surface *superficie = IMG_Load (s.c_str ());
+		if (superficie == nullptr) {
+			// TODO log
+			return omision? true : false;
+		}
+		textura = SDL_CreateTextureFromSurface (renderer, superficie);
+		if (textura == nullptr) {
+			// TODO log
+			SDL_FreeSurface (superficie);
+			return omision? true : false;
+		}
+		SDL_FreeSurface (superficie);
+		return true;
+	});
+	if (textura == nullptr) {
+		/* imagenes/foo.png  ->  _binary_ ______ imagenes_foo_png _start
+		 *                                ../../ imagenes/foo.png _start
+		 */
+		std::replace (s.begin(), s.end(), '/', '_');
+		std::replace (s.begin(), s.end(), '.', '_');
+		std::replace (s.begin(), s.end(), ' ', '_');
+		s.insert (0, "_binary____");
+		std::string se = s;
+		s.append ("_start");
+		se.append ("_end");
+		uint8_t *comienzo = obtener_direccion_de_simbolo (s);
+		uint8_t *fin = obtener_direccion_de_simbolo (se);
+		if (fin == nullptr) {
+			lanzar (excepcion_configuracion, "Fallo dlsym: " << dlerror());
+		}
+
+		SDL_RWops *rw = SDL_RWFromMem ( comienzo, (size_t)(fin-comienzo) );
+		if (rw == nullptr) {
+			// TODO log
+			lanzar (excepcion_configuracion, "Fallo SDL_RWFromMem: " << SDL_GetError());
+		}
+		SDL_Surface *superficie = IMG_Load_RW (rw, 1);
+		if (superficie == nullptr) {
+			// TODO log
+			lanzar (excepcion_configuracion, "Fallo IMG_Load_RW: " << SDL_GetError());
+		}
+		textura = SDL_CreateTextureFromSurface ( renderer, superficie);
+		if (textura == nullptr) {
+			// TODO log
+			lanzar (excepcion_configuracion, "Fallo SDL_CreateTextureFromSurface: " << SDL_GetError());
+		}
+	}
+	return textura;
 }
 
 template <typename t> t configuracion::obtener_i_number (const char *camino, typename tipos<t>::funcion_i f, std::function<bool(int i, bool omision)> validar)
@@ -191,9 +268,7 @@ template <typename t> t configuracion::obtener_i_number (const char *camino, typ
 	if (largo != s.length() || !validar (n, true))
 	{
   		// TODO log
-  		std::stringstream ss ;
-  		ss << "Opcion por defecto para " << camino << " invalida";
-		throw excepcion_configuracion (ss.str());
+		lanzar (excepcion_configuracion, "Opcion por defecto para " << camino << " invalida");
 	}
 	return n;
 }
@@ -217,9 +292,7 @@ template <typename t> t configuracion::obtener_fp_number (const char *camino, ty
 	if (largo != s.length() || !validar (n, true))
 	{
   		// TODO log
-  		std::stringstream ss ;
-  		ss << "Opcion por defecto para " << camino << " invalida";
-		throw excepcion_configuracion (ss.str());
+		lanzar (excepcion_configuracion, "Opcion por defecto para " << camino << " invalida");
 	}
 	return n;
 }

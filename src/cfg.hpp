@@ -8,6 +8,9 @@ extern "C"
 {
 	#include <libxml/tree.h>
 	#include <libxml/xpath.h>
+	#include <SDL2/SDL.h>
+	#include <SDL2/SDL_image.h>
+	#include <dlfcn.h>
 }
 
 class configuracion
@@ -24,6 +27,7 @@ public:
 	float obtener_f (const char *camino, std::function<bool(float n, bool omision)> validar);
 	double obtener_d (const char *camino, std::function<bool(double n, bool omision)> validar);
 	long double obtener_ld (const char *camino, std::function<bool(long double n, bool omision)> validar);
+	SDL_Texture *obtener_textura (const char *camino, SDL_Renderer *renderer, std::function<bool(SDL_Texture *textura, bool omision)> validar);
 private:
 	template<typename t> class tipos
 	{
@@ -33,6 +37,8 @@ private:
 	};
 	xmlDoc *doc, *doc_omision;
 	xmlXPathContextPtr contexto, contexto_omision;
+	void *dlopen_handle;
+	uint8_t *obtener_direccion_de_simbolo (std::string &imagen);
 	std::string obtener_s_del_xml (const char *camino, xmlXPathContextPtr *contexto);
 	template <class t> t obtener_i_number (const char *camino, typename tipos<t>::funcion_i funcion, std::function<bool(int i, bool omision)> validar);
 	template <typename t> t obtener_fp_number (const char *camino, typename tipos<t>::funcion_pf funcion, std::function<bool(int i, bool omision)> validar);

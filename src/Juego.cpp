@@ -6,6 +6,7 @@
  */
 
 #include "Juego.h"
+#include "cfg.hpp"
 
 using namespace std;
 
@@ -90,9 +91,13 @@ void Juego::inicializar(const char* titulo,int posX,int posY,int ancho,int alto)
 		SDL_SetRenderDrawColor(renderer,255,255,255,255);
 	}
 
+	#if 0
 	SDL_Surface* temp = IMG_Load("imagenes/foo.png");
 	texturaJugador = SDL_CreateTextureFromSurface(renderer,temp);
 	SDL_FreeSurface(temp);
+	#endif
+	texturaJugador = cfg.obtener_textura( "//configuracion//personaje//sprite", renderer,
+					      [] (SDL_Texture * textura, bool omision) { return true; });
 }
 
 void Juego::actualizar(){

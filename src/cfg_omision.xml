@@ -3,9 +3,12 @@ R"(<?xml version="1.0"?>
   <debug>
     <level>ERROR</level>
   </debug>
+  <personaje>
+    <sprite>imagenes/foo.png</sprite>
+  </personaje>
   <escenarios>
     <nivel1>
-      <fondo1>/home/file11.bmp</fondo1>
+      <fondo1>imagenes/fondo1.png</fondo1>
     </nivel1>
   </escenarios>
   <nivel>1</nivel>
