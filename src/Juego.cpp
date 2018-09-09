@@ -10,8 +10,13 @@
 using namespace std;
 
 SDL_Texture* texturaJugador;
+SDL_Texture* texturaMapa;
+
 SDL_Rect rectaDestino;
 SDL_Rect sprites[4];
+
+SDL_Rect rectMapaDestino;
+SDL_Rect rectMapaOrigen;
 
 int posx = 0;
 int cont = 0;
@@ -44,8 +49,17 @@ Juego::Juego() {
 
 	rectaDestino.x = 0;
 	rectaDestino.y = 280;
-	rectaDestino.h = 128;
-	rectaDestino.w = 64;
+	rectaDestino.h = 64;
+	rectaDestino.w = 32;
+
+	//rectangulo para el mapa
+	//Por ser imagen de fondo no necesita recta destino, el valor para el render_copy es NULL
+
+	rectMapaOrigen.x = 0;
+	rectMapaOrigen.y = 0;
+	rectMapaOrigen.w = 327;
+	rectMapaOrigen.h = 245;
+
 }
 
 void Juego::inicializar(const char* titulo,int posX,int posY,int ancho,int alto){
@@ -90,9 +104,16 @@ void Juego::inicializar(const char* titulo,int posX,int posY,int ancho,int alto)
 		SDL_SetRenderDrawColor(renderer,255,255,255,255);
 	}
 
+
+	SDL_Surface* mapaTemp = IMG_Load("imagenes/nivel.png");
+	texturaMapa = SDL_CreateTextureFromSurface(renderer,mapaTemp);
+	SDL_FreeSurface(mapaTemp);
+
 	SDL_Surface* temp = IMG_Load("imagenes/foo.png");
 	texturaJugador = SDL_CreateTextureFromSurface(renderer,temp);
 	SDL_FreeSurface(temp);
+
+
 }
 
 void Juego::actualizar(){
@@ -115,6 +136,8 @@ void Juego::jugadorRetroceder(){
 
 void Juego::renderizar(){
 	SDL_RenderClear(renderer);
+	//el rectangulo destino lo dejo en NULL para que ocupe toda la pantalla
+	SDL_RenderCopy(renderer,texturaMapa,&rectMapaOrigen,NULL);
 	SDL_RenderCopy(renderer,texturaJugador,&sprites[cont],&rectaDestino);
 	SDL_RenderPresent(renderer);
 }
