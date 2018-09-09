@@ -19,13 +19,16 @@ public:
 
 	void inicializar(const char* titulo,int posX,int posY,int ancho,int alto);
 	void actualizar();
-	void jugadorAvanzar();
-	void jugadorRetroceder();
 	void renderizar();
 	void manejarEventos();
 	void limpiar();
 
 	bool jugando();
+
+	//estas van en otras clases
+	void jugadorAvanzar();
+	void jugadorRetroceder();
+	void mapaScroll();
 
 
 private:
@@ -33,6 +36,8 @@ private:
 	bool estaJugando;
 	SDL_Window* ventana;
 	SDL_Renderer* renderer;
+	int anchoVentana;
+	int altoVentana;
 };
 
 #endif /* JUEGO_H_ */

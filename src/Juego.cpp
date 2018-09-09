@@ -26,6 +26,8 @@ Juego::Juego() {
 	renderer = NULL;
 	estaJugando = false;
 	sdlInicializado = 0;
+	altoVentana = 0;
+	anchoVentana = 0;
 
 	sprites[0].x = 0;
 	sprites[0].y = 0;
@@ -58,12 +60,14 @@ Juego::Juego() {
 	rectMapaOrigen.x = 0;
 	rectMapaOrigen.y = 0;
 	rectMapaOrigen.w = 327;
-	rectMapaOrigen.h = 245;
+	rectMapaOrigen.h = 220;
 
 }
 
 void Juego::inicializar(const char* titulo,int posX,int posY,int ancho,int alto){
 	estaJugando = true;
+	anchoVentana = ancho;
+	altoVentana = alto;
 
 	int inicializado = SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -134,6 +138,10 @@ void Juego::jugadorRetroceder(){
 	rectaDestino.x = posx;
 }
 
+void Juego::mapaScroll(){
+	rectMapaOrigen.x += 4;
+}
+
 void Juego::renderizar(){
 	SDL_RenderClear(renderer);
 	//el rectangulo destino lo dejo en NULL para que ocupe toda la pantalla
@@ -158,7 +166,10 @@ void Juego::manejarEventos(){
 
 			case (SDL_KEYDOWN):
 					if(evento.key.keysym.sym == SDLK_RIGHT){
-						jugadorAvanzar();
+						if(rectaDestino.x <= (anchoVentana / 2)){
+							jugadorAvanzar();
+						}
+						else mapaScroll();
 					}
 					if(evento.key.keysym.sym == SDLK_LEFT){
 						jugadorRetroceder();
