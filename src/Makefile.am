@@ -6,10 +6,12 @@ contradir = $(prefix)/bin
 
 imagenes=	foo.png \
 		nivel1.png \
-		personaje.png
+		personaje.png \
+		ContraPersonaje.gif
 imagenes_o=	imagen-foo.o \
 		imagen-nivel1.o \
-		imagen-personaje.o
+		imagen-personaje.o \
+		imagen-ContraPersonaje.o
 contra_LDFLAGS= $(imagenes_o) -rdynamic
 nodist_contra_SOURCES = $(imagenes_o)
 BUILT_SOURCES = $(imagenes)
@@ -26,5 +28,6 @@ $(imagenes): Makefile
 
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(bindir)/imagenes && \
-	cp ../../imagenes/*.png $(DESTDIR)$(bindir)/imagenes
+	cp ../../imagenes/*.png $(DESTDIR)$(bindir)/imagenes && \
+	cp ../../imagenes/*.gif $(DESTDIR)$(bindir)/imagenes
 
