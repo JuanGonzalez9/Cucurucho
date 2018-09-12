@@ -25,12 +25,19 @@ public:
 
 	bool jugando();
 
+	//estas van en otras clases
+	void jugadorAvanzar();
+	void jugadorRetroceder();
+	void mapaScroll();
+
 
 private:
 	int sdlInicializado;
 	bool estaJugando;
 	SDL_Window* ventana;
 	SDL_Renderer* renderer;
+	int anchoVentana;
+	int altoVentana;
 };
 
 #endif /* JUEGO_H_ */

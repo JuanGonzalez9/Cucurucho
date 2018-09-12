@@ -6,13 +6,17 @@
  */
 
 #include "Juego.h"
-#include "cfg.hpp"
 
 using namespace std;
 
 SDL_Texture* texturaJugador;
+SDL_Texture* texturaMapa;
+
 SDL_Rect rectaDestino;
-SDL_Rect sprites[4];
+SDL_Rect sprites[5];
+
+SDL_Rect rectMapaDestino;
+SDL_Rect rectMapaOrigen;
 
 int posx = 0;
 int cont = 0;
@@ -22,35 +26,53 @@ Juego::Juego() {
 	renderer = NULL;
 	estaJugando = false;
 	sdlInicializado = 0;
+	altoVentana = 0;
+	anchoVentana = 0;
 
-	sprites[0].x = 0;
-	sprites[0].y = 0;
-	sprites[0].h = 204;
-	sprites[0].w = 64;
+	sprites[0].x = 145;
+	sprites[0].y = 132;
+	sprites[0].h = 38;
+	sprites[0].w = 23;
 
-	sprites[1].x = 64;
-	sprites[1].y = 0;
-	sprites[1].h = 204;
-	sprites[1].w = 64;
+	sprites[1].x = 168;
+	sprites[1].y = 132;
+	sprites[1].h = 38;
+	sprites[1].w = 23;
 
-	sprites[2].x = 128;
-	sprites[2].y = 0;
-	sprites[2].h = 204;
-	sprites[2].w = 64;
+	sprites[2].x = 191;
+	sprites[2].y = 132;
+	sprites[2].h = 38;
+	sprites[2].w = 23;
 
-	sprites[3].x = 196;
-	sprites[3].y = 0;
-	sprites[3].h = 204;
-	sprites[3].w = 64;
+	sprites[3].x = 214;
+	sprites[3].y = 132;
+	sprites[3].h = 38;
+	sprites[3].w = 23;
+
+	sprites[4].x = 237;
+	sprites[4].y = 132;
+	sprites[4].h = 38;
+	sprites[4].w = 23;
 
 	rectaDestino.x = 0;
-	rectaDestino.y = 0;
-	rectaDestino.h = 128;
-	rectaDestino.w = 64;
+	rectaDestino.y = 280;
+	rectaDestino.h = 64;
+	rectaDestino.w = 32;
+
+	//rectangulo para el mapa
+	//Por ser imagen de fondo no necesita recta destino, el valor para el render_copy es NULL
+
+	rectMapaOrigen.x = 0;
+	rectMapaOrigen.y = 0;
+	rectMapaOrigen.w = 327;
+	rectMapaOrigen.h = 220;
+
 }
 
 void Juego::inicializar(const char* titulo,int posX,int posY,int ancho,int alto){
 	estaJugando = true;
+	anchoVentana = ancho;
+	altoVentana = alto;
 
 	int inicializado = SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -91,26 +113,44 @@ void Juego::inicializar(const char* titulo,int posX,int posY,int ancho,int alto)
 		SDL_SetRenderDrawColor(renderer,255,255,255,255);
 	}
 
-	#if 0
-	SDL_Surface* temp = IMG_Load("imagenes/foo.png");
+
+	SDL_Surface* mapaTemp = IMG_Load("imagenes/nivel.png");
+	texturaMapa = SDL_CreateTextureFromSurface(renderer,mapaTemp);
+	SDL_FreeSurface(mapaTemp);
+
+	SDL_Surface* temp = IMG_Load("imagenes/ContraPersonaje.gif");
 	texturaJugador = SDL_CreateTextureFromSurface(renderer,temp);
 	SDL_FreeSurface(temp);
-	#endif
-	texturaJugador = cfg.obtener_textura( "//configuracion//personaje//sprite", renderer,
-					      [] (SDL_Texture * textura, bool omision) { return true; });
+
+
 }
 
 void Juego::actualizar(){
 	cont++;
 	cont %= 4;
 
-	posx += 2;
-	rectaDestino.x = posx;
+}
 
+void Juego::jugadorAvanzar(){
+
+	posx += 4;
+	rectaDestino.x = posx;
+}
+
+void Juego::jugadorRetroceder(){
+
+	posx -= 4;
+	rectaDestino.x = posx;
+}
+
+void Juego::mapaScroll(){
+	rectMapaOrigen.x += 2;
 }
 
 void Juego::renderizar(){
 	SDL_RenderClear(renderer);
+	//el rectangulo destino lo dejo en NULL para que ocupe toda la pantalla
+	SDL_RenderCopy(renderer,texturaMapa,&rectMapaOrigen,NULL);
 	SDL_RenderCopy(renderer,texturaJugador,&sprites[cont],&rectaDestino);
 	SDL_RenderPresent(renderer);
 }
@@ -120,16 +160,29 @@ bool Juego::jugando(){
 }
 
 void Juego::manejarEventos(){
+
 	SDL_Event evento;
-	SDL_PollEvent(&evento);
+	while(SDL_PollEvent(&evento)){
+		switch(evento.type){
 
-	switch(evento.type){
+			case (SDL_QUIT):
+				estaJugando = false;
+				break;
 
-		case (SDL_QUIT):
-			estaJugando = false;
+			case (SDL_KEYDOWN):
+					if(evento.key.keysym.sym == SDLK_RIGHT){
+						if(rectaDestino.x <= (anchoVentana / 2)){
+							jugadorAvanzar();
+						}
+						else mapaScroll();
+					}
+					if(evento.key.keysym.sym == SDLK_LEFT){
+						jugadorRetroceder();
+					}
+					break;
+			default:
 			break;
-		default:
-			break;
+		}
 	}
 
 }

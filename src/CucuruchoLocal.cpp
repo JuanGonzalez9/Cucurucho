@@ -45,7 +45,7 @@ int main (int argc, char *argv[]){
 		 miJuego->actualizar();
 		 miJuego->renderizar();
 
-		 SDL_Delay(60);
+		 SDL_Delay(70);
 	 }
 
 	 //destruyo las clases
