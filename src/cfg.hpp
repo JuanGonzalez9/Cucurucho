@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <functional>
+#include <list>
 
 extern "C"
 {
@@ -12,6 +13,14 @@ extern "C"
 	#include <SDL2/SDL_image.h>
 	#include <dlfcn.h>
 }
+
+class plataforma
+{
+public:
+	typedef enum {pasto, piedra, hielo} tipo;
+	tipo t;
+	int xi, xf, y;
+};
 
 class configuracion
 {
@@ -28,6 +37,7 @@ public:
 	double obtener_d (const char *camino, std::function<bool(double n, bool omision)> validar);
 	long double obtener_ld (const char *camino, std::function<bool(long double n, bool omision)> validar);
 	SDL_Texture *obtener_textura (const char *camino, SDL_Renderer *renderer, std::function<bool(SDL_Texture *textura, bool omision)> validar);
+	void obtener_plataformas (std::list<plataforma> &l);
 private:
 	template<typename t> class tipos
 	{
