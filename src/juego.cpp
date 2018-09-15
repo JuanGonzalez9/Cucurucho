@@ -1,6 +1,7 @@
 #include <iostream>
 #include "juego.hpp"
 
+
 static const int periodo=1000000/60; // TODO averiguar
 static const int ancho=800;
 static const int alto=800;
@@ -12,8 +13,10 @@ juego::juego ():
 	fps (60),
 	d1 (1),
 	d2 (2),
+	d3 (3),
 	rect_origen_fondo1 {0, 0, 800, 600},
 	rect_origen_fondo2 {0, 0, 800, 600},
+	rect_origen_fondo3 {0, 0, 800, 600},
 	ventana (nullptr),
 	renderer (nullptr),
 	imagen_fondo1 (nullptr),
@@ -23,6 +26,7 @@ juego::juego ():
 	textura_fondo2 (nullptr),
 	textura_bob (nullptr),
 	textura_objetivo (nullptr)
+	
 {
 	atexit (SDL_Quit);
 	
@@ -77,10 +81,42 @@ juego::juego ():
 		return;
 	}
 	rect_origen_bob = {0, 0, imagen_bob->w, imagen_bob->h};
+
+
+	// Creamos textura para pegar las plataformas
+	imagen_fondo3 = IMG_Load ("imagenes/fondo3.png"); 
+	if (nullptr == imagen_fondo3) {
+		std::cerr << "No pudo crease la superficie para el imagen: " << SDL_GetError () << '\n';
+		return;
+	}
+	SDL_Texture* textura_fondo3_temp = SDL_CreateTextureFromSurface (renderer, imagen_fondo3);
+	if (nullptr == textura_fondo3_temp) {
+		std::cerr << "No pudo crease la textura: " << SDL_GetError () << '\n';
+		return;
+	}
+
+	plataformas.inicializar(renderer);
+	textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,imagen_fondo3);
+	plataformas.cargarValoresFijos(textura_fondo3,renderer);
+
+	
+	SDL_DestroyTexture (textura_fondo3_temp);
+
 }
 
 juego::~juego ()
-{
+{	
+	SDL_FreeSurface (imagen_fondo3);
+	SDL_DestroyTexture (textura_fondo3);
+	SDL_DestroyTexture (textura_objetivo);
+	SDL_DestroyTexture (textura_bob);
+	SDL_FreeSurface (imagen_bob);
+	SDL_DestroyTexture (textura_fondo1);
+	SDL_FreeSurface (imagen_fondo1);
+	SDL_DestroyTexture (textura_fondo2);
+	SDL_FreeSurface (imagen_fondo2);
+	SDL_DestroyRenderer (renderer);
+	SDL_DestroyWindow (ventana);
 }
 
 bool juego::jugando ()
@@ -103,21 +139,24 @@ void juego::actualizar ()
 		us -= periodo;
 		// Actualizo la posicion del fondo1
 		rect_origen_fondo1.x += d1;
-		// Actualizo la posicion del fondo
+		// Actualizo la posicion del fondo2
 		rect_origen_fondo2.x += d2;
-		if (d2 > 0 ) {
-			if (rect_origen_fondo2.x > imagen_fondo2->w-ancho) {
+		//Actualizo la posicion del fondo3
+		rect_origen_fondo3.x += d3;
+		if (d3 > 0 ) {
+			if (rect_origen_fondo3.x > imagen_fondo3->w-ancho) {
+				d3 = -3;
 				d2 = -2;
-				rect_origen_fondo2.x = imagen_fondo2->w-ancho;
+				rect_origen_fondo3.x = imagen_fondo3->w-ancho;
 				d1 = -1;
 			}
-		} else {
-			if (rect_origen_fondo2.x < 0) {
-				d2 = 2;
-				rect_origen_fondo2.x = 0;
-				d1 = 1;
-			}
+		}else if (rect_origen_fondo3.x < 0) {
+			d3=3;
+			d2 = 2;
+			rect_origen_fondo3.x = 0;
+			d1 = 1;
 		}
+		
 		// Actualizo la posicion de bob
 		rect_destino_bob = {400-imagen_bob->w/12, 295, imagen_bob->w/6, imagen_bob->h/6};
 	}
@@ -125,13 +164,15 @@ void juego::actualizar ()
 
 void juego::dibujar ()
 {
-	std::cout << "fps: " << fps << "\n";
+	
 	SDL_SetTextureBlendMode (textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget (renderer, textura_objetivo);
 	// Copio el fondo1
 	SDL_RenderCopy (renderer, textura_fondo1, &rect_origen_fondo1, nullptr);
 	// Copio el fondo2
 	SDL_RenderCopy (renderer, textura_fondo2, &rect_origen_fondo2, nullptr);
+	//Copio el fondo3
+	SDL_RenderCopy (renderer, textura_fondo3, &rect_origen_fondo3, nullptr);
 	// Copio a bob
 	SDL_RenderCopy (renderer, textura_bob, &rect_origen_bob, &rect_destino_bob);
 	SDL_SetRenderTarget (renderer, nullptr);
@@ -141,6 +182,7 @@ void juego::dibujar ()
 
 void juego::presentar ()
 {
+
 	SDL_RenderPresent (renderer);
 	us += t_ciclo.microsegundos (true);
 	cuadros++;
@@ -148,5 +190,6 @@ void juego::presentar ()
 		int ms = t_fps.milisegundos (true);
 		fps = 1000 * cuadros / ms;
 		cuadros = 0;
+		std::cout << "fps: " << fps << "\n";
 	}
 }

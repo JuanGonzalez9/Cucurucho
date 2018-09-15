@@ -11,15 +11,21 @@ R"(<?xml version="1.0"?>
       <fondo1>imagenes/fondo1.png</fondo1>
       <plataforma>
         <tipo>piedra</tipo>
-        <xi>10</xi>
-        <xf>60</xf>
+        <xi>100</xi>
+        <xf>600</xf>
         <y>400</y>
+      </plataforma>
+   <plataforma>
+        <tipo>piedra</tipo>
+        <xi>800</xi>
+        <xf>900</xf>
+        <y>200</y>
       </plataforma>
       <plataforma>
         <tipo>hielo</tipo>
-        <xi>350</xi>
-        <xf>500</xf>
-        <y>200</y>
+        <xi>2500</xi>
+        <xf>8000</xf>
+        <y>500</y>
       </plataforma>
     </nivel1>
   </escenarios>

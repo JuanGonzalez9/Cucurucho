@@ -1,5 +1,5 @@
 bin_PROGRAMS = contra
-contra_SOURCES = iocontra.cpp temporizador.cpp juego.cpp registro.cpp cfg.cpp Juego.cpp CucuruchoLocal.cpp
+contra_SOURCES = plataformas.cpp iocontra.cpp temporizador.cpp juego.cpp registro.cpp cfg.cpp Juego.cpp CucuruchoLocal.cpp
 contra_CPPFLAGS = -Wall $(XML_CPPFLAGS)
 contra_LDADD= $(XML_LIBS) -lSDL2 -lSDL2_image -ldl
 contradir = $(prefix)/bin
@@ -10,6 +10,7 @@ imagenes=	foo.png \
 		_fondo_1_.png \
 		_fondo_2_.png \
 		bob.png \
+		plataformis.bmp \
 		ContraPersonaje.gif
 imagenes_o=	imagen-foo.o \
 		imagen-nivel1.o \
@@ -17,6 +18,7 @@ imagenes_o=	imagen-foo.o \
 		imagen-_fondo_1_.o \
 		imagen-_fondo_2_.o \
 		imagen-bob.o \
+		imagen-plataformis.o \
 		imagen-ContraPersonaje.o
 contra_LDFLAGS= $(imagenes_o) -rdynamic
 nodist_contra_SOURCES = $(imagenes_o)
@@ -35,5 +37,6 @@ $(imagenes): Makefile
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(bindir)/imagenes && \
 	cp ../../imagenes/*.png $(DESTDIR)$(bindir)/imagenes && \
+	cp ../../imagenes/*.bmp $(DESTDIR)$(bindir)/imagenes && \
 	cp ../../imagenes/*.gif $(DESTDIR)$(bindir)/imagenes
 
