@@ -9,6 +9,18 @@ R"(<?xml version="1.0"?>
   <escenarios>
     <nivel1>
       <fondo1>imagenes/fondo1.png</fondo1>
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>10</xi>
+        <xf>60</xf>
+        <y>400</y>
+      </plataforma>
+      <plataforma>
+        <tipo>hielo</tipo>
+        <xi>350</xi>
+        <xf>500</xf>
+        <y>200</y>
+      </plataforma>
     </nivel1>
   </escenarios>
   <nivel>1</nivel>

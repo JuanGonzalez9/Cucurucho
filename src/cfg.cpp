@@ -195,18 +195,91 @@ uint8_t *configuracion::obtener_direccion_de_simbolo (std::string &s)
 	return direccion;
 }
 
-bool comparar_plataforma (const plataforma& p1, const plataforma& p2)
+bool plataforma::comparar_plataforma (const plataforma& p1, const plataforma& p2)
 {
 	return p1.y < p2.y;
 }
 
-void configuracion::obtener_plataformas (std::list<plataforma> &l)
+void configuracion::obtener_plataformas (const char *camino, std::function<void(xmlNode *node)> funcion)
 {
-	plataforma a = {plataforma::pasto, 10, 60, 400};
-	plataforma b = {plataforma::pasto, 350, 500, 200};
-	l.push_back (a);
-	l.push_back (b);
-	l.sort (comparar_plataforma);
+	xmlXPathContextPtr ctx = contexto;
+	if (ctx == nullptr) {
+		ctx = contexto_omision;
+	}
+	xmlXPathObjectPtr resultado = xmlXPathEvalExpression ((const xmlChar*)camino, ctx);
+	if (resultado && !xmlXPathNodeSetIsEmpty (resultado->nodesetval)) {
+		for (xmlNode *node = resultado->nodesetval->nodeTab[0]->children; node; node = node->next) {
+			if (node->type == XML_ELEMENT_NODE && strcmp ((const char*)node->name, "plataforma") == 0) {
+				funcion (node);
+			}
+		}
+	}
+}
+
+void configuracion::obtener_plataformas (const char *camino, std::list<plataforma> &l)
+{
+	obtener_plataformas (camino, [&l](xmlNode *node){
+		plataforma p;
+		const int t = 0x1;
+		const int xi = 0x2;
+		const int xf = 0x4;
+		const int y = 0x8;
+		int leidos = 0;
+		for (xmlNode *nodo_hijo = node->children; nodo_hijo; nodo_hijo = nodo_hijo->next) {
+			if (nodo_hijo->type == XML_ELEMENT_NODE) {
+				std::string s = (const char*)xmlNodeGetContent(nodo_hijo);
+				if (strcmp ((const char*)nodo_hijo->name, "tipo") == 0) {
+					if (s == "pasto") {
+						leidos |= t;
+						p.t = plataforma::pasto;
+					} else if (s == "piedra") {
+						leidos |= t;
+						p.t = plataforma::piedra;
+					} else if (s == "hielo") {
+						leidos |= t;
+						p.t = plataforma::hielo;
+					} else {
+						// TODO log
+					}
+				} else {
+					try{
+						std::string::size_type largo;
+						int n = std::stoi (s, &largo, 10);
+						if (largo != s.length()) {
+							throw (1);
+						}
+						if (strcmp ((const char*)nodo_hijo->name, "xi") == 0) {
+							leidos |= xi;
+							p.xi = n;
+						} else if (strcmp ((const char*)nodo_hijo->name, "xf") == 0) {
+							leidos |= xf;
+							p.xf = n;
+						} else if (strcmp ((const char*)nodo_hijo->name, "y") == 0) {
+							leidos |= y;
+							p.y = n;
+						}
+						if (leidos == 0xf) {
+							l.push_back (p);
+						} else {
+							if ((leidos & t) == 0) {
+								// TODO log
+							}
+							if ((leidos & xi) == 0) {
+								// TODO log
+							}
+							if ((leidos & xf) == 0) {
+								// TODO log
+							}
+							if ((leidos & y) == 0) {
+								// TODO log
+							}
+						}
+					} catch (...){}
+				}
+			}
+		}
+	});
+	l.sort (plataforma::comparar_plataforma);
 }
 
 SDL_Texture *configuracion::obtener_textura (const char *camino, SDL_Renderer *renderer, std::function<bool(SDL_Texture *textura, bool omision)> validar)

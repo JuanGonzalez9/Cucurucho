@@ -19,6 +19,13 @@ int main (int argc, char *argv[]){
 	LogEventos log;
 	log.definirTipoLog(LogEventos::debug);
 	log.registrar(LogEventos::info,"Comenzo el juego");
+	
+	std::list<plataforma> l;
+	cfg.obtener_plataformas ("//configuracion//escenarios//nivel1", l);
+	for (std::list<plataforma>::iterator it = l.begin(); it != l.end(); it++) {
+		plataforma &p = *it;
+		std::cout << "plataforma: " << p.xi << " - " << p.xf << ", " << p.y << ", " << p.t << "\n";
+	}
 
 	// Obtengo el nivel de depurado almacenado en la clave "//configuracion//debug//level"
 	// Primero se valida el dato obtenido en el archivo xml y de fallar se valida la opción por

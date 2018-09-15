@@ -20,6 +20,7 @@ public:
 	typedef enum {pasto, piedra, hielo} tipo;
 	tipo t;
 	int xi, xf, y;
+	static bool comparar_plataforma (const plataforma& p1, const plataforma& p2);
 };
 
 class configuracion
@@ -37,7 +38,7 @@ public:
 	double obtener_d (const char *camino, std::function<bool(double n, bool omision)> validar);
 	long double obtener_ld (const char *camino, std::function<bool(long double n, bool omision)> validar);
 	SDL_Texture *obtener_textura (const char *camino, SDL_Renderer *renderer, std::function<bool(SDL_Texture *textura, bool omision)> validar);
-	void obtener_plataformas (std::list<plataforma> &l);
+	void obtener_plataformas (const char *camino, std::list<plataforma> &l);
 private:
 	template<typename t> class tipos
 	{
@@ -55,6 +56,7 @@ private:
 	void recrear_archivo_xml ();
 	xmlNode * agregar_nodo_raiz (xmlDoc *doc, std::string & nombre);
 	xmlNode * agregar_nodo_hijo (xmlDoc *doc, xmlNode *nodo_padre, std::string & nombre);
+	void obtener_plataformas (const char *camino, std::function<void(xmlNode *node)> funcion);
 };
 
 class excepcion_configuracion: public std::invalid_argument
