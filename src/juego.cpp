@@ -159,6 +159,12 @@ void juego::actualizar ()
 		
 		// Actualizo la posicion de bob
 		rect_destino_bob = {400-imagen_bob->w/12, 295, imagen_bob->w/6, imagen_bob->h/6};
+		
+		// TODO aca hay que llamar al actualizar() del heroe, de los enemigos y de cualquier
+		// cosa animada (por ejemplo: cualquier texto parpadeante) pasandole como parametro
+		// el tiempo transcurrido, asi:
+		//
+		// heroe.actualizar (periodo);
 	}
 }
 

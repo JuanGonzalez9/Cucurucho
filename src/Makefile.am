@@ -5,7 +5,7 @@ contra_LDADD= $(XML_LIBS) -lSDL2 -lSDL2_image -ldl
 contradir = $(prefix)/bin
 
 imagenes=	foo.png \
-		nivel1.png \
+		nivel.png \
 		personaje.png \
 		_fondo_1_.png \
 		_fondo_2_.png \
@@ -13,7 +13,7 @@ imagenes=	foo.png \
 		plataformis.bmp \
 		ContraPersonaje.gif
 imagenes_o=	imagen-foo.o \
-		imagen-nivel1.o \
+		imagen-nivel.o \
 		imagen-personaje.o \
 		imagen-_fondo_1_.o \
 		imagen-_fondo_2_.o \
