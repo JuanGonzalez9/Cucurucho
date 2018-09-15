@@ -10,7 +10,7 @@ using namespace std;
 
 void Plataformas::inicializar(SDL_Renderer* renderizador){
 
-	SDL_Surface* bmpImagenPlataforma = SDL_LoadBMP("imagenes/plataformis.bmp");
+	SDL_Surface* bmpImagenPlataforma = SDL_LoadBMP("imagenes/piedra1.bmp");
 	texturaPlataforma = SDL_CreateTextureFromSurface(renderizador,bmpImagenPlataforma);
 	SDL_FreeSurface(bmpImagenPlataforma);
 }

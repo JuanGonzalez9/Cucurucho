@@ -12,19 +12,25 @@ R"(<?xml version="1.0"?>
       <plataforma>
         <tipo>piedra</tipo>
         <xi>100</xi>
-        <xf>600</xf>
+        <xf>200</xf>
         <y>400</y>
       </plataforma>
    <plataforma>
         <tipo>piedra</tipo>
-        <xi>800</xi>
-        <xf>900</xf>
+        <xi>100</xi>
+        <xf>200</xf>
+        <y>300</y>
+      </plataforma>
+   <plataforma>
+        <tipo>piedra</tipo>
+        <xi>300</xi>
+        <xf>400</xf>
         <y>200</y>
       </plataforma>
       <plataforma>
         <tipo>hielo</tipo>
-        <xi>2500</xi>
-        <xf>8000</xf>
+        <xi>400</xi>
+        <xf>500</xf>
         <y>500</y>
       </plataforma>
     </nivel1>

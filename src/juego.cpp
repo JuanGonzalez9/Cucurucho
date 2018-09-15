@@ -144,10 +144,11 @@ void juego::actualizar ()
 		//Actualizo la posicion del fondo3
 		rect_origen_fondo3.x += d3;
 		if (d3 > 0 ) {
-			if (rect_origen_fondo3.x > imagen_fondo3->w-ancho) {
+			if (rect_origen_fondo3.x > ancho) {
+				//imagen_fondo3->w-ancho
 				d3 = -3;
 				d2 = -2;
-				rect_origen_fondo3.x = imagen_fondo3->w-ancho;
+				rect_origen_fondo3.x = ancho;
 				d1 = -1;
 			}
 		}else if (rect_origen_fondo3.x < 0) {
@@ -159,12 +160,6 @@ void juego::actualizar ()
 		
 		// Actualizo la posicion de bob
 		rect_destino_bob = {400-imagen_bob->w/12, 295, imagen_bob->w/6, imagen_bob->h/6};
-		
-		// TODO aca hay que llamar al actualizar() del heroe, de los enemigos y de cualquier
-		// cosa animada (por ejemplo: cualquier texto parpadeante) pasandole como parametro
-		// el tiempo transcurrido, asi:
-		//
-		// heroe.actualizar (periodo);
 	}
 }
 

@@ -10,7 +10,7 @@ imagenes=	foo.png \
 		_fondo_1_.png \
 		_fondo_2_.png \
 		bob.png \
-		plataformis.bmp \
+		piedra1.bmp \
 		ContraPersonaje.gif
 imagenes_o=	imagen-foo.o \
 		imagen-nivel.o \
@@ -18,7 +18,7 @@ imagenes_o=	imagen-foo.o \
 		imagen-_fondo_1_.o \
 		imagen-_fondo_2_.o \
 		imagen-bob.o \
-		imagen-plataformis.o \
+		imagen-piedra1.o \
 		imagen-ContraPersonaje.o
 contra_LDFLAGS= $(imagenes_o) -rdynamic
 nodist_contra_SOURCES = $(imagenes_o)
