@@ -1,5 +1,5 @@
 bin_PROGRAMS = contra
-contra_SOURCES = registro.cpp cfg.cpp Juego.cpp CucuruchoLocal.cpp
+contra_SOURCES = iocontra.cpp temporizador.cpp juego.cpp registro.cpp cfg.cpp Juego.cpp CucuruchoLocal.cpp
 contra_CPPFLAGS = -Wall $(XML_CPPFLAGS)
 contra_LDADD= $(XML_LIBS) -lSDL2 -lSDL2_image -ldl
 contradir = $(prefix)/bin
@@ -7,10 +7,16 @@ contradir = $(prefix)/bin
 imagenes=	foo.png \
 		nivel1.png \
 		personaje.png \
+		_fondo_1_.png \
+		_fondo_2_.png \
+		bob.png \
 		ContraPersonaje.gif
 imagenes_o=	imagen-foo.o \
 		imagen-nivel1.o \
 		imagen-personaje.o \
+		imagen-_fondo_1_.o \
+		imagen-_fondo_2_.o \
+		imagen-bob.o \
 		imagen-ContraPersonaje.o
 contra_LDFLAGS= $(imagenes_o) -rdynamic
 nodist_contra_SOURCES = $(imagenes_o)

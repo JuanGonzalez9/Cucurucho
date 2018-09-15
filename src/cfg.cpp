@@ -19,11 +19,6 @@ extern "C"
 static const char * cfg_omision_xml =
 #include "cfg_omision.xml"
 ;
-// Uso el idioma Nifty Counter para asegurarme que el objeto se inicialice
-// antes de su primer uso y se destruya luego del último uso.
-static int nifty_counter;
-static typename std::aligned_storage<sizeof (configuracion), alignof (configuracion)>::type cfg_buffer;
-configuracion &cfg = reinterpret_cast<configuracion&> (cfg_buffer);
 
 #define lanzar(e, msg) \
 	do {\
@@ -54,6 +49,8 @@ excepcion_configuracion::excepcion_configuracion (const std::string &que_paso):
 
 configuracion::configuracion ()
 {
+	registro.definirTipoLog (LogEventos::error);
+	
 	dlopen_handle = dlopen (nullptr, RTLD_LOCAL | RTLD_LAZY);
 	if (dlopen_handle == nullptr) {
 		lanzar (excepcion_configuracion, "Fallo dlopen: " << dlerror());
@@ -92,6 +89,15 @@ configuracion::configuracion ()
 		doc = nullptr;
 		return;
 	}
+	
+	// Obtengo el nivel de depurado almacenado en la clave "//configuracion//debug//level"
+	// Primero se valida el dato obtenido en el archivo xml y de fallar se valida la opción por
+	// defecto, en este último caso no debería fallar, por lo que si lo hace se produce una excepcion.
+	std::string s = cfg.obtener_s ("//configuracion//debug//level", [](std::string s, bool trusted) {
+		return s == "ERROR" || s == "INFO" || s == "DEBUG"; // Se valida el dato.
+	});
+	LogEventos::TipoLog tipo = s == "ERROR" ? LogEventos::error : (s == "INFO" ? LogEventos::info : LogEventos::debug);
+	registro.definirTipoLog (tipo);
 }
 
 configuracion::~configuracion ()
@@ -422,16 +428,6 @@ double configuracion::obtener_d (const char *camino, std::function<bool(double, 
 long double configuracion::obtener_ld (const char *camino, std::function<bool(long double, bool)> validar)
 {
 	return obtener_fp_number<long double> (camino, std::stold, validar);
-}
-
-inicializador_configuracion::inicializador_configuracion ()
-{
-	if (nifty_counter++ == 0) new (&cfg) configuracion ();
-}
-
-inicializador_configuracion::~inicializador_configuracion ()
-{
-	if (--nifty_counter == 0) (&cfg)->~configuracion ();
 }
 
 

@@ -65,13 +65,8 @@ public:
 	explicit excepcion_configuracion (const std::string &que_paso);
 };
 
-extern configuracion &cfg;
-
-static class inicializador_configuracion
-{
-public:
-	inicializador_configuracion ();
-	~inicializador_configuracion ();
-} ini_cfg;
+#ifndef IOCONTRA_HPP
+	#include "iocontra.hpp"
+#endif
 
 #endif

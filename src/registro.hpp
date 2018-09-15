@@ -20,4 +20,8 @@ protected:
 	TipoLog tipoLog;
 };
 
+#ifndef IOCONTRA_HPP
+	#include "iocontra.hpp"
+#endif
+
 #endif
