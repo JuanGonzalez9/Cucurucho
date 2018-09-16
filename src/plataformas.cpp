@@ -30,6 +30,10 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 	//Hay que pedirle al archivo configurable los valores de las plataformas ¿En que formato? (Nos pasa directamente un objeto plataforma)
 	
 	SDL_Rect posicion_imagen;
+	int total;
+	int numeroPlataformas;
+	int anchoUltimaPlataforma;
+	int resto;
 
 	list<plataforma> lista_plataformas;
 	cfg.obtener_plataformas("//configuracion//escenarios//nivel1",lista_plataformas);
@@ -39,13 +43,49 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 
 	for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
 		plataforma &plataformaActual = *it;
-		posicion_imagen.x = plataformaActual.xi;
+		total = (plataformaActual.xf - plataformaActual.xi);
+
 		posicion_imagen.y = plataformaActual.y;
-		posicion_imagen.w = (plataformaActual.xf-plataformaActual.xi)+1;
 		posicion_imagen.h = 600 - plataformaActual.y;
+		
+		if((total) < 101 ){
+			posicion_imagen.x = plataformaActual.xi;
+			posicion_imagen.w = (plataformaActual.xf-plataformaActual.xi)+1;
+			
+
+			SDL_RenderCopy(renderizador,texturaPlataforma,NULL,&posicion_imagen);
+			printf("entro al menor a 101\n");
+		}
+		else{
+
+			printf("entro al mayor a 100\n");
+
+			numeroPlataformas = total/100;
+			posicion_imagen.x = plataformaActual.xi;
+			posicion_imagen.w = 100;
+
+			for(int i =1; i <= numeroPlataformas;i++){
+
+				printf("%i\n",i );
+				posicion_imagen.x = plataformaActual.xi + 100 * (i-1);
+				printf("%i\n",posicion_imagen.x );
+				SDL_RenderCopy(renderizador,texturaPlataforma,NULL,&posicion_imagen);
+
+			}
+
+			resto = total%100;
+			if(resto!=0){
+				anchoUltimaPlataforma = resto;
+				posicion_imagen.x = plataformaActual.xi + 100 * numeroPlataformas;
+				posicion_imagen.w = anchoUltimaPlataforma;
+				SDL_RenderCopy(renderizador,texturaPlataforma,NULL,&posicion_imagen);
+			}
+		}
 
 
-		SDL_RenderCopy(renderizador,texturaPlataforma,NULL,&posicion_imagen);
+		
+
+		
 		
 	}
 

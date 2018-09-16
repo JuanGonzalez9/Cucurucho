@@ -17,20 +17,20 @@ R"(<?xml version="1.0"?>
       </plataforma>
    <plataforma>
         <tipo>piedra</tipo>
-        <xi>100</xi>
-        <xf>200</xf>
+        <xi>500</xi>
+        <xf>780</xf>
         <y>300</y>
       </plataforma>
    <plataforma>
         <tipo>piedra</tipo>
-        <xi>300</xi>
-        <xf>400</xf>
+        <xi>900</xi>
+        <xf>1536</xf>
         <y>200</y>
       </plataforma>
       <plataforma>
         <tipo>hielo</tipo>
-        <xi>400</xi>
-        <xf>500</xf>
+        <xi>2000</xi>
+        <xf>2679</xf>
         <y>500</y>
       </plataforma>
     </nivel1>
