@@ -54,11 +54,11 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 			
 
 			SDL_RenderCopy(renderizador,texturaPlataforma,NULL,&posicion_imagen);
-			printf("entro al menor a 101\n");
+			
 		}
 		else{
 
-			printf("entro al mayor a 100\n");
+			
 
 			numeroPlataformas = total/100;
 			posicion_imagen.x = plataformaActual.xi;
@@ -66,9 +66,9 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 
 			for(int i =1; i <= numeroPlataformas;i++){
 
-				printf("%i\n",i );
-				posicion_imagen.x = plataformaActual.xi + 100 * (i-1);
-				printf("%i\n",posicion_imagen.x );
+				
+				posicion_imagen.x = plataformaActual.xi + 100 * (i);
+				
 				SDL_RenderCopy(renderizador,texturaPlataforma,NULL,&posicion_imagen);
 
 			}
