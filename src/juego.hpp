@@ -36,9 +36,8 @@ protected:
 	Plataformas plataformas;
 
 	//probando
-	EntidadDibujable* fondo1;
-	EntidadDibujable* fondo2;
-	Personaje* boby;
+	EntidadDibujable fondo1, fondo2;
+	Personaje boby;
 
 	bool apretandoDerecha(const Uint8* state);
 	bool apretandoIzquierda(const Uint8* state);

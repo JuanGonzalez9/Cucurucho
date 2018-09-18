@@ -17,11 +17,7 @@ juego::juego ():
 	rect_origen_fondo3 {0, 0, 800, 600},
 	ventana (nullptr),
 	renderer (nullptr),
-	boby (nullptr),
-	textura_objetivo (nullptr),
-	fondo1 (nullptr),
-	fondo2 (nullptr)
-
+	textura_objetivo (nullptr)
 {
 	atexit (SDL_Quit);
 
@@ -40,11 +36,8 @@ juego::juego ():
 		return;
 	}
 
-	fondo1 = new EntidadDibujable();
-	fondo1->crearTextura("imagenes/_fondo_1_.png",renderer);
-
-	fondo2 = new EntidadDibujable();
-	fondo2->crearTextura("imagenes/_fondo_2_.png",renderer);
+	fondo1.crearTextura("imagenes/_fondo_1_.png",renderer);
+	fondo2.crearTextura("imagenes/_fondo_2_.png",renderer);
 
 	textura_objetivo = SDL_CreateTexture (
 		renderer,
@@ -53,9 +46,8 @@ juego::juego ():
 		ancho,
 		alto);
 
-	boby = new Personaje();
-	boby->crearTextura("imagenes/bob.png",renderer);
-	boby->setRectOrigen(0,0,480,480);
+	boby.crearTextura("imagenes/bob.png",renderer);
+	boby.setRectOrigen(0,0,480,480);
 
 
 	// Creamos textura para pegar las plataformas
@@ -86,9 +78,6 @@ juego::~juego ()
 	SDL_DestroyTexture (textura_objetivo);
 	SDL_DestroyRenderer (renderer);
 	SDL_DestroyWindow (ventana);
-	fondo1->~EntidadDibujable();
-	fondo2->~EntidadDibujable();
-	boby->~Personaje();
 }
 
 bool juego::jugando ()
@@ -103,18 +92,18 @@ void juego::manejar_eventos ()
 	//checkeo los estados de las teclas
 	//va afuera del while porque no son eventos
 	if(apretandoDerecha(state)){
-		if(boby->getPosX() <= (ancho / 2)){
-			boby->avanzar();
+		if(boby.getPosX() <= (ancho / 2)){
+			boby.avanzar();
 		}
 		// falta hacer el scroll
 		//else mapaScroll();
 	}
 
 	if(apretandoIzquierda(state)){
-		boby->retroceder();
+		boby.retroceder();
 	}
 	if(apretandoArriba(state)){
-		boby->saltar();
+		boby.saltar();
 	}
 
 	while (SDL_PollEvent (&e) != 0) {
@@ -132,13 +121,13 @@ void juego::manejar_eventos ()
 
 void juego::actualizar ()
 {
-	boby->actualizar();
+	boby.actualizar();
 	while (us >= periodo*0.9 ) {
 		us -= periodo;
 		// Actualizo la posicion del fondo1
-		fondo1->avanzarOrigen(d1);
+		fondo1.avanzarOrigen(d1);
 		// Actualizo la posicion del fondo2
-		fondo2->avanzarOrigen(d2);
+		fondo2.avanzarOrigen(d2);
 		//Actualizo la posicion del fondo3
 		rect_origen_fondo3.x += d3;
 		if (d3 > 0 ) {
@@ -163,9 +152,9 @@ void juego::dibujar ()
 	SDL_SetTextureBlendMode (textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget (renderer, textura_objetivo);
 	// Copio el fondo1
-	fondo1->dibujarFondo(renderer);
+	fondo1.dibujarFondo(renderer);
 	// Copio el fondo2
-	fondo2->dibujarFondo(renderer);
+	fondo2.dibujarFondo(renderer);
 	//Copio el fondo3
 	SDL_RenderCopy (renderer, textura_fondo3, &rect_origen_fondo3, nullptr);
 	// Copio a bob
@@ -173,7 +162,7 @@ void juego::dibujar ()
 	SDL_SetRenderTarget (renderer, nullptr);
 	// Copio el resultado
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
-	boby->dibujar(renderer);
+	boby.dibujar(renderer);
 }
 
 void juego::presentar ()
