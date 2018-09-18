@@ -50,7 +50,7 @@ excepcion_configuracion::excepcion_configuracion (const std::string &que_paso):
 configuracion::configuracion ()
 {
 	registro.definirTipoLog (LogEventos::error);
-	
+
 	dlopen_handle = dlopen (nullptr, RTLD_LOCAL | RTLD_LAZY);
 	if (dlopen_handle == nullptr) {
 		lanzar (excepcion_configuracion, "Fallo dlopen: " << dlerror());
@@ -58,7 +58,7 @@ configuracion::configuracion ()
 
 	LIBXML_TEST_VERSION
 	xmlSetGenericErrorFunc (nullptr, xml_error_handler);
-					 
+
 	doc_omision = xmlReadMemory (cfg_omision_xml, strlen (cfg_omision_xml), "sin_nombre", nullptr, 0);
 	if (doc_omision == nullptr) {
 		// TODO log
@@ -89,7 +89,7 @@ configuracion::configuracion ()
 		doc = nullptr;
 		return;
 	}
-	
+
 	// Obtengo el nivel de depurado almacenado en la clave "//configuracion//debug//level"
 	// Primero se valida el dato obtenido en el archivo xml y de fallar se valida la opción por
 	// defecto, en este último caso no debería fallar, por lo que si lo hace se produce una excepcion.
@@ -429,5 +429,3 @@ long double configuracion::obtener_ld (const char *camino, std::function<bool(lo
 {
 	return obtener_fp_number<long double> (camino, std::stold, validar);
 }
-
-
