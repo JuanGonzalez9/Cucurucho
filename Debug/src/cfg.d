@@ -17,7 +17,8 @@ src/cfg.d: ../src/cfg.cpp ../src/cfg.hpp \
  /usr/include/libxml2/libxml/encoding.h \
  /usr/include/libxml2/libxml/xmlIO.h /usr/include/libxml2/libxml/SAX.h \
  /usr/include/libxml2/libxml/xlink.h /usr/include/libxml2/libxml/SAX2.h \
- /usr/include/libxml2/libxml/xpath.h ../src/cfg_omision.xml
+ /usr/include/libxml2/libxml/xpath.h ../src/iocontra.hpp \
+ ../src/registro.hpp ../src/cfg_omision.xml
 
 ../src/cfg.hpp:
 
@@ -64,5 +65,9 @@ src/cfg.d: ../src/cfg.cpp ../src/cfg.hpp \
 /usr/include/libxml2/libxml/SAX2.h:
 
 /usr/include/libxml2/libxml/xpath.h:
+
+../src/iocontra.hpp:
+
+../src/registro.hpp:
 
 ../src/cfg_omision.xml:

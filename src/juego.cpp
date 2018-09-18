@@ -14,18 +14,13 @@ juego::juego ():
 	d1 (1),
 	d2 (2),
 	d3 (3),
-	rect_origen_fondo1 {0, 0, 800, 600},
-	rect_origen_fondo2 {0, 0, 800, 600},
 	rect_origen_fondo3 {0, 0, 800, 600},
 	ventana (nullptr),
 	renderer (nullptr),
-	imagen_fondo1 (nullptr),
-	imagen_fondo2 (nullptr),
-	imagen_bob (nullptr),
-	textura_fondo1 (nullptr),
-	textura_fondo2 (nullptr),
-	textura_bob (nullptr),
-	textura_objetivo (nullptr)
+	boby (nullptr),
+	textura_objetivo (nullptr),
+	fondo1 (nullptr),
+	fondo2 (nullptr)
 	
 {
 	atexit (SDL_Quit);
@@ -44,43 +39,23 @@ juego::juego ():
 		std::cerr << "No pudo crease el renderer: " << SDL_GetError () << '\n';
 		return;
 	}
-	imagen_fondo1 = IMG_Load ("imagenes/_fondo_1_.png"); 
-	if (nullptr == imagen_fondo1) {
-		std::cerr << "No pudo crease la superficie para el imagen: " << SDL_GetError () << '\n';
-		return;
-	}
-	textura_fondo1 = SDL_CreateTextureFromSurface (renderer, imagen_fondo1);
-	if (nullptr == textura_fondo1) {
-		std::cerr << "No pudo crease la textura: " << SDL_GetError () << '\n';
-		return;
-	}
-	imagen_fondo2 = IMG_Load ("imagenes/_fondo_2_.png"); 
-	if (nullptr == imagen_fondo2) {
-		std::cerr << "No pudo crease la superficie para el imagen: " << SDL_GetError () << '\n';
-		return;
-	}
-	textura_fondo2 = SDL_CreateTextureFromSurface (renderer, imagen_fondo2);
-	if (nullptr == textura_fondo2) {
-		std::cerr << "No pudo crease la textura: " << SDL_GetError () << '\n';
-		return;
-	}
+
+	fondo1 = new EntidadDibujable();
+	fondo1->crearTextura("imagenes/_fondo_1_.png",renderer);
+
+	fondo2 = new EntidadDibujable();
+	fondo2->crearTextura("imagenes/_fondo_2_.png",renderer);
+
 	textura_objetivo = SDL_CreateTexture (
 		renderer,
 		SDL_PIXELFORMAT_RGBA8888,
 		SDL_TEXTUREACCESS_TARGET,
 		ancho,
 		alto);
-	imagen_bob = IMG_Load ("imagenes/bob.png"); 
-	if (nullptr == imagen_bob) {
-		std::cerr << "No pudo crease la superficie para el imagen: " << SDL_GetError () << '\n';
-		return;
-	}
-	textura_bob = SDL_CreateTextureFromSurface (renderer, imagen_bob);
-	if (nullptr == textura_bob) {
-		std::cerr << "No pudo crease la textura: " << SDL_GetError () << '\n';
-		return;
-	}
-	rect_origen_bob = {0, 0, imagen_bob->w, imagen_bob->h};
+
+	boby = new Personaje();
+	boby->crearTextura("imagenes/bob.png",renderer);
+	boby->setRectOrigen(0,0,480,480);
 
 
 	// Creamos textura para pegar las plataformas
@@ -109,14 +84,11 @@ juego::~juego ()
 	SDL_FreeSurface (imagen_fondo3);
 	SDL_DestroyTexture (textura_fondo3);
 	SDL_DestroyTexture (textura_objetivo);
-	SDL_DestroyTexture (textura_bob);
-	SDL_FreeSurface (imagen_bob);
-	SDL_DestroyTexture (textura_fondo1);
-	SDL_FreeSurface (imagen_fondo1);
-	SDL_DestroyTexture (textura_fondo2);
-	SDL_FreeSurface (imagen_fondo2);
 	SDL_DestroyRenderer (renderer);
 	SDL_DestroyWindow (ventana);
+	fondo1->~EntidadDibujable();
+	fondo2->~EntidadDibujable();
+	boby->~Personaje();
 }
 
 bool juego::jugando ()
@@ -126,21 +98,47 @@ bool juego::jugando ()
 
 void juego::manejar_eventos ()
 {
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+
+	//checkeo los estados de las teclas
+	//va afuera del while porque no son eventos
+	if(apretandoDerecha(state)){
+		if(boby->getPosX() <= (ancho / 2)){
+			boby->avanzar();
+		}
+		// falta hacer el scroll
+		//else mapaScroll();
+	}
+
+	if(apretandoIzquierda(state)){
+		boby->retroceder();
+	}
+	if(apretandoArriba(state)){
+		boby->saltar();
+	}
+
 	while (SDL_PollEvent (&e) != 0) {
-		if (e.type == SDL_QUIT) {
-			termino = true;
+		switch(e.type){
+
+			case (SDL_QUIT):
+				termino = true;
+				break;
+
+			default:
+				break;
 		}
 	}
 }
 
 void juego::actualizar ()
 {
+	boby->actualizar();
 	while (us >= periodo*0.9 ) {
 		us -= periodo;
 		// Actualizo la posicion del fondo1
-		rect_origen_fondo1.x += d1;
+		fondo1->avanzarOrigen(d1);
 		// Actualizo la posicion del fondo2
-		rect_origen_fondo2.x += d2;
+		fondo2->avanzarOrigen(d2);
 		//Actualizo la posicion del fondo3
 		rect_origen_fondo3.x += d3;
 		if (d3 > 0 ) {
@@ -157,28 +155,25 @@ void juego::actualizar ()
 			rect_origen_fondo3.x = 0;
 			d1 = 1;
 		}
-		
-		// Actualizo la posicion de bob
-		rect_destino_bob = {400-imagen_bob->w/12, 295, imagen_bob->w/6, imagen_bob->h/6};
 	}
 }
 
 void juego::dibujar ()
 {
-	
 	SDL_SetTextureBlendMode (textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget (renderer, textura_objetivo);
 	// Copio el fondo1
-	SDL_RenderCopy (renderer, textura_fondo1, &rect_origen_fondo1, nullptr);
+	fondo1->dibujarFondo(renderer);
 	// Copio el fondo2
-	SDL_RenderCopy (renderer, textura_fondo2, &rect_origen_fondo2, nullptr);
+	fondo2->dibujarFondo(renderer);
 	//Copio el fondo3
 	SDL_RenderCopy (renderer, textura_fondo3, &rect_origen_fondo3, nullptr);
 	// Copio a bob
-	SDL_RenderCopy (renderer, textura_bob, &rect_origen_bob, &rect_destino_bob);
+
 	SDL_SetRenderTarget (renderer, nullptr);
 	// Copio el resultado
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
+	boby->dibujar(renderer);
 }
 
 void juego::presentar ()
@@ -193,4 +188,18 @@ void juego::presentar ()
 		cuadros = 0;
 		std::cout << "fps: " << fps << "\n";
 	}
+}
+
+bool juego::apretandoDerecha(const Uint8* state){
+	//controla tambien que no este la tecla izquierda
+	return (state[SDL_SCANCODE_RIGHT] && !state[SDL_SCANCODE_LEFT]);
+}
+
+bool juego::apretandoIzquierda(const Uint8* state){
+	//controla tambien que no este la tecla derecha
+	return (state[SDL_SCANCODE_LEFT] && !state[SDL_SCANCODE_RIGHT]);
+}
+
+bool juego::apretandoArriba(const Uint8* state){
+	return state[SDL_SCANCODE_UP];
 }

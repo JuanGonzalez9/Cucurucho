@@ -1,4 +1,6 @@
 src/CucuruchoLocal.d: ../src/CucuruchoLocal.cpp ../src/Juego.h \
+ ../src/juego.hpp ../src/temporizador.hpp ../src/plataformas.hpp \
+ ../src/EntidadDibujable.h ../src/Personaje.h ../src/iocontra.hpp \
  ../src/registro.hpp ../src/cfg.hpp /usr/include/libxml2/libxml/tree.h \
  /usr/include/libxml2/libxml/xmlversion.h \
  /usr/include/libxml2/libxml/xmlexports.h \
@@ -20,6 +22,18 @@ src/CucuruchoLocal.d: ../src/CucuruchoLocal.cpp ../src/Juego.h \
  /usr/include/libxml2/libxml/xpath.h
 
 ../src/Juego.h:
+
+../src/juego.hpp:
+
+../src/temporizador.hpp:
+
+../src/plataformas.hpp:
+
+../src/EntidadDibujable.h:
+
+../src/Personaje.h:
+
+../src/iocontra.hpp:
 
 ../src/registro.hpp:
 

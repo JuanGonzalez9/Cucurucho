@@ -1,5 +1,5 @@
-src/registro.d: ../src/registro.cpp ../src/registro.hpp \
- ../src/iocontra.hpp ../src/cfg.hpp /usr/include/libxml2/libxml/tree.h \
+src/iocontra.d: ../src/iocontra.cpp ../src/iocontra.hpp \
+ ../src/registro.hpp ../src/cfg.hpp /usr/include/libxml2/libxml/tree.h \
  /usr/include/libxml2/libxml/xmlversion.h \
  /usr/include/libxml2/libxml/xmlexports.h \
  /usr/include/libxml2/libxml/xmlstring.h \
@@ -19,9 +19,9 @@ src/registro.d: ../src/registro.cpp ../src/registro.hpp \
  /usr/include/libxml2/libxml/xlink.h /usr/include/libxml2/libxml/SAX2.h \
  /usr/include/libxml2/libxml/xpath.h
 
-../src/registro.hpp:
-
 ../src/iocontra.hpp:
+
+../src/registro.hpp:
 
 ../src/cfg.hpp:
 
