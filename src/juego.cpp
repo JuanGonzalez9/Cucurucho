@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "juego.hpp"
 
 
@@ -10,7 +11,6 @@ juego::juego ():
 	termino (false),
 	us (periodo),
 	cuadros (0),
-	fps (60),
 	d1 (1),
 	d2 (2),
 	d3 (3),
@@ -21,10 +21,10 @@ juego::juego ():
 	textura_objetivo (nullptr),
 	fondo1 (nullptr),
 	fondo2 (nullptr)
-	
+
 {
 	atexit (SDL_Quit);
-	
+
 	if (SDL_Init (SDL_INIT_VIDEO) < 0) {
 		std::cerr << "No pudo inicializarse SDL: " << SDL_GetError () << '\n';
 		return;
@@ -59,7 +59,7 @@ juego::juego ():
 
 
 	// Creamos textura para pegar las plataformas
-	imagen_fondo3 = IMG_Load ("imagenes/fondo3.png"); 
+	imagen_fondo3 = IMG_Load ("imagenes/fondo3.png");
 	if (nullptr == imagen_fondo3) {
 		std::cerr << "No pudo crease la superficie para el imagen: " << SDL_GetError () << '\n';
 		return;
@@ -74,13 +74,13 @@ juego::juego ():
 	textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,imagen_fondo3);
 	plataformas.cargarValoresFijos(textura_fondo3,renderer);
 
-	
+
 	SDL_DestroyTexture (textura_fondo3_temp);
 
 }
 
 juego::~juego ()
-{	
+{
 	SDL_FreeSurface (imagen_fondo3);
 	SDL_DestroyTexture (textura_fondo3);
 	SDL_DestroyTexture (textura_objetivo);
@@ -184,9 +184,9 @@ void juego::presentar ()
 	cuadros++;
 	if (t_fps.milisegundos () > 5000) {
 		int ms = t_fps.milisegundos (true);
-		fps = 1000 * cuadros / ms;
+		float fps = 1000.0 * (float)cuadros / (float)ms;
 		cuadros = 0;
-		std::cout << "fps: " << fps << "\n";
+		std::cout << "fps: " << std::fixed << std::setprecision (2) << fps << "\n";
 	}
 }
 

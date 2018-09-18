@@ -25,7 +25,7 @@ public:
 	bool jugando ();
 protected:
 	bool termino;
-	int us, cuadros, fps, d1, d2, d3;
+	int us, cuadros, d1, d2, d3;
 	temporizador t_ciclo, t_fps;
 	SDL_Event e;
 	SDL_Rect rect_origen_fondo3;
