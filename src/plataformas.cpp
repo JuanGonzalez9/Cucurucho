@@ -15,8 +15,10 @@ void Plataformas::inicializar(SDL_Renderer* renderizador){
 	SDL_FreeSurface(bmpImagenPlataforma);
 }
 
-Plataformas::Plataformas(): texturaPlataforma (nullptr){
+Plataformas::Plataformas(): texturaPlataforma (nullptr)
+{
 
+	cfg.obtener_plataformas("//configuracion//escenarios//nivel1",lista_plataformas);
 }
 
 Plataformas::~Plataformas(){
@@ -34,9 +36,6 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 	int numeroPlataformas;
 	int anchoUltimaPlataforma;
 	int resto;
-
-	list<plataforma> lista_plataformas;
-	cfg.obtener_plataformas("//configuracion//escenarios//nivel1",lista_plataformas);
 	
 	SDL_SetTextureBlendMode(textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget(renderizador, textura_objetivo);
@@ -108,4 +107,70 @@ SDL_Texture * Plataformas::crearTexturaParaElFondo(SDL_Texture* texturaFondo,SDL
 }
 
 
+bool Plataformas::hayColision(int otroX, int otroY, int otroW, int otroH){
 
+
+	int parte_inferior = otroY+otroH;
+	int parte_superior = otroY;
+	int parte_lateral_izq = otroX;
+	int parte_lateral_der = otroX+otroW;
+
+	int parte_inferior_plataforma;
+	int parte_superior_plataforma;
+	int parte_lateral_izq_plataforma;
+	int parte_lateral_der_plataforma;
+
+	for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
+		plataforma &plataformaActual = *it;
+
+		parte_inferior_plataforma = 600 - plataformaActual.y; //Esto en algun momento se va a cambiar
+		parte_superior_plataforma = plataformaActual.y;
+		parte_lateral_izq_plataforma = plataformaActual.xi;
+		parte_lateral_der_plataforma = plataformaActual.xf;
+
+		//Podemos observar que pueden ocurrir 8 tipos de colisiones, 4 simples y 4 complejas.
+		//Colisiones simples: laterales, inferior y superior
+		//Colisiones complejas: lateral y superior, lateral e inferior (2y2); (En punta)
+
+
+		//Colision superior (Personaje arriba de la plataforma)
+		if(parte_inferior == parte_superior_plataforma && (parte_lateral_izq_plataforma < parte_lateral_izq && parte_lateral_der_plataforma > parte_lateral_der)){
+			return true;
+		}
+
+		//Colision inferior (de la plataforma)
+		if(parte_superior == parte_inferior_plataforma && (parte_lateral_izq_plataforma < parte_lateral_izq && parte_lateral_der_plataforma > parte_lateral_der)){
+			return true;
+		}
+
+		//Colision lateral izq (de la plataforma)
+
+		if(parte_lateral_der == parte_lateral_izq_plataforma && (parte_superior_plataforma < parte_superior && parte_inferior_plataforma > parte_inferior)){
+			return true;
+		}  
+
+		//Colision lateral derecha( de la plataforma)
+		if(parte_lateral_izq == parte_lateral_der_plataforma && (parte_superior_plataforma < parte_superior && parte_inferior_plataforma > parte_inferior)){
+			return true;
+		}
+		//Esquina izquierda superior
+		if(parte_inferior == parte_superior_plataforma && (parte_lateral_der_plataforma > parte_lateral_der && parte_lateral_izq_plataforma < parte_lateral_der)){
+			return true;
+		}
+
+		//Esquina derecha superior
+		if(parte_inferior == parte_superior_plataforma && (parte_lateral_izq_plataforma < parte_lateral_izq && parte_lateral_der_plataforma > parte_lateral_izq)){
+			return true;
+		}
+
+		//Esquina izquierda inferior
+		if(parte_superior == parte_inferior_plataforma && (parte_lateral_der_plataforma > parte_lateral_der && parte_lateral_izq_plataforma < parte_lateral_der)){
+			return true;
+		}
+
+		//Esquina derecha inferior
+		if(parte_superior == parte_inferior_plataforma && (parte_lateral_izq_plataforma < parte_lateral_izq && parte_lateral_der_plataforma > parte_lateral_izq)){
+			return true;
+		}
+	}
+}
