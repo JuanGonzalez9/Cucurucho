@@ -72,7 +72,6 @@ SDL_Rect Sprite::getFrameDisparando(){
 }
 
 SDL_Rect Sprite::getFrameDisparandoCaminando(){
-	cout<<"entro aqui"<<endl;
 	if(ultimoFrame != DisparandoCaminando) frameActual = 0;
 	SDL_Rect frame = framesDisparandoCaminando[frameActual];
 	contador++;
