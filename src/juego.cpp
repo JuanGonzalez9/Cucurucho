@@ -46,7 +46,7 @@ juego::juego ():
 		ancho,
 		alto);
 
-	boby.crearTextura("imagenes/bob.png",renderer);
+	boby.crearTextura("imagenes/personaje.png",renderer);
 	boby.setRectOrigen(0,0,480,480);
 
 

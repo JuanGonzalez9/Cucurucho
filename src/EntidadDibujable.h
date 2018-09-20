@@ -23,6 +23,7 @@ public:
 	void crearTextura(const char* path,SDL_Renderer* renderer);
 	SDL_Rect getRectaOrigen();
 	SDL_Rect getRectaDestino();
+	SDL_Texture* getTextura();
 	void setRectOrigen(int x,int y,int w,int h);
 	void setRectDestino(int x,int y,int w,int h);
 

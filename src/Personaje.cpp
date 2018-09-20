@@ -11,8 +11,8 @@ Personaje::Personaje() {
 	EntidadDibujable();
 	velocidadY = 0;
 	velocidadX = 0;
-	maximaVelocidadX = 4;
-	maximaVelocidadY = 16;
+	maximaVelocidadX = 3;
+	maximaVelocidadY = 14;
 	gravedad = 1;
 
 	posX = 50;
@@ -20,7 +20,9 @@ Personaje::Personaje() {
 	estado = Quieto;
 	saltando = false;
 
-	rectDestino = {posX,posY,80,80};
+	rectDestino = {posX,posY,34,72};
+
+	spritesJugador = new Sprite();
 }
 
 //--------GET----SET
@@ -75,6 +77,26 @@ void Personaje::saltar(){
 		velocidadY = - maximaVelocidadY;
 		saltando = true;
 	}
+}
+
+void Personaje::dibujar(SDL_Renderer* renderer){
+	SDL_Rect rect_origen;
+	if(saltando){
+		rect_origen = spritesJugador->getFrameSaltando();
+	}
+	else{
+		switch(estado){
+			case Caminando:
+				rect_origen = spritesJugador->getFrameCaminando();
+				break;
+			default:
+				rect_origen = spritesJugador->getFrameQuieto();
+				break;
+		}
+	}
+
+	SDL_RenderCopy(renderer, textura, & rect_origen , &rectDestino);
+	//SDL_RenderCopyEx(renderer,textura,& rect_origen,&rectDestino,180.0,NULL,SDL_FLIP_VERTICAL);
 }
 
 //--------Destructor-------

@@ -9,6 +9,7 @@
 #define PERSONAJE_H_
 
 #include "EntidadDibujable.h"
+#include "Sprite.h"
 
 class Personaje : public EntidadDibujable{
 
@@ -36,9 +37,10 @@ public:
 	void retroceder();
 	void agacharse();
 	void actualizar();
-
+	void dibujar(SDL_Renderer* renderer);
 
 private:
+	Sprite* spritesJugador;
 	int maximaVelocidadX;
 	int maximaVelocidadY;
 	int velocidadY;

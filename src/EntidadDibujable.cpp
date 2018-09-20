@@ -52,6 +52,9 @@ void EntidadDibujable::setRectOrigen(int x,int y,int w,int h){
 	rectOrigen = {x,y,w,h};
 }
 
+SDL_Texture* EntidadDibujable::getTextura(){
+	return textura;
+}
 
 //-------------------------METODOS--------------------------------------------
 void EntidadDibujable::dibujar(SDL_Renderer* ren){

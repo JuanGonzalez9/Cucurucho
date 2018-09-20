@@ -21,6 +21,7 @@ int main (int argc, char *argv[]){
 		j.actualizar ();
 		j.dibujar ();
 		j.presentar ();
+		//SDL_Delay(40);
 	}
 	return 0;
 	
