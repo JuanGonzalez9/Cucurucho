@@ -21,6 +21,7 @@ public:
 	enum Estado{
 		Quieto,
 		Caminando,
+		Retrocediendo,
 		CaminandoYDisparando,
 		Disparando,
 		CuerpoATierra

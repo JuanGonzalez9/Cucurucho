@@ -67,7 +67,7 @@ void Personaje::avanzar(){
 
 void Personaje::retroceder(){
 	velocidadX = - maximaVelocidadX;
-	estado = Caminando;
+	estado = Retrocediendo;
 }
 
 void Personaje::saltar(){
@@ -89,6 +89,10 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 			case Caminando:
 				rect_origen = spritesJugador->getFrameCaminando();
 				break;
+			case Retrocediendo:
+				rect_origen = spritesJugador->getFrameCaminando();
+				SDL_RenderCopyEx(renderer,textura,& rect_origen,&rectDestino,180.0,NULL,SDL_FLIP_VERTICAL);
+				return;
 			default:
 				rect_origen = spritesJugador->getFrameQuieto();
 				break;
@@ -96,7 +100,6 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 	}
 
 	SDL_RenderCopy(renderer, textura, & rect_origen , &rectDestino);
-	//SDL_RenderCopyEx(renderer,textura,& rect_origen,&rectDestino,180.0,NULL,SDL_FLIP_VERTICAL);
 }
 
 //--------Destructor-------
