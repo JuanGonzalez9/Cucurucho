@@ -102,8 +102,23 @@ void juego::manejar_eventos ()
 	if(apretandoIzquierda(state)){
 		boby.retroceder();
 	}
-	if(apretandoArriba(state)){
+	if(apretandoSalto(state)){
 		boby.saltar();
+	}
+	if(apretandoDisparo(state)){
+		boby.disparar();
+	}
+	if(! apretandoDisparo(state)){
+		boby.dejarDeDisparar();
+	}
+	if(apretandoArriba(state)){
+		boby.apuntarArriba();
+	}
+	if(apretandoAbajo(state)){
+		boby.apuntarAbajo();
+	}
+	if(! apretandoArriba(state) && ! apretandoAbajo(state)){
+		boby.dejarDeApuntar();
 	}
 
 	while (SDL_PollEvent (&e) != 0) {
@@ -191,4 +206,16 @@ bool juego::apretandoIzquierda(const Uint8* state){
 
 bool juego::apretandoArriba(const Uint8* state){
 	return state[SDL_SCANCODE_UP];
+}
+
+bool juego::apretandoDisparo(const Uint8* state){
+	return state[SDL_SCANCODE_Z];
+}
+
+bool juego::apretandoSalto(const Uint8* state){
+	return state[SDL_SCANCODE_X];
+}
+
+bool juego::apretandoAbajo(const Uint8* state){
+	return state[SDL_SCANCODE_DOWN];
 }

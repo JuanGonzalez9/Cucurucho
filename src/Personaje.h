@@ -23,8 +23,13 @@ public:
 		Caminando,
 		Retrocediendo,
 		CaminandoYDisparando,
-		Disparando,
 		CuerpoATierra
+	};
+
+	enum DireccionDisparo{
+		Arriba,
+		Centro,
+		Abajo
 	};
 
 	//----GET--SET
@@ -37,7 +42,13 @@ public:
 	void avanzar();
 	void retroceder();
 	void agacharse();
+	void disparar();
 	void actualizar();
+	void dejarDeDisparar();
+	void apuntarArriba();
+	void apuntarAbajo();
+	//para que la posicion del arma vuelva al centro
+	void dejarDeApuntar();
 	void dibujar(SDL_Renderer* renderer);
 
 private:
@@ -51,8 +62,10 @@ private:
 	int posY;
 
 	Personaje::Estado estado;
+	Personaje::DireccionDisparo direccionDisparo;
 	//el estado de saltando o no se guarda en este booleano para no mezclar
 	bool saltando;
+	bool disparando;
 };
 
 #endif /* PERSONAJE_H_ */

@@ -10,6 +10,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include <vector>
+#include <iostream>
 using namespace std;
 
 
@@ -21,24 +22,48 @@ public:
 	enum Estado{
 		Quieto,
 		Caminando,
-		Saltando
+		Saltando,
+		Disparando,
+		DisparandoCaminando,
+		DisparandoArriba,
+		DisparandoAbajo,
+		DisparandoArribaCaminando,
+		DisparandoAbajoCaminando
 	};
 
 	SDL_Rect getFrameCaminando();
 	SDL_Rect getFrameQuieto();
 	SDL_Rect getFrameSaltando();
+	SDL_Rect getFrameDisparando();
+	SDL_Rect getFrameDisparandoArriba();
+	SDL_Rect getFrameDisparandoAbajo();
+	SDL_Rect getFrameDisparandoCaminando();
+	SDL_Rect getFrameDisparandoArribaCaminando();
+	SDL_Rect getFrameDisparandoAbajoCaminando();
 private:
 	vector<SDL_Rect> framesCaminando;
 	vector<SDL_Rect> framesSaltando;
+	vector<SDL_Rect> framesDisparando;
+	vector<SDL_Rect> framesDisparandoCaminando;
+	vector<SDL_Rect> framesDisparandoArribaCaminando;
+	vector<SDL_Rect> framesDisparandoAbajoCaminando;
 
 	int cantFramesCaminando;
 	int cantFramesSaltando;
+	int cantFramesDisparando;
+	int cantFramesDisparandoCaminando;
+	int cantFramesDisparandoArribaCaminando;
+	int cantFramesDisparandoAbajoCaminando;
 	int contador;
 	int frameActual;
 	Sprite::Estado ultimoFrame;
 
 	void cargarFramesCaminando();
 	void cargarFramesSaltando();
+	void cargarFramesDisparando();
+	void cargarFramesDisparandoCaminando();
+	void cargarFramesDisparandoArribaCaminando();
+	void cargarFramesDisparandoAbajoCaminando();
 
 };
 

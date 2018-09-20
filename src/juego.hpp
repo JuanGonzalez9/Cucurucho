@@ -42,6 +42,9 @@ protected:
 	bool apretandoDerecha(const Uint8* state);
 	bool apretandoIzquierda(const Uint8* state);
 	bool apretandoArriba(const Uint8* state);
+	bool apretandoAbajo(const Uint8* state);
+	bool apretandoDisparo(const Uint8* state);
+	bool apretandoSalto(const Uint8* state);
 
 };
 

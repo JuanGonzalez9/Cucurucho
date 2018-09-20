@@ -18,7 +18,9 @@ Personaje::Personaje() {
 	posX = 50;
 	posY = 280;
 	estado = Quieto;
+	direccionDisparo = Centro;
 	saltando = false;
+	disparando = false;
 
 	rectDestino = {posX,posY,34,72};
 
@@ -70,6 +72,26 @@ void Personaje::retroceder(){
 	estado = Retrocediendo;
 }
 
+void Personaje::disparar(){
+	disparando = true;
+}
+
+void Personaje::dejarDeDisparar(){
+	disparando = false;
+}
+
+void Personaje::apuntarAbajo(){
+	direccionDisparo = Abajo;
+}
+
+void Personaje::apuntarArriba(){
+	direccionDisparo = Arriba;
+}
+
+void Personaje::dejarDeApuntar(){
+	direccionDisparo = Centro;
+}
+
 void Personaje::saltar(){
 	//esto podria cambiar si tenemos estados como SaltandoYAvanzando o Saltando y otra cosa
 	//deberia decir if(esta en una plataforma)
@@ -87,14 +109,41 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 	else{
 		switch(estado){
 			case Caminando:
-				rect_origen = spritesJugador->getFrameCaminando();
+				if(disparando){
+					if(direccionDisparo == Centro)
+						rect_origen = spritesJugador->getFrameDisparandoCaminando();
+					if(direccionDisparo == Arriba)
+						rect_origen = spritesJugador->getFrameDisparandoArribaCaminando();
+					if(direccionDisparo == Abajo)
+						rect_origen = spritesJugador->getFrameDisparandoAbajoCaminando();
+				}
+				else
+					rect_origen = spritesJugador->getFrameCaminando();
 				break;
 			case Retrocediendo:
-				rect_origen = spritesJugador->getFrameCaminando();
+				if(disparando){
+					if(direccionDisparo == Centro)
+						rect_origen = spritesJugador->getFrameDisparandoCaminando();
+					if(direccionDisparo == Arriba)
+						rect_origen = spritesJugador->getFrameDisparandoArribaCaminando();
+					if(direccionDisparo == Abajo)
+						rect_origen = spritesJugador->getFrameDisparandoAbajoCaminando();
+				}
+				else
+					rect_origen = spritesJugador->getFrameCaminando();
 				SDL_RenderCopyEx(renderer,textura,& rect_origen,&rectDestino,180.0,NULL,SDL_FLIP_VERTICAL);
 				return;
 			default:
-				rect_origen = spritesJugador->getFrameQuieto();
+				if(disparando){
+					if(direccionDisparo == Centro)
+						rect_origen = spritesJugador->getFrameDisparando();
+					if(direccionDisparo == Arriba)
+						rect_origen = spritesJugador->getFrameDisparandoArriba();
+					if(direccionDisparo == Abajo)
+						rect_origen = spritesJugador->getFrameDisparandoAbajo();
+				}
+				else
+					rect_origen = spritesJugador->getFrameQuieto();
 				break;
 		}
 	}
