@@ -9,6 +9,7 @@
 
 Personaje::Personaje() {
 	EntidadDibujable();
+	shootTimer = 0;
 	velocidadY = 0;
 	velocidadX = 0;
 	maximaVelocidadX = 3;
@@ -21,6 +22,7 @@ Personaje::Personaje() {
 	direccionDisparo = Centro;
 	saltando = false;
 	disparando = false;
+	mirandoALaDerecha = true;
 
 	rectDestino = {posX,posY,34,72};
 
@@ -62,18 +64,42 @@ void Personaje::actualizar(){
 	velocidadX = 0;
 }
 
+bool Personaje::estaMirandoALaDerecha(){
+	return mirandoALaDerecha;
+}
+
 void Personaje::avanzar(){
 	velocidadX = maximaVelocidadX;
 	estado = Caminando;
+	mirandoALaDerecha = true;
 }
 
 void Personaje::retroceder(){
 	velocidadX = - maximaVelocidadX;
 	estado = Retrocediendo;
+	mirandoALaDerecha = false;
 }
 
 void Personaje::disparar(){
+	//shoot timer = rateOfFire
+	shootTimer = 10;
+}
+
+void Personaje::pelarElChumbo(){
 	disparando = true;
+}
+
+void Personaje::refreshBullets(){
+	if(shootTimer > 0)
+		shootTimer--;
+}
+
+bool Personaje::puedeDisparar(){
+
+	if(shootTimer <= 0)
+		return true;
+
+	return false;
 }
 
 void Personaje::dejarDeDisparar(){
@@ -121,18 +147,8 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 					rect_origen = spritesJugador->getFrameCaminando();
 				break;
 			case Retrocediendo:
-				if(disparando){
-					if(direccionDisparo == Centro)
-						rect_origen = spritesJugador->getFrameDisparandoCaminando();
-					if(direccionDisparo == Arriba)
-						rect_origen = spritesJugador->getFrameDisparandoArribaCaminando();
-					if(direccionDisparo == Abajo)
-						rect_origen = spritesJugador->getFrameDisparandoAbajoCaminando();
-				}
-				else
 					rect_origen = spritesJugador->getFrameCaminando();
-				SDL_RenderCopyEx(renderer,textura,& rect_origen,&rectDestino,180.0,NULL,SDL_FLIP_VERTICAL);
-				return;
+					break;
 			default:
 				if(disparando){
 					if(direccionDisparo == Centro)
@@ -148,7 +164,10 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 		}
 	}
 
-	SDL_RenderCopy(renderer, textura, & rect_origen , &rectDestino);
+	if(mirandoALaDerecha)
+		SDL_RenderCopy(renderer, textura, & rect_origen , &rectDestino);
+	else
+		SDL_RenderCopyEx(renderer,textura,& rect_origen,&rectDestino,180.0,NULL,SDL_FLIP_VERTICAL);
 }
 
 //--------Destructor-------

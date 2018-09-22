@@ -5,6 +5,9 @@
 #include "plataformas.hpp"
 #include "EntidadDibujable.h"
 #include "Personaje.h"
+#include "Bullet.h"
+#include <vector>
+using namespace std;
 
 extern "C"
 {
@@ -32,12 +35,17 @@ protected:
 	SDL_Window *ventana;
 	SDL_Renderer *renderer;
 	SDL_Surface *imagen_fondo3;
-	SDL_Texture *textura_fondo3, *textura_objetivo;
+	SDL_Texture *textura_fondo3, *textura_objetivo, *textura_bala;
 	Plataformas plataformas;
+
+	//balas
+	bool collision(SDL_Rect* rect1,SDL_Rect* rect2);
+	int direccionDeBala;
 
 	//probando
 	EntidadDibujable fondo1, fondo2;
 	Personaje boby;
+	vector<Bullet*> bullets;
 
 	bool apretandoDerecha(const Uint8* state);
 	bool apretandoIzquierda(const Uint8* state);

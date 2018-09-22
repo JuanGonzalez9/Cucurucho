@@ -36,6 +36,20 @@ juego::juego ():
 		return;
 	}
 
+	//cosas de balas
+	direccionDeBala = 0;
+	SDL_Surface* superficieTemporal = IMG_Load("imagenes/bullet.png");
+	if(superficieTemporal == nullptr){
+			std::cerr << "No pudo crease la superficie para el imagen: " << SDL_GetError () << '\n';
+		}
+	textura_bala = SDL_CreateTextureFromSurface(renderer,superficieTemporal);
+	if (textura_bala == nullptr) {
+			std::cerr << "No pudo crease la textura: " << SDL_GetError () << '\n';
+			return;
+		}
+	SDL_FreeSurface(superficieTemporal);
+
+
 	fondo1.crearTextura("imagenes/_fondo_1_.png",renderer);
 	fondo2.crearTextura("imagenes/_fondo_2_.png",renderer);
 
@@ -78,6 +92,11 @@ juego::~juego ()
 	SDL_DestroyTexture (textura_objetivo);
 	SDL_DestroyRenderer (renderer);
 	SDL_DestroyWindow (ventana);
+	SDL_DestroyTexture(textura_bala);
+
+	for(int i = 0;i < bullets.size();i++){
+		bullets[i]->~Bullet();
+	}
 }
 
 bool juego::jugando ()
@@ -105,9 +124,27 @@ void juego::manejar_eventos ()
 	if(apretandoSalto(state)){
 		boby.saltar();
 	}
+
 	if(apretandoDisparo(state)){
-		boby.disparar();
+		boby.pelarElChumbo();
+		if(boby.puedeDisparar()){
+			direccionDeBala = 0;
+			if(apretandoArriba(state))
+				direccionDeBala--;
+			if(apretandoAbajo(state))
+				direccionDeBala++;
+
+			int posBala = 10;
+			if(!boby.estaMirandoALaDerecha())
+				posBala = -10;
+			Bullet* nuevaBala = new Bullet(boby.getPosX(),boby.getPosY(),posBala,direccionDeBala*10);
+			nuevaBala->asignarTextura(textura_bala);
+			bullets.push_back(nuevaBala);
+
+			boby.disparar();
+		}
 	}
+
 	if(! apretandoDisparo(state)){
 		boby.dejarDeDisparar();
 	}
@@ -160,6 +197,21 @@ void juego::actualizar ()
 			d1 = 1;
 		}
 	}
+
+	//Actualizo balas
+	for(int i = 0; i < bullets.size(); i++){
+		bullets[i]->move();
+	}
+
+	//borro las bals que exceden su rango para que no sigan hasta el infinito
+	for(int i = 0; i < bullets.size(); i++){
+		if(bullets[i]->getDuracion() == 0){
+			bullets.erase(bullets.begin() + i);
+		}
+	}
+
+	//actualiza el shootTimer del jugador (para que no tire 500 tiros por segundo)
+	boby.refreshBullets();
 }
 
 void juego::dibujar ()
@@ -178,6 +230,10 @@ void juego::dibujar ()
 	// Copio el resultado
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
 	boby.dibujar(renderer);
+
+	for(unsigned i = 0; i < bullets.size();i++){
+		bullets[i]->dibujar(renderer);
+	}
 }
 
 void juego::presentar ()

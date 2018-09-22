@@ -36,6 +36,10 @@ void EntidadDibujable::crearTextura(const char* path,SDL_Renderer* renderer){
 	SDL_FreeSurface(superficieTemporal);
 }
 
+void EntidadDibujable::asignarTextura(SDL_Texture* tex){
+	textura = tex;
+}
+
 SDL_Rect EntidadDibujable::getRectaDestino(){
 	return rectDestino;
 }

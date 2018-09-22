@@ -36,6 +36,7 @@ public:
 	Personaje::Estado getEstado();
 	int getPosX();
 	int getPosY();
+	bool estaMirandoALaDerecha();
 
 	//----METODOS
 	void saltar();
@@ -43,12 +44,15 @@ public:
 	void retroceder();
 	void agacharse();
 	void disparar();
+	void pelarElChumbo();
 	void actualizar();
 	void dejarDeDisparar();
 	void apuntarArriba();
 	void apuntarAbajo();
 	//para que la posicion del arma vuelva al centro
 	void dejarDeApuntar();
+	bool puedeDisparar();
+	void refreshBullets();
 	void dibujar(SDL_Renderer* renderer);
 
 private:
@@ -60,12 +64,14 @@ private:
 	int gravedad;
 	int posX;
 	int posY;
+	int shootTimer;
 
 	Personaje::Estado estado;
 	Personaje::DireccionDisparo direccionDisparo;
 	//el estado de saltando o no se guarda en este booleano para no mezclar
 	bool saltando;
 	bool disparando;
+	bool mirandoALaDerecha;
 };
 
 #endif /* PERSONAJE_H_ */
