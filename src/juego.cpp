@@ -42,6 +42,8 @@ juego::juego ():
 	if(superficieTemporal == nullptr){
 			std::cerr << "No pudo crease la superficie para el imagen: " << SDL_GetError () << '\n';
 		}
+	Uint32 colorkey = SDL_MapRGB(superficieTemporal->format, 255, 255, 255);
+	SDL_SetColorKey(superficieTemporal, SDL_TRUE, colorkey);
 	textura_bala = SDL_CreateTextureFromSurface(renderer,superficieTemporal);
 	if (textura_bala == nullptr) {
 			std::cerr << "No pudo crease la textura: " << SDL_GetError () << '\n';
@@ -63,7 +65,7 @@ juego::juego ():
 	boby.crearTextura("imagenes/personaje.png",renderer);
 	boby.setRectOrigen(0,0,480,480);
 
-	darthBob = new Enemigo(300,150,5);
+	darthBob = new Enemigo(400,150,5);
 	darthBob->crearTextura("imagenes/enemigo.png",renderer);
 
 
@@ -242,7 +244,7 @@ void juego::dibujar ()
 	else
 		darthBob->~Enemigo();
 
-	if(boby.getInvincibilityFrames() %2 == 0)
+	if((boby.getInvincibilityFrames()/2) %2 == 0)
 		boby.dibujar(renderer);
 
 

@@ -85,7 +85,7 @@ void Personaje::avanzar(){
 
 void Personaje::retroceder(){
 	velocidadX = - maximaVelocidadX;
-	estado = Retrocediendo;
+	estado = Caminando;
 	mirandoALaDerecha = false;
 }
 
@@ -155,9 +155,9 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 				else
 					rect_origen = spritesJugador->getFrameCaminando();
 				break;
-			case Retrocediendo:
+			/*case Retrocediendo:
 					rect_origen = spritesJugador->getFrameCaminando();
-					break;
+					break;*/
 			default:
 				if(disparando){
 					if(direccionDisparo == Centro)
@@ -183,7 +183,7 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 void Personaje::perderVida(){
 	cout<<"perdi vida ahora me queda "<<hitPoints<<endl;
 	hitPoints--;
-	invincibilityFrames = 60;
+	invincibilityFrames = 90;
 	//invincibilityFrames = IFramesMAX
 }
 
