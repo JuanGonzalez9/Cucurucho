@@ -195,14 +195,14 @@ void juego::actualizar ()
 	}
 
 	//borro las bals que exceden su rango para que no sigan hasta el infinito
-	for(int i = 0; i < bullets.size(); i++){
+	for(unsigned i = 0; i < bullets.size(); i++){
 		if(bullets[i]->getDuracion() == 0){
 			bullets.erase(bullets.begin() + i);
 		}
 	}
 
 	//veo si el jugador toca al enemigo
-	if(collision(boby.getRectaDestino(),darthBob->getRectaDestino())){
+	if(! darthBob->derrotado() && collision(boby.getRectaDestino(),darthBob->getRectaDestino())){
 		if(boby.getInvincibilityFrames() == 0)
 			boby.perderVida();
 	}
@@ -214,8 +214,8 @@ void juego::actualizar ()
 	boby.refreshBullets();
 
 	//veo si las balas le pegan al enemigo
-	for(int i = 0;i < bullets.size();i++){
-		if(collision(bullets[i]->getRectaDestino(),darthBob->getRectaDestino())){
+	for(unsigned i = 0;i < bullets.size();i++){
+		if(! darthBob->derrotado() && collision(bullets[i]->getRectaDestino(),darthBob->getRectaDestino())){
 			darthBob->perderVida();
 			bullets.erase(bullets.begin() + i);
 		}
@@ -241,8 +241,9 @@ void juego::dibujar ()
 
 	if(!darthBob->derrotado())
 		darthBob->dibujar(renderer);
-	else
+	else{
 		darthBob->~Enemigo();
+	}
 
 	if((boby.getInvincibilityFrames()/2) %2 == 0)
 		boby.dibujar(renderer);
@@ -313,7 +314,8 @@ juego::~juego ()
 	SDL_DestroyRenderer (renderer);
 	SDL_DestroyWindow (ventana);
 	SDL_DestroyTexture(textura_bala);
-	darthBob->~Enemigo();
+	if(! darthBob->derrotado())
+		darthBob->~Enemigo();
 
 	for(unsigned i = 0;i < bullets.size();i++){
 		bullets[i]->~Bullet();

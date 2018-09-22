@@ -18,7 +18,6 @@ Enemigo::Enemigo(int x,int y,int life) {
 
 void Enemigo::perderVida(){
 	vidas--;
-	cout<<"tengo vidas: "<<vidas<<endl;
 }
 
 bool Enemigo::derrotado(){
