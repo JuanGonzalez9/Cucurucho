@@ -27,6 +27,11 @@ Personaje::Personaje() {
 	rectDestino = {posX,posY,34,72};
 
 	spritesJugador = new Sprite();
+
+	//vidas
+	//vidas = maxVidas
+	hitPoints = 5;
+	invincibilityFrames = 0;
 }
 
 //--------GET----SET
@@ -41,6 +46,10 @@ int Personaje::getPosX(){
 
 int Personaje::getPosY(){
 	return posY;
+}
+
+int Personaje::getInvincibilityFrames(){
+	return invincibilityFrames;
 }
 
 //-------Metodos----------
@@ -168,6 +177,23 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 		SDL_RenderCopy(renderer, textura, & rect_origen , &rectDestino);
 	else
 		SDL_RenderCopyEx(renderer,textura,& rect_origen,&rectDestino,180.0,NULL,SDL_FLIP_VERTICAL);
+}
+
+// Manejo de vidas -- guerreando
+void Personaje::perderVida(){
+	cout<<"perdi vida ahora me queda "<<hitPoints<<endl;
+	hitPoints--;
+	invincibilityFrames = 60;
+	//invincibilityFrames = IFramesMAX
+}
+
+bool Personaje::muerto(){
+	return (hitPoints <= 0);
+}
+
+void Personaje::refreshIFrames(){
+	if(invincibilityFrames > 0)
+		invincibilityFrames--;
 }
 
 //--------Destructor-------

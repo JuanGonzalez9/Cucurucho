@@ -54,6 +54,11 @@ public:
 	bool puedeDisparar();
 	void refreshBullets();
 	void dibujar(SDL_Renderer* renderer);
+	//para tirotear
+	int getInvincibilityFrames();
+	void perderVida();
+	bool muerto();
+	void refreshIFrames();
 
 private:
 	Sprite* spritesJugador;
@@ -65,6 +70,10 @@ private:
 	int posX;
 	int posY;
 	int shootTimer;
+
+	// manejo de vida
+	int hitPoints;
+	int invincibilityFrames;
 
 	Personaje::Estado estado;
 	Personaje::DireccionDisparo direccionDisparo;

@@ -5,6 +5,7 @@
 #include "plataformas.hpp"
 #include "EntidadDibujable.h"
 #include "Personaje.h"
+#include "Enemigo.h"
 #include "Bullet.h"
 #include <vector>
 using namespace std;
@@ -39,12 +40,14 @@ protected:
 	Plataformas plataformas;
 
 	//balas
-	bool collision(SDL_Rect* rect1,SDL_Rect* rect2);
+	bool collision(SDL_Rect rect1,SDL_Rect rect2);
 	int direccionDeBala;
 
 	//probando
 	EntidadDibujable fondo1, fondo2;
 	Personaje boby;
+	Enemigo* darthBob;
+
 	vector<Bullet*> bullets;
 
 	bool apretandoDerecha(const Uint8* state);

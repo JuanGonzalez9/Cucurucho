@@ -16,7 +16,6 @@ public:
 	virtual ~Bullet();
 	int posY();
 	int posX();
-	SDL_Rect getDestino();
 	void move();
 	int getDuracion();
 	void dibujar(SDL_Renderer* renderer);

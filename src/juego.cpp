@@ -63,6 +63,9 @@ juego::juego ():
 	boby.crearTextura("imagenes/personaje.png",renderer);
 	boby.setRectOrigen(0,0,480,480);
 
+	darthBob = new Enemigo(300,150,5);
+	darthBob->crearTextura("imagenes/enemigo.png",renderer);
+
 
 	// Creamos textura para pegar las plataformas
 	imagen_fondo3 = IMG_Load ("imagenes/fondo3.png");
@@ -83,20 +86,6 @@ juego::juego ():
 
 	SDL_DestroyTexture (textura_fondo3_temp);
 
-}
-
-juego::~juego ()
-{
-	SDL_FreeSurface (imagen_fondo3);
-	SDL_DestroyTexture (textura_fondo3);
-	SDL_DestroyTexture (textura_objetivo);
-	SDL_DestroyRenderer (renderer);
-	SDL_DestroyWindow (ventana);
-	SDL_DestroyTexture(textura_bala);
-
-	for(int i = 0;i < bullets.size();i++){
-		bullets[i]->~Bullet();
-	}
 }
 
 bool juego::jugando ()
@@ -210,8 +199,26 @@ void juego::actualizar ()
 		}
 	}
 
+	//veo si el jugador toca al enemigo
+	if(collision(boby.getRectaDestino(),darthBob->getRectaDestino())){
+		if(boby.getInvincibilityFrames() == 0)
+			boby.perderVida();
+	}
+
+	//refresco el tiempo de invincibilidad
+	boby.refreshIFrames();
+
 	//actualiza el shootTimer del jugador (para que no tire 500 tiros por segundo)
 	boby.refreshBullets();
+
+	//veo si las balas le pegan al enemigo
+	for(int i = 0;i < bullets.size();i++){
+		if(collision(bullets[i]->getRectaDestino(),darthBob->getRectaDestino())){
+			darthBob->perderVida();
+			bullets.erase(bullets.begin() + i);
+		}
+
+	}
 }
 
 void juego::dibujar ()
@@ -229,7 +236,15 @@ void juego::dibujar ()
 	SDL_SetRenderTarget (renderer, nullptr);
 	// Copio el resultado
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
-	boby.dibujar(renderer);
+
+	if(!darthBob->derrotado())
+		darthBob->dibujar(renderer);
+	else
+		darthBob->~Enemigo();
+
+	if(boby.getInvincibilityFrames() %2 == 0)
+		boby.dibujar(renderer);
+
 
 	for(unsigned i = 0; i < bullets.size();i++){
 		bullets[i]->dibujar(renderer);
@@ -274,4 +289,31 @@ bool juego::apretandoSalto(const Uint8* state){
 
 bool juego::apretandoAbajo(const Uint8* state){
 	return state[SDL_SCANCODE_DOWN];
+}
+
+bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
+	if(rect1.y >= rect2.y + rect2.h)
+		return false;
+	if(rect1.x >= rect2.x + rect2.w)
+		return false;
+	if(rect1.y + rect1.h <= rect2.y)
+		return false;
+	if(rect1.x + rect1.w <= rect2.x)
+		return false;
+	return true;
+}
+
+juego::~juego ()
+{
+	SDL_FreeSurface (imagen_fondo3);
+	SDL_DestroyTexture (textura_fondo3);
+	SDL_DestroyTexture (textura_objetivo);
+	SDL_DestroyRenderer (renderer);
+	SDL_DestroyWindow (ventana);
+	SDL_DestroyTexture(textura_bala);
+	darthBob->~Enemigo();
+
+	for(unsigned i = 0;i < bullets.size();i++){
+		bullets[i]->~Bullet();
+	}
 }
