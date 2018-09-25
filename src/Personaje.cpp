@@ -104,7 +104,17 @@ void Personaje::actualizar(){
 	rectDestino.x = posX;
 	rectDestino.y = posY;
 
-	if(estado != HaciendoComoQueCamina && velocidadX == 0 && !saltando)
+	if(estado == CuerpoATierra && !saltando){
+		rectDestino.y += 40;
+		rectDestino.w = 72;
+		rectDestino.h = 34;
+	}
+	else{
+		rectDestino.w = 34;
+		rectDestino.h = 72;
+	}
+
+	if(estado != HaciendoComoQueCamina && estado != CuerpoATierra && velocidadX == 0 && !saltando)
 		estado = Quieto;
 	if(estado == HaciendoComoQueCamina) estado = Caminando;
 	if(saltando) velocidadY += gravedad;
@@ -113,6 +123,10 @@ void Personaje::actualizar(){
 
 bool Personaje::estaMirandoALaDerecha(){
 	return mirandoALaDerecha;
+}
+
+bool Personaje::estaSaltando(){
+	return saltando;
 }
 
 void Personaje::avanzar(){
@@ -130,6 +144,10 @@ void Personaje::retroceder(){
 	velocidadX = - maximaVelocidadX;
 	estado = Caminando;
 	mirandoALaDerecha = false;
+}
+
+void Personaje::agacharse(){
+	estado = CuerpoATierra;
 }
 
 void Personaje::disparar(){
@@ -228,9 +246,9 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 				else
 					rect_origen = spritesJugador->getFrameCaminando();
 				break;
-			/*case Retrocediendo:
-					rect_origen = spritesJugador->getFrameCaminando();
-					break;*/
+			case CuerpoATierra:
+					rect_origen = spritesJugador->getFrameAgachado();
+					break;
 			default:
 				if(disparando){
 					if(direccionDisparo == Centro)

@@ -23,6 +23,7 @@ public:
 		Quieto,
 		Caminando,
 		Saltando,
+		Agachado,
 		Disparando,
 		DisparandoCaminando,
 		DisparandoArriba,
@@ -40,6 +41,7 @@ public:
 	SDL_Rect getFrameDisparandoCaminando();
 	SDL_Rect getFrameDisparandoArribaCaminando();
 	SDL_Rect getFrameDisparandoAbajoCaminando();
+	SDL_Rect getFrameAgachado();
 private:
 	vector<SDL_Rect> framesCaminando;
 	vector<SDL_Rect> framesSaltando;
@@ -47,6 +49,7 @@ private:
 	vector<SDL_Rect> framesDisparandoCaminando;
 	vector<SDL_Rect> framesDisparandoArribaCaminando;
 	vector<SDL_Rect> framesDisparandoAbajoCaminando;
+	vector<SDL_Rect> framesAgachado;
 
 	int cantFramesCaminando;
 	int cantFramesSaltando;
@@ -54,6 +57,7 @@ private:
 	int cantFramesDisparandoCaminando;
 	int cantFramesDisparandoArribaCaminando;
 	int cantFramesDisparandoAbajoCaminando;
+	int cantFramesAgachado;
 	int contador;
 	int frameActual;
 	Sprite::Estado ultimoFrame;
@@ -64,6 +68,7 @@ private:
 	void cargarFramesDisparandoCaminando();
 	void cargarFramesDisparandoArribaCaminando();
 	void cargarFramesDisparandoAbajoCaminando();
+	void cargarFramesAgachado();
 
 };
 

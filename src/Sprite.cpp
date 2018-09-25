@@ -14,6 +14,7 @@ Sprite::Sprite() {
 	cantFramesDisparandoCaminando = 3;
 	cantFramesDisparandoArribaCaminando = 3;
 	cantFramesDisparandoAbajoCaminando = 3;
+	cantFramesAgachado = 2;
 	contador = 0;
 	frameActual = 0;
 	ultimoFrame = Quieto;
@@ -23,6 +24,7 @@ Sprite::Sprite() {
 	cargarFramesDisparandoCaminando();
 	cargarFramesDisparandoArribaCaminando();
 	cargarFramesDisparandoAbajoCaminando();
+	cargarFramesAgachado();
 
 }
 
@@ -110,6 +112,19 @@ SDL_Rect Sprite::getFrameDisparandoAbajoCaminando(){
 	return frame;
 }
 
+SDL_Rect Sprite::getFrameAgachado(){
+	if(ultimoFrame != Agachado) frameActual = 0;
+		SDL_Rect frame = framesAgachado[frameActual];
+		contador++;
+		if(contador == 10){
+			frameActual++;
+			frameActual %= cantFramesAgachado;
+			contador = 0;
+		}
+	ultimoFrame = Agachado;
+	return frame;
+}
+
 SDL_Rect Sprite::getFrameDisparandoArriba(){
 	SDL_Rect frameDA = framesDisparandoArribaCaminando[0];
 	ultimoFrame = DisparandoArriba;
@@ -154,6 +169,14 @@ void Sprite::cargarFramesSaltando(){
 
 	saltando = {156, 44 , 18, 34 };
 	framesSaltando.push_back(saltando);
+}
+
+void Sprite::cargarFramesAgachado(){
+	SDL_Rect agachado = {78, 23 , 33 , 20 };
+	framesAgachado.push_back(agachado);
+
+	agachado = {111, 23 , 34, 20 };
+	framesAgachado.push_back(agachado);
 }
 
 void Sprite::cargarFramesDisparando(){

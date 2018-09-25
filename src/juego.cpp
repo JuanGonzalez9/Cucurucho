@@ -148,12 +148,18 @@ void juego::manejar_eventos ()
 		}
 		
 	}
-	if(apretandoSalto(state)){
-		boby.saltar();
+
+	if(apretandoSalto(state) && apretandoAbajo(state) && !boby.estaSaltando()){
+		boby.bajar();		
+	}
+	else{
+		if(apretandoSalto(state)){
+				boby.saltar();
+			}
 	}
 
-	if(apretandoBajar(state)){
-		boby.bajar();		
+	if(apretandoAgacharse(state)){
+		boby.agacharse();
 	}
 
 	if(apretandoDisparo(state)){
@@ -168,7 +174,11 @@ void juego::manejar_eventos ()
 			int posBala = 10;
 			if(!boby.estaMirandoALaDerecha())
 				posBala = -10;
-			Bullet* nuevaBala = new Bullet(boby.getPosX(),boby.getPosY(),posBala,direccionDeBala*10);
+			Bullet* nuevaBala;
+			if(boby.getEstado() == Personaje::Estado::CuerpoATierra)
+				nuevaBala = new Bullet(boby.getPosX(),boby.getPosY() + 34,posBala,direccionDeBala*10);
+			else
+				nuevaBala = new Bullet(boby.getPosX(),boby.getPosY(),posBala,direccionDeBala*10);
 			nuevaBala->asignarTextura(textura_bala);
 			bullets.push_back(nuevaBala);
 
@@ -340,7 +350,7 @@ bool juego::apretandoAbajo(const Uint8* state){
 	return state[SDL_SCANCODE_DOWN];
 }
 
-bool juego::apretandoBajar(const Uint8* state){
+bool juego::apretandoAgacharse(const Uint8* state){
 	return state[SDL_SCANCODE_C];
 }
 

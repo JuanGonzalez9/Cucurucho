@@ -41,6 +41,7 @@ public:
 	int setPosX(int x);
 	int setPosY(int y);
 	bool estaMirandoALaDerecha();
+	bool estaSaltando();
 
 	//----METODOS
 	void saltar();
