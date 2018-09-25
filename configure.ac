@@ -1,4 +1,6 @@
 AC_INIT([contra], [1.0])
+AC_SUBST([CONVERT])
+AC_PATH_PROG([CONVERT], [convert])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AM_PATH_XML2(2.4.0)
 PKG_CHECK_MODULES(SDL2, sdl2 SDL2_image)
@@ -11,3 +13,4 @@ AC_CONFIG_FILES([
 ])
 AC_OUTPUT
 
+    

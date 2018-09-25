@@ -17,7 +17,7 @@ extern "C"
 class plataforma
 {
 public:
-	typedef enum {piedra, puente, hielo, metal} tipo;
+	typedef enum {pasto, piedra, hielo} tipo;
 	tipo t;
 	int xi, xf, y;
 	static bool comparar_plataforma (const plataforma& p1, const plataforma& p2);
@@ -37,7 +37,7 @@ public:
 	float obtener_f (const char *camino, std::function<bool(float n, bool omision)> validar);
 	double obtener_d (const char *camino, std::function<bool(double n, bool omision)> validar);
 	long double obtener_ld (const char *camino, std::function<bool(long double n, bool omision)> validar);
-	SDL_Texture *obtener_textura (const char *camino, SDL_Renderer *renderer, std::function<bool(SDL_Texture *textura, bool omision)> validar);
+	SDL_Texture *obtener_textura (const char *camino, SDL_Renderer *renderer);
 	void obtener_plataformas (const char *camino, std::list<plataforma> &l);
 private:
 	template<typename t> class tipos

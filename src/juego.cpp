@@ -52,8 +52,10 @@ juego::juego ():
 	SDL_FreeSurface(superficieTemporal);
 
 
-	fondo1.crearTextura("imagenes/_fondo_1_.png",renderer);
-	fondo2.crearTextura("imagenes/_fondo_2_.png",renderer);
+	//fondo1.crearTextura("imagenes/_fondo_1_.png",renderer);
+	//fondo2.crearTextura("imagenes/_fondo_2_.png",renderer);
+	fondo1.obtenerTextura("//configuracion//escenarios//nivel1//fondo1", renderer);
+	fondo2.obtenerTextura("//configuracion//escenarios//nivel1//fondo2", renderer);
 
 	textura_objetivo = SDL_CreateTexture (
 		renderer,
@@ -66,7 +68,8 @@ juego::juego ():
 	boby.setRectOrigen(0,0,480,480);
 
 	darthBob = new Enemigo(400,150,5);
-	darthBob->crearTextura("imagenes/enemigo.png",renderer);
+	//darthBob->crearTextura("imagenes/enemigo.png",renderer);
+	darthBob->obtenerTextura("//configuracion//personajes//enemigo//sprite", renderer);
 
 
 	// Creamos textura para pegar las plataformas

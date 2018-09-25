@@ -6,6 +6,7 @@
  */
 
 #include "EntidadDibujable.h"
+#include "iocontra.hpp"
 
 // ----------------- CONSTRUCTOR -----------------------------
 EntidadDibujable::EntidadDibujable() {
@@ -17,6 +18,10 @@ EntidadDibujable::EntidadDibujable() {
 	setRectDestino(0,0,800,600);
 }
 // ------------ GETTER & SETTER----------------------------------------------
+void EntidadDibujable::obtenerTextura(const char* path,SDL_Renderer* renderer){
+	textura = cfg.obtener_textura (path, renderer);
+}
+
 void EntidadDibujable::crearTextura(const char* path,SDL_Renderer* renderer){
 	SDL_Surface* superficieTemporal = IMG_Load(path);
 

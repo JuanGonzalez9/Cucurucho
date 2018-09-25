@@ -235,18 +235,15 @@ void configuracion::obtener_plataformas (const char *camino, std::list<plataform
 			if (nodo_hijo->type == XML_ELEMENT_NODE) {
 				std::string s = (const char*)xmlNodeGetContent(nodo_hijo);
 				if (strcmp ((const char*)nodo_hijo->name, "tipo") == 0) {
-					if (s == "puente") {
+					if (s == "pasto") {
 						leidos |= t;
-						p.t = plataforma::puente;
+						p.t = plataforma::pasto;
 					} else if (s == "piedra") {
 						leidos |= t;
 						p.t = plataforma::piedra;
 					} else if (s == "hielo") {
 						leidos |= t;
 						p.t = plataforma::hielo;
-					} else if (s == "metal") {
-						leidos |= t;
-						p.t = plataforma::metal;
 					} else {
 						// TODO log
 					}
@@ -291,7 +288,7 @@ void configuracion::obtener_plataformas (const char *camino, std::list<plataform
 	l.sort (plataforma::comparar_plataforma);
 }
 
-SDL_Texture *configuracion::obtener_textura (const char *camino, SDL_Renderer *renderer, std::function<bool(SDL_Texture *textura, bool omision)> validar)
+SDL_Texture *configuracion::obtener_textura (const char *camino, SDL_Renderer *renderer)
 {
 	SDL_Texture *textura = nullptr;
 	std::string s = obtener_s (camino, [renderer, &textura] (std::string & s, bool omision) {
@@ -316,7 +313,7 @@ SDL_Texture *configuracion::obtener_textura (const char *camino, SDL_Renderer *r
 		std::replace (s.begin(), s.end(), '/', '_');
 		std::replace (s.begin(), s.end(), '.', '_');
 		std::replace (s.begin(), s.end(), ' ', '_');
-		s.insert (0, "_binary____");
+		s.insert (0, "_binary_imagen_gris_");
 		std::string se = s;
 		s.append ("_start");
 		se.append ("_end");

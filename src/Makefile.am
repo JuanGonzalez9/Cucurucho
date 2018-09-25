@@ -1,5 +1,5 @@
 bin_PROGRAMS = contra
-contra_SOURCES = Bullet.cpp Enemigo.cpp Personaje.cpp Sprite.cpp EntidadDibujable.cpp plataformas.cpp iocontra.cpp temporizador.cpp juego.cpp registro.cpp cfg.cpp Juego.cpp CucuruchoLocal.cpp
+contra_SOURCES = Bullet.cpp Enemigo.cpp Personaje.cpp Sprite.cpp EntidadDibujable.cpp plataformas.cpp iocontra.cpp temporizador.cpp juego.cpp registro.cpp cfg.cpp CucuruchoLocal.cpp
 contra_CPPFLAGS = -Wall $(XML_CPPFLAGS)
 contra_LDADD= $(XML_LIBS) -lSDL2 -lSDL2_image -ldl
 contradir = $(prefix)/bin
@@ -13,9 +13,6 @@ imagenes=	foo.png \
 		bullet.png \
 		enemigo.png \
 		piedra1.bmp \
-		puente.bmp \
-		hielo.bmp \
-		metal.bmp \
 		ContraPersonaje.gif
 imagenes_o=	imagen-foo.o \
 		imagen-nivel.o \
@@ -26,23 +23,27 @@ imagenes_o=	imagen-foo.o \
 		imagen-bullet.o \
 		imagen-enemigo.o \
 		imagen-piedra1.o \
-		imagen-puente.o \
-		imagen-hielo.o \
-		imagen-metal.o \
 		imagen-ContraPersonaje.o
+		
 contra_LDFLAGS= $(imagenes_o) -rdynamic
 nodist_contra_SOURCES = $(imagenes_o)
 BUILT_SOURCES = $(imagenes)
 CLEANFILES = $(imagenes_o)
 
 $(imagenes): Makefile
-	echo creando $@; \
-	$(MKDIR_P) ../imagenes && \
-	cp "../../imagenes/$@" ../imagenes ; \
 	FILE=`echo "$$(basename $@)"`; \
 	EXT=$${FILE##*.}; \
 	NAME=`echo "$$(basename $@ .$$EXT)"`; \
-	objcopy -I binary -O elf64-x86-64 -B i386 ../imagenes/$$FILE imagen-$$NAME.o;
+	if [ ! -f "imagen-$$NAME.o" ] || [ "../../imagenes/$@" -nt "imagen-$$NAME.o" ]; then \
+		echo creando $@; \
+		rm -f $(bin_PROGRAMS); \
+		$(MKDIR_P) ../imagenes && \
+		cp "../../imagenes/$@" ../imagenes ; \
+		TMP="imagen-gris-imagenes-$$NAME.png"; \
+		$(CONVERT) ../imagenes/$$FILE -modulate 100,10 $$TMP; \
+		objcopy -I binary -O elf64-x86-64 -B i386 $$TMP imagen-$$NAME.o; \
+		echo name: $$TMP; \
+	fi;
 
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(bindir)/imagenes && \

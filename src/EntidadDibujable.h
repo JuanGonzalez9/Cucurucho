@@ -21,6 +21,7 @@ public:
 
 	// GETTER SETTER
 	void crearTextura(const char* path,SDL_Renderer* renderer);
+	void obtenerTextura(const char* path,SDL_Renderer* renderer);
 	void asignarTextura(SDL_Texture* textura);
 	SDL_Rect getRectaOrigen();
 	SDL_Rect getRectaDestino();

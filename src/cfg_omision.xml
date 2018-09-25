@@ -3,12 +3,15 @@ R"(<?xml version="1.0"?>
   <debug>
     <level>ERROR</level>
   </debug>
-  <personaje>
-    <sprite>imagenes/foo.png</sprite>
-  </personaje>
+  <personajes>
+    <enemigo>
+	    <sprite>imagenes/enemigo.png</sprite>
+    </enemigo>
+  </personajes>
   <escenarios>
     <nivel1>
-      <fondo1>imagenes/fondo1.png</fondo1>
+      <fondo1>imagenes/_fondo_1_.png</fondo1>
+      <fondo2>imagenes/_fondo_2_.png</fondo2>
       <plataforma>
         <tipo>piedra</tipo>
         <xi>0</xi>
@@ -16,14 +19,14 @@ R"(<?xml version="1.0"?>
         <y>500</y>
       </plataforma>
 	<plataforma>
-        <tipo>hielo</tipo>
+        <tipo>piedra</tipo>
         <xi>100</xi>
         <xf>400</xf>
         <y>450</y>
       </plataforma>
 
    <plataforma>
-        <tipo>metal</tipo>
+        <tipo>piedra</tipo>
         <xi>400</xi>
         <xf>780</xf>
         <y>500</y>
@@ -35,7 +38,7 @@ R"(<?xml version="1.0"?>
         <y>450</y>
       </plataforma>
       <plataforma>
-        <tipo>puente</tipo>
+        <tipo>hielo</tipo>
         <xi>1600</xi>
         <xf>2679</xf>
         <y>400</y>
