@@ -2,45 +2,55 @@
 #include "SDL2/SDL_image.h"
 #include <stdio.h>
 #include <string>
+#include <sstream>
 #include "Juego.h"
 #include "juego.hpp"
 #include "iocontra.hpp"
 
-//esto va en el archivo de configuracion
-int posVentanaX = SDL_WINDOWPOS_CENTERED;
-int posVentanaY = SDL_WINDOWPOS_CENTERED;
-int altoVentana = 600;
-int anchoVentana = 800;
+void uso ()
+{
+	std::cout << "uso: contra [-h | -d (ERROR|INFO|DEBUG)]\n";
+}
 
 int main (int argc, char *argv[]){
-	registro.registrar(LogEventos::info,"Comenzo el juego");
-	
-	juego j;
-	while (j.jugando()) {
-		j.manejar_eventos ();
-		j.actualizar ();
-		j.dibujar ();
-		j.presentar ();
-		//SDL_Delay(40);
+	registro.registrar (LogEventos::info, "Comenzo el juego");
+
+	int r = 1;
+	if (argc == 3 && argv[1][0] == '-') {
+		if (argv[1][1] == 'd') {
+			if (!strcmp (argv[2], "ERROR")) {
+				registro.definirTipoLog (LogEventos::error);
+				r = 0;
+			} else if (!strcmp (argv[2], "INFO")) {
+				registro.definirTipoLog (LogEventos::info);
+				r = 0;
+			} else if (!strcmp (argv[2], "DEBUG")) {
+				registro.definirTipoLog (LogEventos::debug);
+				r = 0;
+			} else {
+				std::stringstream ss;
+				ss << "Opcion de depurado '" << argv[2] << "' no reconida";
+				registro.registrar (LogEventos::error, ss.str().c_str());
+			}
+		}
+	} else {
+		r = argc != 1;
 	}
-	return 0;
-	
-	 Juego* miJuego = new Juego();
-	 miJuego->inicializar("CONTRA",posVentanaX,posVentanaY,anchoVentana,altoVentana);
 
-	 while(miJuego->jugando()){
-		 miJuego->manejarEventos();
-		 miJuego->actualizar();
-		 miJuego->renderizar();
+	if (r) {
+		uso ();
+	} else {
+		juego j;
+		while (j.jugando ()) {
+			j.manejar_eventos ();
+			j.actualizar ();
+			j.dibujar ();
+			j.presentar ();
+		}
+	}
 
-		 SDL_Delay(70);
-	 }
-
-	 //destruyo las clases
-	 miJuego->limpiar();
-
-	registro.registrar(LogEventos::info,"Finalizo el juego");
-	return 0;
+	registro.registrar (LogEventos::info, "Finalizo el juego");
+	return r ;
 }
  
 
