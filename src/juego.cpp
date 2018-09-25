@@ -246,6 +246,13 @@ void juego::actualizar ()
 			boby.perderVida();
 	}
 
+	//veo si el jugador se cayo
+	if(boby.getPosY()>600){
+		boby.setPosY(40);		
+		boby.perderVida();
+		
+	}
+
 	//refresco el tiempo de invincibilidad
 	boby.refreshIFrames();
 

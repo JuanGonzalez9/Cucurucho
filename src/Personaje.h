@@ -38,6 +38,8 @@ public:
 	Personaje::Estado getEstado();
 	int getPosX();
 	int getPosY();
+	int setPosX(int x);
+	int setPosY(int y);
 	bool estaMirandoALaDerecha();
 
 	//----METODOS
