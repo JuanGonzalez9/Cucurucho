@@ -1,5 +1,5 @@
 bin_PROGRAMS = contra
-contra_SOURCES = Personaje.cpp EntidadDibujable.cpp plataformas.cpp iocontra.cpp temporizador.cpp juego.cpp registro.cpp cfg.cpp Juego.cpp CucuruchoLocal.cpp
+contra_SOURCES = Bullet.cpp Enemigo.cpp Personaje.cpp Sprite.cpp EntidadDibujable.cpp plataformas.cpp iocontra.cpp temporizador.cpp juego.cpp registro.cpp cfg.cpp Juego.cpp CucuruchoLocal.cpp
 contra_CPPFLAGS = -Wall $(XML_CPPFLAGS)
 contra_LDADD= $(XML_LIBS) -lSDL2 -lSDL2_image -ldl
 contradir = $(prefix)/bin
@@ -10,6 +10,8 @@ imagenes=	foo.png \
 		_fondo_1_.png \
 		_fondo_2_.png \
 		bob.png \
+		bullet.png \
+		enemigo.png \
 		piedra1.bmp \
 		ContraPersonaje.gif
 imagenes_o=	imagen-foo.o \
@@ -18,6 +20,8 @@ imagenes_o=	imagen-foo.o \
 		imagen-_fondo_1_.o \
 		imagen-_fondo_2_.o \
 		imagen-bob.o \
+		imagen-bullet.o \
+		imagen-enemigo.o \
 		imagen-piedra1.o \
 		imagen-ContraPersonaje.o
 contra_LDFLAGS= $(imagenes_o) -rdynamic
