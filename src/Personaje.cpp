@@ -53,6 +53,14 @@ int Personaje::getPosY(){
 	return posY;
 }
 
+int Personaje::setPosX(int x){
+	posX=x;
+}
+
+int Personaje::setPosY(int y){
+	posY=y;
+}
+
 int Personaje::obtenerCoordenadaX(){
 	return coordenadaX;
 }
