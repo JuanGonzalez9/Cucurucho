@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string>
 #include <sstream>
-#include "Juego.h"
 #include "juego.hpp"
 #include "iocontra.hpp"
 
