@@ -99,21 +99,60 @@ void juego::manejar_eventos ()
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
-	//checkeo los estados de las teclas
-	//va afuera del while porque no son eventos
+	int bobyPosX= boby.obtenerCoordenadaX();
+	int bobyPosY= boby.getPosY();
+	int velocityBoby = boby.obtenerVelocidadY();
+
+	printf("velocidad boby = %i\n", velocityBoby );
+
+
+	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,34,72)){
+		boby.aterrizar();
+	}
+	else if( velocityBoby > 1){
+
+		bobyPosY = plataformas.aproximarPosicionAPlataforma(bobyPosX,bobyPosY,34,72,velocityBoby);
+
+		if(bobyPosY != -1){
+			boby.actualizarPos(bobyPosY);
+			boby.aterrizar();
+		}
+	}
+
+	else {
+		boby.caer();
+		
+	}
 	if(apretandoDerecha(state)){
 		if(boby.getPosX() <= (ancho / 2)){
 			boby.avanzar();
+			boby.subirCoordenadaXEn(3);
 		}
-		// falta hacer el scroll
-		//else mapaScroll();
+		else{
+			boby.subirCoordenadaXEn(d3);
+			fondo1.avanzarOrigen(d1);
+			fondo2.avanzarOrigen(d2);
+			rect_origen_fondo3.x += d3;
+			if (rect_origen_fondo3.x > imagen_fondo3->w-ancho) {
+				rect_origen_fondo3.x = imagen_fondo3->w-ancho;
+			}
+		}
 	}
 
+
 	if(apretandoIzquierda(state)){
-		boby.retroceder();
+		if(boby.getPosX() > 0 ){
+			boby.retroceder();
+			boby.subirCoordenadaXEn(-3);
+		}
+		
 	}
 	if(apretandoSalto(state)){
 		boby.saltar();
+	}
+
+	if(apretandoBajar(state)){
+		boby.bajar();		
 	}
 
 	if(apretandoDisparo(state)){
@@ -167,7 +206,7 @@ void juego::actualizar ()
 	boby.actualizar();
 	while (us >= periodo*0.9 ) {
 		us -= periodo;
-		// Actualizo la posicion del fondo1
+		/*// Actualizo la posicion del fondo1
 		fondo1.avanzarOrigen(d1);
 		// Actualizo la posicion del fondo2
 		fondo2.avanzarOrigen(d2);
@@ -185,8 +224,7 @@ void juego::actualizar ()
 			d3=3;
 			d2 = 2;
 			rect_origen_fondo3.x = 0;
-			d1 = 1;
-		}
+			d1 = 1;*/
 	}
 
 	//Actualizo balas
@@ -293,6 +331,11 @@ bool juego::apretandoSalto(const Uint8* state){
 bool juego::apretandoAbajo(const Uint8* state){
 	return state[SDL_SCANCODE_DOWN];
 }
+
+bool juego::apretandoBajar(const Uint8* state){
+	return state[SDL_SCANCODE_C];
+}
+
 
 bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
 	if(rect1.y >= rect2.y + rect2.h)

@@ -19,6 +19,9 @@ public:
 	void cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer* renderizador);
 	SDL_Texture* crearTexturaParaElFondo(SDL_Texture*,SDL_Renderer*,SDL_Surface*);
 	bool hayColision(int otroX, int otroY, int otroW, int otroH);
+	bool hayColisionSuperior(int otroX, int otroY, int otroW, int otroH);
+	int hayPlataformaEn(int otroX);
+	int aproximarPosicionAPlataforma(int otroX, int otroY, int otroW, int otroH, int velocidad);
 
 protected:
 	SDL_Texture* texturaPlataforma;

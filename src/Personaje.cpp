@@ -16,8 +16,13 @@ Personaje::Personaje() {
 	maximaVelocidadY = 14;
 	gravedad = 1;
 
+
 	posX = 50;
 	posY = 280;
+
+	coordenadaX = posX;
+	coordenadaY = posY; // Comienzan igual pero despues se actualizan diferentes
+
 	estado = Quieto;
 	direccionDisparo = Centro;
 	saltando = false;
@@ -48,21 +53,44 @@ int Personaje::getPosY(){
 	return posY;
 }
 
+int Personaje::obtenerCoordenadaX(){
+	return coordenadaX;
+}
+
+int Personaje::obtenerCoordenadaY(){
+	return coordenadaY;
+}
+
+int Personaje::obtenerVelocidadY(){
+	return velocidadY;
+}
+
+int Personaje::obtenerVelocidadX(){
+	return velocidadX;
+}
+
+//<<<<<<< HEAD
+void Personaje::subirPosX(){
+	posX+=3;
+}
+//=======
 int Personaje::getInvincibilityFrames(){
 	return invincibilityFrames;
+//>>>>>>> 6100df544e34c0d07915ef9e808d20fe90d8f406
 }
 
 //-------Metodos----------
 
 void Personaje::actualizar(){
 
-	if(posY >= 270 && velocidadY > 0){
+	/*if(posY >= 270 && velocidadY > 0){
 		//entra al if si esta cayendo y esta cerca de la plataforma
 
 		posY = 280; //deberia decir la altura de la plataforma
 		velocidadY = 0;
 		saltando = false;
-	}
+	}*/ 
+
 	posX += velocidadX;
 	posY += velocidadY;
 	rectDestino.x = posX;
@@ -135,6 +163,36 @@ void Personaje::saltar(){
 		saltando = true;
 	}
 }
+
+
+
+void Personaje::caer(){
+	
+	saltando = true;
+}
+
+void Personaje::aterrizar(){
+	velocidadY = 0;
+	saltando = false;
+	
+}
+
+void Personaje::bajar(){
+	velocidadY= 1;
+}
+
+void Personaje::subirCoordenadaXEn(int cantidad){
+	coordenadaX += cantidad;
+}
+
+void Personaje::subirCoordenadaYEn(int cantidad){
+	coordenadaY += cantidad;
+}
+
+void Personaje::actualizarPos(int nuevaPos){
+	posY = nuevaPos;
+}
+
 
 void Personaje::dibujar(SDL_Renderer* renderer){
 	SDL_Rect rect_origen;

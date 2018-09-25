@@ -63,7 +63,7 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 			posicion_imagen.x = plataformaActual.xi;
 			posicion_imagen.w = 100;
 
-			for(int i =1; i <= numeroPlataformas;i++){
+			for(int i =0; i < numeroPlataformas;i++){
 
 				
 				posicion_imagen.x = plataformaActual.xi + 100 * (i);
@@ -81,8 +81,22 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 			}
 		}
 
+		//Por default siempre debe haber una plataforma en la donde aparece el bob
 
-		
+		/*plataforma plataformaDefault;
+		plataformaDefault.xi = 0;
+		plataformaDefault.xf = 100;
+		plataformaDefault.y = 400;
+
+		posicion_imagen.x = plataformaDefault.xi;
+		posicion_imagen.w = plataformaDefault.xf;
+		posicion_imagen.y = plataformaDefault.y;
+		posicion_imagen.h = 200;
+
+		it = lista_plataformas.begin();
+		lista_plataformas.insert(it,plataformaDefault);
+
+		SDL_RenderCopy(renderizador,texturaPlataforma,NULL,&posicion_imagen);*/
 
 		
 		
@@ -173,4 +187,84 @@ bool Plataformas::hayColision(int otroX, int otroY, int otroW, int otroH){
 			return true;
 		}
 	}
+
+	return false;
+}
+
+int Plataformas::hayPlataformaEn(int otroX){
+
+	int parte_lateral_izq_plataforma;
+	int parte_lateral_der_plataforma;
+
+	for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
+		plataforma &plataformaActual = *it;
+		
+		parte_lateral_izq_plataforma = plataformaActual.xi;
+		parte_lateral_der_plataforma = plataformaActual.xf;
+
+		if (otroX < plataformaActual.xf && otroX > plataformaActual.xi){
+			return plataformaActual.y;
+		}
+
+	}
+
+	return -1;
+}
+
+
+bool Plataformas::hayColisionSuperior(int otroX,int otroY,int otroW,int otroH){
+	int parte_inferior = otroY+otroH;
+	int parte_superior = otroY;
+	int parte_lateral_izq = otroX;
+	int parte_lateral_der = otroX+otroW;
+
+	int parte_inferior_plataforma;
+	int parte_superior_plataforma;
+	int parte_lateral_izq_plataforma;
+	int parte_lateral_der_plataforma;
+
+	printf("%i, %i,\n", otroX,otroY );
+	printf("Parte inferior personaje = %i\n", parte_inferior );
+
+	for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
+		plataforma &plataformaActual = *it;
+
+		parte_inferior_plataforma = 600 - plataformaActual.y; //Esto en algun momento se va a cambiar
+		parte_superior_plataforma = plataformaActual.y;
+		parte_lateral_izq_plataforma = plataformaActual.xi;
+		parte_lateral_der_plataforma = plataformaActual.xf;
+
+		//Colision superior (Personaje arriba de la plataforma)
+		if(parte_inferior == parte_superior_plataforma && (parte_lateral_izq_plataforma <= parte_lateral_izq && parte_lateral_der_plataforma >= parte_lateral_der)){
+			printf("estoy en el medio de la plataforma\n");
+			return true;
+		}
+		//Esquina izquierda superior
+		if(parte_inferior == parte_superior_plataforma && (parte_lateral_der_plataforma > parte_lateral_der && parte_lateral_izq_plataforma < parte_lateral_der)){
+			printf("Estoy en la esq sup izq de la plataforma\n");
+			return true;
+		}
+
+		//Esquina derecha superior
+		if(parte_inferior == parte_superior_plataforma && (parte_lateral_izq_plataforma < parte_lateral_izq && parte_lateral_der_plataforma > parte_lateral_izq)){
+			printf("Estoy en la esquina sup der de la plataforma\n");
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+int Plataformas::aproximarPosicionAPlataforma(int otroX,int otroY,int otroW,int otroH, int velocidad){
+
+	for (int i=1; i < velocidad;i++){
+
+		if (hayColisionSuperior(otroX,otroY-i,otroW,otroH)){
+
+			return otroY-i;
+		}
+	}
+
+	return -1;
 }

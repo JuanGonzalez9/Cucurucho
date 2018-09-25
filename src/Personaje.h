@@ -10,6 +10,7 @@
 
 #include "EntidadDibujable.h"
 #include "Sprite.h"
+#include "plataformas.hpp"
 
 class Personaje : public EntidadDibujable{
 
@@ -54,11 +55,28 @@ public:
 	bool puedeDisparar();
 	void refreshBullets();
 	void dibujar(SDL_Renderer* renderer);
+
+	void caer();
+	void aterrizar();
+	void subirCoordenadaXEn(int cantidad);
+	void subirCoordenadaYEn(int cantidad);
+	int obtenerCoordenadaX();
+	int obtenerCoordenadaY();
+	int obtenerVelocidadY();
+	int obtenerVelocidadX();
+	void actualizarPos(int);
+	void bajar();
+	
+//<<<<<<< HEAD
+	
+	void subirPosX();
+//=======
 	//para tirotear
 	int getInvincibilityFrames();
 	void perderVida();
 	bool muerto();
 	void refreshIFrames();
+//>>>>>>> 6100df544e34c0d07915ef9e808d20fe90d8f406
 
 private:
 	Sprite* spritesJugador;
@@ -70,6 +88,9 @@ private:
 	int posX;
 	int posY;
 	int shootTimer;
+
+	int coordenadaX;
+	int coordenadaY;
 
 	// manejo de vida
 	int hitPoints;
