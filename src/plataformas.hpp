@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <list>
 #include "cfg.hpp"
+#include "iocontra.hpp"
 
 using namespace std;
 

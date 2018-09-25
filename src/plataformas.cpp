@@ -26,7 +26,7 @@ void Plataformas::inicializar(SDL_Renderer* renderizador){
 	texturaPlataformaMetal = SDL_CreateTextureFromSurface(renderizador,plataformaMetal);
 	SDL_FreeSurface(plataformaMetal);
 
-
+	registro.registrar(LogEventos::info, "Se cargaron las imagenes de las plataformas");
 }
 
 Plataformas::Plataformas(): texturaPlataformaPiedra (nullptr),
@@ -42,15 +42,28 @@ Plataformas::~Plataformas(){
 	if(texturaPlataformaPiedra){
 		SDL_DestroyTexture (texturaPlataformaPuente);
 	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
+
 	if(texturaPlataformaPuente){
 		SDL_DestroyTexture (texturaPlataformaPiedra);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
 	}
 
 	if(texturaPlataformaMetal){
 		SDL_DestroyTexture (texturaPlataformaMetal);
 	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
 	if(texturaPlataformaHielo){
 		SDL_DestroyTexture (texturaPlataformaHielo);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
 	}
 }
 
@@ -142,9 +155,11 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 			}
 		}
 
-		
+			
 		
 	}
+
+	registro.registrar (LogEventos::info, "Se cargaron las plataformas y se renderizaron en el mapa");
 
 	SDL_SetRenderTarget(renderizador,NULL);
 
@@ -160,6 +175,9 @@ SDL_Texture * Plataformas::crearTexturaParaElFondo(SDL_Texture* texturaFondo,SDL
 	SDL_SetRenderTarget(renderizador, textura_objetivo);
 	SDL_RenderCopy(renderizador,texturaFondo,NULL,NULL);
 	SDL_SetRenderTarget(renderizador, NULL);
+
+	registro.registrar (LogEventos::info, "se creo la textura para el fondo de las plataformas");
+
 	return textura_objetivo;
 
 }
@@ -267,8 +285,6 @@ bool Plataformas::hayColisionSuperior(int otroX,int otroY,int otroW,int otroH){
 	int parte_lateral_izq_plataforma;
 	int parte_lateral_der_plataforma;
 
-	printf("%i, %i,\n", otroX,otroY );
-	printf("Parte inferior personaje = %i\n", parte_inferior );
 
 	for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
 		plataforma &plataformaActual = *it;
@@ -280,18 +296,18 @@ bool Plataformas::hayColisionSuperior(int otroX,int otroY,int otroW,int otroH){
 
 		//Colision superior (Personaje arriba de la plataforma)
 		if(parte_inferior == parte_superior_plataforma && (parte_lateral_izq_plataforma <= parte_lateral_izq && parte_lateral_der_plataforma >= parte_lateral_der)){
-			printf("estoy en el medio de la plataforma\n");
+			
 			return true;
 		}
 		//Esquina izquierda superior
 		if(parte_inferior == parte_superior_plataforma && (parte_lateral_der_plataforma > parte_lateral_der && parte_lateral_izq_plataforma < parte_lateral_der)){
-			printf("Estoy en la esq sup izq de la plataforma\n");
+			
 			return true;
 		}
 
 		//Esquina derecha superior
 		if(parte_inferior == parte_superior_plataforma && (parte_lateral_izq_plataforma < parte_lateral_izq && parte_lateral_der_plataforma > parte_lateral_izq)){
-			printf("Estoy en la esquina sup der de la plataforma\n");
+			
 			return true;
 		}
 	}
