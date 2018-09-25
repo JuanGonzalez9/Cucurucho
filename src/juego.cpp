@@ -158,7 +158,7 @@ void juego::manejar_eventos ()
 			}
 	}
 
-	if(apretandoAgacharse(state)){
+	if(apretandoAgacharse(state) && !(apretandoDerecha(state) || apretandoIzquierda(state))){
 		boby.agacharse();
 	}
 
