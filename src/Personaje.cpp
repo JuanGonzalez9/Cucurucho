@@ -96,7 +96,9 @@ void Personaje::actualizar(){
 	rectDestino.x = posX;
 	rectDestino.y = posY;
 
-	if(velocidadX == 0 && !saltando) estado = Quieto;
+	if(estado != HaciendoComoQueCamina && velocidadX == 0 && !saltando)
+		estado = Quieto;
+	if(estado == HaciendoComoQueCamina) estado = Caminando;
 	if(saltando) velocidadY += gravedad;
 	velocidadX = 0;
 }
@@ -108,6 +110,11 @@ bool Personaje::estaMirandoALaDerecha(){
 void Personaje::avanzar(){
 	velocidadX = maximaVelocidadX;
 	estado = Caminando;
+	mirandoALaDerecha = true;
+}
+
+void Personaje::hacerComoQueCamina(){
+	estado = HaciendoComoQueCamina;
 	mirandoALaDerecha = true;
 }
 

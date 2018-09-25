@@ -129,6 +129,7 @@ void juego::manejar_eventos ()
 			boby.subirCoordenadaXEn(3);
 		}
 		else{
+			boby.hacerComoQueCamina();
 			boby.subirCoordenadaXEn(d3);
 			fondo1.avanzarOrigen(d1);
 			fondo2.avanzarOrigen(d2);

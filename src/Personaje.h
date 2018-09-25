@@ -24,7 +24,8 @@ public:
 		Caminando,
 		Retrocediendo,
 		CaminandoYDisparando,
-		CuerpoATierra
+		CuerpoATierra,
+		HaciendoComoQueCamina
 	};
 
 	enum DireccionDisparo{
@@ -66,6 +67,7 @@ public:
 	int obtenerVelocidadX();
 	void actualizarPos(int);
 	void bajar();
+	void hacerComoQueCamina();
 	
 //<<<<<<< HEAD
 	
