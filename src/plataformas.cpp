@@ -10,20 +10,47 @@ using namespace std;
 
 void Plataformas::inicializar(SDL_Renderer* renderizador){
 
-	SDL_Surface* bmpImagenPlataforma = SDL_LoadBMP("imagenes/piedra1.bmp");
-	texturaPlataforma = SDL_CreateTextureFromSurface(renderizador,bmpImagenPlataforma);
-	SDL_FreeSurface(bmpImagenPlataforma);
+	SDL_Surface* plataformaPiedra = SDL_LoadBMP("imagenes/piedra1.bmp");
+	texturaPlataformaPiedra = SDL_CreateTextureFromSurface(renderizador,plataformaPiedra);
+	SDL_FreeSurface(plataformaPiedra);
+
+	SDL_Surface* plataformaPuente = SDL_LoadBMP("imagenes/puente.bmp");
+	texturaPlataformaPuente = SDL_CreateTextureFromSurface(renderizador,plataformaPuente);
+	SDL_FreeSurface(plataformaPuente);
+
+	SDL_Surface* plataformaHielo = SDL_LoadBMP("imagenes/hielo.bmp");
+	texturaPlataformaHielo = SDL_CreateTextureFromSurface(renderizador,plataformaHielo);
+	SDL_FreeSurface(plataformaHielo);
+
+	SDL_Surface* plataformaMetal = SDL_LoadBMP("imagenes/metal.bmp");
+	texturaPlataformaMetal = SDL_CreateTextureFromSurface(renderizador,plataformaMetal);
+	SDL_FreeSurface(plataformaMetal);
+
+
 }
 
-Plataformas::Plataformas(): texturaPlataforma (nullptr)
+Plataformas::Plataformas(): texturaPlataformaPiedra (nullptr),
+							texturaPlataformaPuente (nullptr),
+							texturaPlataformaHielo (nullptr),
+							texturaPlataformaMetal (nullptr)
 {
 
 	cfg.obtener_plataformas("//configuracion//escenarios//nivel1",lista_plataformas);
 }
 
 Plataformas::~Plataformas(){
-	if(texturaPlataforma){
-		SDL_DestroyTexture (texturaPlataforma);
+	if(texturaPlataformaPiedra){
+		SDL_DestroyTexture (texturaPlataformaPuente);
+	}
+	if(texturaPlataformaPuente){
+		SDL_DestroyTexture (texturaPlataformaPiedra);
+	}
+
+	if(texturaPlataformaMetal){
+		SDL_DestroyTexture (texturaPlataformaMetal);
+	}
+	if(texturaPlataformaHielo){
+		SDL_DestroyTexture (texturaPlataformaHielo);
 	}
 }
 
@@ -51,8 +78,18 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 			posicion_imagen.x = plataformaActual.xi;
 			posicion_imagen.w = (plataformaActual.xf-plataformaActual.xi)+1;
 			
-
-			SDL_RenderCopy(renderizador,texturaPlataforma,NULL,&posicion_imagen);
+			if(plataformaActual.t == 0){
+				SDL_RenderCopy(renderizador,texturaPlataformaPiedra,NULL,&posicion_imagen);
+			}
+			else if (plataformaActual.t == 1){
+				SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
+			}
+			else if (plataformaActual.t == 2){
+				SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);
+			}
+			else if (plataformaActual.t == 3){
+				SDL_RenderCopy(renderizador,texturaPlataformaMetal,NULL,&posicion_imagen);
+			}
 			
 		}
 		else{
@@ -68,7 +105,19 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 				
 				posicion_imagen.x = plataformaActual.xi + 100 * (i);
 				
-				SDL_RenderCopy(renderizador,texturaPlataforma,NULL,&posicion_imagen);
+				if(plataformaActual.t == 0){
+					SDL_RenderCopy(renderizador,texturaPlataformaPiedra,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == 1){
+					SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
+				}
+
+				else if (plataformaActual.t == 2){
+					SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == 3){
+					SDL_RenderCopy(renderizador,texturaPlataformaMetal,NULL,&posicion_imagen);
+				}
 
 			}
 
@@ -77,26 +126,21 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 				anchoUltimaPlataforma = resto;
 				posicion_imagen.x = plataformaActual.xi + 100 * numeroPlataformas;
 				posicion_imagen.w = anchoUltimaPlataforma;
-				SDL_RenderCopy(renderizador,texturaPlataforma,NULL,&posicion_imagen);
+				if(plataformaActual.t == 0){
+					SDL_RenderCopy(renderizador,texturaPlataformaPiedra,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == 1){
+					SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
+				}
+
+				else if (plataformaActual.t == 2){
+					SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == 3){
+					SDL_RenderCopy(renderizador,texturaPlataformaMetal,NULL,&posicion_imagen);
+			}
 			}
 		}
-
-		//Por default siempre debe haber una plataforma en la donde aparece el bob
-
-		/*plataforma plataformaDefault;
-		plataformaDefault.xi = 0;
-		plataformaDefault.xf = 100;
-		plataformaDefault.y = 400;
-
-		posicion_imagen.x = plataformaDefault.xi;
-		posicion_imagen.w = plataformaDefault.xf;
-		posicion_imagen.y = plataformaDefault.y;
-		posicion_imagen.h = 200;
-
-		it = lista_plataformas.begin();
-		lista_plataformas.insert(it,plataformaDefault);
-
-		SDL_RenderCopy(renderizador,texturaPlataforma,NULL,&posicion_imagen);*/
 
 		
 		

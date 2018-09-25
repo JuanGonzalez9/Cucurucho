@@ -24,7 +24,10 @@ public:
 	int aproximarPosicionAPlataforma(int otroX, int otroY, int otroW, int otroH, int velocidad);
 
 protected:
-	SDL_Texture* texturaPlataforma;
+	SDL_Texture* texturaPlataformaPiedra;
+	SDL_Texture* texturaPlataformaPuente;
+	SDL_Texture* texturaPlataformaHielo;
+	SDL_Texture* texturaPlataformaMetal;
 	list<plataforma> lista_plataformas;
 };
 

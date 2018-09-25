@@ -13,6 +13,9 @@ imagenes=	foo.png \
 		bullet.png \
 		enemigo.png \
 		piedra1.bmp \
+		puente.bmp \
+		hielo.bmp \
+		metal.bmp \
 		ContraPersonaje.gif
 imagenes_o=	imagen-foo.o \
 		imagen-nivel.o \
@@ -23,6 +26,9 @@ imagenes_o=	imagen-foo.o \
 		imagen-bullet.o \
 		imagen-enemigo.o \
 		imagen-piedra1.o \
+		imagen-puente.o \
+		imagen-hielo.o \
+		imagen-metal.o \
 		imagen-ContraPersonaje.o
 contra_LDFLAGS= $(imagenes_o) -rdynamic
 nodist_contra_SOURCES = $(imagenes_o)
