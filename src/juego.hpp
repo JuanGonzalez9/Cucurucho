@@ -8,6 +8,7 @@
 #include "Enemigo.h"
 #include "Bullet.h"
 #include <vector>
+#include "iocontra.hpp"
 using namespace std;
 
 extern "C"

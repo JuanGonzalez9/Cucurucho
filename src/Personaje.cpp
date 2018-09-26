@@ -37,6 +37,8 @@ Personaje::Personaje() {
 	//vidas = maxVidas
 	hitPoints = 5;
 	invincibilityFrames = 0;
+
+	registro.registrar (LogEventos::info, "Se construyo personaje");
 }
 
 //--------GET----SET
@@ -98,6 +100,7 @@ int Personaje::getInvincibilityFrames(){
 //-------Metodos----------
 
 void Personaje::actualizar(){
+	registro.registrar (LogEventos::info, "Se comenzo actualizar personaje");
 
 	posX += velocidadX;
 	posY += velocidadY;
@@ -120,6 +123,7 @@ void Personaje::actualizar(){
 	if(estado == HaciendoComoQueCamina) estado = Caminando;
 	if(saltando) velocidadY += gravedad;
 	velocidadX = 0;
+	registro.registrar (LogEventos::info, "Se termino de actualizar personaje");
 }
 
 bool Personaje::estaMirandoALaDerecha(){
@@ -251,6 +255,7 @@ bool Personaje::estaCercaDelFinalDelNivel1(){
 
 
 void Personaje::dibujar(SDL_Renderer* renderer){
+	registro.registrar (LogEventos::info, "Se comenzo a dibujar personaje");
 	SDL_Rect rect_origen;
 	if(saltando){
 		rect_origen = spritesJugador->getFrameSaltando();
@@ -291,6 +296,8 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 		SDL_RenderCopy(renderer, textura, & rect_origen , &rectDestino);
 	else
 		SDL_RenderCopyEx(renderer,textura,& rect_origen,&rectDestino,180.0,NULL,SDL_FLIP_VERTICAL);
+
+	registro.registrar (LogEventos::info, "Se termino de dibujar personaje");
 }
 
 // Manejo de vidas -- guerreando

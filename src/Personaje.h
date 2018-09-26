@@ -11,6 +11,7 @@
 #include "EntidadDibujable.h"
 #include "Sprite.h"
 #include "plataformas.hpp"
+ #include "iocontra.hpp"
 
 class Personaje : public EntidadDibujable{
 

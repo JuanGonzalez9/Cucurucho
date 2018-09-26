@@ -64,18 +64,23 @@ juego::juego ():
 
 	// Creamos textura para pegar las plataformas
 	// Creamos textura para pegar las plataformas
+	registro.registrar (LogEventos::info, "Se llama a plataformas para inicializar");
 	plataformas.inicializar(renderer);
 
+
+	registro.registrar (LogEventos::info, "Se llama para obtener la textura para el fondo de las plataformas");
 	SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel1//fondo3", renderer);
 	SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
+
+	registro.registrar (LogEventos::info, "Se llama para crear la textura para el fondo de las plataformas");
 	textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
 	SDL_DestroyTexture (textura_fondo3_temp);
 	
 	
-	
+	registro.registrar (LogEventos::info, "Se llama para cargar los valores de las plataformas en el nivel 1");
 	plataformas.cargarValoresFijos(textura_fondo3,renderer,1);
 	
-
+	registro.registrar (LogEventos::info, "Se construyo juego");
 
 
 
@@ -88,6 +93,8 @@ bool juego::jugando ()
 
 void juego::manejar_eventos ()
 {
+
+	registro.registrar (LogEventos::info, "Se comienza a manejar eventos de juego");
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
 	int bobyPosX= nivel == 2 ? boby.getPosX() : boby.obtenerCoordenadaX();
@@ -222,10 +229,13 @@ void juego::manejar_eventos ()
 				break;
 		}
 	}
+
+	registro.registrar (LogEventos::info, "Se termina de manejar eventos de juego");
 }
 
 void juego::actualizar ()
 {
+	registro.registrar (LogEventos::info, "Se comienza actualizar juego");
 	//scroll vertical
 	if((boby.getPosY() <=(200))&&(nivel==2)&&(boby.obtenerVelocidadY()<0)){
 		boby.subirCoordenadaYEn(boby.obtenerVelocidadY());
@@ -352,10 +362,13 @@ void juego::actualizar ()
 
 		}
 	}
+
+	registro.registrar (LogEventos::info, "Se termina de actualizar juego");
 }
 
 void juego::dibujar ()
 {
+	registro.registrar (LogEventos::info, "Se comienza a dibujar juego");
 	SDL_SetTextureBlendMode (textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget (renderer, textura_objetivo);
 	// Copio el fondo1
@@ -385,10 +398,12 @@ void juego::dibujar ()
 	for(unsigned i = 0; i < bullets.size();i++){
 		bullets[i]->dibujar(renderer);
 	}
+	registro.registrar (LogEventos::info, "Se termina de dibujar juego");
 }
 
 void juego::presentar ()
 {
+	registro.registrar (LogEventos::info, "Se comienza a presentar juego");
 	SDL_RenderPresent (renderer);
 	us += t_ciclo.microsegundos (true);
 	cuadros++;
@@ -398,6 +413,7 @@ void juego::presentar ()
 		cuadros = 0;
 		std::cout << "fps: " << std::fixed << std::setprecision (2) << fps << "\n";
 	}
+	registro.registrar (LogEventos::info, "Se termina de presentar juego");
 }
 
 bool juego::apretandoDerecha(const Uint8* state){
@@ -466,4 +482,6 @@ juego::~juego ()
 	for(unsigned i = 0;i < bullets.size();i++){
 		bullets[i]->~Bullet();
 	}
+
+	registro.registrar (LogEventos::info, "Se destruyo juego");
 }
