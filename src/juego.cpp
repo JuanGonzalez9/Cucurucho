@@ -238,18 +238,21 @@ void juego::actualizar ()
 	registro.registrar (LogEventos::info, "Se comienza actualizar juego");
 	//scroll vertical
 	if((boby.getPosY() <=(200))&&(nivel==2)&&(boby.obtenerVelocidadY()<0)){
-		boby.subirCoordenadaYEn(boby.obtenerVelocidadY());
-		/**/boby.decrementarPosY(boby.obtenerVelocidadY());		
-		//por ahora todo con la velocidad Y de boby, no hay parallax
-		fondo1.avanzarOrigenY(boby.obtenerVelocidadY());
-		printf("origen x = %i\n", fondo1.getRectaOrigen().x);
-		printf("origen y = %i\n", fondo1.getRectaOrigen().y);
-		printf("origen w = %i\n", fondo1.getRectaOrigen().w);
-		printf("origen h = %i\n", fondo1.getRectaOrigen().h);
-		fondo2.avanzarOrigenY(boby.obtenerVelocidadY());
-		rect_origen_fondo3.y += boby.obtenerVelocidadY();
-		
-		std::cout << "rect_origen_fondo3: " << rect_origen_fondo3.y << "\n";
+		if (rect_origen_fondo3.y + boby.obtenerVelocidadY() > 0) {
+			boby.subirCoordenadaYEn(boby.obtenerVelocidadY());
+			/**/boby.decrementarPosY(boby.obtenerVelocidadY());		
+			//por ahora todo con la velocidad Y de boby, no hay parallax
+			fondo1.avanzarOrigenY(boby.obtenerVelocidadY()/3);
+			printf("origen x = %i\n", fondo1.getRectaOrigen().x);
+			printf("origen y = %i\n", fondo1.getRectaOrigen().y);
+			printf("origen w = %i\n", fondo1.getRectaOrigen().w);
+			printf("origen h = %i\n", fondo1.getRectaOrigen().h);
+			fondo2.avanzarOrigenY(boby.obtenerVelocidadY()/2);
+			rect_origen_fondo3.y += boby.obtenerVelocidadY();
+			std::cout << "rect_origen_fondo3: " << rect_origen_fondo3.y << "\n";
+		} else {
+			cambioNivel=true;
+		}	
 	}
 	boby.actualizar();
 	while (us >= periodo*0.9 ) {
@@ -287,7 +290,6 @@ void juego::actualizar ()
 		textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
 		SDL_DestroyTexture (textura_fondo3_temp);
 		plataformas.cargarValoresFijos(textura_fondo3,renderer,2);
-		std::cout << "dib: " << mundo_w << "x" << mundo_h << "\n";
 
 		fondo1.setRectOrigen(0,3600-600,800,600);
 		fondo2.setRectOrigen(0,3600-600,800,600);
@@ -306,6 +308,10 @@ void juego::actualizar ()
 		fondo1.obtenerTextura("//configuracion//escenarios//nivel3//fondo1", renderer);
 		fondo2.obtenerTextura("//configuracion//escenarios//nivel3//fondo2", renderer);
 
+		SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel3//fondo3", renderer);
+		SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
+		textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
+		SDL_DestroyTexture (textura_fondo3_temp);
 		plataformas.cargarValoresFijos(textura_fondo3,renderer,3);
 
 		fondo1.setRectOrigen(0,0,800,600);
