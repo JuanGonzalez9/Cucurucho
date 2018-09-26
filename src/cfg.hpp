@@ -38,7 +38,7 @@ public:
 	double obtener_d (const char *camino, std::function<bool(double n, bool omision)> validar);
 	long double obtener_ld (const char *camino, std::function<bool(long double n, bool omision)> validar);
 	SDL_Texture *obtener_textura (const char *camino, SDL_Renderer *renderer);
-	void obtener_plataformas (const char *camino, std::list<plataforma> &l);
+	void obtener_plataformas (const char *camino, std::list<plataforma> &l, const plataforma & plataforma_omision);
 private:
 	template<typename t> class tipos
 	{

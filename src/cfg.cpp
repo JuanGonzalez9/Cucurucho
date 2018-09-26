@@ -222,7 +222,7 @@ void configuracion::obtener_plataformas (const char *camino, std::function<void(
 	}
 }
 
-void configuracion::obtener_plataformas (const char *camino, std::list<plataforma> &l)
+void configuracion::obtener_plataformas (const char *camino, std::list<plataforma> &l, const plataforma & plataforma_omision)
 {
 	obtener_plataformas (camino, [&l](xmlNode *node){
 		plataforma p;
@@ -288,6 +288,7 @@ void configuracion::obtener_plataformas (const char *camino, std::list<plataform
 			}
 		}
 	});
+	l.push_back (plataforma_omision);
 	l.sort (plataforma::comparar_plataforma);
 }
 
