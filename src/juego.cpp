@@ -104,7 +104,7 @@ void juego::manejar_eventos ()
 
 		if(bobyPosY != -1){
 		std::cout << "bobyPosY: " << bobyPosY << "\n";
-			boby.actualizarPos(bobyPosY);
+			boby.actualizarPos(bobyPosY, nivel);
 			boby.aterrizar();
 		}
 	}

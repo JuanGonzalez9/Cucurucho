@@ -239,8 +239,15 @@ void Personaje::subirCoordenadaYEn(int cantidad){
 	coordenadaY += cantidad;
 }
 
-void Personaje::actualizarPos(int nuevaPos){
-	posY = nuevaPos;
+void Personaje::actualizarPos(int nuevaPos, int nivel){
+	if (nivel == 1 || nivel == 3){
+		posY = nuevaPos;
+	}
+	else if (nivel == 2){
+		coordenadaY = nuevaPos;
+	}
+	
+	
 }
 
 

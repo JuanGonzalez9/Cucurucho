@@ -70,7 +70,7 @@ public:
 	int obtenerCoordenadaY();
 	int obtenerVelocidadY();
 	int obtenerVelocidadX();
-	void actualizarPos(int);
+	void actualizarPos(int,int  nivel);
 	void decrementarPosY(int y);
 	void bajar();
 	void flotar();

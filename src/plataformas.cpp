@@ -90,7 +90,10 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 
 		posicion_imagen.y = plataformaActual.y;
 		posicion_imagen.h = 600 - plataformaActual.y;
-		posicion_imagen.h = 200;
+		
+		if (nivel == 2){
+			posicion_imagen.h = 100;
+		}
 		
 		if((total) < 101 ){
 			posicion_imagen.x = plataformaActual.xi;
