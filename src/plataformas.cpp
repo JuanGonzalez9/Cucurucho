@@ -90,6 +90,7 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 
 		posicion_imagen.y = plataformaActual.y;
 		posicion_imagen.h = 600 - plataformaActual.y;
+		posicion_imagen.h = 200;
 		
 		if((total) < 101 ){
 			posicion_imagen.x = plataformaActual.xi;
@@ -110,9 +111,6 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 			
 		}
 		else{
-
-			
-
 			numeroPlataformas = total/100;
 			posicion_imagen.x = plataformaActual.xi;
 			posicion_imagen.w = 100;
@@ -331,6 +329,8 @@ bool Plataformas::hayColisionSuperior(int otroX,int otroY,int otroW,int otroH, i
 		parte_lateral_der_plataforma = plataformaActual.xf;
 
 		//Colision superior (Personaje arriba de la plataforma)
+		//std::cout << parte_inferior << " " << parte_superior_plataforma << "\n";
+		
 		if(parte_inferior == parte_superior_plataforma && (parte_lateral_izq_plataforma <= parte_lateral_izq && parte_lateral_der_plataforma >= parte_lateral_der)){
 			
 			return true;

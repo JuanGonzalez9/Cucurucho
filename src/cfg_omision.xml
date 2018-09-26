@@ -224,10 +224,31 @@ R"(<?xml version="1.0"?>
     <nivel2>
       <fondo1>imagenes/fondo1vert.png</fondo1>
       <fondo2>imagenes/fondo1vert.png</fondo2>
-    </nivel2>
-    <nivel2>
-      <fondo1>imagenes/_fondo_1_.png</fondo1>
-      <fondo2>imagenes/_fondo_2_.png</fondo2>
+      <fondo3>imagenes/fondo3vert.png</fondo3>
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>0</xi>
+        <xf>800</xf>
+        <y>3550</y>
+      </plataforma>
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>0</xi>
+        <xf>300</xf>
+        <y>3450</y>
+      </plataforma>
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>100</xi>
+        <xf>500</xf>
+        <y>3350</y>
+      </plataforma>
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>400</xi>
+        <xf>600</xf>
+        <y>550</y>
+      </plataforma>
     </nivel2>
   </escenarios>
   <nivel>1</nivel>

@@ -90,26 +90,24 @@ void juego::manejar_eventos ()
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
-	int bobyPosX= boby.obtenerCoordenadaX();
-	int bobyPosY= boby.getPosY();
+	int bobyPosX= nivel == 2 ? boby.getPosX() : boby.obtenerCoordenadaX();
+	int bobyPosY= nivel == 2 ? boby.obtenerCoordenadaY() : boby.getPosY();
 	int velocityBoby = boby.obtenerVelocidadY();
 
-	printf("velocidad boby = %i\n", velocityBoby );
-
-
+	std::cout << "ini bobyPosY: " << bobyPosY << "\n";
+	//printf("velocidad boby = %i\n", velocityBoby );
 	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,34,72,nivel)){
 		boby.aterrizar();
 	}
 	else if( velocityBoby > 1){
-
 		bobyPosY = plataformas.aproximarPosicionAPlataforma(bobyPosX,bobyPosY,34,72,velocityBoby,nivel);
 
 		if(bobyPosY != -1){
+		std::cout << "bobyPosY: " << bobyPosY << "\n";
 			boby.actualizarPos(bobyPosY);
 			boby.aterrizar();
 		}
 	}
-
 	else {
 		boby.caer();
 		
@@ -243,6 +241,7 @@ void juego::actualizar ()
 		printf("origen h = %i\n", fondo1.getRectaOrigen().h);
 		fondo2.avanzarOrigenY(boby.obtenerVelocidadY());
 		rect_origen_fondo3.y -= boby.obtenerVelocidadY();
+		std::cout << "rect_origen_fondo3: " << rect_origen_fondo3.y << "\n";
 	}
 	boby.actualizar();
 	while (us >= periodo*0.9 ) {
@@ -274,25 +273,27 @@ void juego::actualizar ()
 		nivel=2;
 		fondo1.obtenerTextura("//configuracion//escenarios//nivel2//fondo1", renderer);
 		fondo2.obtenerTextura("//configuracion//escenarios//nivel2//fondo2", renderer);
-
-
-
+/*
 		SDL_SetRenderTarget(renderer, textura_fondo3); 
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_SetRenderDrawColor(renderer, 120, 0, 0, 0);
 		SDL_RenderFillRect(renderer, NULL);
-
-
-
 		plataformas.cargarValoresFijos(textura_fondo3,renderer,2);
+*/
+		SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel2//fondo3", renderer);
+		SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
+		textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
+		SDL_DestroyTexture (textura_fondo3_temp);
+		plataformas.cargarValoresFijos(textura_fondo3,renderer,2);
+		std::cout << "dib: " << mundo_w << "x" << mundo_h << "\n";
 
 		fondo1.setRectOrigen(0,3600-600,800,600);
 		fondo2.setRectOrigen(0,3600-600,800,600);
 		rect_origen_fondo3={0,3600-600,800,600};
 		boby.setPosX(50);
-		boby.setPosY(280);	
+		boby.setPosY(400);
 		boby.setCoordenadaX(0+50);
-		boby.setCoordenadaY(3000+280);
+		boby.setCoordenadaY(3600-(600-400));
 		cambioNivel=false;
 		
 	}
@@ -365,10 +366,9 @@ void juego::dibujar ()
 	fondo1.dibujarFondo(renderer);
 	// Copio el fondo2
 	fondo2.dibujarFondo(renderer);
+	
 	//Copio el fondo3
 	SDL_RenderCopy (renderer, textura_fondo3, &rect_origen_fondo3, nullptr);
-	// Copio a bob
-
 	SDL_SetRenderTarget (renderer, nullptr);
 	// Copio el resultado
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
@@ -379,6 +379,7 @@ void juego::dibujar ()
 		darthBob->~Enemigo();
 	}
 
+	// Copio a bob
 	if((boby.getInvincibilityFrames()/2) %2 == 0)
 		boby.dibujar(renderer);
 

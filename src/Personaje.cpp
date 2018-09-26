@@ -109,6 +109,7 @@ void Personaje::actualizar(){
 
 	posX += velocidadX;
 	posY += velocidadY;
+	coordenadaY += velocidadY;
 	rectDestino.x = posX;
 	rectDestino.y = posY;
 
@@ -288,7 +289,7 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 
 // Manejo de vidas -- guerreando
 void Personaje::perderVida(){
-	cout<<"perdi vida ahora me queda "<<hitPoints<<endl;
+	//cout<<"perdi vida ahora me queda "<<hitPoints<<endl;
 	hitPoints--;
 	invincibilityFrames = 90;
 	//invincibilityFrames = IFramesMAX

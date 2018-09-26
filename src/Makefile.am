@@ -9,6 +9,7 @@ imagenes=	personaje.png \
 		fondo2.png \
 		fondo3.png \
 		fondo1vert.png \
+		fondo3vert.png \
 		bullet.png \
 		enemigo.png \
 		piedra.bmp \
@@ -21,6 +22,7 @@ imagenes_o=	imagen-personaje.o \
 		imagen-fondo2.o \
 		imagen-fondo3.o \
 		imagen-fondo1vert.o \
+		imagen-fondo3vert.o \
 		imagen-bullet.o \
 		imagen-enemigo.o \
 		imagen-piedra.o \
