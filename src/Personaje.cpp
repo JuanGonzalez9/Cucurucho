@@ -203,8 +203,6 @@ void Personaje::saltar(){
 	}
 }
 
-
-
 void Personaje::caer(){
 	
 	saltando = true;
@@ -245,6 +243,10 @@ void Personaje::actualizarPos(int nuevaPos, int nivel){
 	}
 	
 	
+}
+
+bool Personaje::estaCercaDelFinalDelNivel1(){
+	return (coordenadaX >= 5000);
 }
 
 
