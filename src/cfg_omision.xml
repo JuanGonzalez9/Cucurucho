@@ -19,20 +19,20 @@ R"(<?xml version="1.0"?>
         <y>500</y>
       </plataforma>
 	<plataforma>
-        <tipo>piedra</tipo>
+        <tipo>hielo</tipo>
         <xi>100</xi>
         <xf>400</xf>
         <y>450</y>
       </plataforma>
 
    <plataforma>
-        <tipo>piedra</tipo>
+        <tipo>puente</tipo>
         <xi>400</xi>
         <xf>780</xf>
         <y>500</y>
       </plataforma>
    <plataforma>
-        <tipo>piedra</tipo>
+        <tipo>metal</tipo>
         <xi>800</xi>
         <xf>1536</xf>
         <y>450</y>

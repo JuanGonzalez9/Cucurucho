@@ -235,15 +235,18 @@ void configuracion::obtener_plataformas (const char *camino, std::list<plataform
 			if (nodo_hijo->type == XML_ELEMENT_NODE) {
 				std::string s = (const char*)xmlNodeGetContent(nodo_hijo);
 				if (strcmp ((const char*)nodo_hijo->name, "tipo") == 0) {
-					if (s == "pasto") {
+					if (s == "metal") {
 						leidos |= t;
-						p.t = plataforma::pasto;
+						p.t = plataforma::metal;
 					} else if (s == "piedra") {
 						leidos |= t;
 						p.t = plataforma::piedra;
 					} else if (s == "hielo") {
 						leidos |= t;
 						p.t = plataforma::hielo;
+					} else if (s == "puente") {
+						leidos |= t;
+						p.t = plataforma::puente;
 					} else {
 						// TODO log
 					}

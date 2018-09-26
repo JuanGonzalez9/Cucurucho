@@ -91,16 +91,16 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 			posicion_imagen.x = plataformaActual.xi;
 			posicion_imagen.w = (plataformaActual.xf-plataformaActual.xi)+1;
 			
-			if(plataformaActual.t == 0){
+			if(plataformaActual.t == plataforma::piedra){
 				SDL_RenderCopy(renderizador,texturaPlataformaPiedra,NULL,&posicion_imagen);
 			}
-			else if (plataformaActual.t == 1){
+			else if (plataformaActual.t == plataforma::puente){
 				SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
 			}
-			else if (plataformaActual.t == 2){
+			else if (plataformaActual.t == plataforma::hielo){
 				SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);
 			}
-			else if (plataformaActual.t == 3){
+			else if (plataformaActual.t == plataforma::metal){
 				SDL_RenderCopy(renderizador,texturaPlataformaMetal,NULL,&posicion_imagen);
 			}
 			
@@ -118,20 +118,18 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 				
 				posicion_imagen.x = plataformaActual.xi + 100 * (i);
 				
-				if(plataformaActual.t == 0){
+				if(plataformaActual.t == plataforma::piedra){
 					SDL_RenderCopy(renderizador,texturaPlataformaPiedra,NULL,&posicion_imagen);
 				}
-				else if (plataformaActual.t == 1){
+				else if (plataformaActual.t == plataforma::puente){
 					SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
 				}
-
-				else if (plataformaActual.t == 2){
+				else if (plataformaActual.t == plataforma::hielo){
 					SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);
 				}
-				else if (plataformaActual.t == 3){
+				else if (plataformaActual.t == plataforma::metal){
 					SDL_RenderCopy(renderizador,texturaPlataformaMetal,NULL,&posicion_imagen);
 				}
-
 			}
 
 			resto = total%100;
@@ -139,19 +137,18 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 				anchoUltimaPlataforma = resto;
 				posicion_imagen.x = plataformaActual.xi + 100 * numeroPlataformas;
 				posicion_imagen.w = anchoUltimaPlataforma;
-				if(plataformaActual.t == 0){
+				if(plataformaActual.t == plataforma::piedra){
 					SDL_RenderCopy(renderizador,texturaPlataformaPiedra,NULL,&posicion_imagen);
 				}
-				else if (plataformaActual.t == 1){
+				else if (plataformaActual.t == plataforma::puente){
 					SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
 				}
-
-				else if (plataformaActual.t == 2){
+				else if (plataformaActual.t == plataforma::hielo){
 					SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);
 				}
-				else if (plataformaActual.t == 3){
+				else if (plataformaActual.t == plataforma::metal){
 					SDL_RenderCopy(renderizador,texturaPlataformaMetal,NULL,&posicion_imagen);
-			}
+				}
 			}
 		}
 
