@@ -240,7 +240,8 @@ void juego::actualizar ()
 		printf("origen w = %i\n", fondo1.getRectaOrigen().w);
 		printf("origen h = %i\n", fondo1.getRectaOrigen().h);
 		fondo2.avanzarOrigenY(boby.obtenerVelocidadY());
-		rect_origen_fondo3.y -= boby.obtenerVelocidadY();
+		rect_origen_fondo3.y += boby.obtenerVelocidadY();
+		
 		std::cout << "rect_origen_fondo3: " << rect_origen_fondo3.y << "\n";
 	}
 	boby.actualizar();

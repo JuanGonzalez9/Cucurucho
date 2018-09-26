@@ -21,7 +21,7 @@ Personaje::Personaje() {
 	posY = 280;
 
 	coordenadaX = posX;
-	coordenadaY = posY; // Comienzan igual pero despues se actualizan diferentes
+	//coordenadaY = posY; // Comienzan igual pero despues se actualizan diferentes
 
 	estado = Quieto;
 	direccionDisparo = Centro;
@@ -136,6 +136,7 @@ bool Personaje::estaMirandoALaDerecha(){
 
 void Personaje::decrementarPosY(int y){
 	posY -=y;
+	coordenadaY -=y;
 }
 
 bool Personaje::estaSaltando(){
@@ -244,6 +245,10 @@ void Personaje::actualizarPos(int nuevaPos, int nivel){
 		posY = nuevaPos;
 	}
 	else if (nivel == 2){
+
+
+		posY += nuevaPos- coordenadaY ;
+
 		coordenadaY = nuevaPos;
 	}
 	
