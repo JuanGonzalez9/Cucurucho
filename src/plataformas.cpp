@@ -24,7 +24,10 @@ Plataformas::Plataformas(): texturaPlataformaPiedra (nullptr),
 							texturaPlataformaMetal (nullptr)
 {
 
-	cfg.obtener_plataformas("//configuracion//escenarios//nivel1",lista_plataformas);
+	cfg.obtener_plataformas("//configuracion//escenarios//nivel1",lista_plataformas_nivel1);
+	cfg.obtener_plataformas("//configuracion//escenarios//nivel2",lista_plataformas_nivel2);
+	cfg.obtener_plataformas("//configuracion//escenarios//nivel3",lista_plataformas_nivel3);
+
 }
 
 Plataformas::~Plataformas(){
@@ -57,7 +60,7 @@ Plataformas::~Plataformas(){
 }
 
 
-void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer* renderizador){
+void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer* renderizador, int nivel){
 	//Hay que pedirle al archivo configurable los valores de las plataformas ¿En que formato? (Nos pasa directamente un objeto plataforma)
 	
 	SDL_Rect posicion_imagen;
@@ -65,7 +68,19 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 	int numeroPlataformas;
 	int anchoUltimaPlataforma;
 	int resto;
-	
+	list<plataforma> lista_plataformas;
+
+	if (nivel == 1){
+		lista_plataformas = lista_plataformas_nivel1;
+	}
+	else if (nivel == 2){
+		lista_plataformas = lista_plataformas_nivel2;
+	}
+	else if (nivel == 3){
+		lista_plataformas = lista_plataformas_nivel3;
+	}
+
+
 	SDL_SetTextureBlendMode(textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget(renderizador, textura_objetivo);
 
@@ -169,7 +184,7 @@ SDL_Texture * Plataformas::crearTexturaParaElFondo(SDL_Texture* texturaFondo,SDL
 }
 
 
-bool Plataformas::hayColision(int otroX, int otroY, int otroW, int otroH){
+bool Plataformas::hayColision(int otroX, int otroY, int otroW, int otroH, int nivel){
 
 
 	int parte_inferior = otroY+otroH;
@@ -181,6 +196,17 @@ bool Plataformas::hayColision(int otroX, int otroY, int otroW, int otroH){
 	int parte_superior_plataforma;
 	int parte_lateral_izq_plataforma;
 	int parte_lateral_der_plataforma;
+	list<plataforma> lista_plataformas;
+
+	if (nivel == 1){
+		lista_plataformas = lista_plataformas_nivel1;
+	}
+	else if (nivel == 2){
+		lista_plataformas = lista_plataformas_nivel2;
+	}
+	else if (nivel == 3){
+		lista_plataformas = lista_plataformas_nivel3;
+	}
 
 	for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
 		plataforma &plataformaActual = *it;
@@ -239,10 +265,22 @@ bool Plataformas::hayColision(int otroX, int otroY, int otroW, int otroH){
 	return false;
 }
 
-int Plataformas::hayPlataformaEn(int otroX){
+int Plataformas::hayPlataformaEn(int otroX,int nivel){
 
 	int parte_lateral_izq_plataforma;
 	int parte_lateral_der_plataforma;
+
+	list<plataforma> lista_plataformas;
+	
+	if (nivel == 1){
+		lista_plataformas = lista_plataformas_nivel1;
+	}
+	else if (nivel == 2){
+		lista_plataformas = lista_plataformas_nivel2;
+	}
+	else if (nivel == 3){
+		lista_plataformas = lista_plataformas_nivel3;
+	}
 
 	for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
 		plataforma &plataformaActual = *it;
@@ -260,7 +298,7 @@ int Plataformas::hayPlataformaEn(int otroX){
 }
 
 
-bool Plataformas::hayColisionSuperior(int otroX,int otroY,int otroW,int otroH){
+bool Plataformas::hayColisionSuperior(int otroX,int otroY,int otroW,int otroH, int nivel){
 	int parte_inferior = otroY+otroH;
 	int parte_superior = otroY;
 	int parte_lateral_izq = otroX;
@@ -270,6 +308,18 @@ bool Plataformas::hayColisionSuperior(int otroX,int otroY,int otroW,int otroH){
 	int parte_superior_plataforma;
 	int parte_lateral_izq_plataforma;
 	int parte_lateral_der_plataforma;
+
+	list<plataforma> lista_plataformas;
+	
+	if (nivel == 1){
+		lista_plataformas = lista_plataformas_nivel1;
+	}
+	else if (nivel == 2){
+		lista_plataformas = lista_plataformas_nivel2;
+	}
+	else if (nivel == 3){
+		lista_plataformas = lista_plataformas_nivel3;
+	}
 
 
 	for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
@@ -302,11 +352,11 @@ bool Plataformas::hayColisionSuperior(int otroX,int otroY,int otroW,int otroH){
 }
 
 
-int Plataformas::aproximarPosicionAPlataforma(int otroX,int otroY,int otroW,int otroH, int velocidad){
+int Plataformas::aproximarPosicionAPlataforma(int otroX,int otroY,int otroW,int otroH, int velocidad, int nivel){
 
 	for (int i=1; i < velocidad;i++){
 
-		if (hayColisionSuperior(otroX,otroY-i,otroW,otroH)){
+		if (hayColisionSuperior(otroX,otroY-i,otroW,otroH,nivel)){
 
 			return otroY-i;
 		}

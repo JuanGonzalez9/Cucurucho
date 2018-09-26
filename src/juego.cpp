@@ -64,12 +64,21 @@ juego::juego ():
 
 	// Creamos textura para pegar las plataformas
 	// Creamos textura para pegar las plataformas
+	plataformas.inicializar(renderer);
+
 	SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel1//fondo3", renderer);
 	SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
-	plataformas.inicializar(renderer);
 	textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
-	plataformas.cargarValoresFijos(textura_fondo3,renderer);
 	SDL_DestroyTexture (textura_fondo3_temp);
+	
+	
+	
+	plataformas.cargarValoresFijos(textura_fondo3,renderer,1);
+	
+
+
+
+
 }
 
 bool juego::jugando ()
@@ -88,12 +97,12 @@ void juego::manejar_eventos ()
 	printf("velocidad boby = %i\n", velocityBoby );
 
 
-	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,34,72)){
+	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,34,72,nivel)){
 		boby.aterrizar();
 	}
 	else if( velocityBoby > 1){
 
-		bobyPosY = plataformas.aproximarPosicionAPlataforma(bobyPosX,bobyPosY,34,72,velocityBoby);
+		bobyPosY = plataformas.aproximarPosicionAPlataforma(bobyPosX,bobyPosY,34,72,velocityBoby,nivel);
 
 		if(bobyPosY != -1){
 			boby.actualizarPos(bobyPosY);
@@ -265,6 +274,18 @@ void juego::actualizar ()
 		nivel=2;
 		fondo1.obtenerTextura("//configuracion//escenarios//nivel2//fondo1", renderer);
 		fondo2.obtenerTextura("//configuracion//escenarios//nivel2//fondo2", renderer);
+
+
+
+		SDL_SetRenderTarget(renderer, textura_fondo3); 
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_RenderFillRect(renderer, NULL);
+
+
+
+		plataformas.cargarValoresFijos(textura_fondo3,renderer,2);
+
 		fondo1.setRectOrigen(0,3600-600,800,600);
 		fondo2.setRectOrigen(0,3600-600,800,600);
 		rect_origen_fondo3={0,3600-600,800,600};
@@ -281,6 +302,9 @@ void juego::actualizar ()
 		nivel=3;		
 		fondo1.obtenerTextura("//configuracion//escenarios//nivel3//fondo1", renderer);
 		fondo2.obtenerTextura("//configuracion//escenarios//nivel3//fondo2", renderer);
+
+		plataformas.cargarValoresFijos(textura_fondo3,renderer,3);
+
 		fondo1.setRectOrigen(0,0,800,600);
 		fondo2.setRectOrigen(0,0,800,600);
 		rect_origen_fondo3={0,0,800,600};

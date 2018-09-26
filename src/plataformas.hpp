@@ -17,19 +17,21 @@ public:
 	~Plataformas();	
 
 	void inicializar(SDL_Renderer* renderizador);
-	void cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer* renderizador);
+	void cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer* renderizador,int nivel);
 	SDL_Texture* crearTexturaParaElFondo(SDL_Texture*,SDL_Renderer*,int w,int h);
-	bool hayColision(int otroX, int otroY, int otroW, int otroH);
-	bool hayColisionSuperior(int otroX, int otroY, int otroW, int otroH);
-	int hayPlataformaEn(int otroX);
-	int aproximarPosicionAPlataforma(int otroX, int otroY, int otroW, int otroH, int velocidad);
+	bool hayColision(int otroX, int otroY, int otroW, int otroH, int nivel);
+	bool hayColisionSuperior(int otroX, int otroY, int otroW, int otroH, int nivel);
+	int hayPlataformaEn(int otroX, int nivel);
+	int aproximarPosicionAPlataforma(int otroX, int otroY, int otroW, int otroH, int velocidad, int nivel);
 
 protected:
 	SDL_Texture* texturaPlataformaPiedra;
 	SDL_Texture* texturaPlataformaPuente;
 	SDL_Texture* texturaPlataformaHielo;
 	SDL_Texture* texturaPlataformaMetal;
-	list<plataforma> lista_plataformas;
+	list<plataforma> lista_plataformas_nivel1;
+	list<plataforma> lista_plataformas_nivel2;
+	list<plataforma> lista_plataformas_nivel3;
 };
 
 #endif
