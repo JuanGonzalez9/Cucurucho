@@ -268,7 +268,17 @@ void configuracion::obtener_plataformas (const char *camino, std::list<plataform
 							p.y = n;
 						}
 						if (leidos == 0xf) {
-							l.push_back (p);
+							if (p.xi > p.xf) {
+								std::cout << "los di vuelta\n";
+								int aux = p.xi;
+								p.xi = p.xf;
+								p.xf = aux;
+							}
+							if ((p.xi >= 0 || p.xf >= 0) && (p.xf < 10000)) {
+								l.push_back (p);
+							} else {
+								// TODO log
+							}
 						} else {
 							if ((leidos & t) == 0) {
 								// TODO log

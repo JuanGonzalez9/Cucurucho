@@ -94,8 +94,6 @@ void juego::manejar_eventos ()
 	int bobyPosY= nivel == 2 ? boby.obtenerCoordenadaY() : boby.getPosY();
 	int velocityBoby = boby.obtenerVelocidadY();
 
-	std::cout << "ini bobyPosY: " << bobyPosY << "\n";
-	//printf("velocidad boby = %i\n", velocityBoby );
 	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,34,72,nivel)){
 		boby.aterrizar();
 	}
@@ -103,7 +101,6 @@ void juego::manejar_eventos ()
 		bobyPosY = plataformas.aproximarPosicionAPlataforma(bobyPosX,bobyPosY,34,72,velocityBoby,nivel);
 
 		if(bobyPosY != -1){
-		std::cout << "bobyPosY: " << bobyPosY << "\n";
 			boby.actualizarPos(bobyPosY, nivel);
 			boby.aterrizar();
 		}
@@ -274,13 +271,7 @@ void juego::actualizar ()
 		nivel=2;
 		fondo1.obtenerTextura("//configuracion//escenarios//nivel2//fondo1", renderer);
 		fondo2.obtenerTextura("//configuracion//escenarios//nivel2//fondo2", renderer);
-/*
-		SDL_SetRenderTarget(renderer, textura_fondo3); 
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
-		SDL_SetRenderDrawColor(renderer, 120, 0, 0, 0);
-		SDL_RenderFillRect(renderer, NULL);
-		plataformas.cargarValoresFijos(textura_fondo3,renderer,2);
-*/
+
 		SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel2//fondo3", renderer);
 		SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
 		textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
