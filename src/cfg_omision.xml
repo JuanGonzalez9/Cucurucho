@@ -4,14 +4,37 @@ R"(<?xml version="1.0"?>
     <level>ERROR</level>
   </debug>
   <personajes>
+    <heroe>
+	    <sprite>imagenes/personaje.png</sprite>
+    </heroe>
     <enemigo>
 	    <sprite>imagenes/enemigo.png</sprite>
     </enemigo>
   </personajes>
+  <items>
+    <bala>
+	    <sprite>imagenes/bullet.png</sprite>
+    </bala>
+  </items>
+  <plataformas>
+    <piedra>
+	    <sprite>imagenes/piedra.bmp</sprite>
+    </piedra>
+    <puente>
+	    <sprite>imagenes/puente.bmp</sprite>
+    </puente>
+    <hielo>
+	    <sprite>imagenes/hielo.bmp</sprite>
+    </hielo>
+    <metal>
+	    <sprite>imagenes/metal.bmp</sprite>
+    </metal>
+  </plataformas>
   <escenarios>
     <nivel1>
-      <fondo1>imagenes/_fondo_1_.png</fondo1>
-      <fondo2>imagenes/_fondo_2_.png</fondo2>
+      <fondo1>imagenes/fondo1.png</fondo1>
+      <fondo2>imagenes/fondo2.png</fondo2>
+      <fondo3>imagenes/fondo3.png</fondo3>
       <plataforma>
         <tipo>piedra</tipo>
         <xi>0</xi>
@@ -19,33 +42,46 @@ R"(<?xml version="1.0"?>
         <y>500</y>
       </plataforma>
 	<plataforma>
-        <tipo>hielo</tipo>
+        <tipo>piedra</tipo>
         <xi>100</xi>
         <xf>400</xf>
-        <y>450</y>
+        <y>400</y>
       </plataforma>
-
-   <plataforma>
+      <plataforma>
         <tipo>puente</tipo>
         <xi>400</xi>
-        <xf>780</xf>
+        <xf>800</xf>
         <y>500</y>
       </plataforma>
-   <plataforma>
-        <tipo>metal</tipo>
+      <plataforma>
+        <tipo>piedra</tipo>
         <xi>800</xi>
         <xf>1536</xf>
         <y>450</y>
       </plataforma>
       <plataforma>
-        <tipo>hielo</tipo>
+        <tipo>metal</tipo>
         <xi>1600</xi>
+        <xf>1800</xf>
+        <y>400</y>
+      </plataforma>
+      <plataforma>
+        <tipo>hielo</tipo>
+        <xi>1850</xi>
         <xf>2679</xf>
         <y>400</y>
       </plataforma>
-
     </nivel1>
+    <nivel2>
+      <fondo1>imagenes/fondo1vert.png</fondo1>
+      <fondo2>imagenes/fondo1vert.png</fondo2>
+    </nivel2>
+    <nivel2>
+      <fondo1>imagenes/_fondo_1_.png</fondo1>
+      <fondo2>imagenes/_fondo_2_.png</fondo2>
+    </nivel2>
   </escenarios>
   <nivel>1</nivel>
 </configuracion>
 )"
+

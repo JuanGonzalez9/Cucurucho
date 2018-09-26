@@ -40,19 +40,7 @@ juego::juego ():
 
 	//cosas de balas
 	direccionDeBala = 0;
-	SDL_Surface* superficieTemporal = IMG_Load("imagenes/bullet.png");
-	if(superficieTemporal == nullptr){
-			std::cerr << "No pudo crease la superficie para el imagen: " << SDL_GetError () << '\n';
-		}
-	Uint32 colorkey = SDL_MapRGB(superficieTemporal->format, 255, 255, 255);
-	SDL_SetColorKey(superficieTemporal, SDL_TRUE, colorkey);
-	textura_bala = SDL_CreateTextureFromSurface(renderer,superficieTemporal);
-	if (textura_bala == nullptr) {
-			std::cerr << "No pudo crease la textura: " << SDL_GetError () << '\n';
-			return;
-		}
-	SDL_FreeSurface(superficieTemporal);
-
+	textura_bala = cfg.obtener_textura ("//configuracion//items//bala//sprite", renderer);
 
 	//fondo1.crearTextura("imagenes/_fondo_1_.png",renderer);
 	//fondo2.crearTextura("imagenes/_fondo_2_.png",renderer);
@@ -66,33 +54,22 @@ juego::juego ():
 		ancho,
 		alto);
 
-	boby.crearTextura("imagenes/personaje.png",renderer);
+	boby.obtenerTextura("//configuracion//personajes//heroe//sprite", renderer);
 	boby.setRectOrigen(0,0,480,480);
 
-	darthBob = new Enemigo(400,150,5);
 	//darthBob->crearTextura("imagenes/enemigo.png",renderer);
+	darthBob = new Enemigo(400,150,5);
 	darthBob->obtenerTextura("//configuracion//personajes//enemigo//sprite", renderer);
 
 
 	// Creamos textura para pegar las plataformas
-	imagen_fondo3 = IMG_Load ("imagenes/fondo3.png");
-	if (nullptr == imagen_fondo3) {
-		std::cerr << "No pudo crease la superficie para el imagen: " << SDL_GetError () << '\n';
-		return;
-	}
-	SDL_Texture* textura_fondo3_temp = SDL_CreateTextureFromSurface (renderer, imagen_fondo3);
-	if (nullptr == textura_fondo3_temp) {
-		std::cerr << "No pudo crease la textura: " << SDL_GetError () << '\n';
-		return;
-	}
-
+	// Creamos textura para pegar las plataformas
+	SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel1//fondo3", renderer);
+	SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
 	plataformas.inicializar(renderer);
-	textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,imagen_fondo3);
+	textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
 	plataformas.cargarValoresFijos(textura_fondo3,renderer);
-
-
 	SDL_DestroyTexture (textura_fondo3_temp);
-
 }
 
 bool juego::jugando ()
@@ -140,8 +117,8 @@ void juego::manejar_eventos ()
 				fondo1.avanzarOrigen(d1);
 				fondo2.avanzarOrigen(d2);
 				rect_origen_fondo3.x += d3;
-				if (rect_origen_fondo3.x > imagen_fondo3->w-ancho) {
-					rect_origen_fondo3.x = imagen_fondo3->w-ancho;
+				if (rect_origen_fondo3.x > mundo_w-ancho) {
+					rect_origen_fondo3.x = mundo_h-ancho;
 				}
 			}
 		}
@@ -239,7 +216,6 @@ void juego::manejar_eventos ()
 
 void juego::actualizar ()
 {
-
 	//scroll vertical
 	if((boby.getPosY() <=(200))&&(nivel==2)&&(boby.obtenerVelocidadY()<0)){
 		boby.subirCoordenadaYEn(boby.obtenerVelocidadY());
@@ -281,8 +257,8 @@ void juego::actualizar ()
 	if((nivel==1)&&cambioNivel)
 	{
 		nivel=2;
-		fondo1.crearTextura("imagenes/fondo1vert.png",renderer);
-		fondo2.crearTextura("imagenes/fondo1vert.png",renderer);
+		fondo1.obtenerTextura("//configuracion//escenarios//nivel2//fondo1", renderer);
+		fondo2.obtenerTextura("//configuracion//escenarios//nivel2//fondo2", renderer);
 		fondo1.setRectOrigen(0,3600-600,800,600);
 		fondo2.setRectOrigen(0,3600-600,800,600);
 		rect_origen_fondo3={0,3600-600,800,600};
@@ -297,8 +273,8 @@ void juego::actualizar ()
 	if((nivel==2)&&cambioNivel)
 	{
 		nivel=3;		
-		fondo1.crearTextura("imagenes/_fondo_1_.png",renderer);
-		fondo2.crearTextura("imagenes/_fondo_2_.png",renderer);
+		fondo1.obtenerTextura("//configuracion//escenarios//nivel3//fondo1", renderer);
+		fondo2.obtenerTextura("//configuracion//escenarios//nivel3//fondo2", renderer);
 		fondo1.setRectOrigen(0,0,800,600);
 		fondo2.setRectOrigen(0,0,800,600);
 		rect_origen_fondo3={0,0,800,600};
@@ -384,7 +360,6 @@ void juego::dibujar ()
 
 void juego::presentar ()
 {
-
 	SDL_RenderPresent (renderer);
 	us += t_ciclo.microsegundos (true);
 	cuadros++;
@@ -451,7 +426,6 @@ bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
 
 juego::~juego ()
 {
-	SDL_FreeSurface (imagen_fondo3);
 	SDL_DestroyTexture (textura_fondo3);
 	SDL_DestroyTexture (textura_objetivo);
 	SDL_DestroyRenderer (renderer);

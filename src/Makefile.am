@@ -4,32 +4,29 @@ contra_CPPFLAGS = -Wall $(XML_CPPFLAGS)
 contra_LDADD= $(XML_LIBS) -lSDL2 -lSDL2_image -ldl
 contradir = $(prefix)/bin
 
-imagenes=	foo.png \
-		nivel.png \
-		personaje.png \
-		_fondo_1_.png \
-		_fondo_2_.png \
-		bob.png \
+imagenes=	personaje.png \
+		fondo1.png \
+		fondo2.png \
+		fondo3.png \
+		fondo1vert.png \
 		bullet.png \
 		enemigo.png \
-		piedra1.bmp \
+		piedra.bmp \
 		metal.bmp \
 		hielo.bmp \
-		puente.bmp \
-		ContraPersonaje.gif
-imagenes_o=	imagen-foo.o \
-		imagen-nivel.o \
-		imagen-personaje.o \
-		imagen-_fondo_1_.o \
-		imagen-_fondo_2_.o \
-		imagen-bob.o \
+		puente.bmp
+		
+imagenes_o=	imagen-personaje.o \
+		imagen-fondo1.o \
+		imagen-fondo2.o \
+		imagen-fondo3.o \
+		imagen-fondo1vert.o \
 		imagen-bullet.o \
 		imagen-enemigo.o \
-		imagen-piedra1.o \
+		imagen-piedra.o \
 		imagen-metal.o \
 		imagen-hielo.o \
-		imagen-puente.o \
-		imagen-ContraPersonaje.o
+		imagen-puente.o
 		
 contra_LDFLAGS= $(imagenes_o) -rdynamic
 nodist_contra_SOURCES = $(imagenes_o)
@@ -45,14 +42,24 @@ $(imagenes): Makefile
 		rm -f $(bin_PROGRAMS); \
 		$(MKDIR_P) ../imagenes && \
 		cp "../../imagenes/$@" ../imagenes ; \
-		TMP="imagen-gris-imagenes-$$NAME.png"; \
-		$(CONVERT) ../imagenes/$$FILE -modulate 100,10 $$TMP; \
-		objcopy -I binary -O elf64-x86-64 -B i386 $$TMP imagen-$$NAME.o; \
-		echo name: $$TMP; \
+		IMAGEN_DE_RESPALDO="imagen-gris-imagenes-$$NAME.$$EXT"; \
+		$(CONVERT) ../imagenes/$$FILE -modulate 100,10 $$IMAGEN_DE_RESPALDO; \
+		objcopy -I binary -O elf64-x86-64 -B i386 $$IMAGEN_DE_RESPALDO imagen-$$NAME.o; \
 	fi;
 
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(bindir)/imagenes && \
 	cp ../../imagenes/*.png $(DESTDIR)$(bindir)/imagenes && \
-	cp ../../imagenes/*.bmp $(DESTDIR)$(bindir)/imagenes && \
-	cp ../../imagenes/*.gif $(DESTDIR)$(bindir)/imagenes
+	cp ../../imagenes/*.bmp $(DESTDIR)$(bindir)/imagenes
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	

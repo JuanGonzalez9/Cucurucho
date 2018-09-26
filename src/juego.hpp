@@ -30,12 +30,12 @@ public:
 protected:
 	bool termino, cambioNivel;
 	int us, cuadros, d1, d2, d3, nivel;
+	int mundo_w, mundo_h;
 	temporizador t_ciclo, t_fps;
 	SDL_Event e;
 	SDL_Rect rect_origen_fondo3;
 	SDL_Window *ventana;
 	SDL_Renderer *renderer;
-	SDL_Surface *imagen_fondo3;
 	SDL_Texture *textura_fondo3, *textura_objetivo, *textura_bala;
 	Plataformas plataformas;
 

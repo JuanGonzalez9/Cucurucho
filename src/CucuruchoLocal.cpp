@@ -40,11 +40,17 @@ int main (int argc, char *argv[]){
 		uso ();
 	} else {
 		juego j;
+		std::cout << "ciclo1\n";
 		while (j.jugando ()) {
+			std::cout << "ciclo2\n";
 			j.manejar_eventos ();
+			std::cout << "ciclo3\n";
 			j.actualizar ();
+			std::cout << "ciclo4\n";
 			j.dibujar ();
+			std::cout << "ciclo5\n";
 			j.presentar ();
+			std::cout << "ciclo6\n";
 		}
 	}
 

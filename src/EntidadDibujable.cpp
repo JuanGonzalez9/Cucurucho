@@ -18,27 +18,9 @@ EntidadDibujable::EntidadDibujable() {
 	setRectDestino(0,0,800,600);
 }
 // ------------ GETTER & SETTER----------------------------------------------
+// crearTextura
 void EntidadDibujable::obtenerTextura(const char* path,SDL_Renderer* renderer){
 	textura = cfg.obtener_textura (path, renderer);
-}
-
-void EntidadDibujable::crearTextura(const char* path,SDL_Renderer* renderer){
-	SDL_Surface* superficieTemporal = IMG_Load(path);
-
-	if(superficieTemporal == nullptr){
-		std::cerr << "No pudo crease la superficie para el imagen: " << SDL_GetError () << '\n';
-		return;
-	}
-
-	textura = SDL_CreateTextureFromSurface(renderer,superficieTemporal);
-
-	if (textura == nullptr) {
-		std::cerr << "No pudo crease la textura: " << SDL_GetError () << '\n';
-		return;
-	}
-
-
-	SDL_FreeSurface(superficieTemporal);
 }
 
 void EntidadDibujable::asignarTextura(SDL_Texture* tex){

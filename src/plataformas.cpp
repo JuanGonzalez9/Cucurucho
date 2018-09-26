@@ -8,23 +8,12 @@
 using namespace std;
 
 
-void Plataformas::inicializar(SDL_Renderer* renderizador){
-
-	SDL_Surface* plataformaPiedra = SDL_LoadBMP("imagenes/piedra1.bmp");
-	texturaPlataformaPiedra = SDL_CreateTextureFromSurface(renderizador,plataformaPiedra);
-	SDL_FreeSurface(plataformaPiedra);
-
-	SDL_Surface* plataformaPuente = SDL_LoadBMP("imagenes/puente.bmp");
-	texturaPlataformaPuente = SDL_CreateTextureFromSurface(renderizador,plataformaPuente);
-	SDL_FreeSurface(plataformaPuente);
-
-	SDL_Surface* plataformaHielo = SDL_LoadBMP("imagenes/hielo.bmp");
-	texturaPlataformaHielo = SDL_CreateTextureFromSurface(renderizador,plataformaHielo);
-	SDL_FreeSurface(plataformaHielo);
-
-	SDL_Surface* plataformaMetal = SDL_LoadBMP("imagenes/metal.bmp");
-	texturaPlataformaMetal = SDL_CreateTextureFromSurface(renderizador,plataformaMetal);
-	SDL_FreeSurface(plataformaMetal);
+void Plataformas::inicializar(SDL_Renderer* renderizador)
+{
+	texturaPlataformaPiedra = cfg.obtener_textura ("//configuracion//plataformas//piedra//sprite", renderizador);
+	texturaPlataformaPuente = cfg.obtener_textura ("//configuracion//plataformas//puente//sprite", renderizador);
+	texturaPlataformaHielo = cfg.obtener_textura ("//configuracion//plataformas//hielo//sprite", renderizador);
+	texturaPlataformaMetal = cfg.obtener_textura ("//configuracion//plataformas//metal//sprite", renderizador);
 
 	registro.registrar(LogEventos::info, "Se cargaron las imagenes de las plataformas");
 }
@@ -166,8 +155,8 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 	return;	
 }
 
-SDL_Texture * Plataformas::crearTexturaParaElFondo(SDL_Texture* texturaFondo,SDL_Renderer* renderizador,SDL_Surface* bmpImagenFondo){
-	SDL_Texture * textura_objetivo = SDL_CreateTexture (renderizador,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,bmpImagenFondo->w,bmpImagenFondo->h);
+SDL_Texture * Plataformas::crearTexturaParaElFondo(SDL_Texture* texturaFondo,SDL_Renderer* renderizador,int w,int h){
+	SDL_Texture * textura_objetivo = SDL_CreateTexture (renderizador,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,w, h);
 	SDL_SetTextureBlendMode(textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget(renderizador, textura_objetivo);
 	SDL_RenderCopy(renderizador,texturaFondo,NULL,NULL);
