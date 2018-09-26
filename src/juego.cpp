@@ -58,7 +58,7 @@ juego::juego ():
 	boby.setRectOrigen(0,0,480,480);
 
 	//darthBob->crearTextura("imagenes/enemigo.png",renderer);
-	darthBob = new Enemigo(400,150,5);
+	darthBob = new Enemigo(500,150,5);
 	darthBob->obtenerTextura("//configuracion//personajes//enemigo//sprite", renderer);
 
 
@@ -331,9 +331,11 @@ void juego::actualizar ()
 	}
 
 	//veo si el jugador toca al enemigo
-	if(! darthBob->derrotado() && collision(boby.getRectaDestino(),darthBob->getRectaDestino())){
-		if(boby.getInvincibilityFrames() == 0)
-			boby.perderVida();
+	if(nivel == 1 && boby.estaCercaDelFinalDelNivel1()){
+		if(! darthBob->derrotado() && collision(boby.getRectaDestino(),darthBob->getRectaDestino())){
+			if(boby.getInvincibilityFrames() == 0)
+				boby.perderVida();
+		}
 	}
 
 	//veo si el jugador se cayo
@@ -350,12 +352,14 @@ void juego::actualizar ()
 	boby.refreshBullets();
 
 	//veo si las balas le pegan al enemigo
-	for(unsigned i = 0;i < bullets.size();i++){
-		if(! darthBob->derrotado() && collision(bullets[i]->getRectaDestino(),darthBob->getRectaDestino())){
-			darthBob->perderVida();
-			bullets.erase(bullets.begin() + i);
-		}
+	if(nivel == 1 && boby.estaCercaDelFinalDelNivel1()){
+		for(unsigned i = 0;i < bullets.size();i++){
+			if(! darthBob->derrotado() && collision(bullets[i]->getRectaDestino(),darthBob->getRectaDestino())){
+				darthBob->perderVida();
+				bullets.erase(bullets.begin() + i);
+			}
 
+		}
 	}
 }
 
@@ -374,10 +378,12 @@ void juego::dibujar ()
 	// Copio el resultado
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
 
-	if(!darthBob->derrotado())
-		darthBob->dibujar(renderer);
-	else{
-		darthBob->~Enemigo();
+	if(nivel == 1 && boby.estaCercaDelFinalDelNivel1()){
+		if(!darthBob->derrotado())
+			darthBob->dibujar(renderer);
+		else{
+			darthBob->~Enemigo();
+		}
 	}
 
 	// Copio a bob

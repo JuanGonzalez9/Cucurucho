@@ -44,6 +44,7 @@ public:
 	void setCoordenadaY(int y);
 	bool estaMirandoALaDerecha();
 	bool estaSaltando();
+	bool estaCercaDelFinalDelNivel1();
 
 	//----METODOS
 	void saltar();
