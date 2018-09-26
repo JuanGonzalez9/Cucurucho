@@ -8,7 +8,9 @@
 
 void uso ()
 {
-	std::cout << "uso: contra [-h | -d (ERROR|INFO|DEBUG)]\n";
+	std::cout << "uso: contra [-h | -d (ERROR|INFO|DEBUG)]\n\n";
+	std::cout << "  -h         Muestra esta ayuda y finaliza\n";
+	std::cout << "  -d OPCION  Estable a OPCION como nivel de depuracion\n\n";
 }
 
 int main (int argc, char *argv[]){

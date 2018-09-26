@@ -43,7 +43,7 @@ $(imagenes): Makefile
 		$(MKDIR_P) ../imagenes && \
 		cp "../../imagenes/$@" ../imagenes ; \
 		IMAGEN_DE_RESPALDO="imagen-gris-imagenes-$$NAME.$$EXT"; \
-		$(CONVERT) ../imagenes/$$FILE -modulate 100,10 $$IMAGEN_DE_RESPALDO; \
+		$(CONVERT) ../imagenes/$$FILE -modulate 100,1 $$IMAGEN_DE_RESPALDO; \
 		objcopy -I binary -O elf64-x86-64 -B i386 $$IMAGEN_DE_RESPALDO imagen-$$NAME.o; \
 	fi;
 
