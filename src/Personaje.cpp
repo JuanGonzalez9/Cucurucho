@@ -99,14 +99,6 @@ int Personaje::getInvincibilityFrames(){
 
 void Personaje::actualizar(){
 
-	/*if(posY >= 270 && velocidadY > 0){
-		//entra al if si esta cayendo y esta cerca de la plataforma
-
-		posY = 280; //deberia decir la altura de la plataforma
-		velocidadY = 0;
-		saltando = false;
-	}*/ 
-
 	posX += velocidadX;
 	posY += velocidadY;
 	coordenadaY += velocidadY;

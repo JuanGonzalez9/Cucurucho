@@ -19,12 +19,19 @@ Sprite::Sprite() {
 	frameActual = 0;
 	ultimoFrame = Quieto;
 	cargarFramesCaminando();
+	registro.registrar (LogEventos::info, "Se cargaron los frames para el personaje caminando");
 	cargarFramesSaltando();
+	registro.registrar (LogEventos::info, "Se cargaron los frames para el personaje saltando");
 	cargarFramesDisparando();
+	registro.registrar (LogEventos::info, "Se cargaron los frames para el personaje disparando");
 	cargarFramesDisparandoCaminando();
+	registro.registrar (LogEventos::info, "Se cargaron los frames para el personaje disparando mientras camina");
 	cargarFramesDisparandoArribaCaminando();
+	registro.registrar (LogEventos::info, "Se cargaron los frames para el personaje disparando para arriba mientras camina");
 	cargarFramesDisparandoAbajoCaminando();
+	registro.registrar (LogEventos::info, "Se cargaron los frames para el personaje disparando para abajo mientras camina");
 	cargarFramesAgachado();
+	registro.registrar (LogEventos::info, "Se cargaron los frames para el personaje agachado");
 
 }
 

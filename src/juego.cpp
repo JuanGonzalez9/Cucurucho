@@ -130,7 +130,7 @@ void juego::manejar_eventos ()
 			}
 		}
 		else{
-			if(boby.getPosX() <760){
+			if(boby.getPosX() < 760){
 				boby.avanzar();
 				boby.subirCoordenadaXEn(3);
 			}
