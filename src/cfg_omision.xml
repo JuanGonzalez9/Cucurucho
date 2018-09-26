@@ -39,37 +39,186 @@ R"(<?xml version="1.0"?>
         <tipo>piedra</tipo>
         <xi>0</xi>
         <xf>300</xf>
-        <y>500</y>
+        <y>300</y>
       </plataforma>
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>300</xi>
+        <xf>600</xf>
+        <y>300</y>
+      </plataforma>
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>600</xi>
+        <xf>900</xf>
+        <y>300</y>
+      </plataforma>
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>900</xi>
+        <xf>1200</xf>
+        <y>300</y>
+      </plataforma>
+
 	<plataforma>
-        <tipo>piedra</tipo>
-        <xi>100</xi>
-        <xf>400</xf>
-        <y>400</y>
-      </plataforma>
-      <plataforma>
-        <tipo>puente</tipo>
-        <xi>400</xi>
-        <xf>800</xf>
-        <y>500</y>
-      </plataforma>
-      <plataforma>
-        <tipo>piedra</tipo>
-        <xi>800</xi>
-        <xf>1536</xf>
+        <tipo>hielo</tipo>
+        <xi>0</xi>
+        <xf>350</xf>
         <y>450</y>
       </plataforma>
-      <plataforma>
-        <tipo>metal</tipo>
-        <xi>1600</xi>
-        <xf>1800</xf>
-        <y>400</y>
+
+	<plataforma>
+        <tipo>hielo</tipo>
+        <xi>350</xi>
+        <xf>400</xf>
+        <y>450</y>
       </plataforma>
+
+	<plataforma>
+        <tipo>hielo</tipo>
+        <xi>450</xi>
+        <xf>500</xf>
+        <y>550</y>
+      </plataforma>
+
+	<plataforma>
+        <tipo>hielo</tipo>
+        <xi>500</xi>
+        <xf>550</xf>
+        <y>450</y>
+      </plataforma>
+
+	<plataforma>
+        <tipo>hielo</tipo>
+        <xi>600</xi>
+        <xf>800</xf>
+        <y>350</y>
+      </plataforma>
+
+   <plataforma>
+        <tipo>metal</tipo>
+        <xi>950</xi>
+        <xf>1150</xf>
+        <y>450</y>
+      </plataforma>
+
+   <plataforma>
+        <tipo>metal</tipo>
+        <xi>900</xi>
+        <xf>1000</xf>
+        <y>450</y>
+      </plataforma>
+
+   <plataforma>
+        <tipo>puente</tipo>
+        <xi>1200</xi>
+        <xf>1600</xf>
+        <y>300</y>
+      </plataforma>
+
       <plataforma>
         <tipo>hielo</tipo>
-        <xi>1850</xi>
-        <xf>2679</xf>
+        <xi>1600</xi>
+        <xf>2000</xf>
+        <y>300</y>
+      </plataforma>
+
+   <plataforma>
+        <tipo>puente</tipo>
+        <xi>2000</xi>
+        <xf>2400</xf>
+        <y>300</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>2900</xi>
+        <xf>4000</xf>
+        <y>240</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>2400</xi>
+        <xf>3000</xf>
+        <y>300</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>hielo</tipo>
+        <xi>2950</xi>
+        <xf>3100</xf>
+        <y>530</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>3100</xi>
+        <xf>3250</xf>
+        <y>450</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>3250</xi>
+        <xf>3800</xf>
         <y>400</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>4800</xi>
+        <xf>5200</xf>
+        <y>240</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>3800</xi>
+        <xf>4700</xf>
+        <y>340</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>3600</xi>
+        <xf>4100</xf>
+        <y>540</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>4100</xi>
+        <xf>4300</xf>
+        <y>450</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>4400</xi>
+        <xf>4700</xf>
+        <y>450</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>4800</xi>
+        <xf>4900</xf>
+        <y>400</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>5200</xi>
+        <xf>5400</xf>
+        <y>300</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedra</tipo>
+        <xi>5000</xi>
+        <xf>5300</xf>
+        <y>350</y>
       </plataforma>
     </nivel1>
     <nivel2>

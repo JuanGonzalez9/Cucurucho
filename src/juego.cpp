@@ -197,6 +197,12 @@ void juego::manejar_eventos ()
 	if(apretandoAbajo(state)){
 		boby.apuntarAbajo();
 	}
+
+	//PASA DE NIVEL SI LLEGA AL FINAL
+	if((nivel==1)&&(boby.obtenerCoordenadaX()>=5300)){
+			cambioNivel=true;
+		}
+
 	if(! apretandoArriba(state) && ! apretandoAbajo(state)){
 		boby.dejarDeApuntar();
 	}
