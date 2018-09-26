@@ -8,7 +8,7 @@ R"(<?xml version="1.0"?>
 	    <sprite>imagenes/personaje.png</sprite>
     </heroe>
     <enemigo>
-	    <sprite>imagenes/enemigo.png</sprite>
+	    <sprite>imagenes/boss.png</sprite>
     </enemigo>
   </personajes>
   <items>

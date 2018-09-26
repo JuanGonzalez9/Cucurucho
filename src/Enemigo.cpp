@@ -12,7 +12,7 @@ Enemigo::Enemigo(int x,int y,int life) {
 	EntidadDibujable();
 	vidas = life;
 	rectOrigen = {0,0,126,120};
-	rectDestino = {x,y,126,120};
+	rectDestino = {x,y,252,240};
 
 }
 
