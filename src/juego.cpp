@@ -9,11 +9,13 @@ static const int alto=800;
 
 juego::juego ():
 	termino (false),
+	cambioNivel(false),
 	us (periodo),
 	cuadros (0),
 	d1 (1),
 	d2 (2),
 	d3 (3),
+	nivel (1),
 	rect_origen_fondo3 {0, 0, 800, 600},
 	ventana (nullptr),
 	renderer (nullptr),
@@ -127,18 +129,26 @@ void juego::manejar_eventos ()
 		
 	}
 	if(apretandoDerecha(state)){
-		if(boby.getPosX() <= (ancho / 2)){
-			boby.avanzar();
-			boby.subirCoordenadaXEn(3);
+		if(nivel!=2){	
+			if(boby.getPosX() <= (ancho / 2)){
+				boby.avanzar();
+				boby.subirCoordenadaXEn(3);
+			}
+			else{
+				boby.hacerComoQueCamina();
+				boby.subirCoordenadaXEn(d3);
+				fondo1.avanzarOrigen(d1);
+				fondo2.avanzarOrigen(d2);
+				rect_origen_fondo3.x += d3;
+				if (rect_origen_fondo3.x > imagen_fondo3->w-ancho) {
+					rect_origen_fondo3.x = imagen_fondo3->w-ancho;
+				}
+			}
 		}
 		else{
-			boby.hacerComoQueCamina();
-			boby.subirCoordenadaXEn(d3);
-			fondo1.avanzarOrigen(d1);
-			fondo2.avanzarOrigen(d2);
-			rect_origen_fondo3.x += d3;
-			if (rect_origen_fondo3.x > imagen_fondo3->w-ancho) {
-				rect_origen_fondo3.x = imagen_fondo3->w-ancho;
+			if(boby.getPosX() <760){
+				boby.avanzar();
+				boby.subirCoordenadaXEn(3);
 			}
 		}
 	}
@@ -163,6 +173,18 @@ void juego::manejar_eventos ()
 
 	if(apretandoAgacharse(state) && !(apretandoDerecha(state) || apretandoIzquierda(state))){
 		boby.agacharse();
+	}
+
+	if(apretandoNivel(state)){
+		if(nivel==1){
+			cambioNivel=true;
+		}
+	}
+	if(apretandoFlotar(state)){
+		boby.flotar();
+		if((nivel==2)&&(apretandoNivel(state))){
+			cambioNivel=true;
+		}
 	}
 
 	if(apretandoDisparo(state)){
@@ -217,6 +239,20 @@ void juego::manejar_eventos ()
 
 void juego::actualizar ()
 {
+
+	//scroll vertical
+	if((boby.getPosY() <=(200))&&(nivel==2)&&(boby.obtenerVelocidadY()<0)){
+		boby.subirCoordenadaYEn(boby.obtenerVelocidadY());
+		/**/boby.decrementarPosY(boby.obtenerVelocidadY());		
+		//por ahora todo con la velocidad Y de boby, no hay parallax
+		fondo1.avanzarOrigenY(boby.obtenerVelocidadY());
+		printf("origen x = %i\n", fondo1.getRectaOrigen().x);
+		printf("origen y = %i\n", fondo1.getRectaOrigen().y);
+		printf("origen w = %i\n", fondo1.getRectaOrigen().w);
+		printf("origen h = %i\n", fondo1.getRectaOrigen().h);
+		fondo2.avanzarOrigenY(boby.obtenerVelocidadY());
+		rect_origen_fondo3.y -= boby.obtenerVelocidadY();
+	}
 	boby.actualizar();
 	while (us >= periodo*0.9 ) {
 		us -= periodo;
@@ -239,6 +275,39 @@ void juego::actualizar ()
 			d2 = 2;
 			rect_origen_fondo3.x = 0;
 			d1 = 1;*/
+	}
+
+
+	if((nivel==1)&&cambioNivel)
+	{
+		nivel=2;
+		fondo1.crearTextura("imagenes/fondo1vert.png",renderer);
+		fondo2.crearTextura("imagenes/fondo1vert.png",renderer);
+		fondo1.setRectOrigen(0,3600-600,800,600);
+		fondo2.setRectOrigen(0,3600-600,800,600);
+		rect_origen_fondo3={0,3600-600,800,600};
+		boby.setPosX(50);
+		boby.setPosY(280);	
+		boby.setCoordenadaX(0+50);
+		boby.setCoordenadaY(3000+280);
+		cambioNivel=false;
+		
+	}
+
+	if((nivel==2)&&cambioNivel)
+	{
+		nivel=3;		
+		fondo1.crearTextura("imagenes/_fondo_1_.png",renderer);
+		fondo2.crearTextura("imagenes/_fondo_2_.png",renderer);
+		fondo1.setRectOrigen(0,0,800,600);
+		fondo2.setRectOrigen(0,0,800,600);
+		rect_origen_fondo3={0,0,800,600};
+		boby.setPosX(50);
+		boby.setPosY(280);	
+		boby.setCoordenadaX(0+50);
+		boby.setCoordenadaY(280);
+		cambioNivel=false;
+		
 	}
 
 	//Actualizo balas
@@ -355,6 +424,16 @@ bool juego::apretandoAbajo(const Uint8* state){
 
 bool juego::apretandoAgacharse(const Uint8* state){
 	return state[SDL_SCANCODE_C];
+}
+
+//Cambia de nivel
+bool juego::apretandoNivel(const Uint8* state){
+	return state[SDL_SCANCODE_Q];
+}
+
+//sube al jugador
+bool juego::apretandoFlotar(const Uint8* state){
+	return state[SDL_SCANCODE_W];
 }
 
 

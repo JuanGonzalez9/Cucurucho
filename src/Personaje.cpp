@@ -53,12 +53,20 @@ int Personaje::getPosY(){
 	return posY;
 }
 
-int Personaje::setPosX(int x){
+void Personaje::setPosX(int x){
 	posX=x;
 }
 
-int Personaje::setPosY(int y){
+void Personaje::setPosY(int y){
 	posY=y;
+}
+
+void Personaje::setCoordenadaX(int x){
+	coordenadaX= x;
+}
+
+void Personaje::setCoordenadaY(int y){
+	coordenadaY= y;
 }
 
 int Personaje::obtenerCoordenadaX(){
@@ -123,6 +131,10 @@ void Personaje::actualizar(){
 
 bool Personaje::estaMirandoALaDerecha(){
 	return mirandoALaDerecha;
+}
+
+void Personaje::decrementarPosY(int y){
+	posY -=y;
 }
 
 bool Personaje::estaSaltando(){
@@ -212,6 +224,10 @@ void Personaje::aterrizar(){
 
 void Personaje::bajar(){
 	velocidadY= 1;
+}
+
+void Personaje::flotar(){
+	velocidadY= -3;
 }
 
 void Personaje::subirCoordenadaXEn(int cantidad){

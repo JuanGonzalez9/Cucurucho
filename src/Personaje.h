@@ -38,8 +38,10 @@ public:
 	Personaje::Estado getEstado();
 	int getPosX();
 	int getPosY();
-	int setPosX(int x);
-	int setPosY(int y);
+	void setPosX(int x);
+	void setPosY(int y);
+	void setCoordenadaX(int x);
+	void setCoordenadaY(int y);
 	bool estaMirandoALaDerecha();
 	bool estaSaltando();
 
@@ -69,7 +71,9 @@ public:
 	int obtenerVelocidadY();
 	int obtenerVelocidadX();
 	void actualizarPos(int);
+	void decrementarPosY(int y);
 	void bajar();
+	void flotar();
 	void hacerComoQueCamina();
 	
 //<<<<<<< HEAD

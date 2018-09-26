@@ -78,6 +78,10 @@ void EntidadDibujable::avanzarOrigen(int velocidad){
 	rectOrigen.x += velocidad;
 }
 
+void EntidadDibujable::avanzarOrigenY(int velocidad){
+	rectOrigen.y += velocidad;
+}
+
 void EntidadDibujable::retrocederOrigen(int velocidad){
 	rectOrigen.x -= velocidad;
 }

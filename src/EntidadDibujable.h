@@ -35,6 +35,7 @@ public:
 	void dibujar(SDL_Renderer* renderer);
 	// estos dos modifican la posicion en x
 	void avanzarOrigen(int velocidad);
+	void avanzarOrigenY(int velocidad);
 	void retrocederOrigen(int velocidad);
 
 protected:

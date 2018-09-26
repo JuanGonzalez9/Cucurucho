@@ -28,8 +28,8 @@ public:
 	void presentar ();
 	bool jugando ();
 protected:
-	bool termino;
-	int us, cuadros, d1, d2, d3;
+	bool termino, cambioNivel;
+	int us, cuadros, d1, d2, d3, nivel;
 	temporizador t_ciclo, t_fps;
 	SDL_Event e;
 	SDL_Rect rect_origen_fondo3;
@@ -57,6 +57,8 @@ protected:
 	bool apretandoDisparo(const Uint8* state);
 	bool apretandoSalto(const Uint8* state);
 	bool apretandoAgacharse(const Uint8* state);
+	bool apretandoNivel(const Uint8* state);
+	bool apretandoFlotar(const Uint8* state);
 
 
 };
