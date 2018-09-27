@@ -16,6 +16,7 @@ juego::juego ():
 	d2 (2),
 	d3 (3),
 	nivel (1),
+	cascada(0),
 	rect_origen_fondo3 {0, 0, 800, 600},
 	ventana (nullptr),
 	renderer (nullptr),
@@ -254,6 +255,18 @@ void juego::actualizar ()
 			cambioNivel=true;
 		}	
 	}
+
+	//efecto cascada
+	if(nivel==2)
+	{
+		cascada+=2;
+		fondo1.avanzarOrigenY(-2);		
+		if(cascada==32){
+			fondo1.avanzarOrigenY(34);
+			cascada=0;
+		}
+	}
+
 	boby.actualizar();
 	while (us >= periodo*0.9 ) {
 		us -= periodo;
