@@ -46,6 +46,7 @@ public:
 	bool estaMirandoALaDerecha();
 	bool estaSaltando();
 	bool estaCercaDelFinalDelNivel1();
+	bool estaCercaDelFinalDelNivel3();
 
 	//----METODOS
 	void saltar();

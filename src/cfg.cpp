@@ -72,6 +72,7 @@ configuracion::configuracion ()
 	}
 	struct stat sb;
 	if (stat ("cfg.xml", &sb) == -1) {
+		registro.registrar (LogEventos::error, "Archivo de configuracion recreado");
 		// TODO log
 		recrear_archivo_xml ();
 		return;
@@ -155,7 +156,7 @@ void configuracion::recrear_archivo_xml ()
 	xmlKeepBlanksDefault (0);
 	if (xmlSaveFormatFile ("cfg.xml", doc_omision, 1) == -1)
 	{
-		// TODO log
+		registro.registrar (LogEventos::error,"no se puede crear el archivo de configuracion");
 	}
 }
 
@@ -184,7 +185,7 @@ std::string configuracion::obtener_s (const char *camino, std::function<bool(std
 	if (s.empty() || !validar (s, false)) {
 		s = obtener_s_del_xml (camino, &contexto_omision);
 		if (s.empty() || !validar (s, true)) {
-			// TODO log
+		registro.registrar (LogEventos::error, "Usado de configuracion por omision");
 			s.clear();
 			lanzar (excepcion_configuracion, "Opcion por defecto para " << camino << " invalida");
 		}
@@ -248,7 +249,7 @@ void configuracion::obtener_plataformas (const char *camino, std::list<plataform
 						leidos |= t;
 						p.t = plataforma::puente;
 					} else {
-						// TODO log
+						registro.registrar (LogEventos::error,"tipo de plataforma especificado incorrecto");
 					}
 				} else {
 					try{
@@ -269,7 +270,7 @@ void configuracion::obtener_plataformas (const char *camino, std::list<plataform
 						}
 						if (leidos == 0xf) {
 							if (p.xi > p.xf) {
-								std::cout << "los di vuelta\n";
+								
 								int aux = p.xi;
 								p.xi = p.xf;
 								p.xf = aux;
@@ -277,20 +278,20 @@ void configuracion::obtener_plataformas (const char *camino, std::list<plataform
 							if ((p.xi >= 0 || p.xf >= 0) && (p.xf < 10000)) {
 								l.push_back (p);
 							} else {
-								// TODO log
+								registro.registrar (LogEventos::error,"se ignora plataforma no visible o enorme para la pantalla");
 							}
 						} else {
 							if ((leidos & t) == 0) {
-								// TODO log
+								registro.registrar (LogEventos::error,"A la plataforma dada le falta el tipo");
 							}
 							if ((leidos & xi) == 0) {
-								// TODO log
+								registro.registrar (LogEventos::error,"A la plataforma dada le falta el xi");
 							}
 							if ((leidos & xf) == 0) {
-								// TODO log
+								registro.registrar (LogEventos::error,"A la plataforma dada le falta el xf");
 							}
 							if ((leidos & y) == 0) {
-								// TODO log
+								registro.registrar (LogEventos::error,"A la plataforma dada le falta el y");
 							}
 						}
 					} catch (...){}
@@ -308,12 +309,12 @@ SDL_Texture *configuracion::obtener_textura (const char *camino, SDL_Renderer *r
 	std::string s = obtener_s (camino, [renderer, &textura] (std::string & s, bool omision) {
 		SDL_Surface *superficie = IMG_Load (s.c_str ());
 		if (superficie == nullptr) {
-			// TODO log
+		registro.registrar (LogEventos::error, "Usado de configuracion por omision");
 			return omision? true : false;
 		}
 		textura = SDL_CreateTextureFromSurface (renderer, superficie);
 		if (textura == nullptr) {
-			// TODO log
+		registro.registrar (LogEventos::error, "Usado de configuracion por omision");
 			SDL_FreeSurface (superficie);
 			return omision? true : false;
 		}
@@ -374,7 +375,7 @@ template <typename t> t configuracion::obtener_i_number (const char *camino, typ
 	n = f (s, &largo, 10);
 	if (largo != s.length() || !validar (n, true))
 	{
-  		// TODO log
+		registro.registrar (LogEventos::error, "Usado de configuracion por omision");
 		lanzar (excepcion_configuracion, "Opcion por defecto para " << camino << " invalida");
 	}
 	return n;
@@ -398,7 +399,7 @@ template <typename t> t configuracion::obtener_fp_number (const char *camino, ty
 	n = f (s, &largo);
 	if (largo != s.length() || !validar (n, true))
 	{
-  		// TODO log
+		registro.registrar (LogEventos::error, "Usado de configuracion por omision");
 		lanzar (excepcion_configuracion, "Opcion por defecto para " << camino << " invalida");
 	}
 	return n;

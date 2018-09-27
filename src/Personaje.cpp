@@ -250,7 +250,10 @@ void Personaje::actualizarPos(int nuevaPos, int nivel){
 }
 
 bool Personaje::estaCercaDelFinalDelNivel1(){
-	return (coordenadaX >= 5000);
+	return (coordenadaX >= 7000);
+}
+bool Personaje::estaCercaDelFinalDelNivel3(){
+	return (coordenadaX >= 7000);
 }
 
 
