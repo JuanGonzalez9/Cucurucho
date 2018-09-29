@@ -129,13 +129,15 @@ void juego::manejar_eventos ()
 			else{
 				boby.hacerComoQueCamina();
 				boby.subirCoordenadaXEn(d3);
-				fondo1.avanzarOrigen(d1);
-				fondo2.avanzarOrigen(d2);
+				//fondo1.avanzarOrigen(d1);
+				//fondo2.avanzarOrigen(d2);
 				rect_origen_fondo3.x += d3;
 				if (rect_origen_fondo3.x > mundo_w-ancho) {
 					rect_origen_fondo3.x = mundo_h-ancho;
 				}
 			}
+			fondo1.avanzarOrigen(d1);
+			fondo2.avanzarOrigen(d2);
 		}
 		else{
 			if(boby.getPosX() < 760){
@@ -150,6 +152,10 @@ void juego::manejar_eventos ()
 		if(boby.getPosX() > 0 ){
 			boby.retroceder();
 			boby.subirCoordenadaXEn(-d3);
+			if(nivel != 2){
+				fondo1.avanzarOrigen(-d1);
+				fondo2.avanzarOrigen(-d2);
+			}
 		}
 		
 	}
