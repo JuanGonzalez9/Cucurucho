@@ -57,6 +57,15 @@ void Bullet::ajustarPorEstado(Personaje::Estado estado){
 		rectDestino.y += 30;
 	}
 
+	if(estado == Personaje::Estado::Caminando){
+		if(xvel < 0){
+			rectDestino.x -= 10;
+		}
+		else{
+		rectDestino.x += 10;
+		}
+	}
+
 	//si esta apuntando para la derecha
 	if(xvel > 0){
 		//si esta apuntando para abajo
