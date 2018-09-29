@@ -17,7 +17,7 @@ extern "C"
 class plataforma
 {
 public:
-	typedef enum {piedra, puente, hielo, metal} tipo;
+	typedef enum {piedra, puente, hielo, metal, puente2} tipo;
 	tipo t;
 	int xi, xf, y;
 	static bool comparar_plataforma (const plataforma& p1, const plataforma& p2);

@@ -17,7 +17,8 @@ imagenes=	personaje.png \
 		metal.bmp \
 		hielo.bmp \
 		boss.png \
-		puente.bmp
+		puente.bmp\
+		puente2.png
 		
 imagenes_o=	imagen-personaje.o \
 		imagen-fondo1.o \
@@ -32,7 +33,8 @@ imagenes_o=	imagen-personaje.o \
 		imagen-metal.o \
 		imagen-hielo.o \
 		imagen-boss.o \
-		imagen-puente.o
+		imagen-puente.o\
+		imagen-puente2.o
 		
 contra_LDFLAGS= $(imagenes_o) -rdynamic
 nodist_contra_SOURCES = $(imagenes_o)
