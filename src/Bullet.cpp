@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet(int x,int y,int xVel,int yVel)
+Bullet::Bullet(int x,int y,int xVel,int yVel,Personaje::Estado estadoPersonaje)
 {
 	EntidadDibujable();
 	rectOrigen.x=0;
@@ -15,6 +15,8 @@ Bullet::Bullet(int x,int y,int xVel,int yVel)
 	yvel=yVel;
     duracion=60;
      //duracion=bulletRange;
+
+    ajustarPorEstado(estadoPersonaje);
 }
 
 
@@ -43,6 +45,51 @@ void Bullet::move()
 
 void Bullet::dibujar(SDL_Renderer* renderer){
 	SDL_RenderCopy(renderer, textura, & rectOrigen , &rectDestino);
+}
+
+void Bullet::ajustarPorEstado(Personaje::Estado estado){
+
+	if(estado == Personaje::Estado::CuerpoATierra){
+		if(xvel > 0){
+			rectDestino.x += 40;
+		}
+
+		rectDestino.y += 30;
+	}
+
+	//si esta apuntando para la derecha
+	if(xvel > 0){
+		//si esta apuntando para abajo
+		if(yvel > 0){
+			rectDestino.y -= 5;
+			rectDestino.x += 10;
+		}
+
+		//si esta apuntando para arriba
+		if(yvel < 0){
+			rectDestino.y -= 12;
+			rectDestino.x += 14;
+		}
+
+		//si apunta dereche
+		if(yvel == 0)
+			rectDestino.x += 15;
+	}
+
+	//si esta apuntando para la izquierda
+	if(xvel < 0){
+		//si esta apuntando para abajo
+		if(yvel > 0){
+			rectDestino.y += 10;
+		}
+
+		//si esta apuntando para arriba
+		if(yvel < 0){
+			rectDestino.y -= 20;
+		}
+
+	}
+
 }
 
 Bullet::~Bullet(){

@@ -198,10 +198,9 @@ void juego::manejar_eventos ()
 			if(!boby.estaMirandoALaDerecha())
 				posBala = -10;
 			Bullet* nuevaBala;
-			if(boby.getEstado() == Personaje::Estado::CuerpoATierra)
-				nuevaBala = new Bullet(boby.getPosX(),boby.getPosY() + 34,posBala,direccionDeBala*10);
-			else
-				nuevaBala = new Bullet(boby.getPosX(),boby.getPosY(),posBala,direccionDeBala*10);
+
+			nuevaBala = new Bullet(boby.getPosX(),boby.getPosY(),posBala,direccionDeBala*10,boby.getEstado());
+
 			nuevaBala->asignarTextura(textura_bala);
 			bullets.push_back(nuevaBala);
 

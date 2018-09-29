@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "EntidadDibujable.h"
+#include "Personaje.h"
 
 #ifndef BULLET_H
 #define BULLET_H
@@ -9,10 +10,11 @@ class Bullet : public EntidadDibujable{
 
 private:
 	int xvel, yvel, duracion;
+	void ajustarPorEstado(Personaje::Estado estado);
 
 public:
 
-	Bullet(int x,int y,int xVel, int yVel);
+	Bullet(int x,int y,int xVel, int yVel,Personaje::Estado estadoPersonaje);
 	virtual ~Bullet();
 	int posY();
 	int posX();
