@@ -12,9 +12,12 @@ juego::juego ():
 	cambioNivel(false),
 	us (periodo),
 	cuadros (0),
-	d1 (1),
-	d2 (2),
-	d3 (3),
+	//d1 (1),
+	//d2 (2),
+	//d3 (3),
+	d1 (2),
+	d2 (3),
+	d3 (5),
 	nivel (1),
 	cascada(0),
 	rect_origen_fondo3 {0, 0, 800, 600},
@@ -121,7 +124,7 @@ void juego::manejar_eventos ()
 		if(nivel!=2){	
 			if(boby.getPosX() <= (ancho / 2)){
 				boby.avanzar();
-				boby.subirCoordenadaXEn(3);
+				boby.subirCoordenadaXEn(d3);
 			}
 			else{
 				boby.hacerComoQueCamina();
@@ -137,7 +140,7 @@ void juego::manejar_eventos ()
 		else{
 			if(boby.getPosX() < 760){
 				boby.avanzar();
-				boby.subirCoordenadaXEn(3);
+				boby.subirCoordenadaXEn(d3);
 			}
 		}
 	}
@@ -146,7 +149,7 @@ void juego::manejar_eventos ()
 	if(apretandoIzquierda(state)){
 		if(boby.getPosX() > 0 ){
 			boby.retroceder();
-			boby.subirCoordenadaXEn(-3);
+			boby.subirCoordenadaXEn(-d3);
 		}
 		
 	}

@@ -12,8 +12,8 @@ Personaje::Personaje() {
 	shootTimer = 0;
 	velocidadY = 0;
 	velocidadX = 0;
-	maximaVelocidadX = 3;
-	maximaVelocidadY = 14;
+	maximaVelocidadX = 5;
+	maximaVelocidadY = 17;
 	gravedad = 1;
 
 
