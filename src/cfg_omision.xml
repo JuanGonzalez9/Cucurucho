@@ -35,8 +35,8 @@ R"(<?xml version="1.0"?>
   </plataformas>
   <escenarios>
     <nivel1>
-      <fondo1>imagenes/fondo1.png</fondo1>
-      <fondo2>imagenes/fondo2.png</fondo2>
+      <fondo1>imagenes/fondo1lv1.png</fondo1>
+      <fondo2>imagenes/fondo2lv1.png</fondo2>
       <fondo3>imagenes/fondo3.png</fondo3>
       <plataforma>
         <tipo>piedra</tipo>
@@ -470,8 +470,8 @@ R"(<?xml version="1.0"?>
       </plataforma>
     </nivel2>
     <nivel3>
-      <fondo1>imagenes/fondo1.png</fondo1>
-      <fondo2>imagenes/fondo2.png</fondo2>
+      <fondo1>imagenes/fondo1lv3.png</fondo1>
+      <fondo2>imagenes/fondo2lv3.png</fondo2>
       <fondo3>imagenes/fondo3.png</fondo3>
       <plataforma>
         <tipo>hielo</tipo>
