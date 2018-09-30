@@ -20,27 +20,40 @@ static const char * cfg_omision_xml =
 #include "cfg_omision.xml"
 ;
 
-#define lanzar(e, msg) \
-	do {\
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+
+#define logerror(msg) \
+	do { \
 		std::stringstream ss; \
-		ss << msg; \
-		throw e (ss.str()); \
+		ss << __FILENAME__ << ":" << __LINE__ << ": " << msg; \
+		registro.registrar (LogEventos::error, ss.str().c_str()); \
 	} while (false)
 
-void xml_error_handler (void * contexto, const char * format, ...)
-{
-	/* TODO decidir si implementar bien y hacer un log
-	va_list ap;
-	va_start (ap, format);
-	int size = vsnprintf (nullptr, 0, format, ap);
-	va_end (ap);
-	va_start (ap, format);
-	char * msg = new char[size+1];
-	vsnprintf (msg, size+1, format, ap);
-	va_end (ap);
-	std::cout << msg;
-	*/
-}
+#define cfgerror(nodo, msg) \
+	do { \
+		std::stringstream ss; \
+		ss << "cfg.xml:" << xmlGetLineNo (nodo) << ": " << msg; \
+		registro.registrar (LogEventos::error, ss.str().c_str()); \
+	} while (false)
+	
+#define cfg_carga_error() \
+	do { \
+		xmlErrorPtr	error = xmlGetLastError (); \
+		if (error) { \
+			std::stringstream ss; \
+			ss << "cfg.xml:" << error->line << ": " << error->message; \
+			std::string s = ss.str(); \
+			std::replace (s.begin(), s.end(), '\n', '\0'); \
+			registro.registrar (LogEventos::error, s.c_str()); \
+		} \
+	} while (false)
+
+#define lanzar(msg) \
+	do {\
+		std::stringstream ss; \
+		ss << __FILENAME__ << ":" << __LINE__ << ": " << msg; \
+		throw excepcion_configuracion (ss.str()); \
+	} while (false)
 
 excepcion_configuracion::excepcion_configuracion (const std::string &que_paso):
 	std::invalid_argument (que_paso)
@@ -53,39 +66,37 @@ configuracion::configuracion ()
 
 	dlopen_handle = dlopen (nullptr, RTLD_LOCAL | RTLD_LAZY);
 	if (dlopen_handle == nullptr) {
-		lanzar (excepcion_configuracion, "Fallo dlopen: " << dlerror());
+		lanzar ("fallo dlopen: " << dlerror() << '.');
 	}
 
 	LIBXML_TEST_VERSION
-	xmlSetGenericErrorFunc (nullptr, xml_error_handler);
 
 	doc_omision = xmlReadMemory (cfg_omision_xml, strlen (cfg_omision_xml), "sin_nombre", nullptr, 0);
 	if (doc_omision == nullptr) {
-		// TODO log
-		lanzar (excepcion_configuracion, "no pudo crearse el xmlDoc con los valores por omision");
+		lanzar ("no pudo crearse el xmlDoc con los valores por omision.");
 	}
 	contexto_omision = xmlXPathNewContext (doc_omision);
 	if (contexto_omision == nullptr) {
-		// TODO log
 		xmlFreeDoc (doc_omision);
-		lanzar (excepcion_configuracion, "no pudo crearse el xmlXPathContextPtr del documento con los valores por omision");
+		lanzar ("no pudo crearse el xmlXPathContextPtr del documento con los valores por omision.");
 	}
 	struct stat sb;
 	if (stat ("cfg.xml", &sb) == -1) {
-		registro.registrar (LogEventos::error, "Archivo de configuracion recreado");
-		// TODO log
 		recrear_archivo_xml ();
+		logerror("el archivo de configuracion no existia, fue recreado.");
 		return;
 	}
 
 	doc = xmlReadFile ("cfg.xml", NULL, 0);
 	if (doc == nullptr) {
-		// TODO log
+		cfg_carga_error ();
+		logerror("el archivo de configuracion no pudo cargarse, se usan las opciones por omision.");
 		return;
 	}
 	contexto = xmlXPathNewContext (doc);
 	if (contexto == nullptr) {
-		// TODO log
+		cfg_carga_error ();
+		logerror("el archivo de configuracion no pudo cargarse, se usan las opciones por omision.");
 		xmlFreeDoc (doc);
 		doc = nullptr;
 		return;
@@ -116,8 +127,8 @@ configuracion::~configuracion ()
 xmlNode * configuracion::agregar_nodo_raiz (xmlDoc *doc, std::string & nombre)
 {
 	xmlNode *nodo = xmlNewNode (nullptr, (const xmlChar*)nombre.c_str ());
-	if (nodo == nullptr) {
-		// TODO log
+	if (nodo != nullptr) {
+		logerror ("no pudo crearse un nuevo nodo, fallo xmlNewNode.");
 		return nullptr;
 	}
 	xmlDocSetRootElement (doc, nodo);
@@ -132,7 +143,7 @@ xmlNode * configuracion::agregar_nodo_hijo (xmlDoc *doc, xmlNode *nodo_padre, st
 		} else if (strcmp ((const char*)nodo_padre->name, nombre.c_str ()) == 0) {
 			return nodo_padre;
 		} else {
-			// TODO log
+			logerror ("se intento agregar otro nodo raiz.");
 			return nullptr;
 		}
 	} else {
@@ -143,7 +154,7 @@ xmlNode * configuracion::agregar_nodo_hijo (xmlDoc *doc, xmlNode *nodo_padre, st
 		}
 		xmlNode *nodo = xmlNewNode (nullptr, (const xmlChar*)nombre.c_str ());
 		if (nodo == nullptr) {
-			// TODO log
+			logerror ("no pudo crearse un nuevo nodo, fallo xmlNewNode.");
 			return nullptr;
 		}
 		xmlAddChild (nodo_padre, nodo);
@@ -156,7 +167,7 @@ void configuracion::recrear_archivo_xml ()
 	xmlKeepBlanksDefault (0);
 	if (xmlSaveFormatFile ("cfg.xml", doc_omision, 1) == -1)
 	{
-		registro.registrar (LogEventos::error,"no se puede crear el archivo de configuracion");
+		logerror ("no se puede guardarse el archivo de configuracion.");
 	}
 }
 
@@ -166,8 +177,8 @@ std::string configuracion::obtener_s_del_xml (const char *camino, xmlXPathContex
 	if (*contexto != nullptr) {
 		xmlXPathObjectPtr resultado = xmlXPathEvalExpression ((const xmlChar*)camino, *contexto);
 		if (resultado && !xmlXPathNodeSetIsEmpty (resultado->nodesetval)) {
-			xmlNode *node = resultado->nodesetval->nodeTab[0];
-			xmlNode *child_node = node->children;
+			unodo = resultado->nodesetval->nodeTab[0];
+			xmlNode *child_node = unodo->children;
 			if (child_node && child_node->type == XML_TEXT_NODE) {
 				s = (const char*)xmlNodeGetContent(child_node);
 				const char *ws = " \t\n\r\v\f";
@@ -179,15 +190,53 @@ std::string configuracion::obtener_s_del_xml (const char *camino, xmlXPathContex
 	return s;
 }
 
+bool configuracion::obtener_padre (std::string &camino)
+{
+	std::size_t pos = camino.rfind("//");
+	if (pos == std::string::npos) {
+		lanzar ("camino: '" << camino << "' invalido.");
+	}
+	if (camino.length () == 2) {
+		return false;
+	} else if (pos > 0) {
+		camino.resize (pos);
+	} else {
+		camino.resize (2);
+	}
+	return true;
+}
+
+xmlNode *configuracion::obtener_nodo_mas_profundo (const char *camino, xmlXPathContextPtr *contexto)
+{
+	std::string s = camino;
+	do {
+		xmlXPathObjectPtr resultado = xmlXPathEvalExpression ((const xmlChar*)s.c_str(), *contexto);
+		if (resultado && !xmlXPathNodeSetIsEmpty (resultado->nodesetval)) {
+			return resultado->nodesetval->nodeTab[0];
+		}
+	} while (obtener_padre (s));
+	return nullptr;
+}
+
 std::string configuracion::obtener_s (const char *camino, std::function<bool(std::string & s, bool omision)> validar)
 {
 	std::string s = obtener_s_del_xml (camino, &contexto);
 	if (s.empty() || !validar (s, false)) {
+		if (s.empty()) {
+			if ((unodo = obtener_nodo_mas_profundo (camino, &contexto))) {
+				cfgerror (unodo, "falta el valor de '" << camino << "'.");
+			} else {
+				logerror ("falta el valor de '" << camino << "'.");
+			}
+		} else {
+			cfgerror (unodo, "el valor '" << s << "' es invalido para <" << unodo->name << ">.");
+		}
 		s = obtener_s_del_xml (camino, &contexto_omision);
 		if (s.empty() || !validar (s, true)) {
-		registro.registrar (LogEventos::error, "Usado de configuracion por omision");
 			s.clear();
-			lanzar (excepcion_configuracion, "Opcion por defecto para " << camino << " invalida");
+			lanzar ("opcion por defecto '" << s << "' para " << camino << " invalida.");
+		} else {
+			logerror ("se usa el valor por omision '" << s << "' para '" << camino << "'.");
 		}
 	}
 	return s;
@@ -197,7 +246,7 @@ uint8_t *configuracion::obtener_direccion_de_simbolo (std::string &s)
 {
 	uint8_t *direccion = (uint8_t*)dlsym (dlopen_handle, s.c_str ());
 	if (direccion == nullptr) {
-		lanzar (excepcion_configuracion, "Fallo dlsym: " << dlerror());
+		lanzar ("fallo dlsym: " << dlerror() << '.');
 	}
 	return direccion;
 }
@@ -225,80 +274,83 @@ void configuracion::obtener_plataformas (const char *camino, std::function<void(
 
 void configuracion::obtener_plataformas (const char *camino, std::list<plataforma> &l, const plataforma & plataforma_omision)
 {
-	obtener_plataformas (camino, [&l](xmlNode *node){
+	obtener_plataformas (camino, [&l](xmlNode *nodo){
 		plataforma p;
 		const int t = 0x1;
 		const int xi = 0x2;
 		const int xf = 0x4;
 		const int y = 0x8;
 		int leidos = 0;
-		for (xmlNode *nodo_hijo = node->children; nodo_hijo; nodo_hijo = nodo_hijo->next) {
+		for (xmlNode *nodo_hijo = nodo->children; nodo_hijo; nodo_hijo = nodo_hijo->next) {
 			if (nodo_hijo->type == XML_ELEMENT_NODE) {
 				std::string s = (const char*)xmlNodeGetContent(nodo_hijo);
 				if (strcmp ((const char*)nodo_hijo->name, "tipo") == 0) {
+					leidos |= t;
 					if (s == "metal") {
-						leidos |= t;
 						p.t = plataforma::metal;
 					} else if (s == "piedra") {
-						leidos |= t;
 						p.t = plataforma::piedra;
 					} else if (s == "hielo") {
-						leidos |= t;
 						p.t = plataforma::hielo;
 					} else if (s == "puente2") {
-						leidos |= t;
 						p.t = plataforma::puente2;
 					} else if (s == "puente") {
-						leidos |= t;
 						p.t = plataforma::puente;
 					} else {
-						registro.registrar (LogEventos::error,"tipo de plataforma especificado incorrecto");
+						cfgerror (nodo_hijo, "se esperaba metal, piedra, hielo, puente o puente2 en el nodo <" << nodo_hijo->name << ">.");
 					}
 				} else {
 					try{
+						if (strcmp ((const char*)nodo_hijo->name, "xi") == 0) {
+							leidos |= xi;
+						} else if (strcmp ((const char*)nodo_hijo->name, "xf") == 0) {
+							leidos |= xf;
+						} else if (strcmp ((const char*)nodo_hijo->name, "y") == 0) {
+							leidos |= y;
+						}
+
 						std::string::size_type largo;
 						int n = std::stoi (s, &largo, 10);
 						if (largo != s.length()) {
 							throw (1);
 						}
+
 						if (strcmp ((const char*)nodo_hijo->name, "xi") == 0) {
-							leidos |= xi;
 							p.xi = n;
 						} else if (strcmp ((const char*)nodo_hijo->name, "xf") == 0) {
-							leidos |= xf;
 							p.xf = n;
 						} else if (strcmp ((const char*)nodo_hijo->name, "y") == 0) {
-							leidos |= y;
 							p.y = n;
 						}
-						if (leidos == 0xf) {
-							if (p.xi > p.xf) {
-								
-								int aux = p.xi;
-								p.xi = p.xf;
-								p.xf = aux;
-							}
-							if ((p.xi >= 0 || p.xf >= 0) && (p.xf < 10000)) {
-								l.push_back (p);
-							} else {
-								registro.registrar (LogEventos::error,"se ignora plataforma no visible o enorme para la pantalla");
-							}
-						} else {
-							if ((leidos & t) == 0) {
-								registro.registrar (LogEventos::error,"A la plataforma dada le falta el tipo");
-							}
-							if ((leidos & xi) == 0) {
-								registro.registrar (LogEventos::error,"A la plataforma dada le falta el xi");
-							}
-							if ((leidos & xf) == 0) {
-								registro.registrar (LogEventos::error,"A la plataforma dada le falta el xf");
-							}
-							if ((leidos & y) == 0) {
-								registro.registrar (LogEventos::error,"A la plataforma dada le falta el y");
-							}
-						}
-					} catch (...){}
+					} catch (...) {
+						cfgerror (nodo_hijo, "se esperaba un entero en el nodo <" << nodo_hijo->name << ">.");
+					}
 				}
+			}
+		}
+		if (leidos == 0xf) {
+			if (p.xi > p.xf) {
+				int aux = p.xi;
+				p.xi = p.xf;
+				p.xf = aux;
+			}
+			if (p.xi >= 0 && p.xf >= 0 && p.xf < 10000) {
+				l.push_back (p);
+			} else {
+				cfgerror (nodo, "se ignora plataforma fuera del area permitida (0,0,9999,9999).");
+			}
+		} else {
+			if ((leidos & t) == 0) {
+				cfgerror (nodo, "a la plataforma dada le falta el nodo <tipo>.");
+			}
+			if ((leidos & xi) == 0) {
+				cfgerror (nodo, "a la plataforma dada le falta el nodo <xi>.");
+			}
+			if ((leidos & xf) == 0) {
+				cfgerror (nodo, "a la plataforma dada le falta el nodo <xf>.");
+			}
+			if ((leidos & y) == 0) {
+				cfgerror (nodo, "a la plataforma dada le falta el nodo <y>.");
 			}
 		}
 	});
@@ -312,12 +364,10 @@ SDL_Texture *configuracion::obtener_textura (const char *camino, SDL_Renderer *r
 	std::string s = obtener_s (camino, [renderer, &textura] (std::string & s, bool omision) {
 		SDL_Surface *superficie = IMG_Load (s.c_str ());
 		if (superficie == nullptr) {
-		registro.registrar (LogEventos::error, "Usado de configuracion por omision");
 			return omision? true : false;
 		}
 		textura = SDL_CreateTextureFromSurface (renderer, superficie);
 		if (textura == nullptr) {
-		registro.registrar (LogEventos::error, "Usado de configuracion por omision");
 			SDL_FreeSurface (superficie);
 			return omision? true : false;
 		}
@@ -325,6 +375,8 @@ SDL_Texture *configuracion::obtener_textura (const char *camino, SDL_Renderer *r
 		return true;
 	});
 	if (textura == nullptr) {
+		logerror ("la imagen '" << s << "' no pudo cargarse, se usa la imagen por omision.");
+
 		/* imagenes/foo.png  ->  _binary_ ______ imagenes_foo_png _start
 		 *                                ../../ imagenes/foo.png _start
 		 */
@@ -338,23 +390,20 @@ SDL_Texture *configuracion::obtener_textura (const char *camino, SDL_Renderer *r
 		uint8_t *comienzo = obtener_direccion_de_simbolo (s);
 		uint8_t *fin = obtener_direccion_de_simbolo (se);
 		if (fin == nullptr) {
-			lanzar (excepcion_configuracion, "Fallo dlsym: " << dlerror());
+			lanzar ("fallo dlsym: " << dlerror());
 		}
 
 		SDL_RWops *rw = SDL_RWFromMem ( comienzo, (size_t)(fin-comienzo) );
 		if (rw == nullptr) {
-			// TODO log
-			lanzar (excepcion_configuracion, "Fallo SDL_RWFromMem: " << SDL_GetError());
+			lanzar ("fallo SDL_RWFromMem: " << SDL_GetError());
 		}
 		SDL_Surface *superficie = IMG_Load_RW (rw, 1);
 		if (superficie == nullptr) {
-			// TODO log
-			lanzar (excepcion_configuracion, "Fallo IMG_Load_RW: " << SDL_GetError());
+			lanzar ("fallo IMG_Load_RW: " << SDL_GetError());
 		}
 		textura = SDL_CreateTextureFromSurface ( renderer, superficie);
 		if (textura == nullptr) {
-			// TODO log
-			lanzar (excepcion_configuracion, "Fallo SDL_CreateTextureFromSurface: " << SDL_GetError());
+			lanzar ("fallo SDL_CreateTextureFromSurface: " << SDL_GetError());
 		}
 	}
 	return textura;
@@ -363,48 +412,30 @@ SDL_Texture *configuracion::obtener_textura (const char *camino, SDL_Renderer *r
 template <typename t> t configuracion::obtener_i_number (const char *camino, typename tipos<t>::funcion_i f, std::function<bool(int i, bool omision)> validar)
 {
 	t n;
-	std::string::size_type largo;
-	// Si no está la opción en el archivo xml o no es un número, evito que se lance un excepción;
-	// ya que todavía puedo usar la opción por defecto.
-	try{
-		std::string s = obtener_s_del_xml (camino, &contexto);
-		n = f (s, &largo, 10);
-		if (largo == s.length() && validar (n, false)) {
-			return n;
+	std::string s = obtener_s (camino, [&n, f, validar] (std::string & s, bool omision) {
+		std::string::size_type largo;
+		try{
+			n = f (s, &largo, 10);
+			return largo == s.length() && validar (n, false);
+		} catch (...){
+			return false;
 		}
-	} catch (...){}
-	// La opción por defecto debe estar sí o sí en cfg_omision.xml
-	std::string s = obtener_s_del_xml (camino, &contexto_omision);
-	n = f (s, &largo, 10);
-	if (largo != s.length() || !validar (n, true))
-	{
-		registro.registrar (LogEventos::error, "Usado de configuracion por omision");
-		lanzar (excepcion_configuracion, "Opcion por defecto para " << camino << " invalida");
-	}
+	});
 	return n;
 }
 
 template <typename t> t configuracion::obtener_fp_number (const char *camino, typename tipos<t>::funcion_pf f, std::function<bool(int i, bool omision)> validar)
 {
 	t n;
-	std::string::size_type largo;
-	// Si no está la opción en el archivo xml o no es un número, evito que se lance un excepción;
-	// ya que todavía puedo usar la opción por defecto.
-	try{
-		std::string s = obtener_s_del_xml (camino, &contexto);
-		n = f (s, &largo);
-		if (largo == s.length() && validar (n, false)) {
-			return n;
+	std::string s = obtener_s (camino, [&n, f, validar] (std::string & s, bool omision) {
+		std::string::size_type largo;
+		try{
+			n = f (s, &largo);
+			return largo == s.length() && validar (n, false);
+		} catch (...){
+			return false;
 		}
-	} catch (...){}
-	// La opción por defecto debe estar sí o sí en cfg_defaults.cpp
-	std::string s = obtener_s_del_xml (camino, &contexto_omision);
-	n = f (s, &largo);
-	if (largo != s.length() || !validar (n, true))
-	{
-		registro.registrar (LogEventos::error, "Usado de configuracion por omision");
-		lanzar (excepcion_configuracion, "Opcion por defecto para " << camino << " invalida");
-	}
+	});
 	return n;
 }
 

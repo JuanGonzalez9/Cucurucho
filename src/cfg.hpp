@@ -48,6 +48,7 @@ private:
 	};
 	xmlDoc *doc, *doc_omision;
 	xmlXPathContextPtr contexto, contexto_omision;
+	xmlNode *unodo;
 	void *dlopen_handle;
 	uint8_t *obtener_direccion_de_simbolo (std::string &imagen);
 	std::string obtener_s_del_xml (const char *camino, xmlXPathContextPtr *contexto);
@@ -57,6 +58,8 @@ private:
 	xmlNode * agregar_nodo_raiz (xmlDoc *doc, std::string & nombre);
 	xmlNode * agregar_nodo_hijo (xmlDoc *doc, xmlNode *nodo_padre, std::string & nombre);
 	void obtener_plataformas (const char *camino, std::function<void(xmlNode *node)> funcion);
+	bool obtener_padre (std::string &camino);
+	xmlNode *obtener_nodo_mas_profundo (const char *camino, xmlXPathContextPtr *contexto);
 };
 
 class excepcion_configuracion: public std::invalid_argument
