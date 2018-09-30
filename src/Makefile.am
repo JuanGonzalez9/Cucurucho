@@ -26,6 +26,7 @@ imagenes=	personaje.png \
 		piedral.png \
 		piedraxl.png \
 		puente.bmp \
+		puentesoga.png \
 		puente2.png
 		
 imagenes_o=	imagen-personaje.o \
@@ -50,6 +51,7 @@ imagenes_o=	imagen-personaje.o \
 		imagen-piedral.o \
 		imagen-piedraxl.o \
 		imagen-puente.o\
+		imagen-puentesoga.o\
 		imagen-puente2.o
 		
 contra_LDFLAGS= $(imagenes_o) -rdynamic

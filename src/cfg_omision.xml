@@ -26,6 +26,9 @@ R"(<?xml version="1.0"?>
     <puente2>
 	    <sprite>imagenes/puente2.png</sprite>
     </puente2>
+    <puentesoga>
+	    <sprite>imagenes/puentesoga.png</sprite>
+    </puentesoga>
     <cascroca1>
 	    <sprite>imagenes/cascroca1.png</sprite>
     </cascroca1>
@@ -357,7 +360,7 @@ R"(<?xml version="1.0"?>
         <y>3050</y>
       </plataforma>
       <plataforma>
-        <tipo>puente</tipo>
+        <tipo>puentesoga</tipo>
         <xi>100</xi>
         <xf>700</xf>
         <y>3050</y>
@@ -423,7 +426,7 @@ R"(<?xml version="1.0"?>
         <y>2250</y>
       </plataforma>
       <plataforma>
-        <tipo>puente</tipo>
+        <tipo>puentesoga</tipo>
         <xi>200</xi>
         <xf>600</xf>
         <y>2250</y>
@@ -525,7 +528,7 @@ R"(<?xml version="1.0"?>
         <y>650</y>
       </plataforma>
       <plataforma>
-        <tipo>puente</tipo>
+        <tipo>puentesoga</tipo>
         <xi>100</xi>
         <xf>600</xf>
         <y>650</y>
