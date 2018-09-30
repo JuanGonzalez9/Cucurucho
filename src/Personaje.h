@@ -53,6 +53,7 @@ public:
 	void avanzar();
 	void retroceder();
 	void agacharse();
+	void pararse();
 	void disparar();
 	void pelarElChumbo();
 	void actualizar();

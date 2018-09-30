@@ -160,6 +160,11 @@ void Personaje::agacharse(){
 	estado = CuerpoATierra;
 }
 
+void Personaje::pararse(){
+	if(estado == CuerpoATierra)
+		estado = Quieto;
+}
+
 void Personaje::disparar(){
 	//shoot timer = rateOfFire
 	shootTimer = 10;

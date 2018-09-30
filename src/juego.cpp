@@ -173,6 +173,10 @@ void juego::manejar_eventos ()
 		boby.agacharse();
 	}
 
+	if(! apretandoAgacharse(state)){
+		boby.pararse();
+	}
+
 	if(apretandoNivel(state)){
 		if(nivel==1){
 			cambioNivel=true;
