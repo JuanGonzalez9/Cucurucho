@@ -13,6 +13,14 @@ void Plataformas::inicializar(SDL_Renderer* renderizador)
 	texturaPlataformaPiedra = cfg.obtener_textura ("//configuracion//plataformas//piedra//sprite", renderizador);
 	texturaPlataformaPuente = cfg.obtener_textura ("//configuracion//plataformas//puente//sprite", renderizador);
 	texturaPlataformaPuente2 = cfg.obtener_textura ("//configuracion//plataformas//puente2//sprite", renderizador);
+	texturaPlataformaCascRoca1 = cfg.obtener_textura ("//configuracion//plataformas//cascroca1//sprite", renderizador);
+	texturaPlataformaCascRoca2 = cfg.obtener_textura ("//configuracion//plataformas//cascroca2//sprite", renderizador);
+	texturaPlataformaCascRoca3 = cfg.obtener_textura ("//configuracion//plataformas//cascroca3//sprite", renderizador);
+	texturaPlataformaCascRoca4 = cfg.obtener_textura ("//configuracion//plataformas//cascroca4//sprite", renderizador);
+	texturaPlataformaPiedraS = cfg.obtener_textura ("//configuracion//plataformas//piedras//sprite", renderizador);
+	texturaPlataformaPiedraM = cfg.obtener_textura ("//configuracion//plataformas//piedram//sprite", renderizador);
+	texturaPlataformaPiedraL = cfg.obtener_textura ("//configuracion//plataformas//piedral//sprite", renderizador);
+	texturaPlataformaPiedraXL = cfg.obtener_textura ("//configuracion//plataformas//piedraxl//sprite", renderizador);
 	texturaPlataformaHielo = cfg.obtener_textura ("//configuracion//plataformas//hielo//sprite", renderizador);
 	texturaPlataformaMetal = cfg.obtener_textura ("//configuracion//plataformas//metal//sprite", renderizador);
 
@@ -22,6 +30,14 @@ void Plataformas::inicializar(SDL_Renderer* renderizador)
 Plataformas::Plataformas(): texturaPlataformaPiedra (nullptr),
 				texturaPlataformaPuente (nullptr),
 				texturaPlataformaPuente2 (nullptr),
+				texturaPlataformaCascRoca1 (nullptr),
+				texturaPlataformaCascRoca2 (nullptr),
+				texturaPlataformaCascRoca3 (nullptr),
+				texturaPlataformaCascRoca4 (nullptr),
+				texturaPlataformaPiedraS (nullptr),
+				texturaPlataformaPiedraM (nullptr),
+				texturaPlataformaPiedraL (nullptr),
+				texturaPlataformaPiedraXL (nullptr),
 				texturaPlataformaHielo (nullptr),
 				texturaPlataformaMetal (nullptr)
 {
@@ -55,6 +71,63 @@ Plataformas::~Plataformas(){
 	else{
 		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
 	}
+
+	if(texturaPlataformaCascRoca1){
+		SDL_DestroyTexture (texturaPlataformaCascRoca1);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
+
+	if(texturaPlataformaCascRoca2){
+		SDL_DestroyTexture (texturaPlataformaCascRoca2);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
+
+	if(texturaPlataformaCascRoca3){
+		SDL_DestroyTexture (texturaPlataformaCascRoca3);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
+
+	if(texturaPlataformaCascRoca4){
+		SDL_DestroyTexture (texturaPlataformaCascRoca4);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
+
+	if(texturaPlataformaPiedraS){
+		SDL_DestroyTexture (texturaPlataformaPiedraS);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
+
+	if(texturaPlataformaPiedraM){
+		SDL_DestroyTexture (texturaPlataformaPiedraM);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
+
+	if(texturaPlataformaPiedraL){
+		SDL_DestroyTexture (texturaPlataformaPiedraL);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
+
+	if(texturaPlataformaPiedraXL){
+		SDL_DestroyTexture (texturaPlataformaPiedraXL);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
+
 
 	if(texturaPlataformaMetal){
 		SDL_DestroyTexture (texturaPlataformaMetal);
@@ -120,6 +193,31 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 				SDL_RenderCopy(renderizador,texturaPlataformaPuente2,NULL,&posicion_imagen);
 			}
 
+			else if (plataformaActual.t == plataforma::cascroca1){
+				SDL_RenderCopy(renderizador,texturaPlataformaCascRoca1,NULL,&posicion_imagen);
+			}
+			else if (plataformaActual.t == plataforma::cascroca2){
+				SDL_RenderCopy(renderizador,texturaPlataformaCascRoca2,NULL,&posicion_imagen);
+			}
+			else if (plataformaActual.t == plataforma::cascroca3){
+				SDL_RenderCopy(renderizador,texturaPlataformaCascRoca3,NULL,&posicion_imagen);
+			}
+			else if (plataformaActual.t == plataforma::cascroca4){
+				SDL_RenderCopy(renderizador,texturaPlataformaCascRoca4,NULL,&posicion_imagen);
+			}
+			else if (plataformaActual.t == plataforma::piedras){
+				SDL_RenderCopy(renderizador,texturaPlataformaPiedraS,NULL,&posicion_imagen);
+			}
+			else if (plataformaActual.t == plataforma::piedram){
+				SDL_RenderCopy(renderizador,texturaPlataformaPiedraM,NULL,&posicion_imagen);
+			}
+			else if (plataformaActual.t == plataforma::piedral){
+				SDL_RenderCopy(renderizador,texturaPlataformaPiedraL,NULL,&posicion_imagen);
+			}
+			else if (plataformaActual.t == plataforma::piedraxl){
+				SDL_RenderCopy(renderizador,texturaPlataformaPiedraXL,NULL,&posicion_imagen);
+			}
+
 			else if (plataformaActual.t == plataforma::hielo){
 				SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);
 			}
@@ -147,6 +245,30 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 				else if (plataformaActual.t == plataforma::puente2){
 					SDL_RenderCopy(renderizador,texturaPlataformaPuente2,NULL,&posicion_imagen);
 				}
+				else if (plataformaActual.t == plataforma::cascroca1){
+					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca1,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::cascroca2){
+					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca2,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::cascroca3){
+					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca3,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::cascroca4){
+					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca4,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::piedras){
+					SDL_RenderCopy(renderizador,texturaPlataformaPiedraS,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::piedram){
+					SDL_RenderCopy(renderizador,texturaPlataformaPiedraM,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::piedral){
+					SDL_RenderCopy(renderizador,texturaPlataformaPiedraL,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::piedraxl){
+					SDL_RenderCopy(renderizador,texturaPlataformaPiedraXL,NULL,&posicion_imagen);
+				}
 				else if (plataformaActual.t == plataforma::hielo){
 					SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);
 				}
@@ -168,6 +290,30 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 				}
 				else if (plataformaActual.t == plataforma::puente2){
 					SDL_RenderCopy(renderizador,texturaPlataformaPuente2,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::cascroca1){
+					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca1,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::cascroca2){
+					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca2,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::cascroca3){
+					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca3,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::cascroca4){
+					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca4,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::piedras){
+					SDL_RenderCopy(renderizador,texturaPlataformaPiedraS,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::piedram){
+					SDL_RenderCopy(renderizador,texturaPlataformaPiedraM,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::piedral){
+					SDL_RenderCopy(renderizador,texturaPlataformaPiedraL,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::piedraxl){
+					SDL_RenderCopy(renderizador,texturaPlataformaPiedraXL,NULL,&posicion_imagen);
 				}
 				else if (plataformaActual.t == plataforma::hielo){
 					SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);

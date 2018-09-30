@@ -294,6 +294,22 @@ void configuracion::obtener_plataformas (const char *camino, std::list<plataform
 						p.t = plataforma::hielo;
 					} else if (s == "puente2") {
 						p.t = plataforma::puente2;
+					} else if (s == "piedras") {
+						p.t = plataforma::piedras;
+					} else if (s == "piedram") {
+						p.t = plataforma::piedram;
+					} else if (s == "piedral") {
+						p.t = plataforma::piedral;
+					} else if (s == "piedraxl") {
+						p.t = plataforma::piedraxl;
+					} else if (s == "cascroca1") {
+						p.t = plataforma::cascroca1;
+					} else if (s == "cascroca2") {
+						p.t = plataforma::cascroca2;
+					} else if (s == "cascroca3") {
+						p.t = plataforma::cascroca3;
+					} else if (s == "cascroca4") {
+						p.t = plataforma::cascroca4;
 					} else if (s == "puente") {
 						p.t = plataforma::puente;
 					} else {

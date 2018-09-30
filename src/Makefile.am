@@ -17,7 +17,15 @@ imagenes=	personaje.png \
 		metal.bmp \
 		hielo.bmp \
 		boss.png \
-		puente.bmp\
+		cascroca1.png \
+		cascroca2.png \
+		cascroca3.png \
+		cascroca4.png \
+		piedras.png \
+		piedram.png \
+		piedral.png \
+		piedraxl.png \
+		puente.bmp \
 		puente2.png
 		
 imagenes_o=	imagen-personaje.o \
@@ -33,6 +41,14 @@ imagenes_o=	imagen-personaje.o \
 		imagen-metal.o \
 		imagen-hielo.o \
 		imagen-boss.o \
+		imagen-cascroca1.o \
+		imagen-cascroca2.o \
+		imagen-cascroca3.o \
+		imagen-cascroca4.o \
+		imagen-piedras.o \
+		imagen-piedram.o \
+		imagen-piedral.o \
+		imagen-piedraxl.o \
 		imagen-puente.o\
 		imagen-puente2.o
 		
