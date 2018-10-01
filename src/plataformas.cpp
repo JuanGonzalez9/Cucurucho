@@ -358,8 +358,10 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 
 SDL_Texture * Plataformas::crearTexturaParaElFondo(SDL_Texture* texturaFondo,SDL_Renderer* renderizador,int w,int h){
 	SDL_Texture * textura_objetivo = SDL_CreateTexture (renderizador,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,w, h);
-	SDL_SetTextureBlendMode(textura_objetivo, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(textura_objetivo, SDL_BLENDMODE_NONE);
 	SDL_SetRenderTarget(renderizador, textura_objetivo);
+	SDL_SetRenderDrawColor(renderizador, 0, 0, 0, 0);
+	SDL_RenderClear(renderizador);
 	SDL_RenderCopy(renderizador,texturaFondo,NULL,NULL);
 	SDL_SetRenderTarget(renderizador, NULL);
 
