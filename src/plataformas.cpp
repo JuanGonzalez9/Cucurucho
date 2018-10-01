@@ -12,6 +12,7 @@ void Plataformas::inicializar(SDL_Renderer* renderizador)
 {
 	texturaPlataformaPiedra = cfg.obtener_textura ("//configuracion//plataformas//piedra//sprite", renderizador);
 	texturaPlataformaPuente = cfg.obtener_textura ("//configuracion//plataformas//puente//sprite", renderizador);
+	texturaPlataformaPuenteSoga = cfg.obtener_textura ("//configuracion//plataformas//puentesoga//sprite", renderizador);
 	texturaPlataformaPuente2 = cfg.obtener_textura ("//configuracion//plataformas//puente2//sprite", renderizador);
 	texturaPlataformaCascRoca1 = cfg.obtener_textura ("//configuracion//plataformas//cascroca1//sprite", renderizador);
 	texturaPlataformaCascRoca2 = cfg.obtener_textura ("//configuracion//plataformas//cascroca2//sprite", renderizador);
@@ -29,6 +30,7 @@ void Plataformas::inicializar(SDL_Renderer* renderizador)
 
 Plataformas::Plataformas(): texturaPlataformaPiedra (nullptr),
 				texturaPlataformaPuente (nullptr),
+				texturaPlataformaPuenteSoga (nullptr),
 				texturaPlataformaPuente2 (nullptr),
 				texturaPlataformaCascRoca1 (nullptr),
 				texturaPlataformaCascRoca2 (nullptr),
@@ -60,6 +62,13 @@ Plataformas::~Plataformas(){
 
 	if(texturaPlataformaPuente){
 		SDL_DestroyTexture (texturaPlataformaPuente);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
+
+	if(texturaPlataformaPuenteSoga){
+		SDL_DestroyTexture (texturaPlataformaPuenteSoga);
 	}
 	else{
 		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
@@ -189,6 +198,9 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 			else if (plataformaActual.t == plataforma::puente){
 				SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
 			}
+			else if (plataformaActual.t == plataforma::puentesoga){
+				SDL_RenderCopy(renderizador,texturaPlataformaPuenteSoga,NULL,&posicion_imagen);
+			}
 			else if (plataformaActual.t == plataforma::puente2){
 				SDL_RenderCopy(renderizador,texturaPlataformaPuente2,NULL,&posicion_imagen);
 			}
@@ -242,6 +254,9 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 				else if (plataformaActual.t == plataforma::puente){
 					SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
 				}
+				else if (plataformaActual.t == plataforma::puentesoga){
+					SDL_RenderCopy(renderizador,texturaPlataformaPuenteSoga,NULL,&posicion_imagen);
+				}
 				else if (plataformaActual.t == plataforma::puente2){
 					SDL_RenderCopy(renderizador,texturaPlataformaPuente2,NULL,&posicion_imagen);
 				}
@@ -287,6 +302,9 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 				}
 				else if (plataformaActual.t == plataforma::puente){
 					SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
+				}
+				else if (plataformaActual.t == plataforma::puentesoga){
+					SDL_RenderCopy(renderizador,texturaPlataformaPuenteSoga,NULL,&posicion_imagen);
 				}
 				else if (plataformaActual.t == plataforma::puente2){
 					SDL_RenderCopy(renderizador,texturaPlataformaPuente2,NULL,&posicion_imagen);

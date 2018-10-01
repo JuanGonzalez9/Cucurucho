@@ -27,6 +27,7 @@ public:
 protected:
 	SDL_Texture* texturaPlataformaPiedra;
 	SDL_Texture* texturaPlataformaPuente;
+	SDL_Texture* texturaPlataformaPuenteSoga;
 	SDL_Texture* texturaPlataformaPuente2;
 	SDL_Texture* texturaPlataformaCascRoca1;
 	SDL_Texture* texturaPlataformaCascRoca2;

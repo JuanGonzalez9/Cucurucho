@@ -294,6 +294,8 @@ void configuracion::obtener_plataformas (const char *camino, std::list<plataform
 						p.t = plataforma::hielo;
 					} else if (s == "puente2") {
 						p.t = plataforma::puente2;
+					} else if (s == "puentesoga") {
+						p.t = plataforma::puentesoga;
 					} else if (s == "piedras") {
 						p.t = plataforma::piedras;
 					} else if (s == "piedram") {
