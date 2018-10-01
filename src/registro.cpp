@@ -29,8 +29,20 @@ void LogEventos::registrar(LogEventos::TipoLog tipoEvento,const char* evento_ocu
 
     	time_t tSac = time(NULL);
     	struct tm* pt1 = localtime(&tSac);
+    	char * evento;
 
-    	archivo << "Hora actual: " << pt1->tm_hour << ":" << pt1->tm_min << ":" << pt1->tm_sec << "   Nombre evento: " << evento_ocurrido << endl;
+    	if(tipoEvento == 0){
+    		evento = "ERROR";
+    	}
+    	else if(tipoEvento == 1){
+    		evento = "INFO";
+    	}
+    	else if(tipoEvento==2){
+    		evento = "DEBUG";
+    	}
+    	
+
+    	archivo << "Hora actual: " << pt1->tm_hour << ":" << pt1->tm_min << ":" << pt1->tm_sec << " Tipo: " << evento <<"   Nombre evento: " << evento_ocurrido << endl;
     
 
 		archivo.close();
