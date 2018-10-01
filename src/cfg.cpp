@@ -1,7 +1,6 @@
 #include <new>
 #include <type_traits>
 #include <iostream>
-#include <sstream>
 #include <map>
 #include <algorithm>
 #include "cfg.hpp"
@@ -19,15 +18,6 @@ extern "C"
 static const char * cfg_omision_xml =
 #include "cfg_omision.xml"
 ;
-
-#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-
-#define logerror(msg) \
-	do { \
-		std::stringstream ss; \
-		ss << __FILENAME__ << ":" << __LINE__ << ": " << msg; \
-		registro.registrar (LogEventos::error, ss.str().c_str()); \
-	} while (false)
 
 #define cfgerror(nodo, msg) \
 	do { \

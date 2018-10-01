@@ -7,32 +7,6 @@ static const int periodo=1000000/60; // TODO averiguar
 static const int ancho=800;
 static const int alto=800;
 
-
-#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-
-#define loginfo(msg) \
-	do { \
-		std::stringstream ss; \
-		ss << __FILENAME__ << ":" << __LINE__ << ": " << msg; \
-		registro.registrar (LogEventos::info, ss.str().c_str()); \
-	} while (false)
-
-#define logerror(msg) \
-	do { \
-		std::stringstream ss; \
-		ss << __FILENAME__ << ":" << __LINE__ << ": " << msg; \
-		registro.registrar (LogEventos::error, ss.str().c_str()); \
-	} while (false)
-
-#define logdebug(msg) \
-	do { \
-		std::stringstream ss; \
-		ss << __FILENAME__ << ":" << __LINE__ << ": " << msg; \
-		registro.registrar (LogEventos::debug, ss.str().c_str()); \
-	} while (false)
-
-
-
 juego::juego ():
 	termino (false),
 	cambioNivel(false),
