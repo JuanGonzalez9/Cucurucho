@@ -171,11 +171,11 @@ void configuracion::recrear_archivo_xml ()
 	}
 }
 
-std::string configuracion::obtener_s_del_xml (const char *camino, xmlXPathContextPtr *contexto)
+std::string configuracion::obtener_s_del_xml (const char *camino, xmlXPathContextPtr contexto)
 {
 	std::string s;
-	if (*contexto != nullptr) {
-		xmlXPathObjectPtr resultado = xmlXPathEvalExpression ((const xmlChar*)camino, *contexto);
+	if (contexto != nullptr) {
+		xmlXPathObjectPtr resultado = xmlXPathEvalExpression ((const xmlChar*)camino, contexto);
 		if (resultado && !xmlXPathNodeSetIsEmpty (resultado->nodesetval)) {
 			unodo = resultado->nodesetval->nodeTab[0];
 			xmlNode *child_node = unodo->children;
@@ -206,24 +206,26 @@ bool configuracion::obtener_padre (std::string &camino)
 	return true;
 }
 
-xmlNode *configuracion::obtener_nodo_mas_profundo (const char *camino, xmlXPathContextPtr *contexto)
+xmlNode *configuracion::obtener_nodo_mas_profundo (const char *camino, xmlXPathContextPtr contexto)
 {
-	std::string s = camino;
-	do {
-		xmlXPathObjectPtr resultado = xmlXPathEvalExpression ((const xmlChar*)s.c_str(), *contexto);
-		if (resultado && !xmlXPathNodeSetIsEmpty (resultado->nodesetval)) {
-			return resultado->nodesetval->nodeTab[0];
-		}
-	} while (obtener_padre (s));
+	if (contexto != nullptr) {
+		std::string s = camino;
+		do {
+			xmlXPathObjectPtr resultado = xmlXPathEvalExpression ((const xmlChar*)s.c_str(), contexto);
+			if (resultado && !xmlXPathNodeSetIsEmpty (resultado->nodesetval)) {
+				return resultado->nodesetval->nodeTab[0];
+			}
+		} while (obtener_padre (s));
+	}
 	return nullptr;
 }
 
 std::string configuracion::obtener_s (const char *camino, std::function<bool(std::string & s, bool omision)> validar)
 {
-	std::string s = obtener_s_del_xml (camino, &contexto);
+	std::string s = obtener_s_del_xml (camino, contexto);
 	if (s.empty() || !validar (s, false)) {
 		if (s.empty()) {
-			if ((unodo = obtener_nodo_mas_profundo (camino, &contexto))) {
+			if ((unodo = obtener_nodo_mas_profundo (camino, contexto))) {
 				cfgerror (unodo, "falta el valor de '" << camino << "'.");
 			} else {
 				logerror ("falta el valor de '" << camino << "'.");
@@ -231,7 +233,7 @@ std::string configuracion::obtener_s (const char *camino, std::function<bool(std
 		} else {
 			cfgerror (unodo, "el valor '" << s << "' es invalido para <" << unodo->name << ">.");
 		}
-		s = obtener_s_del_xml (camino, &contexto_omision);
+		s = obtener_s_del_xml (camino, contexto_omision);
 		if (s.empty() || !validar (s, true)) {
 			s.clear();
 			lanzar ("opcion por defecto '" << s << "' para " << camino << " invalida.");

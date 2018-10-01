@@ -51,7 +51,7 @@ private:
 	xmlNode *unodo;
 	void *dlopen_handle;
 	uint8_t *obtener_direccion_de_simbolo (std::string &imagen);
-	std::string obtener_s_del_xml (const char *camino, xmlXPathContextPtr *contexto);
+	std::string obtener_s_del_xml (const char *camino, xmlXPathContextPtr contexto);
 	template <class t> t obtener_i_number (const char *camino, typename tipos<t>::funcion_i funcion, std::function<bool(int i, bool omision)> validar);
 	template <typename t> t obtener_fp_number (const char *camino, typename tipos<t>::funcion_pf funcion, std::function<bool(int i, bool omision)> validar);
 	void recrear_archivo_xml ();
@@ -59,7 +59,7 @@ private:
 	xmlNode * agregar_nodo_hijo (xmlDoc *doc, xmlNode *nodo_padre, std::string & nombre);
 	void obtener_plataformas (const char *camino, std::function<void(xmlNode *node)> funcion);
 	bool obtener_padre (std::string &camino);
-	xmlNode *obtener_nodo_mas_profundo (const char *camino, xmlXPathContextPtr *contexto);
+	xmlNode *obtener_nodo_mas_profundo (const char *camino, xmlXPathContextPtr contexto);
 };
 
 class excepcion_configuracion: public std::invalid_argument
