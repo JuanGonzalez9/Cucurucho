@@ -54,8 +54,14 @@ R"(<?xml version="1.0"?>
 	    <sprite>imagenes/piedraxl.png</sprite>
     </piedraxl>
     <hielo>
-	    <sprite>imagenes/hielo.bmp</sprite>
+	    <sprite>imagenes/hielo.png</sprite>
     </hielo>
+    <hielo1>
+	    <sprite>imagenes/hielo1.png</sprite>
+    </hielo1>
+    <nieve>
+	    <sprite>imagenes/nieve.png</sprite>
+    </nieve>
     <metal>
 	    <sprite>imagenes/metal.bmp</sprite>
     </metal>
@@ -69,19 +75,27 @@ R"(<?xml version="1.0"?>
         <tipo>piedraxl</tipo>
         <xi>0</xi>
         <xf>1920</xf>
-        <y>280</y>
+        <y>320</y>
       </plataforma>
+
       <plataforma>
         <tipo>piedral</tipo>
-        <xi>400</xi>
+        <xi>250</xi>
+        <xf>400</xf>
+        <y>500</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>piedral</tipo>
+        <xi>430</xi>
         <xf>640</xf>
-        <y>360</y>
+        <y>420</y>
       </plataforma>
       <plataforma>
         <tipo>piedral</tipo>
         <xi>1040</xi>
         <xf>1200</xf>
-        <y>360</y>
+        <y>410</y>
       </plataforma>
       <plataforma>
         <tipo>piedram</tipo>
@@ -118,13 +132,13 @@ R"(<?xml version="1.0"?>
         <tipo>puente2</tipo>
         <xi>1920</xi>
         <xf>2240</xf>
-        <y>280</y>
+        <y>320</y>
       </plataforma>
       <plataforma>
         <tipo>piedraxl</tipo>
         <xi>2240</xi>
         <xf>2640</xf>
-        <y>280</y>
+        <y>320</y>
       </plataforma>
       <plataforma>
         <tipo>puente2</tipo>
@@ -480,7 +494,7 @@ R"(<?xml version="1.0"?>
         <y>1450</y>
       </plataforma>
       <plataforma>
-        <tipo>hielo</tipo>
+        <tipo>puentesoga</tipo>
         <xi>0</xi>
         <xf>800</xf>
         <y>1350</y>
@@ -565,96 +579,143 @@ R"(<?xml version="1.0"?>
       <plataforma>
         <tipo>hielo</tipo>
         <xi>0</xi>
+        <xf>100</xf>
+        <y>300</y>
+      </plataforma>
+
+<plataforma>
+        <tipo>hielo</tipo>
+        <xi>100</xi>
+        <xf>200</xf>
+        <y>300</y>
+      </plataforma>
+
+<plataforma>
+        <tipo>hielo</tipo>
+        <xi>200</xi>
         <xf>300</xf>
         <y>300</y>
       </plataforma>
-      <plataforma>
-        <tipo>hielo</tipo>
-        <xi>300</xi>
-        <xf>600</xf>
-        <y>300</y>
-      </plataforma>
-      <plataforma>
-        <tipo>hielo</tipo>
-        <xi>600</xi>
-        <xf>900</xf>
-        <y>300</y>
-      </plataforma>
-      <plataforma>
-        <tipo>hielo</tipo>
-        <xi>900</xi>
-        <xf>1200</xf>
-        <y>300</y>
-      </plataforma>
 
-	<plataforma>
-        <tipo>metal</tipo>
+      <plataforma>
+        <tipo>hielo1</tipo>
         <xi>0</xi>
-        <xf>350</xf>
-        <y>450</y>
+        <xf>150</xf>
+        <y>440</y>
       </plataforma>
 
-	<plataforma>
-        <tipo>metal</tipo>
-        <xi>350</xi>
-        <xf>400</xf>
-        <y>450</y>
+      <plataforma>
+        <tipo>nieve</tipo>
+        <xi>150</xi>
+        <xf>330</xf>
+        <y>500</y>
+      </plataforma>
+      
+      <plataforma>
+        <tipo>hielo1</tipo>
+        <xi>400</xi>
+        <xf>450</xf>
+        <y>400</y>
       </plataforma>
 
-	<plataforma>
-        <tipo>metal</tipo>
-        <xi>450</xi>
-        <xf>500</xf>
-        <y>550</y>
-      </plataforma>
-
-	<plataforma>
-        <tipo>metal</tipo>
-        <xi>500</xi>
-        <xf>550</xf>
-        <y>450</y>
-      </plataforma>
-
-	<plataforma>
-        <tipo>metal</tipo>
-        <xi>600</xi>
+      <plataforma>
+        <tipo>hielo</tipo>
+        <xi>550</xi>
         <xf>800</xf>
-        <y>350</y>
+        <y>440</y>
       </plataforma>
 
-   <plataforma>
-        <tipo>metal</tipo>
-        <xi>950</xi>
-        <xf>1150</xf>
-        <y>450</y>
-      </plataforma>
-
-   <plataforma>
-        <tipo>metal</tipo>
+      <plataforma>
+        <tipo>hielo</tipo>
         <xi>900</xi>
-        <xf>1000</xf>
+        <xf>1100</xf>
+        <y>380</y>
+      </plataforma>
+
+   <plataforma>
+        <tipo>hielo1</tipo>
+        <xi>1150</xi>
+        <xf>1400</xf>
         <y>450</y>
       </plataforma>
+
+	
 
    <plataforma>
         <tipo>hielo</tipo>
         <xi>1200</xi>
-        <xf>1600</xf>
-        <y>300</y>
-      </plataforma>
-
-      <plataforma>
-        <tipo>hielo</tipo>
-        <xi>1600</xi>
         <xf>2000</xf>
         <y>300</y>
       </plataforma>
 
+     <plataforma>
+        <tipo>hielo1</tipo>
+        <xi>1400</xi>
+        <xf>1450</xf>
+        <y>500</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>puentesoga</tipo>
+        <xi>1450</xi>
+        <xf>1700</xf>
+        <y>500</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>nieve</tipo>
+        <xi>1700</xi>
+        <xf>1800</xf>
+        <y>500</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>hielo</tipo>
+        <xi>1850</xi>
+        <xf>1990</xf>
+        <y>400</y>
+      </plataforma>
+
    <plataforma>
-        <tipo>metal</tipo>
-        <xi>2000</xi>
-        <xf>2400</xf>
-        <y>300</y>
+        <tipo>nieve</tipo>
+        <xi>2100</xi>
+        <xf>2300</xf>
+        <y>500</y>
+      </plataforma>
+
+   <plataforma>
+        <tipo>hielo</tipo>
+        <xi>2200</xi>
+        <xf>2280</xf>
+        <y>370</y>
+      </plataforma>
+
+   <plataforma>
+        <tipo>puentesoga</tipo>
+        <xi>2300</xi>
+        <xf>2900</xf>
+        <y>500</y>
+      </plataforma>
+
+	<plataforma>
+        <tipo>nieve</tipo>
+        <xi>2900</xi>
+        <xf>3100</xf>
+        <y>500</y>
+      </plataforma>
+
+     <plataforma>
+        <tipo>puentesoga</tipo>
+        <xi>3100</xi>
+        <xf>3250</xf>
+        <y>500</y>
+      </plataforma>
+
+     <plataforma>
+        <tipo>nieve</tipo>
+        <xi>3250</xi>
+        <xf>3350</xf>
+        <y>500</y>
       </plataforma>
 
       <plataforma>
@@ -671,19 +732,7 @@ R"(<?xml version="1.0"?>
         <y>300</y>
       </plataforma>
 
-      <plataforma>
-        <tipo>metal</tipo>
-        <xi>2950</xi>
-        <xf>3100</xf>
-        <y>530</y>
-      </plataforma>
-
-      <plataforma>
-        <tipo>metal</tipo>
-        <xi>3100</xi>
-        <xf>3250</xf>
-        <y>450</y>
-      </plataforma>
+      
 
       <plataforma>
         <tipo>hielo</tipo>
@@ -707,21 +756,21 @@ R"(<?xml version="1.0"?>
       </plataforma>
 
       <plataforma>
-        <tipo>hielo</tipo>
+        <tipo>nieve</tipo>
         <xi>3600</xi>
         <xf>4100</xf>
         <y>540</y>
       </plataforma>
 
       <plataforma>
-        <tipo>hielo</tipo>
+        <tipo>nieve</tipo>
         <xi>4100</xi>
         <xf>4300</xf>
         <y>450</y>
       </plataforma>
 
       <plataforma>
-        <tipo>hielo</tipo>
+        <tipo>nieve</tipo>
         <xi>4400</xi>
         <xf>4700</xf>
         <y>450</y>
@@ -748,10 +797,10 @@ R"(<?xml version="1.0"?>
         <y>350</y>
       </plataforma>
 	<plataforma>
-        <tipo>puente</tipo>
+        <tipo>puentesoga</tipo>
         <xi>5350</xi>
         <xf>8000</xf>
-        <y>350</y>
+        <y>450</y>
       </plataforma>
     </nivel3>
   </escenarios>
