@@ -15,9 +15,9 @@ imagenes=	personaje.png \
 		enemigo.png \
 		piedra.bmp \
 		metal.bmp \
-		hielo.bmp \
-		hielo1.bmp \
-		nieve.bmp \
+		hielo.png \
+		hielo1.png \
+		nieve.png \
 		boss.png \
 		cascroca1.png \
 		cascroca2.png \
