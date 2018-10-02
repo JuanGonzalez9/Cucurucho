@@ -284,6 +284,10 @@ void configuracion::obtener_plataformas (const char *camino, std::list<plataform
 						p.t = plataforma::piedra;
 					} else if (s == "hielo") {
 						p.t = plataforma::hielo;
+					} else if (s == "hielo1") {
+						p.t = plataforma::hielo1;
+					} else if (s == "nieve") {
+						p.t = plataforma::nieve;
 					} else if (s == "puente2") {
 						p.t = plataforma::puente2;
 					} else if (s == "puentesoga") {

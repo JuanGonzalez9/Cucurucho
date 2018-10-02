@@ -16,6 +16,8 @@ imagenes=	personaje.png \
 		piedra.bmp \
 		metal.bmp \
 		hielo.bmp \
+		hielo1.bmp \
+		nieve.bmp \
 		boss.png \
 		cascroca1.png \
 		cascroca2.png \
@@ -45,6 +47,8 @@ imagenes_o=	imagen-personaje.o \
 		imagen-piedra.o \
 		imagen-metal.o \
 		imagen-hielo.o \
+		imagen-hielo1.o \
+		imagen-nieve.o \
 		imagen-boss.o \
 		imagen-cascroca1.o \
 		imagen-cascroca2.o \

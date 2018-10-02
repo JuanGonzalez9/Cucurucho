@@ -38,6 +38,8 @@ protected:
 	SDL_Texture* texturaPlataformaPiedraL;
 	SDL_Texture* texturaPlataformaPiedraXL;
 	SDL_Texture* texturaPlataformaHielo;
+	SDL_Texture* texturaPlataformaHielo1;
+	SDL_Texture* texturaPlataformaNieve;
 	SDL_Texture* texturaPlataformaMetal;
 	list<plataforma> lista_plataformas_nivel1;
 	list<plataforma> lista_plataformas_nivel2;
