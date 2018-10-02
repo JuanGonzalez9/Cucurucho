@@ -33,6 +33,7 @@ imagenes=	personaje.png \
 		fondo2lv1.png\
 		fondo1lv3.png\
 		fondo2lv3.png\
+		monstruolevel2.bmp \
 		puente2.png
 		
 imagenes_o=	imagen-personaje.o \
@@ -64,6 +65,7 @@ imagenes_o=	imagen-personaje.o \
 		imagen-fondo2lv1.o\
 		imagen-fondo1lv3.o\
 		imagen-fondo2lv3.o\
+		imagen-monstruolevel2.o \
 		imagen-puente2.o
 		
 contra_LDFLAGS= $(imagenes_o) -rdynamic

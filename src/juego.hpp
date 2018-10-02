@@ -47,7 +47,9 @@ protected:
 	//probando
 	EntidadDibujable fondo1, fondo2;
 	Personaje boby;
-	Enemigo* darthBob;
+	Enemigo* enemigoNivel1;
+	Enemigo* enemigoNivel2;
+	Enemigo* enemigoNivel3;
 
 	vector<Bullet*> bullets;
 

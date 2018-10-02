@@ -12,9 +12,7 @@ juego::juego ():
 	cambioNivel(false),
 	us (periodo),
 	cuadros (0),
-	//d1 (1),
-	//d2 (2),
-	//d3 (3),
+	
 	d1 (2),
 	d2 (3),
 	d3 (5),
@@ -64,9 +62,12 @@ juego::juego ():
 	boby.obtenerTextura("//configuracion//personajes//heroe//sprite", renderer);
 	boby.setRectOrigen(0,0,480,480);
 
-	//darthBob->crearTextura("imagenes/enemigo.png",renderer);
-	darthBob = new Enemigo(500,150,5);
-	darthBob->obtenerTextura("//configuracion//personajes//enemigo//sprite", renderer);
+	//enemigoNivel1->crearTextura("imagenes/enemigo.png",renderer);
+	enemigoNivel1 = new Enemigo(600,150,5);
+	enemigoNivel1->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
+
+	enemigoNivel2 = new Enemigo(200,0,5);
+	enemigoNivel2->obtenerTextura("//configuracion//personajes//enemigo2//sprite", renderer);
 
 
 	// Creamos textura para pegar las plataformas
@@ -262,10 +263,7 @@ void juego::actualizar ()
 			/**/boby.decrementarPosY(boby.obtenerVelocidadY());		
 			//por ahora todo con la velocidad Y de boby, no hay parallax
 			fondo1.avanzarOrigenY(boby.obtenerVelocidadY()/3);
-			printf("origen x = %i\n", fondo1.getRectaOrigen().x);
-			printf("origen y = %i\n", fondo1.getRectaOrigen().y);
-			printf("origen w = %i\n", fondo1.getRectaOrigen().w);
-			printf("origen h = %i\n", fondo1.getRectaOrigen().h);
+			
 			fondo2.avanzarOrigenY(boby.obtenerVelocidadY()/2);
 			rect_origen_fondo3.y += boby.obtenerVelocidadY();
 			std::cout << "rect_origen_fondo3: " << rect_origen_fondo3.y << "\n";
@@ -288,25 +286,7 @@ void juego::actualizar ()
 	boby.actualizar();
 	while (us >= periodo*0.9 ) {
 		us -= periodo;
-		/*// Actualizo la posicion del fondo1
-		fondo1.avanzarOrigen(d1);
-		// Actualizo la posicion del fondo2
-		fondo2.avanzarOrigen(d2);
-		//Actualizo la posicion del fondo3
-		rect_origen_fondo3.x += d3;
-		if (d3 > 0 ) {
-			if (rect_origen_fondo3.x > ancho) {
-				//imagen_fondo3->w-ancho
-				d3 = -3;
-				d2 = -2;
-				rect_origen_fondo3.x = ancho;
-				d1 = -1;
-			}
-		}else if (rect_origen_fondo3.x < 0) {
-			d3=3;
-			d2 = 2;
-			rect_origen_fondo3.x = 0;
-			d1 = 1;*/
+		
 	}
 
 
@@ -333,7 +313,7 @@ void juego::actualizar ()
 		
 	}
 
-	if((nivel==2)&&cambioNivel)
+	if((nivel==2)&& boby.estaCercaDelFinalDelNivel2())
 	{
 		nivel=3;		
 		fondo1.obtenerTextura("//configuracion//escenarios//nivel3//fondo1", renderer);
@@ -356,6 +336,10 @@ void juego::actualizar ()
 		
 	}
 
+	if((nivel ==3) && boby.estaCercaDelFinalDelNivel3()){
+		termino = true;
+	}
+
 	//Actualizo balas
 	for(int i = 0; i < bullets.size(); i++){
 		bullets[i]->move();
@@ -370,7 +354,7 @@ void juego::actualizar ()
 
 	//veo si el jugador toca al enemigo
 	if(nivel == 1 && boby.estaCercaDelFinalDelNivel1()){
-		if(! darthBob->derrotado() && collision(boby.getRectaDestino(),darthBob->getRectaDestino())){
+		if(! enemigoNivel1->derrotado() && collision(boby.getRectaDestino(),enemigoNivel1->getRectaDestino())){
 			if(boby.getInvincibilityFrames() == 0)
 				boby.perderVida();
 		}
@@ -392,8 +376,8 @@ void juego::actualizar ()
 	//veo si las balas le pegan al enemigo
 	if(nivel == 1 && boby.estaCercaDelFinalDelNivel1()){
 		for(unsigned i = 0;i < bullets.size();i++){
-			if(! darthBob->derrotado() && collision(bullets[i]->getRectaDestino(),darthBob->getRectaDestino())){
-				darthBob->perderVida();
+			if(! enemigoNivel1->derrotado() && collision(bullets[i]->getRectaDestino(),enemigoNivel1->getRectaDestino())){
+				enemigoNivel1->perderVida();
 				bullets.erase(bullets.begin() + i);
 			}
 
@@ -422,10 +406,18 @@ void juego::dibujar ()
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
 
 	if(nivel == 1 && boby.estaCercaDelFinalDelNivel1()){
-		if(!darthBob->derrotado())
-			darthBob->dibujar(renderer);
+		if(!enemigoNivel1->derrotado())
+			enemigoNivel1->dibujar(renderer);
 		else{
-			darthBob->~Enemigo();
+			enemigoNivel1->~Enemigo(); // Esto no libera memoria
+		}
+	}
+
+	if(nivel == 2 && boby.obtenerCoordenadaY() < 300){
+		if(!enemigoNivel2->derrotado())
+			enemigoNivel2->dibujar(renderer);
+		else{
+			delete(enemigoNivel2);
 		}
 	}
 
@@ -518,8 +510,8 @@ juego::~juego ()
 	SDL_DestroyRenderer (renderer);
 	SDL_DestroyWindow (ventana);
 	SDL_DestroyTexture(textura_bala);
-	if(! darthBob->derrotado())
-		darthBob->~Enemigo();
+	if(! enemigoNivel1->derrotado())
+		enemigoNivel1->~Enemigo();
 
 	for(unsigned i = 0;i < bullets.size();i++){
 		bullets[i]->~Bullet();

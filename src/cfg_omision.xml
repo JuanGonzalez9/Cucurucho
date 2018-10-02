@@ -7,9 +7,12 @@ R"(<?xml version="1.0"?>
     <heroe>
 	    <sprite>imagenes/personaje.png</sprite>
     </heroe>
-    <enemigo>
+    <enemigo1>
 	    <sprite>imagenes/boss.png</sprite>
-    </enemigo>
+    </enemigo1>
+	<enemigo2>
+	    <sprite>imagenes/monstruolevel2.bmp</sprite>
+    </enemigo2>
   </personajes>
   <items>
     <bala>

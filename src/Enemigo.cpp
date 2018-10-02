@@ -11,7 +11,8 @@ Enemigo::Enemigo(int x,int y,int life) {
 
 	EntidadDibujable();
 	vidas = life;
-	rectOrigen = {0,0,126,120};
+	//rectOrigen = {0,0,126,120};
+	rectOrigen = {0,0,250,158};
 	rectDestino = {x,y,252,240};
 
 }
