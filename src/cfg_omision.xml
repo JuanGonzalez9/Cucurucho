@@ -368,13 +368,134 @@ R"(<?xml version="1.0"?>
         <tipo>cascroca3</tipo>
         <xi>0</xi>
         <xf>300</xf>
-        <y>3080</y>
+        <y>3090</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca3</tipo>
+        <xi>400</xi>
+        <xf>500</xf>
+        <y>3090</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca1</tipo>
+        <xi>500</xi>
+        <xf>800</xf>
+        <y>3090</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca4</tipo>
+        <xi>0</xi>
+        <xf>200</xf>
+        <y>2900</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca1</tipo>
+        <xi>300</xi>
+        <xf>400</xf>
+        <y>2850</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca4</tipo>
+        <xi>500</xi>
+        <xf>800</xf>
+        <y>2800</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca3</tipo>
+        <xi>600</xi>
+        <xf>800</xf>
+        <y>2580</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca4</tipo>
+        <xi>0</xi>
+        <xf>800</xf>
+        <y>2375</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca3</tipo>
+        <xi>100</xi>
+        <xf>800</xf>
+        <y>2150</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca1</tipo>
+        <xi>0</xi>
+        <xf>200</xf>
+        <y>1974</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca4</tipo>
+        <xi>200</xi>
+        <xf>400</xf>
+        <y>1756</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca3</tipo>
+        <xi>0</xi>
+        <xf>300</xf>
+        <y>1580</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>cascroca1</tipo>
+        <xi>0</xi>
+        <xf>300</xf>
+        <y>1380</y>
+      </plataforma>
+      <plataforma>
+        <tipo>cascroca3</tipo>
+        <xi>300</xi>
+        <xf>400</xf>
+        <y>1380</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>cascroca1</tipo>
+        <xi>0</xi>
+        <xf>200</xf>
+        <y>1200</y>
       </plataforma>
       <plataforma>
         <tipo>cascroca2</tipo>
         <xi>500</xi>
         <xf>800</xf>
-        <y>3080</y>
+        <y>1200</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>cascroca3</tipo>
+        <xi>0</xi>
+        <xf>400</xf>
+        <y>1050</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>cascroca3</tipo>
+        <xi>100</xi>
+        <xf>300</xf>
+        <y>880</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>cascroca4</tipo>
+        <xi>0</xi>
+        <xf>300</xf>
+        <y>706</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>cascroca4</tipo>
+        <xi>100</xi>
+        <xf>600</xf>
+        <y>550</y>
+      </plataforma>
+
+      <plataforma>
+        <tipo>cascroca1</tipo>
+        <xi>0</xi>
+        <xf>800</xf>
+        <y>350</y>
       </plataforma>
 
     </nivel2>
