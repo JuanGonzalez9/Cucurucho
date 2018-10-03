@@ -29,6 +29,7 @@ imagenes=	personaje.png \
 		piedraxl.png \
 		puente.bmp \
 		puentesoga.png \
+		nieve_arboles.png\
 		fondo1lv1.png\
 		fondo2lv1.png\
 		fondo1lv3.png\
@@ -62,6 +63,7 @@ imagenes_o=	imagen-personaje.o \
 		imagen-piedraxl.o \
 		imagen-puente.o\
 		imagen-puentesoga.o\
+		imagen-nieve_arboles.o\
 		imagen-fondo1lv1.o\
 		imagen-fondo2lv1.o\
 		imagen-fondo1lv3.o\

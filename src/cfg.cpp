@@ -45,6 +45,26 @@ static const char * cfg_omision_xml =
 		throw excepcion_configuracion (ss.str()); \
 	} while (false)
 
+const char * plataforma::caminos[] = {
+	"//configuracion//plataformas//piedra//sprite",
+	"//configuracion//plataformas//puente//sprite",
+	"//configuracion//plataformas//puentesoga//sprite",
+	"//configuracion//plataformas//puente2//sprite",
+	"//configuracion//plataformas//cascroca1//sprite",
+	"//configuracion//plataformas//cascroca2//sprite",
+	"//configuracion//plataformas//cascroca3//sprite",
+	"//configuracion//plataformas//cascroca4//sprite",
+	"//configuracion//plataformas//piedras//sprite",
+	"//configuracion//plataformas//piedram//sprite",
+	"//configuracion//plataformas//piedral//sprite",
+	"//configuracion//plataformas//piedraxl//sprite",
+	"//configuracion//plataformas//hielo//sprite",
+	"//configuracion//plataformas//hielo1//sprite",
+	"//configuracion//plataformas//nieve//sprite",
+	"//configuracion//plataformas//nieve_arboles//sprite",
+	"//configuracion//plataformas//metal//sprite"
+};
+
 excepcion_configuracion::excepcion_configuracion (const std::string &que_paso):
 	std::invalid_argument (que_paso)
 {

@@ -10,6 +10,16 @@
 
 using namespace std;
 
+class ImagePlataforma
+{
+public:
+	ImagePlataforma ();
+	~ImagePlataforma ();
+	void inicializar (const char *camino, SDL_Renderer* renderizador);
+	SDL_Texture* textura;
+	int ancho, alto, delta;
+};
+
 class Plataformas {
 public:
 	
@@ -25,22 +35,7 @@ public:
 	int aproximarPosicionAPlataforma(int otroX, int otroY, int otroW, int otroH, int velocidad, int nivel);
 
 protected:
-	SDL_Texture* texturaPlataformaPiedra;
-	SDL_Texture* texturaPlataformaPuente;
-	SDL_Texture* texturaPlataformaPuenteSoga;
-	SDL_Texture* texturaPlataformaPuente2;
-	SDL_Texture* texturaPlataformaCascRoca1;
-	SDL_Texture* texturaPlataformaCascRoca2;
-	SDL_Texture* texturaPlataformaCascRoca3;
-	SDL_Texture* texturaPlataformaCascRoca4;
-	SDL_Texture* texturaPlataformaPiedraS;
-	SDL_Texture* texturaPlataformaPiedraM;
-	SDL_Texture* texturaPlataformaPiedraL;
-	SDL_Texture* texturaPlataformaPiedraXL;
-	SDL_Texture* texturaPlataformaHielo;
-	SDL_Texture* texturaPlataformaHielo1;
-	SDL_Texture* texturaPlataformaNieve;
-	SDL_Texture* texturaPlataformaMetal;
+	ImagePlataforma imagenes[plataforma::cantidad];
 	list<plataforma> lista_plataformas_nivel1;
 	list<plataforma> lista_plataformas_nivel2;
 	list<plataforma> lista_plataformas_nivel3;

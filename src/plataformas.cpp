@@ -7,173 +7,58 @@
 
 using namespace std;
 
+ImagePlataforma::ImagePlataforma ():
+	textura (nullptr),
+	delta (0)
+{
+}
+
+ImagePlataforma::~ImagePlataforma()
+{
+	if(textura){
+		SDL_DestroyTexture (textura);
+	}
+	else{
+		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+	}
+}
+
+void ImagePlataforma::inicializar (const char *camino, SDL_Renderer* renderizador)
+{
+	textura = cfg.obtener_textura (camino, renderizador);
+	SDL_QueryTexture (textura, nullptr, nullptr, &ancho, &alto);
+}
 
 void Plataformas::inicializar(SDL_Renderer* renderizador)
 {
-	texturaPlataformaPiedra = cfg.obtener_textura ("//configuracion//plataformas//piedra//sprite", renderizador);
-	texturaPlataformaPuente = cfg.obtener_textura ("//configuracion//plataformas//puente//sprite", renderizador);
-	texturaPlataformaPuenteSoga = cfg.obtener_textura ("//configuracion//plataformas//puentesoga//sprite", renderizador);
-	texturaPlataformaPuente2 = cfg.obtener_textura ("//configuracion//plataformas//puente2//sprite", renderizador);
-	texturaPlataformaCascRoca1 = cfg.obtener_textura ("//configuracion//plataformas//cascroca1//sprite", renderizador);
-	texturaPlataformaCascRoca2 = cfg.obtener_textura ("//configuracion//plataformas//cascroca2//sprite", renderizador);
-	texturaPlataformaCascRoca3 = cfg.obtener_textura ("//configuracion//plataformas//cascroca3//sprite", renderizador);
-	texturaPlataformaCascRoca4 = cfg.obtener_textura ("//configuracion//plataformas//cascroca4//sprite", renderizador);
-	texturaPlataformaPiedraS = cfg.obtener_textura ("//configuracion//plataformas//piedras//sprite", renderizador);
-	texturaPlataformaPiedraM = cfg.obtener_textura ("//configuracion//plataformas//piedram//sprite", renderizador);
-	texturaPlataformaPiedraL = cfg.obtener_textura ("//configuracion//plataformas//piedral//sprite", renderizador);
-	texturaPlataformaPiedraXL = cfg.obtener_textura ("//configuracion//plataformas//piedraxl//sprite", renderizador);
-	texturaPlataformaHielo = cfg.obtener_textura ("//configuracion//plataformas//hielo//sprite", renderizador);
-	texturaPlataformaHielo1 = cfg.obtener_textura ("//configuracion//plataformas//hielo1//sprite", renderizador);
-	texturaPlataformaNieve = cfg.obtener_textura ("//configuracion//plataformas//nieve//sprite", renderizador);
-	texturaPlataformaMetal = cfg.obtener_textura ("//configuracion//plataformas//metal//sprite", renderizador);
-
+	for (int i = 0; i < plataforma::cantidad; i++) {
+		imagenes[i].inicializar (plataforma::caminos[i], renderizador);
+	}
 	registro.registrar(LogEventos::info, "Se cargaron las imagenes de las plataformas");
 }
 
-Plataformas::Plataformas(): texturaPlataformaPiedra (nullptr),
-				texturaPlataformaPuente (nullptr),
-				texturaPlataformaPuenteSoga (nullptr),
-				texturaPlataformaPuente2 (nullptr),
-				texturaPlataformaCascRoca1 (nullptr),
-				texturaPlataformaCascRoca2 (nullptr),
-				texturaPlataformaCascRoca3 (nullptr),
-				texturaPlataformaCascRoca4 (nullptr),
-				texturaPlataformaPiedraS (nullptr),
-				texturaPlataformaPiedraM (nullptr),
-				texturaPlataformaPiedraL (nullptr),
-				texturaPlataformaPiedraXL (nullptr),
-				texturaPlataformaHielo (nullptr),
-				texturaPlataformaHielo1 (nullptr),
-				texturaPlataformaNieve (nullptr),
-				texturaPlataformaMetal (nullptr)
+Plataformas::Plataformas()
 {
 	plataforma p = {plataforma::piedras, 0, 100, 550};
 	cfg.obtener_plataformas("//configuracion//escenarios//nivel1",lista_plataformas_nivel1, p);
 	p.t = plataforma::piedra;
 	p.y = 3600-50;
 	cfg.obtener_plataformas("//configuracion//escenarios//nivel2",lista_plataformas_nivel2, p);
-	p.t = plataforma::hielo;
+	p.t = plataforma::nieve;
+	p.y = 550;
+	p.xf = 100;
 	cfg.obtener_plataformas("//configuracion//escenarios//nivel3",lista_plataformas_nivel3, p);
 
 }
 
 Plataformas::~Plataformas(){
-	if(texturaPlataformaPiedra){
-		SDL_DestroyTexture (texturaPlataformaPiedra);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-	if(texturaPlataformaPuente){
-		SDL_DestroyTexture (texturaPlataformaPuente);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-	if(texturaPlataformaPuenteSoga){
-		SDL_DestroyTexture (texturaPlataformaPuenteSoga);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-	if(texturaPlataformaPuente2){
-		SDL_DestroyTexture (texturaPlataformaPuente2);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-	if(texturaPlataformaCascRoca1){
-		SDL_DestroyTexture (texturaPlataformaCascRoca1);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-	if(texturaPlataformaCascRoca2){
-		SDL_DestroyTexture (texturaPlataformaCascRoca2);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-	if(texturaPlataformaCascRoca3){
-		SDL_DestroyTexture (texturaPlataformaCascRoca3);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-	if(texturaPlataformaCascRoca4){
-		SDL_DestroyTexture (texturaPlataformaCascRoca4);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-	if(texturaPlataformaPiedraS){
-		SDL_DestroyTexture (texturaPlataformaPiedraS);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-	if(texturaPlataformaPiedraM){
-		SDL_DestroyTexture (texturaPlataformaPiedraM);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-	if(texturaPlataformaPiedraL){
-		SDL_DestroyTexture (texturaPlataformaPiedraL);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-	if(texturaPlataformaPiedraXL){
-		SDL_DestroyTexture (texturaPlataformaPiedraXL);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-
-
-	if(texturaPlataformaMetal){
-		SDL_DestroyTexture (texturaPlataformaMetal);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-	if(texturaPlataformaHielo){
-		SDL_DestroyTexture (texturaPlataformaHielo);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-	if(texturaPlataformaHielo1){
-		SDL_DestroyTexture (texturaPlataformaHielo1);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
-	if(texturaPlataformaNieve){
-		SDL_DestroyTexture (texturaPlataformaNieve);
-	}
-	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
-	}
 }
 
 
 void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer* renderizador, int nivel){
 	//Hay que pedirle al archivo configurable los valores de las plataformas ¿En que formato? (Nos pasa directamente un objeto plataforma)
 	
-	SDL_Rect posicion_imagen;
+	SDL_Rect posicion_imagen, src_rect;
 	int total;
 	int numeroPlataformas;
 	int anchoUltimaPlataforma;
@@ -205,190 +90,28 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 			posicion_imagen.h = 100;
 		}
 		
-		if((total) < 101 ){
-			posicion_imagen.x = plataformaActual.xi;
-			posicion_imagen.w = (plataformaActual.xf-plataformaActual.xi)+1;
-			
-			if(plataformaActual.t == plataforma::piedra){
-				SDL_RenderCopy(renderizador,texturaPlataformaPiedra,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::puente){
-				SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::puentesoga){
-				SDL_RenderCopy(renderizador,texturaPlataformaPuenteSoga,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::puente2){
-				SDL_RenderCopy(renderizador,texturaPlataformaPuente2,NULL,&posicion_imagen);
-			}
-
-			else if (plataformaActual.t == plataforma::cascroca1){
-				SDL_RenderCopy(renderizador,texturaPlataformaCascRoca1,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::cascroca2){
-				SDL_RenderCopy(renderizador,texturaPlataformaCascRoca2,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::cascroca3){
-				SDL_RenderCopy(renderizador,texturaPlataformaCascRoca3,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::cascroca4){
-				SDL_RenderCopy(renderizador,texturaPlataformaCascRoca4,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::piedras){
-				SDL_RenderCopy(renderizador,texturaPlataformaPiedraS,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::piedram){
-				SDL_RenderCopy(renderizador,texturaPlataformaPiedraM,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::piedral){
-				SDL_RenderCopy(renderizador,texturaPlataformaPiedraL,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::piedraxl){
-				SDL_RenderCopy(renderizador,texturaPlataformaPiedraXL,NULL,&posicion_imagen);
-			}
-
-			else if (plataformaActual.t == plataforma::hielo){
-				SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::hielo1){
-				SDL_RenderCopy(renderizador,texturaPlataformaHielo1,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::nieve){
-				SDL_RenderCopy(renderizador,texturaPlataformaNieve,NULL,&posicion_imagen);
-			}
-			else if (plataformaActual.t == plataforma::metal){
-				SDL_RenderCopy(renderizador,texturaPlataformaMetal,NULL,&posicion_imagen);
-			}
-			
-		}
-		else{
-			numeroPlataformas = total/100;
-			posicion_imagen.x = plataformaActual.xi;
-			posicion_imagen.w = 100;
-
-			for(int i =0; i < numeroPlataformas;i++){
-
-				
-				posicion_imagen.x = plataformaActual.xi + 100 * (i);
-				
-				if(plataformaActual.t == plataforma::piedra){
-					SDL_RenderCopy(renderizador,texturaPlataformaPiedra,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::puente){
-					SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::puentesoga){
-					SDL_RenderCopy(renderizador,texturaPlataformaPuenteSoga,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::puente2){
-					SDL_RenderCopy(renderizador,texturaPlataformaPuente2,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::cascroca1){
-					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca1,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::cascroca2){
-					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca2,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::cascroca3){
-					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca3,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::cascroca4){
-					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca4,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::piedras){
-					SDL_RenderCopy(renderizador,texturaPlataformaPiedraS,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::piedram){
-					SDL_RenderCopy(renderizador,texturaPlataformaPiedraM,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::piedral){
-					SDL_RenderCopy(renderizador,texturaPlataformaPiedraL,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::piedraxl){
-					SDL_RenderCopy(renderizador,texturaPlataformaPiedraXL,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::hielo){
-					SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::hielo1){
-					SDL_RenderCopy(renderizador,texturaPlataformaHielo1,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::nieve){
-					SDL_RenderCopy(renderizador,texturaPlataformaNieve,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::metal){
-					SDL_RenderCopy(renderizador,texturaPlataformaMetal,NULL,&posicion_imagen);
-				}
-			}
-
-			resto = total%100;
-			if(resto!=0){
-				anchoUltimaPlataforma = resto;
-				posicion_imagen.x = plataformaActual.xi + 100 * numeroPlataformas;
-				posicion_imagen.w = anchoUltimaPlataforma;
-				if(plataformaActual.t == plataforma::piedra){
-					SDL_RenderCopy(renderizador,texturaPlataformaPiedra,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::puente){
-					SDL_RenderCopy(renderizador,texturaPlataformaPuente,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::puentesoga){
-					SDL_RenderCopy(renderizador,texturaPlataformaPuenteSoga,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::puente2){
-					SDL_RenderCopy(renderizador,texturaPlataformaPuente2,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::cascroca1){
-					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca1,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::cascroca2){
-					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca2,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::cascroca3){
-					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca3,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::cascroca4){
-					SDL_RenderCopy(renderizador,texturaPlataformaCascRoca4,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::piedras){
-					SDL_RenderCopy(renderizador,texturaPlataformaPiedraS,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::piedram){
-					SDL_RenderCopy(renderizador,texturaPlataformaPiedraM,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::piedral){
-					SDL_RenderCopy(renderizador,texturaPlataformaPiedraL,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::piedraxl){
-					SDL_RenderCopy(renderizador,texturaPlataformaPiedraXL,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::hielo){
-					SDL_RenderCopy(renderizador,texturaPlataformaHielo,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::hielo1){
-					SDL_RenderCopy(renderizador,texturaPlataformaHielo1,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::nieve){
-					SDL_RenderCopy(renderizador,texturaPlataformaNieve,NULL,&posicion_imagen);
-				}
-				else if (plataformaActual.t == plataforma::metal){
-					SDL_RenderCopy(renderizador,texturaPlataformaMetal,NULL,&posicion_imagen);
-				}
-			}
-		}
-
-			
+		int anchoPlataforma = 100;
 		
+		if (plataformaActual.t == plataforma::nieve_arboles) std::cout << "ancho: " << anchoPlataforma << "\n";
+		numeroPlataformas = total/anchoPlataforma;
+		posicion_imagen.x = plataformaActual.xi;
+		posicion_imagen.w = anchoPlataforma;
+
+		for(int i =0; i < numeroPlataformas;i++){
+			posicion_imagen.x = plataformaActual.xi + anchoPlataforma * (i);
+			SDL_RenderCopy(renderizador,imagenes[plataformaActual.t].textura,NULL,&posicion_imagen);
+		}
+
+		resto = total%anchoPlataforma;
+		if(resto!=0){
+			anchoUltimaPlataforma = resto;
+			posicion_imagen.x = plataformaActual.xi + anchoPlataforma * numeroPlataformas;
+			posicion_imagen.w = anchoUltimaPlataforma;
+			SDL_RenderCopy(renderizador,imagenes[plataformaActual.t].textura,NULL,&posicion_imagen);
+		}
 	}
-
 	registro.registrar (LogEventos::info, "Se cargaron las plataformas y se renderizaron en el mapa");
-
 	SDL_SetRenderTarget(renderizador,NULL);
-
-	
-	
-
-	return;	
 }
 
 SDL_Texture * Plataformas::crearTexturaParaElFondo(SDL_Texture* texturaFondo,SDL_Renderer* renderizador,int w,int h){
@@ -549,7 +272,7 @@ bool Plataformas::hayColisionSuperior(int otroX,int otroY,int otroW,int otroH, i
 		plataforma &plataformaActual = *it;
 
 		parte_inferior_plataforma = 600 - plataformaActual.y; //Esto en algun momento se va a cambiar
-		parte_superior_plataforma = plataformaActual.y;
+		parte_superior_plataforma = plataformaActual.t == plataforma::nieve_arboles ? plataformaActual.y + 10 : plataformaActual.y;
 		parte_lateral_izq_plataforma = plataformaActual.xi;
 		parte_lateral_der_plataforma = plataformaActual.xf;
 

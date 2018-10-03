@@ -13,7 +13,7 @@ Personaje::Personaje() {
 	velocidadY = 0;
 	velocidadX = 0;
 	maximaVelocidadX = 5;
-	maximaVelocidadY = 17;
+	maximaVelocidadY = 22;
 	gravedad = 1;
 
 
