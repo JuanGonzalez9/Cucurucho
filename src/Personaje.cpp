@@ -275,7 +275,7 @@ bool Personaje::estaCercaDelFinalDelNivel1(){
 }
 
 bool Personaje::estaCercaDelFinalDelNivel2(){
-	return (coordenadaY <= 200);
+	return (coordenadaY <= 300);
 }
 
 bool Personaje::estaCercaDelFinalDelNivel3(){

@@ -42,7 +42,7 @@ void LogEventos::registrar(LogEventos::TipoLog tipoEvento,const char* evento_ocu
     	}
     	
 
-    	archivo << "Hora actual: " << pt1->tm_hour << ":" << pt1->tm_min << ":" << pt1->tm_sec << " Tipo: " << evento <<"   Nombre evento: " << evento_ocurrido << endl;
+    	archivo << pt1->tm_hour << ":" << pt1->tm_min << ":" << pt1->tm_sec << ": " << evento <<": " << evento_ocurrido << endl;
     
 
 		archivo.close();

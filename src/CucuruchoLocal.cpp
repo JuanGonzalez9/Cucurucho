@@ -14,6 +14,7 @@ void uso ()
 }
 
 int main (int argc, char *argv[]){
+	registro.borrarEventos();
 	registro.registrar (LogEventos::info, "Comenzo el juego");
 
 	int r = 1;

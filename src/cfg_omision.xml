@@ -149,6 +149,12 @@ R"(<?xml version="1.0"?>
         <xf>2640</xf>
         <y>320</y>
       </plataforma>
+	<plataforma>
+        <tipo>piedraxl</tipo>
+        <xi>2540</xi>
+        <xf>2640</xf>
+        <y>280</y>
+      </plataforma>
       <plataforma>
         <tipo>puente2</tipo>
         <xi>2640</xi>

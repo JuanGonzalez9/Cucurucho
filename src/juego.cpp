@@ -65,10 +65,11 @@ juego::juego ():
 	enemigoNivel1 = new Enemigo(600,150,5);
 	enemigoNivel1->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 
-	enemigoNivel2 = new Enemigo(200,0,5);
+	enemigoNivel2 = new Enemigo(260,80,5);
 	enemigoNivel2->obtenerTextura("//configuracion//personajes//enemigo2//sprite", renderer);
 
-	enemigoNivel3 = new Enemigo(600,150,5);
+	enemigoNivel3 = new Enemigo(550,150,5);
+
 	enemigoNivel3->obtenerTextura("//configuracion//personajes//enemigo3//sprite", renderer);
 
 
@@ -265,7 +266,7 @@ void juego::actualizar ()
 			
 			fondo2.avanzarOrigenY(boby.obtenerVelocidadY()/2);
 			rect_origen_fondo3.y += boby.obtenerVelocidadY();
-			std::cout << "rect_origen_fondo3: " << rect_origen_fondo3.y << "\n";
+			
 		
 		}
 	}
@@ -402,12 +403,6 @@ void juego::dibujar ()
 	
 	//Copio el fondo3
 	SDL_RenderCopy (renderer, textura_fondo3, &rect_origen_fondo3, nullptr);
-
-	SDL_Rect dst_enemigo;
-	dst_enemigo.y = 20 - rect_origen_fondo3.y;
-	dst_enemigo.x = 300;
-	dst_enemigo.w = 252;
-	dst_enemigo.h = 240;
 
 
 
