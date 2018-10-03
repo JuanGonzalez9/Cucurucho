@@ -254,16 +254,32 @@ void Personaje::actualizarPos(int nuevaPos, int nivel){
 	
 }
 
+bool Personaje::llegoAlFinalDelNivel1(){
+	return (coordenadaX >= 7600);
+}
+
+bool Personaje::llegoAlFinalDelNivel2(){
+	
+	return (coordenadaY <= 30);
+}
+
+bool Personaje::llegoAlFinalDelNivel3(){
+	return (coordenadaX >= 7600);
+}
+
+
+
+
 bool Personaje::estaCercaDelFinalDelNivel1(){
-	return (coordenadaX >= 7000);
+	return (coordenadaX >= 7400);
 }
 
 bool Personaje::estaCercaDelFinalDelNivel2(){
-	return (coordenadaY <= 50);
+	return (coordenadaY <= 200);
 }
 
 bool Personaje::estaCercaDelFinalDelNivel3(){
-	return (coordenadaX >= 7000);
+	return (coordenadaX >= 7400);
 }
 
 

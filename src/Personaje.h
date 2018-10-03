@@ -48,6 +48,9 @@ public:
 	bool estaCercaDelFinalDelNivel1();
 	bool estaCercaDelFinalDelNivel2();
 	bool estaCercaDelFinalDelNivel3();
+	bool llegoAlFinalDelNivel1();
+	bool llegoAlFinalDelNivel2();
+	bool llegoAlFinalDelNivel3();
 
 	//----METODOS
 	void saltar();

@@ -13,6 +13,9 @@ R"(<?xml version="1.0"?>
 	<enemigo2>
 	    <sprite>imagenes/monstruolevel2.bmp</sprite>
     </enemigo2>
+	<enemigo3>
+	    <sprite>imagenes/monstruolevel3.bmp</sprite>
+    </enemigo3>
   </personajes>
   <items>
     <bala>

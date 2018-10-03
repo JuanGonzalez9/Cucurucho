@@ -60,8 +60,8 @@ protected:
 	bool apretandoDisparo(const Uint8* state);
 	bool apretandoSalto(const Uint8* state);
 	bool apretandoAgacharse(const Uint8* state);
-	bool apretandoNivel(const Uint8* state);
-	bool apretandoFlotar(const Uint8* state);
+	bool apretandoNivel2(const Uint8* state);
+	bool apretandoNivel3(const Uint8* state);
 
 
 };

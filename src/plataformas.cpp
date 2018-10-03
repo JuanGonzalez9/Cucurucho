@@ -47,8 +47,9 @@ Plataformas::Plataformas(): texturaPlataformaPiedra (nullptr),
 				texturaPlataformaNieve (nullptr),
 				texturaPlataformaMetal (nullptr)
 {
-	plataforma p = {plataforma::piedra, 0, 100, 550};
+	plataforma p = {plataforma::piedras, 0, 100, 550};
 	cfg.obtener_plataformas("//configuracion//escenarios//nivel1",lista_plataformas_nivel1, p);
+	p.t = plataforma::piedra;
 	p.y = 3600-50;
 	cfg.obtener_plataformas("//configuracion//escenarios//nivel2",lista_plataformas_nivel2, p);
 	p.t = plataforma::hielo;
