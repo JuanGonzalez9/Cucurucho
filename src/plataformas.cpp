@@ -19,8 +19,9 @@ ImagePlataforma::~ImagePlataforma()
 		SDL_DestroyTexture (textura);
 	}
 	else{
-		registro.registrar(LogEventos::error, "No se pudo destruir una textura");
+		logerror("No se pudo destruir una textura");
 	}
+		
 }
 
 void ImagePlataforma::inicializar (const char *camino, SDL_Renderer* renderizador)
@@ -34,7 +35,8 @@ void Plataformas::inicializar(SDL_Renderer* renderizador)
 	for (int i = 0; i < plataforma::cantidad; i++) {
 		imagenes[i].inicializar (plataforma::caminos[i], renderizador);
 	}
-	registro.registrar(LogEventos::info, "Se cargaron las imagenes de las plataformas");
+	loginfo("Se cargaron las imagenes de las plataformas");
+	
 }
 
 Plataformas::Plataformas()
@@ -110,7 +112,8 @@ void Plataformas::cargarValoresFijos(SDL_Texture* textura_objetivo, SDL_Renderer
 			SDL_RenderCopy(renderizador,imagenes[plataformaActual.t].textura,NULL,&posicion_imagen);
 		}
 	}
-	registro.registrar (LogEventos::info, "Se cargaron las plataformas y se renderizaron en el mapa");
+	loginfo("Se cargaron las plataformas y se renderizaron en el mapa");
+	
 	SDL_SetRenderTarget(renderizador,NULL);
 }
 
@@ -123,7 +126,7 @@ SDL_Texture * Plataformas::crearTexturaParaElFondo(SDL_Texture* texturaFondo,SDL
 	SDL_RenderCopy(renderizador,texturaFondo,NULL,NULL);
 	SDL_SetRenderTarget(renderizador, NULL);
 
-	registro.registrar (LogEventos::info, "se creo la textura para el fondo de las plataformas");
+	loginfo("se creo la textura para el fondo de las plataformas");
 
 	return textura_objetivo;
 

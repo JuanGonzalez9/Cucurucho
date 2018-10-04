@@ -72,7 +72,7 @@ juego::juego ():
 
 	enemigoNivel3->obtenerTextura("//configuracion//personajes//enemigo3//sprite", renderer);
 
-
+	loginfo("Se crearon los enemigos");
 
 	// Creamos textura para pegar las plataformas
 	// Creamos textura para pegar las plataformas
@@ -364,6 +364,11 @@ void juego::actualizar ()
 
 	//veo si el jugador se cayo
 	if(boby.getPosY()>600){
+
+		if (nivel ==2){
+			boby.setCoordenadaY(boby.obtenerCoordenadaY()+40 - boby.getPosY());
+		}
+
 		boby.setPosY(40);		
 		boby.perderVida();
 		
