@@ -49,7 +49,7 @@ void Bullet::dibujar(SDL_Renderer* renderer){
 
 void Bullet::ajustarPorEstado(Personaje::Estado estado){
 
-	if(estado == Personaje::Estado::CuerpoATierra){
+	if(estado == Personaje::CuerpoATierra){
 		yvel = 0;
 		if(xvel > 0){
 			rectDestino.x += 40;
@@ -58,7 +58,7 @@ void Bullet::ajustarPorEstado(Personaje::Estado estado){
 		rectDestino.y += 30;
 	}
 
-	if(estado == Personaje::Estado::Caminando){
+	if(estado == Personaje::Caminando){
 		if(xvel < 0){
 			rectDestino.x -= 10;
 		}
