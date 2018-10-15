@@ -30,7 +30,7 @@ public:
 	bool jugando ();
 protected:
 	bool termino, cambioNivel;
-	int us, cuadros, d1, d2, d3, nivel, cascada;
+	int us, cuadros, d1, d2, d3, nivel, cascada, num_jugadores;
 	int mundo_w, mundo_h;
 	temporizador t_ciclo, t_fps;
 	SDL_Event e;
@@ -46,7 +46,7 @@ protected:
 
 	//probando
 	EntidadDibujable fondo1, fondo2;
-	Personaje boby;
+	Personaje boby, boby2;
 	Enemigo* enemigoNivel1;
 	Enemigo* enemigoNivel2;
 	Enemigo* enemigoNivel3;
@@ -62,6 +62,9 @@ protected:
 	bool apretandoAgacharse(const Uint8* state);
 	bool apretandoNivel2(const Uint8* state);
 	bool apretandoNivel3(const Uint8* state);
+	bool apretandoMultijugador(const Uint8* state);
+	bool apretandoplayer2izquierda(const Uint8* state);
+	bool apretandoplayer2derecha(const Uint8* state);
 
 
 };

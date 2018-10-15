@@ -17,6 +17,7 @@ juego::juego ():
 	d3 (5),
 	nivel (1),
 	cascada(0),
+	num_jugadores(1),
 	rect_origen_fondo3 {0, 0, 800, 600},
 	ventana (nullptr),
 	renderer (nullptr),
@@ -60,6 +61,8 @@ juego::juego ():
 
 	boby.obtenerTextura("//configuracion//personajes//heroe//sprite", renderer);
 	boby.setRectOrigen(0,0,480,480);
+	boby2.obtenerTextura("//configuracion//personajes//heroe//sprite", renderer);
+	boby2.setRectOrigen(0,0,480,480);
 
 	//enemigoNivel1->crearTextura("imagenes/enemigo.png",renderer);
 	enemigoNivel1 = new Enemigo(600,150,5);
@@ -139,15 +142,19 @@ void juego::manejar_eventos ()
 			else{
 				boby.hacerComoQueCamina();
 				boby.subirCoordenadaXEn(d3);
-				//fondo1.avanzarOrigen(d1);
-				//fondo2.avanzarOrigen(d2);
+				if (num_jugadores>1){				
+					fondo1.avanzarOrigen(d1);
+					fondo2.avanzarOrigen(d2);
+				}				
 				rect_origen_fondo3.x += d3;
 				if (rect_origen_fondo3.x > mundo_w-ancho) {
 					rect_origen_fondo3.x = mundo_h-ancho;
 				}
 			}
-			fondo1.avanzarOrigen(d1);
-			fondo2.avanzarOrigen(d2);
+			if (num_jugadores==1){
+				fondo1.avanzarOrigen(d1);
+				fondo2.avanzarOrigen(d2);
+			}
 		}
 		else{
 			if(boby.getPosX() < 760){
@@ -162,7 +169,7 @@ void juego::manejar_eventos ()
 		if(boby.getPosX() > 0 ){
 			boby.retroceder();
 			boby.subirCoordenadaXEn(-d3);
-			if(nivel != 2){
+			if((nivel != 2)&&(num_jugadores==1)){
 				fondo1.avanzarOrigen(-d1);
 				fondo2.avanzarOrigen(-d2);
 			}
@@ -232,6 +239,11 @@ void juego::manejar_eventos ()
 		boby.apuntarAbajo();
 	}
 
+	//activo multijugador
+	if(apretandoMultijugador(state)){
+		num_jugadores=2;
+	}
+
 
 	if(! apretandoArriba(state) && ! apretandoAbajo(state)){
 		boby.dejarDeApuntar();
@@ -287,7 +299,6 @@ void juego::actualizar ()
 		us -= periodo;
 		
 	}
-
 
 	if((nivel==1)&& (boby.llegoAlFinalDelNivel1() || cambioNivel==true))
 	{	
@@ -444,6 +455,9 @@ void juego::dibujar ()
 	if((boby.getInvincibilityFrames()/2) %2 == 0)
 		boby.dibujar(renderer);
 
+	if(num_jugadores>1)
+		boby2.dibujar(renderer);
+
 
 	for(unsigned i = 0; i < bullets.size();i++){
 		bullets[i]->dibujar(renderer);
@@ -509,6 +523,18 @@ bool juego::apretandoNivel3(const Uint8* state){
 	return state[SDL_SCANCODE_W];
 }
 
+//activa multijugador
+bool juego::apretandoMultijugador(const Uint8* state){
+	return state[SDL_SCANCODE_M];
+}
+
+bool juego::apretandoplayer2izquierda(const Uint8* state){
+	return state[SDL_SCANCODE_J];
+}
+
+bool juego::apretandoplayer2derecha(const Uint8* state){
+	return state[SDL_SCANCODE_L];
+}
 
 bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
 	if(rect1.y >= rect2.y + rect2.h)
