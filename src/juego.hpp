@@ -62,7 +62,8 @@ protected:
 	bool apretandoAgacharse(const Uint8* state);
 	bool apretandoNivel2(const Uint8* state);
 	bool apretandoNivel3(const Uint8* state);
-	bool apretandoMultijugador(const Uint8* state);
+	bool apretandoMultijugador2P(const Uint8* state);
+	bool apretandoMultijugador4P(const Uint8* state);
 	bool apretandoplayer2izquierda(const Uint8* state);
 	bool apretandoplayer2derecha(const Uint8* state);
 	bool apretandoplayer2salto(const Uint8* state);

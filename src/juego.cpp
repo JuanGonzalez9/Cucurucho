@@ -61,11 +61,11 @@ juego::juego ():
 
 	boby.obtenerTextura("//configuracion//personajes//heroe//sprite", renderer);
 	boby.setRectOrigen(0,0,480,480);
-	boby2.obtenerTextura("//configuracion//personajes//heroe//sprite", renderer);
+	boby2.obtenerTextura("//configuracion//personajes//heroe2//sprite", renderer);
 	boby2.setRectOrigen(0,0,480,480);
-	boby3.obtenerTextura("//configuracion//personajes//heroe//sprite", renderer);
+	boby3.obtenerTextura("//configuracion//personajes//heroe3//sprite", renderer);
 	boby3.setRectOrigen(0,0,480,480);
-	boby4.obtenerTextura("//configuracion//personajes//heroe//sprite", renderer);
+	boby4.obtenerTextura("//configuracion//personajes//heroe4//sprite", renderer);
 	boby4.setRectOrigen(0,0,480,480);
 
 	//enemigoNivel1->crearTextura("imagenes/enemigo.png",renderer);
@@ -113,6 +113,28 @@ juego::juego ():
 		boby3.activar();
 	if(num_jugadores>=4)
 		boby4.activar();
+
+	//inicializo la posicion de los bobys en el primer nivel
+	boby.setPosX(50);
+	boby.setPosY(200);
+	boby.setCoordenadaX(0+50);
+	boby.setCoordenadaY(200);
+
+	boby2.setPosX(150);
+	boby2.setPosY(200);
+	boby2.setCoordenadaX(0+150);
+	boby2.setCoordenadaY(200);
+
+	boby3.setPosX(250);
+	boby3.setPosY(200);
+	boby3.setCoordenadaX(0+250);
+	boby3.setCoordenadaY(200);
+
+	boby4.setPosX(350);
+	boby4.setPosY(200);
+	boby4.setCoordenadaX(0+350);
+	boby4.setCoordenadaY(200);
+
 
 }
 
@@ -416,9 +438,17 @@ void juego::manejar_eventos ()
 	}
 
 	//activo multijugador
-	if(apretandoMultijugador(state)){
+	if((num_jugadores==1)&&(apretandoMultijugador2P(state))){
 		num_jugadores=2;
 		boby2.activar();
+	}
+
+	//activo multijugador4P
+	if(apretandoMultijugador4P(state)){
+		num_jugadores=4;
+		boby2.activar();
+		boby3.activar();
+		boby4.activar();
 	}
 
 
@@ -754,15 +784,15 @@ void juego::dibujar ()
 		}
 	}
 
-	// Copio a los jugadores
-	if((boby.getInvincibilityFrames()/2) %2 == 0)
-		boby.dibujar(renderer);
-	if((num_jugadores>=2)&&((boby2.getInvincibilityFrames()/2) %2 == 0))
-		boby2.dibujar(renderer);
-	if((num_jugadores>=3)&&((boby3.getInvincibilityFrames()/2) %2 == 0))
-		boby3.dibujar(renderer);
+	// Copio a los jugadores (LO HAGO EN ORDEN INVERSO ASI SI SE SUPERPONEN APARECEN P1 arriba del 2, etc.)
 	if((num_jugadores>=4)&&((boby4.getInvincibilityFrames()/2) %2 == 0))
 		boby4.dibujar(renderer);
+	if((num_jugadores>=3)&&((boby3.getInvincibilityFrames()/2) %2 == 0))
+		boby3.dibujar(renderer);
+	if((num_jugadores>=2)&&((boby2.getInvincibilityFrames()/2) %2 == 0))
+		boby2.dibujar(renderer);
+	if((boby.getInvincibilityFrames()/2) %2 == 0)
+		boby.dibujar(renderer);
 
 
 	for(unsigned i = 0; i < bullets.size();i++){
@@ -829,23 +859,30 @@ bool juego::apretandoNivel3(const Uint8* state){
 	return state[SDL_SCANCODE_W];
 }
 
-//activa multijugador
-bool juego::apretandoMultijugador(const Uint8* state){
+////////////////////////TECLAS MULTIPLAYER/////////////////////////////
+
+//activa multijugador (2 players)
+bool juego::apretandoMultijugador2P(const Uint8* state){
+	return state[SDL_SCANCODE_N];
+}
+//activa multijugador (4 players)
+bool juego::apretandoMultijugador4P(const Uint8* state){
 	return state[SDL_SCANCODE_M];
 }
 
 bool juego::apretandoplayer2izquierda(const Uint8* state){
-	return state[SDL_SCANCODE_J];
+	return state[SDL_SCANCODE_A];
 }
-
-bool juego::apretandoplayer2derecha(const Uint8* state){
-	return state[SDL_SCANCODE_L];
-}
-
 bool juego::apretandoplayer2salto(const Uint8* state){
-	return state[SDL_SCANCODE_K];
+	return state[SDL_SCANCODE_S];
+}
+bool juego::apretandoplayer2derecha(const Uint8* state){
+	return state[SDL_SCANCODE_D];
 }
 
+
+
+////////////////////////FIN TECLAS MULTIPLAYER/////////////////////////
 
 bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
 	if(rect1.y >= rect2.y + rect2.h)

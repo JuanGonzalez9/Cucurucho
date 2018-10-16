@@ -7,6 +7,15 @@
     <heroe>
 	    <sprite>imagenes/personaje.png</sprite>
     </heroe>
+    <heroe2>
+	    <sprite>imagenes/personaje2.png</sprite>
+    </heroe2>
+    <heroe3>
+	    <sprite>imagenes/personaje3.png</sprite>
+    </heroe3>
+    <heroe4>
+	    <sprite>imagenes/personaje4.png</sprite>
+    </heroe4>
     <enemigo>
 	    <sprite>imagenes/boss.png</sprite>
     </enemigo>
