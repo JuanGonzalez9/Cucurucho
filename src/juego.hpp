@@ -65,6 +65,7 @@ protected:
 	bool apretandoMultijugador(const Uint8* state);
 	bool apretandoplayer2izquierda(const Uint8* state);
 	bool apretandoplayer2derecha(const Uint8* state);
+	bool apretandoplayer2salto(const Uint8* state);
 
 
 };

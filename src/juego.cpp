@@ -123,6 +123,8 @@ void juego::manejar_eventos ()
 	
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
+	///////////////////GRAVEDAD/////////////////////////
+
 	int bobyPosX= nivel == 2 ? boby.getPosX() : boby.obtenerCoordenadaX();
 	int bobyPosY= nivel == 2 ? boby.obtenerCoordenadaY() : boby.getPosY();
 	int velocityBoby = boby.obtenerVelocidadY();
@@ -140,8 +142,29 @@ void juego::manejar_eventos ()
 	}
 	else {
 		boby.caer();
-		
 	}
+
+	bobyPosX= nivel == 2 ? boby2.getPosX() : boby2.obtenerCoordenadaX();
+	bobyPosY= nivel == 2 ? boby2.obtenerCoordenadaY() : boby2.getPosY();
+	velocityBoby = boby2.obtenerVelocidadY();
+
+	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,34,72,nivel)){
+		boby2.aterrizar();
+	}
+	else if( velocityBoby > 1){
+		bobyPosY = plataformas.aproximarPosicionAPlataforma(bobyPosX,bobyPosY,34,72,velocityBoby,nivel);
+
+		if(bobyPosY != -1){
+			boby2.actualizarPos(bobyPosY, nivel);
+			boby2.aterrizar();
+		}
+	}
+	else {
+		boby2.caer();
+	}
+
+
+
 
 ///////////////////SCROLL HORIZONTAL///////////////////////////////////////
 
@@ -274,6 +297,16 @@ void juego::manejar_eventos ()
 				boby.saltar();
 			}
 	}
+
+	if(apretandoplayer2salto(state) && apretandoAbajo(state) && !boby2.estaSaltando()){
+		boby2.bajar();		
+	}
+	else{
+		if(apretandoplayer2salto(state)){
+				boby2.saltar();
+			}
+	}
+
 
 	if(apretandoAgacharse(state) && !(apretandoDerecha(state) || apretandoIzquierda(state))){
 		boby.agacharse();
@@ -411,6 +444,11 @@ void juego::actualizar ()
 		boby.setPosY(400);
 		boby.setCoordenadaX(0+50);
 		boby.setCoordenadaY(3600-(600-400));
+
+		boby2.setPosX(250);
+		boby2.setPosY(400);
+		boby2.setCoordenadaX(0+250);
+		boby2.setCoordenadaY(3600-(600-400));
 		
 		
 	}
@@ -436,6 +474,10 @@ void juego::actualizar ()
 		boby.setPosY(280);	
 		boby.setCoordenadaX(0+50);
 		boby.setCoordenadaY(280);
+		boby2.setPosX(250);
+		boby2.setPosY(280);
+		boby2.setCoordenadaX(0+250);
+		boby2.setCoordenadaY(280);
 		fondo1.avanzarOrigen(50);
 		fondo2.avanzarOrigen(50);
 		
@@ -468,18 +510,23 @@ void juego::actualizar ()
 
 	//veo si el jugador se cayo
 	if(boby.getPosY()>600){
-
 		if (nivel ==2){
 			boby.setCoordenadaY(boby.obtenerCoordenadaY()+40 - boby.getPosY());
 		}
-
 		boby.setPosY(40);		
 		boby.perderVida();
-		
+	}
+	if(boby2.getPosY()>600){
+		if (nivel ==2){
+			boby2.setCoordenadaY(boby2.obtenerCoordenadaY()+40 - boby2.getPosY());
+		}
+		boby2.setPosY(40);		
+		boby2.perderVida();
 	}
 
 	//refresco el tiempo de invincibilidad
 	boby.refreshIFrames();
+	boby2.refreshIFrames();
 
 	//actualiza el shootTimer del jugador (para que no tire 500 tiros por segundo)
 	boby.refreshBullets();
@@ -547,11 +594,11 @@ void juego::dibujar ()
 	// Copio a los jugadores
 	if((boby.getInvincibilityFrames()/2) %2 == 0)
 		boby.dibujar(renderer);
-	if(num_jugadores>=2)
+	if((num_jugadores>=2)&&((boby2.getInvincibilityFrames()/2) %2 == 0))
 		boby2.dibujar(renderer);
-	if(num_jugadores>=3)
+	if((num_jugadores>=3)&&((boby3.getInvincibilityFrames()/2) %2 == 0))
 		boby3.dibujar(renderer);
-	if(num_jugadores>=4)
+	if((num_jugadores>=4)&&((boby4.getInvincibilityFrames()/2) %2 == 0))
 		boby4.dibujar(renderer);
 
 
@@ -631,6 +678,11 @@ bool juego::apretandoplayer2izquierda(const Uint8* state){
 bool juego::apretandoplayer2derecha(const Uint8* state){
 	return state[SDL_SCANCODE_L];
 }
+
+bool juego::apretandoplayer2salto(const Uint8* state){
+	return state[SDL_SCANCODE_K];
+}
+
 
 bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
 	if(rect1.y >= rect2.y + rect2.h)
