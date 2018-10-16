@@ -46,7 +46,7 @@ protected:
 
 	//probando
 	EntidadDibujable fondo1, fondo2;
-	Personaje boby, boby2;
+	Personaje boby, boby2, boby3, boby4;
 	Enemigo* enemigoNivel1;
 	Enemigo* enemigoNivel2;
 	Enemigo* enemigoNivel3;

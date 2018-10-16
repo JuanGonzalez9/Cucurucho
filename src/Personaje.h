@@ -51,8 +51,11 @@ public:
 	bool llegoAlFinalDelNivel1();
 	bool llegoAlFinalDelNivel2();
 	bool llegoAlFinalDelNivel3();
+	bool esActivo();
 
 	//----METODOS
+	void activar();
+	void desactivar();
 	void saltar();
 	void avanzar();
 	void retroceder();
@@ -80,6 +83,7 @@ public:
 	int obtenerVelocidadX();
 	void actualizarPos(int,int  nivel);
 	void decrementarPosY(int y);
+	void decrementarPosX(int x);
 	void bajar();
 	void flotar();
 	void hacerComoQueCamina();
@@ -118,6 +122,7 @@ private:
 	//el estado de saltando o no se guarda en este booleano para no mezclar
 	bool saltando;
 	bool disparando;
+	bool activo;
 	bool mirandoALaDerecha;
 };
 

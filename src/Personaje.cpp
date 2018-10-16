@@ -15,6 +15,7 @@ Personaje::Personaje() {
 	maximaVelocidadX = 5;
 	maximaVelocidadY = 22;
 	gravedad = 1;
+	activo=false;
 
 
 	posX = 50;
@@ -108,6 +109,7 @@ void Personaje::actualizar(){
 	rectDestino.x = posX;
 	rectDestino.y = posY;
 
+
 	if(estado == CuerpoATierra && !saltando){
 		rectDestino.y += 40;
 		rectDestino.w = 72;
@@ -130,9 +132,26 @@ bool Personaje::estaMirandoALaDerecha(){
 	return mirandoALaDerecha;
 }
 
+void Personaje::activar(){
+	activo=true;
+}
+
+
+void Personaje::desactivar(){
+	activo=false;
+}
+
+bool Personaje::esActivo(){
+	return activo;
+}
+
 void Personaje::decrementarPosY(int y){
 	posY -=y;
 	coordenadaY -=y;
+}
+
+void Personaje::decrementarPosX(int x){
+	posX -=x;
 }
 
 bool Personaje::estaSaltando(){

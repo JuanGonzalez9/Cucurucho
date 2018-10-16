@@ -97,9 +97,18 @@ juego::juego ():
 	
 
 	loginfo("Se construyo juego");
-	
 
+	fondo1.avanzarOrigen(50);
+	fondo2.avanzarOrigen(50);
 
+	//activo los jugadores al principio
+	boby.activar();
+	if(num_jugadores>=2)
+		boby2.activar();
+	if(num_jugadores>=3)
+		boby3.activar();
+	if(num_jugadores>=4)
+		boby4.activar();
 
 }
 
@@ -133,15 +142,231 @@ void juego::manejar_eventos ()
 		boby.caer();
 		
 	}
-	if(apretandoDerecha(state)){
+
+///////////////////SCROLL HORIZONTAL///////////////////////////////////////
+
+	//lo siguiente se encarga de chequear si se mueve el fondo y hace lo que corresponde (en nivel no 2)
+	//el fondo solo se mueve si todos los jugadores activos tienen posX mayor a 0,
+	//y si alguno de ellos esta por delante de la mitad  y tiene la tecla de movimiento apretada
+	bool scrolleando=true;
+	bool bobyPuede=false;
+	bool boby2Puede=false;
+	bool boby3Puede=false;
+	bool boby4Puede=false;
+	//el nivel no scrollea si el nivel es 2 o si la posicion de uno de los jugadores activos es 0.
+	if((boby.esActivo()&&(boby.getPosX()<0))||(boby2.esActivo()&&(boby2.getPosX()<0))||(boby3.esActivo()&&(boby3.getPosX()<0))||(boby4.esActivo()&&(boby4.getPosX()<0))||(nivel==2)){
+		scrolleando=false;
+	}
+
+	//si boby es activo, esta apretando derecha, y sobrepasa el ancho, boby puede causar un scroll.
+	if((boby.esActivo())&&(apretandoDerecha(state))&&(boby.getPosX() > (ancho / 2)))
+		bobyPuede=true;
+
+	//NOTA: por ahora uso esta tecla para los otros 3 pero hay que cambiarla al input correspondiente
+	if((boby2.esActivo())&&(apretandoplayer2derecha(state))&&(boby2.getPosX() > (ancho / 2)))
+		boby2Puede=true;
+
+	if((boby3.esActivo())&&(apretandoplayer2derecha(state))&&(boby3.getPosX() > (ancho / 2)))
+		boby3Puede=true;
+
+	if((boby4.esActivo())&&(apretandoplayer2derecha(state))&&(boby4.getPosX() > (ancho / 2)))
+		boby4Puede=true;
+
+	//SI NINGUNO de los 4 puede scrollear, no hay scrolleo.
+	if((!bobyPuede)&&(!boby2Puede)&&(!boby3Puede)&&(!boby4Puede))
+		scrolleando=false;
+
+	//Ahora ya tengo la condicion.
+	if(scrolleando){
+		//scrollea el fondo horizontalmente.
+		if (num_jugadores>1){				
+			fondo1.avanzarOrigen(d1);
+			fondo2.avanzarOrigen(d2);
+		}				
+		rect_origen_fondo3.x += d3;
+		if (rect_origen_fondo3.x > mundo_w-ancho) {
+			rect_origen_fondo3.x = mundo_h-ancho;
+		}
+		//si un jugador tiene su tecla derecha apretada, hace que se mueve en su lugar hacia adelante
+		//el resto retrocede respecto la pantalla (se mantiene su animacion) 
+		if (apretandoDerecha(state)){
+			boby.hacerComoQueCamina();
+			boby.subirCoordenadaXEn(d3);
+		}else{
+			boby.decrementarPosX(d3);
+		}
+		if (apretandoplayer2derecha(state)){
+			boby2.hacerComoQueCamina();
+			boby2.subirCoordenadaXEn(d3);
+		}else{
+			boby2.decrementarPosX(d3);
+		}
+		//(para 3 y 4 cambiar el input que corresponde)
+		if (apretandoplayer2derecha(state)){
+			boby3.hacerComoQueCamina();
+			boby3.subirCoordenadaXEn(d3);
+		}else{
+			boby3.decrementarPosX(d3);
+		}
+		if (apretandoplayer2derecha(state)){
+			boby4.hacerComoQueCamina();
+			boby4.subirCoordenadaXEn(d3);
+		}else{
+			boby4.decrementarPosX(d3);
+		}
+	}else{
+		//esto es lo que pasa si el fondo no scrollea.
+		if ((apretandoDerecha(state))&&(boby.getPosX() < 760)){
+			//SOLO PARA PLAYER1 (mueve los fondos en nivel 1 y 3)
+			if ((num_jugadores==1)&&(nivel!=2)){
+				fondo1.avanzarOrigen(d1);
+				fondo2.avanzarOrigen(d2);
+			}
+			boby.avanzar();
+			boby.subirCoordenadaXEn(d3);
+		}
+		if ((apretandoplayer2derecha(state))&&(boby2.getPosX() < 760)){
+			boby2.avanzar();
+			boby2.subirCoordenadaXEn(d3);
+		}
+		if ((apretandoplayer2derecha(state))&&(boby3.getPosX() < 760)){
+			boby3.avanzar();
+			boby3.subirCoordenadaXEn(d3);
+		}
+		if ((apretandoplayer2derecha(state))&&(boby4.getPosX() < 760)){
+			boby4.avanzar();
+			boby4.subirCoordenadaXEn(d3);
+		}
+	}
+
+/*	if((boby.getPosX()>0)&&(boby2.getPosX()>0)&&(boby3.getPosX()>0)&&(boby4.getPosX()>0)&&(nivel!=2)){
+		if(((apretandoDerecha(state))&&(boby.getPosX() > (ancho / 2)))||((apretandoplayer2derecha(state))&&(boby2.getPosX() > (ancho / 2)))){
+			//NOTA EN EL IF DE ARRIBA HAY QUE REPETIR PARA LOS OTROS DOS JUGADORES
+			//el fondo puede scrollear			
+			if (num_jugadores>1){				
+				fondo1.avanzarOrigen(d1);
+				fondo2.avanzarOrigen(d2);
+			}				
+			rect_origen_fondo3.x += d3;
+			if (rect_origen_fondo3.x > mundo_w-ancho) {
+				rect_origen_fondo3.x = mundo_h-ancho;
+			}
+			//para cada jugador que tiene la tecla apretada se mueve en su lugar
+			//el resto retrocede si esta quieto o hace cualquier otra cosa
+			if (apretandoDerecha(state)){
+				boby.hacerComoQueCamina();
+				boby.subirCoordenadaXEn(d3);
+			}else{
+				boby.decrementarPosX(d3);
+			}
+			if (apretandoplayer2derecha(state)){
+				boby2.hacerComoQueCamina();
+				boby2.subirCoordenadaXEn(d3);
+			}else{
+				boby2.decrementarPosX(d3);
+			}
+			//cambiar el input que corresponde
+			if (apretandoplayer2derecha(state)){
+				boby3.hacerComoQueCamina();
+				boby3.subirCoordenadaXEn(d3);
+			}else{
+				boby3.decrementarPosX(d3);
+			}
+			if (apretandoplayer2derecha(state)){
+				boby4.hacerComoQueCamina();
+				boby4.subirCoordenadaXEn(d3);
+			}else{
+				boby4.decrementarPosX(d3);
+			}
+		}else{
+			
+			
+	}else{
+		//esto si el fondo no se mueve.
+		if ((apretandoDerecha(state))&&(boby.getPosX() < 760)){
+			//SOLO PARA PLAYER1
+			if (num_jugadores==1){
+				fondo1.avanzarOrigen(d1);
+				fondo2.avanzarOrigen(d2);
+			}
+			boby.avanzar();
+			boby.subirCoordenadaXEn(d3);
+		}
+		if ((apretandoplayer2derecha(state))&&(boby2.getPosX() < 760)){
+			boby2.avanzar();
+			boby2.subirCoordenadaXEn(d3);
+		}
+		if ((apretandoplayer2derecha(state))&&(boby3.getPosX() < 760)){
+			boby3.avanzar();
+			boby3.subirCoordenadaXEn(d3);
+		}
+		if ((apretandoplayer2derecha(state))&&(boby4.getPosX() < 760)){
+			boby4.avanzar();
+			boby4.subirCoordenadaXEn(d3);
+		}
+	}
+
+		//esto si el fondo no se mueve.
+			if ((apretandoDerecha(state))&&(boby.getPosX() < 760)){
+				//SOLO PARA PLAYER1
+				if (num_jugadores==1){
+					fondo1.avanzarOrigen(d1);
+					fondo2.avanzarOrigen(d2);
+				}
+				boby.avanzar();
+				boby.subirCoordenadaXEn(d3);
+			}
+			if ((apretandoplayer2derecha(state))&&(boby2.getPosX() < 760)){
+				boby2.avanzar();
+				boby2.subirCoordenadaXEn(d3);
+			}
+			if ((apretandoplayer2derecha(state))&&(boby3.getPosX() < 760)){
+				boby3.avanzar();
+				boby3.subirCoordenadaXEn(d3);
+			}
+			if ((apretandoplayer2derecha(state))&&(boby4.getPosX() < 760)){
+				boby4.avanzar();
+				boby4.subirCoordenadaXEn(d3);
+			}
+		}
+*/
+
+	//ahora el movimiento hacia la izquierda
+	if((apretandoIzquierda(state))&&(boby.getPosX() > 0 )){
+		boby.retroceder();
+		boby.subirCoordenadaXEn(-d3);
+		//solo para player 1- scrolleo el fondo si hay un jugador		
+		if((nivel != 2)&&(num_jugadores==1)){
+			fondo1.avanzarOrigen(-d1);
+			fondo2.avanzarOrigen(-d2);
+		}
+	}
+	//muevo los otros jugadores (usar el input apropiado)
+	if((apretandoplayer2izquierda(state))&&(boby2.getPosX() > 0 )){
+		boby2.retroceder();
+		boby2.subirCoordenadaXEn(-d3);		
+	}
+	if((apretandoplayer2izquierda(state))&&(boby3.getPosX() > 0 )){
+		boby3.retroceder();
+		boby3.subirCoordenadaXEn(-d3);		
+	}
+	if((apretandoplayer2izquierda(state))&&(boby4.getPosX() > 0 )){
+		boby4.retroceder();
+		boby4.subirCoordenadaXEn(-d3);		
+	}	
+
+/*
+if(apretandoDerecha(state)){
 		if(nivel!=2){	
 			if(boby.getPosX() <= (ancho / 2)){
 				boby.avanzar();
 				boby.subirCoordenadaXEn(d3);
 			}
-			else{
+			else if((num_jugadores==1)||(boby2.getPosX()>0)){
+								
 				boby.hacerComoQueCamina();
 				boby.subirCoordenadaXEn(d3);
+				boby2.decrementarPosX(d3);
 				if (num_jugadores>1){				
 					fondo1.avanzarOrigen(d1);
 					fondo2.avanzarOrigen(d2);
@@ -150,6 +375,10 @@ void juego::manejar_eventos ()
 				if (rect_origen_fondo3.x > mundo_w-ancho) {
 					rect_origen_fondo3.x = mundo_h-ancho;
 				}
+			}
+			else if(boby.getPosX() < 760){
+				boby.avanzar();
+				boby.subirCoordenadaXEn(d3);
 			}
 			if (num_jugadores==1){
 				fondo1.avanzarOrigen(d1);
@@ -176,6 +405,23 @@ void juego::manejar_eventos ()
 		}
 		
 	}
+
+	//muevo player2
+	if(apretandoplayer2izquierda(state)){
+		if(boby2.getPosX() > 0 ){
+			boby2.retroceder();
+			boby2.subirCoordenadaXEn(-d3);
+		}
+		
+	}
+*/
+
+
+
+
+
+///////////////////FIN DE SCROLL HORIZONTAL, ALELUYA///////////////////////////////////
+
 
 	if(apretandoSalto(state) && apretandoAbajo(state) && !boby.estaSaltando()){
 		boby.bajar();		
@@ -242,6 +488,7 @@ void juego::manejar_eventos ()
 	//activo multijugador
 	if(apretandoMultijugador(state)){
 		num_jugadores=2;
+		boby2.activar();
 	}
 
 
@@ -295,6 +542,7 @@ void juego::actualizar ()
 	}
 
 	boby.actualizar();
+	boby2.actualizar();
 	while (us >= periodo*0.9 ) {
 		us -= periodo;
 		
@@ -345,6 +593,8 @@ void juego::actualizar ()
 		boby.setPosY(280);	
 		boby.setCoordenadaX(0+50);
 		boby.setCoordenadaY(280);
+		fondo1.avanzarOrigen(50);
+		fondo2.avanzarOrigen(50);
 		
 		
 	}
@@ -451,12 +701,15 @@ void juego::dibujar ()
 		}
 	}
 
-	// Copio a bob
+	// Copio a los jugadores
 	if((boby.getInvincibilityFrames()/2) %2 == 0)
 		boby.dibujar(renderer);
-
-	if(num_jugadores>1)
+	if(num_jugadores>=2)
 		boby2.dibujar(renderer);
+	if(num_jugadores>=3)
+		boby3.dibujar(renderer);
+	if(num_jugadores>=4)
+		boby4.dibujar(renderer);
 
 
 	for(unsigned i = 0; i < bullets.size();i++){
