@@ -63,6 +63,10 @@ juego::juego ():
 	boby.setRectOrigen(0,0,480,480);
 	boby2.obtenerTextura("//configuracion//personajes//heroe//sprite", renderer);
 	boby2.setRectOrigen(0,0,480,480);
+	boby3.obtenerTextura("//configuracion//personajes//heroe//sprite", renderer);
+	boby3.setRectOrigen(0,0,480,480);
+	boby4.obtenerTextura("//configuracion//personajes//heroe//sprite", renderer);
+	boby4.setRectOrigen(0,0,480,480);
 
 	//enemigoNivel1->crearTextura("imagenes/enemigo.png",renderer);
 	enemigoNivel1 = new Enemigo(600,150,5);
@@ -161,6 +165,43 @@ void juego::manejar_eventos ()
 	}
 	else {
 		boby2.caer();
+	}
+
+	bobyPosX= nivel == 2 ? boby3.getPosX() : boby3.obtenerCoordenadaX();
+	bobyPosY= nivel == 2 ? boby3.obtenerCoordenadaY() : boby3.getPosY();
+	velocityBoby = boby3.obtenerVelocidadY();
+
+	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,34,72,nivel)){
+		boby3.aterrizar();
+	}
+	else if( velocityBoby > 1){
+		bobyPosY = plataformas.aproximarPosicionAPlataforma(bobyPosX,bobyPosY,34,72,velocityBoby,nivel);
+
+		if(bobyPosY != -1){
+			boby3.actualizarPos(bobyPosY, nivel);
+			boby3.aterrizar();
+		}
+	}
+	else {
+		boby3.caer();
+	}
+	bobyPosX= nivel == 2 ? boby4.getPosX() : boby4.obtenerCoordenadaX();
+	bobyPosY= nivel == 2 ? boby4.obtenerCoordenadaY() : boby4.getPosY();
+	velocityBoby = boby4.obtenerVelocidadY();
+
+	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,34,72,nivel)){
+		boby4.aterrizar();
+	}
+	else if( velocityBoby > 1){
+		bobyPosY = plataformas.aproximarPosicionAPlataforma(bobyPosX,bobyPosY,34,72,velocityBoby,nivel);
+
+		if(bobyPosY != -1){
+			boby4.actualizarPos(bobyPosY, nivel);
+			boby4.aterrizar();
+		}
+	}
+	else {
+		boby4.caer();
 	}
 
 
@@ -293,19 +334,32 @@ void juego::manejar_eventos ()
 		boby.bajar();		
 	}
 	else{
-		if(apretandoSalto(state)){
+		if(apretandoSalto(state))
 				boby.saltar();
-			}
 	}
 
 	if(apretandoplayer2salto(state) && apretandoAbajo(state) && !boby2.estaSaltando()){
 		boby2.bajar();		
 	}
 	else{
-		if(apretandoplayer2salto(state)){
+		if(apretandoplayer2salto(state))
 				boby2.saltar();
-			}
 	}
+	if(apretandoplayer2salto(state) && apretandoAbajo(state) && !boby3.estaSaltando()){
+		boby3.bajar();		
+	}
+	else{
+		if(apretandoplayer2salto(state))
+				boby3.saltar();
+	}
+	if(apretandoplayer2salto(state) && apretandoAbajo(state) && !boby4.estaSaltando()){
+		boby4.bajar();		
+	}
+	else{
+		if(apretandoplayer2salto(state))
+				boby4.saltar();
+	}
+
 
 
 	if(apretandoAgacharse(state) && !(apretandoDerecha(state) || apretandoIzquierda(state))){
@@ -391,20 +445,88 @@ void juego::manejar_eventos ()
 void juego::actualizar ()
 {
 	loginfo("Se comienza actualizar juego");
-	//scroll vertical
-	if((boby.getPosY() <=(200))&&(nivel==2)&&(boby.obtenerVelocidadY()<0)){
-		if (rect_origen_fondo3.y + boby.obtenerVelocidadY() > 0) {
-			boby.subirCoordenadaYEn(boby.obtenerVelocidadY());
-			/**/boby.decrementarPosY(boby.obtenerVelocidadY());		
-			//por ahora todo con la velocidad Y de boby, no hay parallax
-			fondo1.avanzarOrigenY(boby.obtenerVelocidadY()/3);
-			
-			fondo2.avanzarOrigenY(boby.obtenerVelocidadY()/2);
-			rect_origen_fondo3.y += boby.obtenerVelocidadY();
-			
-		
-		}
+
+////////////////////////////SCROLL VERTICAL/////////////////////////////////
+
+	//parecido al scroll horizontal. solo se puede scrollear SI:
+	//1) es el nivel 2, y ninguno de los jugadores activos esta en el borde inferior.
+	//2) para al menos uno de los jugadores activos, supera los 200 pixeles, se esta moviendo para arriba y no toca el techo.
+	//notese que tambien debo obtener la maxima velocidad Y para determinar por cuanto debo hacer el scroll.
+	bool scrolleando=true;
+	bool bobyPuede=false;
+	bool boby2Puede=false;
+	bool boby3Puede=false;
+	bool boby4Puede=false;
+	int maxVel=0;
+
+	//vemos si pasa 1)
+	if((boby.esActivo()&&(boby.getPosY()>580))||(boby2.esActivo()&&(boby2.getPosY()>580))||(boby3.esActivo()&&(boby3.getPosY()>580))||(boby4.esActivo()&&(boby4.getPosY()>580))||(nivel!=2)){
+		scrolleando=false;
 	}
+
+	//si boby es activo, supera los 200px, se mueve para arriba y no toca el techo, boby puede causar un scroll.
+	if((boby.esActivo())&&(boby.getPosY() <=(200))&&(boby.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby.obtenerVelocidadY() > 0)){
+		bobyPuede=true;
+		if(boby.obtenerVelocidadY()<maxVel)
+			maxVel=boby.obtenerVelocidadY();
+	}
+	if((boby2.esActivo())&&(boby2.getPosY() <=(200))&&(boby2.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby2.obtenerVelocidadY() > 0)){
+		boby2Puede=true;
+		if(boby2.obtenerVelocidadY()<maxVel)
+			maxVel=boby2.obtenerVelocidadY();
+	}
+	if((boby3.esActivo())&&(boby3.getPosY() <=(200))&&(boby3.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby3.obtenerVelocidadY() > 0)){
+		boby3Puede=true;
+		if(boby3.obtenerVelocidadY()<maxVel)
+			maxVel=boby3.obtenerVelocidadY();
+	}
+	if((boby4.esActivo())&&(boby4.getPosY() <=(200))&&(boby4.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby4.obtenerVelocidadY() > 0)){
+		boby4Puede=true;
+		if(boby4.obtenerVelocidadY()<maxVel)
+			maxVel=boby4.obtenerVelocidadY();
+	}
+
+	//SI NINGUNO de los 4 puede scrollear, no hay scrolleo.
+	if((!bobyPuede)&&(!boby2Puede)&&(!boby3Puede)&&(!boby4Puede))
+		scrolleando=false;
+
+	//Ya determine si puedo scrollear, ¡Y! la velocidad maxima.
+
+	if(scrolleando){
+		//scrolleo verticalmente.
+		boby.decrementarPosY(maxVel);
+		boby2.decrementarPosY(maxVel);
+		boby3.decrementarPosY(maxVel);
+		boby4.decrementarPosY(maxVel);
+
+		fondo1.avanzarOrigenY(maxVel/3);
+		fondo2.avanzarOrigenY(maxVel/2);
+		rect_origen_fondo3.y += maxVel;
+	}
+	else{
+		//si no se puede scrollear, evito que los jugadores que pueden moverse por arriba del borde se muevan.
+		if((boby.esActivo())&&(boby.getPosY()<=(0))&&(boby.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby.obtenerVelocidadY() > 0)){
+			boby.decrementarPosY(boby.obtenerVelocidadY());
+			boby.subirCoordenadaYEn(-boby.obtenerVelocidadY());
+			}
+		if((boby2.esActivo())&&(boby2.getPosY()<=(0))&&(boby2.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby2.obtenerVelocidadY() > 0)){
+			boby2.decrementarPosY(boby2.obtenerVelocidadY());
+			boby2.subirCoordenadaYEn(-boby2.obtenerVelocidadY());
+			}
+		if((boby3.esActivo())&&(boby3.getPosY()<=(0))&&(boby3.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby3.obtenerVelocidadY() > 0)){
+			boby3.decrementarPosY(boby3.obtenerVelocidadY());
+			boby3.subirCoordenadaYEn(-boby3.obtenerVelocidadY());
+			}
+		if((boby4.esActivo())&&(boby4.getPosY()<=(0))&&(boby4.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby4.obtenerVelocidadY() > 0)){
+			boby4.decrementarPosY(boby4.obtenerVelocidadY());
+			boby4.subirCoordenadaYEn(-boby4.obtenerVelocidadY());
+			}
+	}
+
+/////////////////////////FIN DE SCROLL VERTICAL/////////////////////////////
+
+
+
 
 	//efecto cascada
 	if(nivel==2)
@@ -419,6 +541,9 @@ void juego::actualizar ()
 
 	boby.actualizar();
 	boby2.actualizar();
+	boby3.actualizar();
+	boby4.actualizar();
+
 	while (us >= periodo*0.9 ) {
 		us -= periodo;
 		
@@ -449,7 +574,16 @@ void juego::actualizar ()
 		boby2.setPosY(400);
 		boby2.setCoordenadaX(0+250);
 		boby2.setCoordenadaY(3600-(600-400));
+
+		boby3.setPosX(450);
+		boby3.setPosY(400);
+		boby3.setCoordenadaX(0+450);
+		boby3.setCoordenadaY(3600-(600-400));
 		
+		boby4.setPosX(650);
+		boby4.setPosY(400);
+		boby4.setCoordenadaX(0+650);
+		boby4.setCoordenadaY(3600-(600-400));
 		
 	}
 
@@ -470,14 +604,27 @@ void juego::actualizar ()
 		fondo1.setRectOrigen(0,0,800,600);
 		fondo2.setRectOrigen(0,0,800,600);
 		rect_origen_fondo3={0,0,800,600};
+
 		boby.setPosX(50);
 		boby.setPosY(280);	
 		boby.setCoordenadaX(0+50);
 		boby.setCoordenadaY(280);
-		boby2.setPosX(250);
+
+		boby2.setPosX(150);
 		boby2.setPosY(280);
-		boby2.setCoordenadaX(0+250);
+		boby2.setCoordenadaX(0+150);
 		boby2.setCoordenadaY(280);
+
+		boby3.setPosX(250);
+		boby3.setPosY(280);
+		boby3.setCoordenadaX(0+250);
+		boby3.setCoordenadaY(280);
+
+		boby4.setPosX(350);
+		boby4.setPosY(280);
+		boby4.setCoordenadaX(0+350);
+		boby4.setCoordenadaY(280);
+
 		fondo1.avanzarOrigen(50);
 		fondo2.avanzarOrigen(50);
 		
@@ -493,7 +640,7 @@ void juego::actualizar ()
 		bullets[i]->move();
 	}
 
-	//borro las bals que exceden su rango para que no sigan hasta el infinito
+	//borro las balas que exceden su rango para que no sigan hasta el infinito
 	for(unsigned i = 0; i < bullets.size(); i++){
 		if(bullets[i]->getDuracion() == 0){
 			bullets.erase(bullets.begin() + i);
@@ -523,10 +670,26 @@ void juego::actualizar ()
 		boby2.setPosY(40);		
 		boby2.perderVida();
 	}
+	if(boby3.getPosY()>600){
+		if (nivel ==2){
+			boby3.setCoordenadaY(boby3.obtenerCoordenadaY()+40 - boby3.getPosY());
+		}
+		boby3.setPosY(40);		
+		boby3.perderVida();
+	}
+	if(boby4.getPosY()>600){
+		if (nivel ==2){
+			boby4.setCoordenadaY(boby4.obtenerCoordenadaY()+40 - boby4.getPosY());
+		}
+		boby4.setPosY(40);		
+		boby4.perderVida();
+	}
 
 	//refresco el tiempo de invincibilidad
 	boby.refreshIFrames();
 	boby2.refreshIFrames();
+	boby3.refreshIFrames();
+	boby4.refreshIFrames();
 
 	//actualiza el shootTimer del jugador (para que no tire 500 tiros por segundo)
 	boby.refreshBullets();

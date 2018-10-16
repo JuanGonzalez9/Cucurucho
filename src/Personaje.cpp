@@ -147,7 +147,6 @@ bool Personaje::esActivo(){
 
 void Personaje::decrementarPosY(int y){
 	posY -=y;
-	coordenadaY -=y;
 }
 
 void Personaje::decrementarPosX(int x){
