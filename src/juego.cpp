@@ -102,6 +102,7 @@ juego::juego ():
 
 	loginfo("Se construyo juego");
 
+	//evita que se estire el fondo si al principio voy para atras
 	fondo1.avanzarOrigen(50);
 	fondo2.avanzarOrigen(50);
 
@@ -239,12 +240,13 @@ void juego::manejar_eventos ()
 	bool boby2Puede=false;
 	bool boby3Puede=false;
 	bool boby4Puede=false;
-	//el nivel no scrollea si el nivel es 2 o si la posicion de uno de los jugadores activos es 0.
-	if((boby.esActivo()&&(boby.getPosX()<0))||(boby2.esActivo()&&(boby2.getPosX()<0))||(boby3.esActivo()&&(boby3.getPosX()<0))||(boby4.esActivo()&&(boby4.getPosX()<0))||(nivel==2)){
+	//el nivel no scrollea si el nivel es 2 o si la posicion de uno de los jugadores activos NO GRISADOS es 0.
+	if((!boby.esGrisado()&&boby.esActivo()&&(boby.getPosX()<0))||(!boby2.esGrisado()&&boby2.esActivo()&&(boby2.getPosX()<0))||(!boby3.esGrisado()&&boby3.esActivo()&&(boby3.getPosX()<0))||(!boby4.esGrisado()&&boby4.esActivo()&&(boby4.getPosX()<0))||(nivel==2)){
 		scrolleando=false;
 	}
 
 	//si boby es activo, esta apretando derecha, y sobrepasa el ancho, boby puede causar un scroll.
+	//Nota: si esta grisado o no es irrelevante aca porque tecnicamente no se pueden apretar las teclas (esta desconectado).
 	if((boby.esActivo())&&(apretandoDerecha(state))&&(boby.getPosX() > (ancho / 2)))
 		bobyPuede=true;
 
@@ -265,10 +267,8 @@ void juego::manejar_eventos ()
 	//Ahora ya tengo la condicion.
 	if(scrolleando){
 		//scrollea el fondo horizontalmente.
-		if (num_jugadores>1){				
-			fondo1.avanzarOrigen(d1);
-			fondo2.avanzarOrigen(d2);
-		}				
+		fondo1.avanzarOrigen(d1);
+		fondo2.avanzarOrigen(d2);			
 		rect_origen_fondo3.x += d3;
 		if (rect_origen_fondo3.x > mundo_w-ancho) {
 			rect_origen_fondo3.x = mundo_h-ancho;
@@ -279,27 +279,45 @@ void juego::manejar_eventos ()
 			boby.hacerComoQueCamina();
 			boby.subirCoordenadaXEn(d3);
 		}else{
-			boby.decrementarPosX(d3);
+			//si un personaje esta grisado muevo su coordenada para adelante y dejo la posicion como esta
+			if (boby.esGrisado()){
+				boby.subirCoordenadaXEn(d3);
+			}else {
+				boby.decrementarPosX(d3);
+			}
 		}
 		if (apretandoplayer2derecha(state)){
 			boby2.hacerComoQueCamina();
 			boby2.subirCoordenadaXEn(d3);
 		}else{
-			boby2.decrementarPosX(d3);
+			if (boby2.esGrisado()){
+				boby2.subirCoordenadaXEn(d3);
+			}else {
+				boby2.decrementarPosX(d3);
+			}
 		}
 		//(para 3 y 4 cambiar el input que corresponde)
 		if (apretandoplayer2derecha(state)){
 			boby3.hacerComoQueCamina();
 			boby3.subirCoordenadaXEn(d3);
 		}else{
-			boby3.decrementarPosX(d3);
+			if (boby3.esGrisado()){
+				boby3.subirCoordenadaXEn(d3);
+			}else {
+				boby3.decrementarPosX(d3);
+			}
 		}
 		if (apretandoplayer2derecha(state)){
 			boby4.hacerComoQueCamina();
 			boby4.subirCoordenadaXEn(d3);
 		}else{
-			boby4.decrementarPosX(d3);
+			if (boby4.esGrisado()){
+				boby4.subirCoordenadaXEn(d3);
+			}else {
+				boby4.decrementarPosX(d3);
+			}
 		}
+
 	}else{
 		//esto es lo que pasa si el fondo no scrollea.
 		if ((apretandoDerecha(state))&&(boby.getPosX() < 760)){
@@ -449,6 +467,10 @@ void juego::manejar_eventos ()
 		boby2.activar();
 		boby3.activar();
 		boby4.activar();
+	}
+
+	if(apretandoGrisP2(state)){
+		boby2.grisar();
 	}
 
 
@@ -878,6 +900,9 @@ bool juego::apretandoplayer2salto(const Uint8* state){
 }
 bool juego::apretandoplayer2derecha(const Uint8* state){
 	return state[SDL_SCANCODE_D];
+}
+bool juego::apretandoGrisP2(const Uint8* state){
+	return state[SDL_SCANCODE_P];
 }
 
 

@@ -52,10 +52,13 @@ public:
 	bool llegoAlFinalDelNivel2();
 	bool llegoAlFinalDelNivel3();
 	bool esActivo();
+	bool esGrisado();
 
 	//----METODOS
 	void activar();
 	void desactivar();
+	void grisar();
+	void desgrisar();
 	void saltar();
 	void avanzar();
 	void retroceder();
@@ -123,6 +126,7 @@ private:
 	bool saltando;
 	bool disparando;
 	bool activo;
+	bool grisado;
 	bool mirandoALaDerecha;
 };
 

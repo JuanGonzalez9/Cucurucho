@@ -16,7 +16,7 @@ Personaje::Personaje() {
 	maximaVelocidadY = 22;
 	gravedad = 1;
 	activo=false;
-
+	grisado=false;
 
 	posX = 50;
 	posY = 280;
@@ -135,22 +135,33 @@ bool Personaje::estaMirandoALaDerecha(){
 void Personaje::activar(){
 	activo=true;
 }
-
-
 void Personaje::desactivar(){
 	activo=false;
 }
-
 bool Personaje::esActivo(){
 	return activo;
 }
 
+void Personaje::grisar(){
+	grisado=true;
+}
+void Personaje::desgrisar(){
+	grisado=false;
+}
+bool Personaje::esGrisado(){
+	return grisado;
+}
+
 void Personaje::decrementarPosY(int y){
-	posY -=y;
+	if (!grisado){
+		posY -=y;
+	}
 }
 
 void Personaje::decrementarPosX(int x){
-	posX -=x;
+	if (!grisado){
+		posX -=x;
+	}
 }
 
 bool Personaje::estaSaltando(){
