@@ -71,6 +71,7 @@ protected:
 	bool apretandoplayer2derecha(const Uint8* state);
 	bool apretandoplayer2salto(const Uint8* state);
 	bool apretandoGrisP2(const Uint8* state);
+	bool apretandoDesGrisP2(const Uint8* state);
 
 
 };

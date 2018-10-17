@@ -123,7 +123,9 @@ void Personaje::actualizar(){
 	if(estado != HaciendoComoQueCamina && estado != CuerpoATierra && velocidadX == 0 && !saltando)
 		estado = Quieto;
 	if(estado == HaciendoComoQueCamina) estado = Caminando;
-	if(saltando) velocidadY += gravedad;
+	
+	if(!grisado&&saltando) velocidadY += gravedad;
+
 	velocidadX = 0;
 	loginfo("Se termino de actualizar personaje");
 }
@@ -143,6 +145,8 @@ bool Personaje::esActivo(){
 }
 
 void Personaje::grisar(){
+	velocidadY = 0;
+	velocidadX = 0;
 	grisado=true;
 }
 void Personaje::desgrisar(){
@@ -235,25 +239,24 @@ void Personaje::dejarDeApuntar(){
 void Personaje::saltar(){
 	//esto podria cambiar si tenemos estados como SaltandoYAvanzando o Saltando y otra cosa
 	//deberia decir if(esta en una plataforma)
-	if( !saltando ){
+	if( !saltando && !grisado ){
 		velocidadY = - maximaVelocidadY;
 		saltando = true;
 	}
 }
 
 void Personaje::caer(){
-	
-	saltando = true;
+	if(!grisado) saltando = true;
 }
 
 void Personaje::aterrizar(){
 	velocidadY = 0;
-	saltando = false;
+	if(!grisado) saltando = false;
 	
 }
 
 void Personaje::bajar(){
-	velocidadY= 1;
+	if(!grisado) velocidadY= 1;
 }
 
 void Personaje::flotar(){
