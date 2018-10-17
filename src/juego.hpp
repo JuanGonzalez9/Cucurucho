@@ -9,6 +9,7 @@
 #include "Bullet.h"
 #include <vector>
 #include "iocontra.hpp"
+#include "traductorDelCliente.h"
 using namespace std;
 
 extern "C"
@@ -23,6 +24,7 @@ class juego
 public:
 	juego ();
 	~juego ();
+	void setAcciones(char* msj);
 	void manejar_eventos ();
 	void actualizar ();
 	void dibujar ();
@@ -39,6 +41,7 @@ protected:
 	SDL_Renderer *renderer;
 	SDL_Texture *textura_fondo3, *textura_objetivo, *textura_bala;
 	Plataformas plataformas;
+	traductorDelCliente* traductor;
 
 	//balas
 	bool collision(SDL_Rect rect1,SDL_Rect rect2);

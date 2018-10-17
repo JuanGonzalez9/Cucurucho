@@ -21,7 +21,8 @@ juego::juego ():
 	rect_origen_fondo3 {0, 0, 800, 600},
 	ventana (nullptr),
 	renderer (nullptr),
-	textura_objetivo (nullptr)
+	textura_objetivo (nullptr),
+	traductor(nullptr)
 {
 	atexit (SDL_Quit);
 
@@ -101,6 +102,9 @@ juego::juego ():
 	
 
 	loginfo("Se construyo juego");
+
+	//Traductor
+	traductor = new traductorDelCliente();
 
 	//evita que se estire el fondo si al principio voy para atras
 	fondo1.avanzarOrigen(50);
@@ -369,14 +373,19 @@ void juego::manejar_eventos ()
 
 ///////////////////FIN DE SCROLL HORIZONTAL, ALELUYA///////////////////////////////////
 
-
-	if(apretandoSalto(state) && apretandoAbajo(state) && !boby.estaSaltando()){
+	//probando traductor
+	/*if(apretandoSalto(state) && apretandoAbajo(state) && !boby.estaSaltando()){
 		boby.bajar();		
 	}
 	else{
 		if(apretandoSalto(state))
 				boby.saltar();
+	}*/
+	
+	if(traductor->quiereSaltar()){
+		boby.saltar();	
 	}
+	
 
 	if(apretandoplayer2salto(state) && apretandoAbajo(state) && !boby2.estaSaltando()){
 		boby2.bajar();		
@@ -921,6 +930,10 @@ bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
 	return true;
 }
 
+void juego::setAcciones(char* msj){
+	traductor->setMensajeATraducir(msj);
+}
+
 juego::~juego ()
 {
 	SDL_DestroyTexture (textura_fondo3);
@@ -935,6 +948,8 @@ juego::~juego ()
 	for(unsigned i = 0;i < bullets.size();i++){
 		bullets[i]->~Bullet();
 	}
+
+	traductor->~traductorDelCliente();
 
 	loginfo("Se destruyo juego");
 	
