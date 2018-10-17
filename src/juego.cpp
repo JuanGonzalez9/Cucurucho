@@ -472,6 +472,9 @@ void juego::manejar_eventos ()
 	if(apretandoGrisP2(state)){
 		boby2.grisar();
 	}
+	if(apretandoDesGrisP2(state)){
+		boby2.desgrisar();
+	}
 
 
 	if(! apretandoArriba(state) && ! apretandoAbajo(state)){
@@ -512,27 +515,27 @@ void juego::actualizar ()
 	int maxVel=0;
 
 	//vemos si pasa 1)
-	if((boby.esActivo()&&(boby.getPosY()>580))||(boby2.esActivo()&&(boby2.getPosY()>580))||(boby3.esActivo()&&(boby3.getPosY()>580))||(boby4.esActivo()&&(boby4.getPosY()>580))||(nivel!=2)){
+	if((!boby.esGrisado()&&boby.esActivo()&&(boby.getPosY()>580))||(!boby2.esGrisado()&&boby2.esActivo()&&(boby2.getPosY()>580))||(!boby3.esGrisado()&&boby3.esActivo()&&(boby3.getPosY()>580))||(!boby4.esGrisado()&&boby4.esActivo()&&(boby4.getPosY()>580))||(nivel!=2)){
 		scrolleando=false;
 	}
 
 	//si boby es activo, supera los 200px, se mueve para arriba y no toca el techo, boby puede causar un scroll.
-	if((boby.esActivo())&&(boby.getPosY() <=(200))&&(boby.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby.obtenerVelocidadY() > 0)){
+	if(boby.esActivo()&&(boby.getPosY() <=(200))&&(boby.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby.obtenerVelocidadY() > 0)){
 		bobyPuede=true;
 		if(boby.obtenerVelocidadY()<maxVel)
 			maxVel=boby.obtenerVelocidadY();
 	}
-	if((boby2.esActivo())&&(boby2.getPosY() <=(200))&&(boby2.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby2.obtenerVelocidadY() > 0)){
+	if(boby2.esActivo()&&(boby2.getPosY() <=(200))&&(boby2.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby2.obtenerVelocidadY() > 0)){
 		boby2Puede=true;
 		if(boby2.obtenerVelocidadY()<maxVel)
 			maxVel=boby2.obtenerVelocidadY();
 	}
-	if((boby3.esActivo())&&(boby3.getPosY() <=(200))&&(boby3.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby3.obtenerVelocidadY() > 0)){
+	if(boby3.esActivo()&&(boby3.getPosY() <=(200))&&(boby3.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby3.obtenerVelocidadY() > 0)){
 		boby3Puede=true;
 		if(boby3.obtenerVelocidadY()<maxVel)
 			maxVel=boby3.obtenerVelocidadY();
 	}
-	if((boby4.esActivo())&&(boby4.getPosY() <=(200))&&(boby4.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby4.obtenerVelocidadY() > 0)){
+	if(boby4.esActivo()&&(boby4.getPosY() <=(200))&&(boby4.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby4.obtenerVelocidadY() > 0)){
 		boby4Puede=true;
 		if(boby4.obtenerVelocidadY()<maxVel)
 			maxVel=boby4.obtenerVelocidadY();
@@ -546,10 +549,33 @@ void juego::actualizar ()
 
 	if(scrolleando){
 		//scrolleo verticalmente.
-		boby.decrementarPosY(maxVel);
-		boby2.decrementarPosY(maxVel);
-		boby3.decrementarPosY(maxVel);
-		boby4.decrementarPosY(maxVel);
+
+/*		if(!boby.esGrisado()) boby.decrementarPosY(maxVel);
+		if(!boby.esGrisado()) boby2.decrementarPosY(maxVel);
+		if(!boby.esGrisado()) boby3.decrementarPosY(maxVel);
+		if(!boby.esGrisado()) boby4.decrementarPosY(maxVel);*/
+
+		if(boby.esGrisado()){
+			boby.subirCoordenadaYEn(maxVel);
+		}else{
+			boby.decrementarPosY(maxVel);
+		}
+		if(boby2.esGrisado()){
+			boby2.subirCoordenadaYEn(maxVel);
+		}else{
+			boby2.decrementarPosY(maxVel);
+		}
+		if(boby3.esGrisado()){
+			boby3.subirCoordenadaYEn(maxVel);
+		}else{
+			boby3.decrementarPosY(maxVel);
+		}
+		if(boby4.esGrisado()){
+			boby4.subirCoordenadaYEn(maxVel);
+		}else{
+			boby4.decrementarPosY(maxVel);
+		}
+
 
 		fondo1.avanzarOrigenY(maxVel/3);
 		fondo2.avanzarOrigenY(maxVel/2);
@@ -557,26 +583,25 @@ void juego::actualizar ()
 	}
 	else{
 		//si no se puede scrollear, evito que los jugadores que pueden moverse por arriba del borde se muevan.
-		if((boby.esActivo())&&(boby.getPosY()<=(0))&&(boby.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby.obtenerVelocidadY() > 0)){
+		if(boby.esActivo()&&(boby.getPosY()<=(0))&&(boby.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby.obtenerVelocidadY() > 0)){
 			boby.decrementarPosY(boby.obtenerVelocidadY());
 			boby.subirCoordenadaYEn(-boby.obtenerVelocidadY());
 			}
-		if((boby2.esActivo())&&(boby2.getPosY()<=(0))&&(boby2.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby2.obtenerVelocidadY() > 0)){
+		if(boby2.esActivo()&&(boby2.getPosY()<=(0))&&(boby2.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby2.obtenerVelocidadY() > 0)){
 			boby2.decrementarPosY(boby2.obtenerVelocidadY());
 			boby2.subirCoordenadaYEn(-boby2.obtenerVelocidadY());
 			}
-		if((boby3.esActivo())&&(boby3.getPosY()<=(0))&&(boby3.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby3.obtenerVelocidadY() > 0)){
+		if(boby3.esActivo()&&(boby3.getPosY()<=(0))&&(boby3.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby3.obtenerVelocidadY() > 0)){
 			boby3.decrementarPosY(boby3.obtenerVelocidadY());
 			boby3.subirCoordenadaYEn(-boby3.obtenerVelocidadY());
 			}
-		if((boby4.esActivo())&&(boby4.getPosY()<=(0))&&(boby4.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby4.obtenerVelocidadY() > 0)){
+		if(boby4.esActivo()&&(boby4.getPosY()<=(0))&&(boby4.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby4.obtenerVelocidadY() > 0)){
 			boby4.decrementarPosY(boby4.obtenerVelocidadY());
 			boby4.subirCoordenadaYEn(-boby4.obtenerVelocidadY());
 			}
 	}
 
 /////////////////////////FIN DE SCROLL VERTICAL/////////////////////////////
-
 
 
 
@@ -904,7 +929,9 @@ bool juego::apretandoplayer2derecha(const Uint8* state){
 bool juego::apretandoGrisP2(const Uint8* state){
 	return state[SDL_SCANCODE_P];
 }
-
+bool juego::apretandoDesGrisP2(const Uint8* state){
+	return state[SDL_SCANCODE_O];
+}
 
 
 ////////////////////////FIN TECLAS MULTIPLAYER/////////////////////////
