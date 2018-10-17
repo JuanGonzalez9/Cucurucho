@@ -16,22 +16,8 @@ void traductorDelCliente::setMensajeATraducir(char* mensaje){
 	mensajeSinTraducir = bitSetAux;
 }
 
-bool traductorDelCliente::quiereMoverDerecha(){
-	if(mensajeSinTraducir[0] == 1){
-		return true;
-	}
-	return false;
-}
-
-bool traductorDelCliente::quiereSaltar(){
-	if(mensajeSinTraducir[5] == 1){
-		return true;
-	}
-	return false;
-}
-
-bool traductorDelCliente::quiereMoverIzquierda(){
-if(mensajeSinTraducir[1] == 1){
+bool traductorDelCliente::quiereAccion(Constantes::BitAccion accion){
+	if(mensajeSinTraducir[accion] == 1){
 		return true;
 	}
 	return false;

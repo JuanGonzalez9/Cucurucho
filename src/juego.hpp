@@ -10,6 +10,7 @@
 #include <vector>
 #include "iocontra.hpp"
 #include "traductorDelCliente.h"
+#include "Constantes.h"
 using namespace std;
 
 extern "C"
@@ -41,7 +42,7 @@ protected:
 	SDL_Renderer *renderer;
 	SDL_Texture *textura_fondo3, *textura_objetivo, *textura_bala;
 	Plataformas plataformas;
-	traductorDelCliente* traductor;
+	traductorDelCliente* cliente;
 
 	//balas
 	bool collision(SDL_Rect rect1,SDL_Rect rect2);

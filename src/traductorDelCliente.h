@@ -2,6 +2,7 @@
 #define TRADUCTORDELCLIENTE_H_
 
 #include <bitset>
+#include "Constantes.h"
 using namespace std;
 
 class traductorDelCliente {
@@ -10,9 +11,7 @@ public:
 
 	void setMensajeATraducir(char* mensaje);
 
-	bool quiereMoverDerecha();
-	bool quiereMoverIzquierda();
-	bool quiereSaltar();
+	bool quiereAccion(Constantes::BitAccion accion);
 
 	virtual ~traductorDelCliente();
 

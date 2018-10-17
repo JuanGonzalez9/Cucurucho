@@ -26,7 +26,7 @@ int main (int argc, char *argv[]){
 
 		cout << "Arranca el cliente" << endl;
 		EscuchadorDeAcciones* escuchador = new EscuchadorDeAcciones();
-		SDL_Window* ventana = SDL_CreateWindow ("Titulo", 900, 600, 100, 100, 0);
+		SDL_Window* ventana = SDL_CreateWindow ("Jugador 1", 1200, 400, 100, 100, 0);
 		const char* serverAdress = "127.0.0.1";
 		cout<<"el puerto es "<<puerto<<" y la adress es "<<serverAdress<<endl;
 
@@ -36,10 +36,8 @@ int main (int argc, char *argv[]){
 		while(escuchador->enAccion()){
 			string acciones = escuchador->obtenerAcciones();
 			//if(acciones != "000000000"){
+				// mas adelante enviamos solo si esta apretando alguna tecla (si las acciones es distinto de todo 0)
 				int enviados = soqueteCliente->enviar(soqueteCliente->getSocketId(),acciones.c_str(),TAMANIO_MENSAJE_TECLAS);
-				cout<<"bytes enviados: "<<enviados<<endl;
-				//cout<<"La accion que queres hacer es esta: "<<acciones<<endl;
-				// si enviados = -1 error en el servidor
 				if(enviados == -1){
 					cout<<"Error en la conexion"<<endl;
 				}

@@ -22,39 +22,39 @@ string EscuchadorDeAcciones::obtenerAcciones(){
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
 	if(apretandoDerecha(state)){
-		acciones.set(derecha); //pone el bit 0 en 1 indicando que se esta apretando la tecla derecha
+		acciones.set(Constantes::derecha); //pone el bit 0 en 1 indicando que se esta apretando la tecla derecha
 	}
 
 	if(apretandoIzquierda(state)){
-		acciones.set(izquierda);
+		acciones.set(Constantes::izquierda);
 	}
 
 	if(apretandoArriba(state)){
-		acciones.set(arriba);
+		acciones.set(Constantes::arriba);
 	}
 
 	if(apretandoAbajo(state)){
-		acciones.set(abajo);
+		acciones.set(Constantes::abajo);
 	}
 
 	if(apretandoDisparo(state)){
-		acciones.set(disparo);
+		acciones.set(Constantes::disparo);
 	}
 
 	if(apretandoSalto(state)){
-		acciones.set(salto);
+		acciones.set(Constantes::salto);
 	}
 
 	if(apretandoAgacharse(state)){
-		acciones.set(agacharse);
+		acciones.set(Constantes::agacharse);
 	}
 
 	if(apretandoNivel2(state)){
-		acciones.set(nivel2);
+		acciones.set(Constantes::nivel2);
 	}
 
 	if(apretandoNivel3(state)){
-		acciones.set(nivel3);
+		acciones.set(Constantes::nivel3);
 		jugando = false;
 	}
 

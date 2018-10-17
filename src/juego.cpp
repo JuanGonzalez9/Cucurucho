@@ -22,7 +22,7 @@ juego::juego ():
 	ventana (nullptr),
 	renderer (nullptr),
 	textura_objetivo (nullptr),
-	traductor(nullptr)
+	cliente(nullptr)
 {
 	atexit (SDL_Quit);
 
@@ -104,7 +104,7 @@ juego::juego ():
 	loginfo("Se construyo juego");
 
 	//Traductor
-	traductor = new traductorDelCliente();
+	cliente = new traductorDelCliente();
 
 	//evita que se estire el fondo si al principio voy para atras
 	fondo1.avanzarOrigen(50);
@@ -251,7 +251,8 @@ void juego::manejar_eventos ()
 
 	//si boby es activo, esta apretando derecha, y sobrepasa el ancho, boby puede causar un scroll.
 	//Nota: si esta grisado o no es irrelevante aca porque tecnicamente no se pueden apretar las teclas (esta desconectado).
-	if((boby.esActivo())&&(apretandoDerecha(state))&&(boby.getPosX() > (ancho / 2)))
+
+	if((boby.esActivo())&&(cliente->quiereAccion(Constantes::derecha))&&(boby.getPosX() > (ancho / 2)))
 		bobyPuede=true;
 
 	//NOTA: por ahora uso esta tecla para los otros 3 pero hay que cambiarla al input correspondiente
@@ -279,7 +280,7 @@ void juego::manejar_eventos ()
 		}
 		//si un jugador tiene su tecla derecha apretada, hace que se mueve en su lugar hacia adelante
 		//el resto retrocede respecto la pantalla (se mantiene su animacion) 
-		if (apretandoDerecha(state)){
+		if (cliente->quiereAccion(Constantes::derecha)){
 			boby.hacerComoQueCamina();
 			boby.subirCoordenadaXEn(d3);
 		}else{
@@ -324,7 +325,7 @@ void juego::manejar_eventos ()
 
 	}else{
 		//esto es lo que pasa si el fondo no scrollea.
-		if ((apretandoDerecha(state))&&(boby.getPosX() < 760)){
+		if ((cliente->quiereAccion(Constantes::derecha))&&(boby.getPosX() < 760)){
 			//SOLO PARA PLAYER1 (mueve los fondos en nivel 1 y 3)
 			if ((num_jugadores==1)&&(nivel!=2)){
 				fondo1.avanzarOrigen(d1);
@@ -348,7 +349,7 @@ void juego::manejar_eventos ()
 	}
 
 	//ahora el movimiento hacia la izquierda
-	if(!boby.esGrisado()&&(apretandoIzquierda(state))&&(boby.getPosX() > 0 )){
+	if(!boby.esGrisado()&&(cliente->quiereAccion(Constantes::izquierda))&&(boby.getPosX() > 0 )){
 		boby.retroceder();
 		boby.subirCoordenadaXEn(-d3);
 		//solo para player 1- scrolleo el fondo si hay un jugador		
@@ -373,17 +374,15 @@ void juego::manejar_eventos ()
 
 ///////////////////FIN DE SCROLL HORIZONTAL, ALELUYA///////////////////////////////////
 
-	//probando traductor
-	/*if(apretandoSalto(state) && apretandoAbajo(state) && !boby.estaSaltando()){
-		boby.bajar();		
+	//probando traductor	
+
+	if(cliente->quiereAccion(Constantes::salto) && cliente->quiereAccion(Constantes::abajo) && !boby.estaSaltando()){
+		boby.bajar();
 	}
 	else{
-		if(apretandoSalto(state))
-				boby.saltar();
-	}*/
-	
-	if(traductor->quiereSaltar()){
-		boby.saltar();	
+		if(cliente->quiereAccion(Constantes::salto)){
+			boby.saltar();	
+		}
 	}
 	
 
@@ -411,33 +410,35 @@ void juego::manejar_eventos ()
 
 
 
-	if(apretandoAgacharse(state) && !(apretandoDerecha(state) || apretandoIzquierda(state))){
+	if(cliente->quiereAccion(Constantes::agacharse) &&
+ 		!(cliente->quiereAccion(Constantes::derecha) || cliente->quiereAccion(Constantes::izquierda))){
+		
 		boby.agacharse();
 	}
 
-	if(! apretandoAgacharse(state)){
+	if(! cliente->quiereAccion(Constantes::agacharse)){
 		boby.pararse();
 	}
 
-	if(apretandoNivel2(state)){
+	if(cliente->quiereAccion(Constantes::nivel2)){
 		if(nivel == 1){
 			cambioNivel=true;
 		}		
 	}
 
-	if(apretandoNivel3(state)){
+	if(cliente->quiereAccion(Constantes::nivel3)){
 		if(nivel == 2){
 			cambioNivel=true;
 		}
 	}
 
-	if(apretandoDisparo(state)){
+	if(cliente->quiereAccion(Constantes::disparo)){
 		boby.pelarElChumbo();
 		if(boby.puedeDisparar()){
 			direccionDeBala = 0;
-			if(apretandoArriba(state))
+			if(cliente->quiereAccion(Constantes::arriba))
 				direccionDeBala--;
-			if(apretandoAbajo(state))
+			if(cliente->quiereAccion(Constantes::abajo))
 				direccionDeBala++;
 
 			int posBala = 10;
@@ -454,13 +455,13 @@ void juego::manejar_eventos ()
 		}
 	}
 
-	if(! apretandoDisparo(state)){
+	if(! cliente->quiereAccion(Constantes::disparo)){
 		boby.dejarDeDisparar();
 	}
-	if(apretandoArriba(state)){
+	if(cliente->quiereAccion(Constantes::arriba)){
 		boby.apuntarArriba();
 	}
-	if(apretandoAbajo(state)){
+	if(cliente->quiereAccion(Constantes::abajo)){
 		boby.apuntarAbajo();
 	}
 
@@ -486,7 +487,7 @@ void juego::manejar_eventos ()
 	}
 
 
-	if(! apretandoArriba(state) && ! apretandoAbajo(state)){
+	if(! cliente->quiereAccion(Constantes::arriba) && ! cliente->quiereAccion(Constantes::abajo)){
 		boby.dejarDeApuntar();
 	}
 
@@ -722,7 +723,7 @@ void juego::actualizar ()
 	}
 
 	//Actualizo balas
-	for(int i = 0; i < bullets.size(); i++){
+	for(unsigned i = 0; i < bullets.size(); i++){
 		bullets[i]->move();
 	}
 
@@ -958,7 +959,7 @@ bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
 }
 
 void juego::setAcciones(char* msj){
-	traductor->setMensajeATraducir(msj);
+	cliente->setMensajeATraducir(msj);
 }
 
 juego::~juego ()
@@ -976,7 +977,7 @@ juego::~juego ()
 		bullets[i]->~Bullet();
 	}
 
-	traductor->~traductorDelCliente();
+	cliente->~traductorDelCliente();
 
 	loginfo("Se destruyo juego");
 	

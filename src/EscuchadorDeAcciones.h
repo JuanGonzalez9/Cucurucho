@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <bitset>
+#include "Constantes.h"
 
 using namespace std;
 
@@ -16,7 +17,7 @@ public:
 	bool enAccion();
 	virtual ~EscuchadorDeAcciones();
 
-	enum BitAccion{
+	/*enum BitAccion{
 		derecha,
 		izquierda,
 		arriba,
@@ -26,11 +27,14 @@ public:
 		agacharse,
 		nivel2,
 		nivel3
-	};
+	};*/
 
 private:
 	bitset<9> acciones;
 	bool jugando;
+
+	//posible refactorizacion: cambiar todas las funciones de apretando por 1 asi
+	//bool apretando(Constantes::BitAccion accion,const Uint8* state);
 
 	bool apretandoDerecha(const Uint8* state);
 	bool apretandoIzquierda(const Uint8* state);
