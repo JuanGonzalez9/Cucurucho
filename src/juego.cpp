@@ -344,7 +344,7 @@ void juego::manejar_eventos ()
 	}
 
 	//ahora el movimiento hacia la izquierda
-	if((apretandoIzquierda(state))&&(boby.getPosX() > 0 )){
+	if(!boby.esGrisado()&&(apretandoIzquierda(state))&&(boby.getPosX() > 0 )){
 		boby.retroceder();
 		boby.subirCoordenadaXEn(-d3);
 		//solo para player 1- scrolleo el fondo si hay un jugador		
@@ -354,15 +354,15 @@ void juego::manejar_eventos ()
 		}
 	}
 	//muevo los otros jugadores (usar el input apropiado)
-	if((apretandoplayer2izquierda(state))&&(boby2.getPosX() > 0 )){
+	if(!boby2.esGrisado()&&(apretandoplayer2izquierda(state))&&(boby2.getPosX() > 0 )){
 		boby2.retroceder();
 		boby2.subirCoordenadaXEn(-d3);		
 	}
-	if((apretandoplayer2izquierda(state))&&(boby3.getPosX() > 0 )){
+	if(!boby3.esGrisado()&&(apretandoplayer2izquierda(state))&&(boby3.getPosX() > 0 )){
 		boby3.retroceder();
 		boby3.subirCoordenadaXEn(-d3);		
 	}
-	if((apretandoplayer2izquierda(state))&&(boby4.getPosX() > 0 )){
+	if(!boby4.esGrisado()&&(apretandoplayer2izquierda(state))&&(boby4.getPosX() > 0 )){
 		boby4.retroceder();
 		boby4.subirCoordenadaXEn(-d3);		
 	}	

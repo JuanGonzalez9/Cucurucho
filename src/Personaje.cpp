@@ -239,7 +239,7 @@ void Personaje::dejarDeApuntar(){
 void Personaje::saltar(){
 	//esto podria cambiar si tenemos estados como SaltandoYAvanzando o Saltando y otra cosa
 	//deberia decir if(esta en una plataforma)
-	if( !saltando ){
+	if( !saltando && !grisado ){
 		velocidadY = - maximaVelocidadY;
 		saltando = true;
 	}
@@ -256,7 +256,7 @@ void Personaje::aterrizar(){
 }
 
 void Personaje::bajar(){
-	velocidadY= 1;
+	if(!grisado) velocidadY= 1;
 }
 
 void Personaje::flotar(){
