@@ -11,8 +11,9 @@ y otra vez en otra consola en modo cliente:
 
 -d INFO cliente 8080 (el puerto tiene que ser el mismo que el del servidor)
 
-Para jugar pararse en la ventana chica que aparecec mas a la izquierda y apretar botones
-Para cerrar, cerrar primero la ventana grande y despues apretar W
+Para JUGAR pararse en la ventana chica que aparece mas a la derecha y apretar botones
+
+Para CERRAR, cerrar primero la ventana grande y despues apretar W en la ventana chica
 
 
 
