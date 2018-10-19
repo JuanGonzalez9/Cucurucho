@@ -35,6 +35,7 @@ public:
 	// estos dos modifican la posicion en x
 	void avanzarOrigen(int velocidad);
 	void avanzarOrigenY(int velocidad);
+	bool collision(SDL_Rect rect1,SDL_Rect rect2);
 	void retrocederOrigen(int velocidad);
 
 protected:

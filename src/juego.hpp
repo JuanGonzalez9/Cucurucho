@@ -40,7 +40,7 @@ protected:
 	SDL_Rect rect_origen_fondo3;
 	SDL_Window *ventana;
 	SDL_Renderer *renderer;
-	SDL_Texture *textura_fondo3, *textura_objetivo, *textura_bala;
+	SDL_Texture *textura_fondo3, *textura_objetivo, *textura_bala, *textura_bala2, *textura_bala3, *textura_bala4;
 	Plataformas plataformas;
 	traductorDelCliente* cliente;
 
@@ -54,8 +54,6 @@ protected:
 	Enemigo* enemigoNivel1;
 	Enemigo* enemigoNivel2;
 	Enemigo* enemigoNivel3;
-
-	vector<Bullet*> bullets;
 
 	bool apretandoDerecha(const Uint8* state);
 	bool apretandoIzquierda(const Uint8* state);

@@ -10,11 +10,10 @@ class Bullet : public EntidadDibujable{
 
 private:
 	int xvel, yvel, duracion;
-	void ajustarPorEstado(Personaje::Estado estado);
 
 public:
 
-	Bullet(int x,int y,int xVel, int yVel,Personaje::Estado estadoPersonaje);
+	Bullet(int x,int y,int xVel, int yVel);
 	virtual ~Bullet();
 	int posY();
 	int posX();

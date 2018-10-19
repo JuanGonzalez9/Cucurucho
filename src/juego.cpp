@@ -47,6 +47,9 @@ juego::juego ():
 	//cosas de balas
 	direccionDeBala = 0;
 	textura_bala = cfg.obtener_textura ("//configuracion//items//bala//sprite", renderer);
+	textura_bala2 = cfg.obtener_textura ("//configuracion//items//bala2//sprite", renderer);
+	textura_bala3 = cfg.obtener_textura ("//configuracion//items//bala3//sprite", renderer);
+	textura_bala4 = cfg.obtener_textura ("//configuracion//items//bala4//sprite", renderer);
 
 	//fondo1.crearTextura("imagenes/_fondo_1_.png",renderer);
 	//fondo2.crearTextura("imagenes/_fondo_2_.png",renderer);
@@ -251,7 +254,6 @@ void juego::manejar_eventos ()
 
 	//si boby es activo, esta apretando derecha, y sobrepasa el ancho, boby puede causar un scroll.
 	//Nota: si esta grisado o no es irrelevante aca porque tecnicamente no se pueden apretar las teclas (esta desconectado).
-
 	if((boby.esActivo())&&(cliente->quiereAccion(Constantes::derecha))&&(boby.getPosX() > (ancho / 2)))
 		bobyPuede=true;
 
@@ -374,17 +376,16 @@ void juego::manejar_eventos ()
 
 ///////////////////FIN DE SCROLL HORIZONTAL, ALELUYA///////////////////////////////////
 
-	//probando traductor	
 
+	//probando traductor	
 	if(cliente->quiereAccion(Constantes::salto) && cliente->quiereAccion(Constantes::abajo) && !boby.estaSaltando()){
-		boby.bajar();
+		boby.bajar();	
 	}
 	else{
 		if(cliente->quiereAccion(Constantes::salto)){
 			boby.saltar();	
 		}
 	}
-	
 
 	if(apretandoplayer2salto(state) && apretandoAbajo(state) && !boby2.estaSaltando()){
 		boby2.bajar();		
@@ -410,9 +411,7 @@ void juego::manejar_eventos ()
 
 
 
-	if(cliente->quiereAccion(Constantes::agacharse) &&
- 		!(cliente->quiereAccion(Constantes::derecha) || cliente->quiereAccion(Constantes::izquierda))){
-		
+	if(cliente->quiereAccion(Constantes::agacharse) && !(cliente->quiereAccion(Constantes::derecha) || cliente->quiereAccion(Constantes::izquierda))){
 		boby.agacharse();
 	}
 
@@ -432,7 +431,8 @@ void juego::manejar_eventos ()
 		}
 	}
 
-	if(cliente->quiereAccion(Constantes::disparo)){
+	//DISPAROS
+	if(!boby.esGrisado()&&boby.esActivo()&&cliente->quiereAccion(Constantes::disparo)){
 		boby.pelarElChumbo();
 		if(boby.puedeDisparar()){
 			direccionDeBala = 0;
@@ -444,26 +444,51 @@ void juego::manejar_eventos ()
 			int posBala = 10;
 			if(!boby.estaMirandoALaDerecha())
 				posBala = -10;
-			Bullet* nuevaBala;
+			boby.disparar(posBala,direccionDeBala*10,textura_bala);
+		}
+	}
 
-			nuevaBala = new Bullet(boby.getPosX(),boby.getPosY(),posBala,direccionDeBala*10,boby.getEstado());
+	if(!boby2.esGrisado()&&boby2.esActivo()&&apretandoDisparo(state)){
+		boby2.pelarElChumbo();
+		if(boby2.puedeDisparar()){
+			direccionDeBala = 0;
+			if(apretandoArriba(state))
+				direccionDeBala--;
+			if(apretandoAbajo(state))
+				direccionDeBala++;
 
-			nuevaBala->asignarTextura(textura_bala);
-			bullets.push_back(nuevaBala);
-
-			boby.disparar();
+			int posBala = 10;
+			if(!boby2.estaMirandoALaDerecha())
+				posBala = -10;
+			boby2.disparar(posBala,direccionDeBala*10,textura_bala2);
 		}
 	}
 
 	if(! cliente->quiereAccion(Constantes::disparo)){
 		boby.dejarDeDisparar();
 	}
+	//reemplazar por input para cada uno
+	if(! apretandoDisparo(state)){
+		boby2.dejarDeDisparar();
+		boby3.dejarDeDisparar();
+		boby4.dejarDeDisparar();
+	}
+
+
 	if(cliente->quiereAccion(Constantes::arriba)){
 		boby.apuntarArriba();
 	}
 	if(cliente->quiereAccion(Constantes::abajo)){
 		boby.apuntarAbajo();
 	}
+
+	if(apretandoArriba(state)){
+		boby2.apuntarArriba();
+	}
+	if(apretandoAbajo(state)){
+		boby2.apuntarAbajo();
+	}
+
 
 	//activo multijugador
 	if((num_jugadores==1)&&(apretandoMultijugador2P(state))){
@@ -489,6 +514,9 @@ void juego::manejar_eventos ()
 
 	if(! cliente->quiereAccion(Constantes::arriba) && ! cliente->quiereAccion(Constantes::abajo)){
 		boby.dejarDeApuntar();
+	}
+	if(! apretandoArriba(state) && ! apretandoAbajo(state)){
+		boby2.dejarDeApuntar();
 	}
 
 	while (SDL_PollEvent (&e) != 0) {
@@ -555,15 +583,10 @@ void juego::actualizar ()
 	if((!bobyPuede)&&(!boby2Puede)&&(!boby3Puede)&&(!boby4Puede))
 		scrolleando=false;
 
-	//Ya determine si puedo scrollear, ¡Y! la velocidad maxima.
+	//Ya determine si puedo scrollear, Y! la velocidad maxima.
 
 	if(scrolleando){
 		//scrolleo verticalmente.
-
-/*		if(!boby.esGrisado()) boby.decrementarPosY(maxVel);
-		if(!boby.esGrisado()) boby2.decrementarPosY(maxVel);
-		if(!boby.esGrisado()) boby3.decrementarPosY(maxVel);
-		if(!boby.esGrisado()) boby4.decrementarPosY(maxVel);*/
 
 		if(boby.esGrisado()){
 			boby.subirCoordenadaYEn(maxVel);
@@ -722,17 +745,13 @@ void juego::actualizar ()
 		termino = true;
 	}
 
-	//Actualizo balas
-	for(unsigned i = 0; i < bullets.size(); i++){
-		bullets[i]->move();
-	}
+	//actualiza el shootTimer del jugador (para que no tire 500 tiros por segundo)
+	//tambien el movimiento de las balas y borro las que exceden su rango
+	boby.refreshBullets();
+	boby2.refreshBullets();
+	boby3.refreshBullets();
+	boby4.refreshBullets();
 
-	//borro las balas que exceden su rango para que no sigan hasta el infinito
-	for(unsigned i = 0; i < bullets.size(); i++){
-		if(bullets[i]->getDuracion() == 0){
-			bullets.erase(bullets.begin() + i);
-		}
-	}
 
 	//veo si el jugador toca al enemigo
 	if(nivel == 1 && boby.estaCercaDelFinalDelNivel1()){
@@ -778,18 +797,11 @@ void juego::actualizar ()
 	boby3.refreshIFrames();
 	boby4.refreshIFrames();
 
-	//actualiza el shootTimer del jugador (para que no tire 500 tiros por segundo)
-	boby.refreshBullets();
+	
 
 	//veo si las balas le pegan al enemigo
 	if(nivel == 1 && boby.estaCercaDelFinalDelNivel1()){
-		for(unsigned i = 0;i < bullets.size();i++){
-			if(! enemigoNivel1->derrotado() && collision(bullets[i]->getRectaDestino(),enemigoNivel1->getRectaDestino())){
-				enemigoNivel1->perderVida();
-				bullets.erase(bullets.begin() + i);
-			}
-
-		}
+		boby.verSiBalasPegan(enemigoNivel1);
 	}
 
 	loginfo("Se termina de actualizar juego");
@@ -852,9 +864,11 @@ void juego::dibujar ()
 		boby.dibujar(renderer);
 
 
-	for(unsigned i = 0; i < bullets.size();i++){
-		bullets[i]->dibujar(renderer);
-	}
+	boby.dibujarBalas(renderer);
+	boby2.dibujarBalas(renderer);
+	boby3.dibujarBalas(renderer);
+	boby4.dibujarBalas(renderer);
+
 	loginfo("Se termina de dibujar juego");
 	
 }
@@ -969,12 +983,12 @@ juego::~juego ()
 	SDL_DestroyRenderer (renderer);
 	SDL_DestroyWindow (ventana);
 	SDL_DestroyTexture(textura_bala);
+	SDL_DestroyTexture(textura_bala2);
+	SDL_DestroyTexture(textura_bala3);
+	SDL_DestroyTexture(textura_bala4);
+
 	if(! enemigoNivel1->derrotado()){
 		enemigoNivel1->~Enemigo();
-	}
-
-	for(unsigned i = 0;i < bullets.size();i++){
-		bullets[i]->~Bullet();
 	}
 
 	cliente->~traductorDelCliente();

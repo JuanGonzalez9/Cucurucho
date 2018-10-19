@@ -11,7 +11,9 @@
 #include "EntidadDibujable.h"
 #include "Sprite.h"
 #include "plataformas.hpp"
- #include "iocontra.hpp"
+#include "Bullet.h"
+#include "Enemigo.h"
+#include "iocontra.hpp"
 
 class Personaje : public EntidadDibujable{
 
@@ -64,7 +66,9 @@ public:
 	void retroceder();
 	void agacharse();
 	void pararse();
-	void disparar();
+	void disparar(int dirX, int dirY,SDL_Texture *text);
+	void verSiBalasPegan(Enemigo* malo);
+	void dibujarBalas(SDL_Renderer* renderer);
 	void pelarElChumbo();
 	void actualizar();
 	void dejarDeDisparar();
@@ -112,7 +116,7 @@ private:
 	int posX;
 	int posY;
 	int shootTimer;
-
+	vector<Bullet*> bullets;
 	int coordenadaX;
 	int coordenadaY;
 
