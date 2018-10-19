@@ -419,6 +419,15 @@ void juego::manejar_eventos ()
 		boby.pararse();
 	}
 
+	if(apretandoAgacharse(state) && !(apretandoDerecha(state) || apretandoIzquierda(state))) boby2.agacharse();
+	if(! apretandoAgacharse(state)) boby2.pararse();
+
+	if(apretandoAgacharse(state) && !(apretandoDerecha(state) || apretandoIzquierda(state))) boby3.agacharse();
+	if(! apretandoAgacharse(state)) boby3.pararse();
+
+	if(apretandoAgacharse(state) && !(apretandoDerecha(state) || apretandoIzquierda(state))) boby4.agacharse();
+	if(! apretandoAgacharse(state)) boby4.pararse();
+
 	if(cliente->quiereAccion(Constantes::nivel2)){
 		if(nivel == 1){
 			cambioNivel=true;
@@ -464,12 +473,44 @@ void juego::manejar_eventos ()
 		}
 	}
 
+	if(!boby3.esGrisado()&&boby3.esActivo()&&apretandoDisparo(state)){
+		boby3.pelarElChumbo();
+		if(boby3.puedeDisparar()){
+			direccionDeBala = 0;
+			if(apretandoArriba(state))
+				direccionDeBala--;
+			if(apretandoAbajo(state))
+				direccionDeBala++;
+
+			int posBala = 10;
+			if(!boby3.estaMirandoALaDerecha())
+				posBala = -10;
+			boby3.disparar(posBala,direccionDeBala*10,textura_bala3);
+		}
+	}
+
+	if(!boby4.esGrisado()&&boby4.esActivo()&&apretandoDisparo(state)){
+		boby4.pelarElChumbo();
+		if(boby4.puedeDisparar()){
+			direccionDeBala = 0;
+			if(apretandoArriba(state))
+				direccionDeBala--;
+			if(apretandoAbajo(state))
+				direccionDeBala++;
+
+			int posBala = 10;
+			if(!boby4.estaMirandoALaDerecha())
+				posBala = -10;
+			boby4.disparar(posBala,direccionDeBala*10,textura_bala4);
+		}
+	}
+
 	if(! cliente->quiereAccion(Constantes::disparo)){
 		boby.dejarDeDisparar();
 	}
 	//reemplazar por input para cada uno
 	if(! apretandoDisparo(state)){
-		boby2.dejarDeDisparar();
+		boby4.dejarDeDisparar();
 		boby3.dejarDeDisparar();
 		boby4.dejarDeDisparar();
 	}
@@ -484,9 +525,13 @@ void juego::manejar_eventos ()
 
 	if(apretandoArriba(state)){
 		boby2.apuntarArriba();
+		boby3.apuntarArriba();
+		boby4.apuntarArriba();
 	}
 	if(apretandoAbajo(state)){
 		boby2.apuntarAbajo();
+		boby3.apuntarAbajo();
+		boby4.apuntarAbajo();
 	}
 
 
@@ -517,6 +562,8 @@ void juego::manejar_eventos ()
 	}
 	if(! apretandoArriba(state) && ! apretandoAbajo(state)){
 		boby2.dejarDeApuntar();
+		boby3.dejarDeApuntar();
+		boby4.dejarDeApuntar();
 	}
 
 	while (SDL_PollEvent (&e) != 0) {
@@ -766,28 +813,32 @@ void juego::actualizar ()
 		if (nivel ==2){
 			boby.setCoordenadaY(boby.obtenerCoordenadaY()+40 - boby.getPosY());
 		}
-		boby.setPosY(40);		
+		boby.setPosY(40);
+		boby.resetFall();		
 		boby.perderVida();
 	}
 	if(boby2.getPosY()>600){
 		if (nivel ==2){
 			boby2.setCoordenadaY(boby2.obtenerCoordenadaY()+40 - boby2.getPosY());
 		}
-		boby2.setPosY(40);		
+		boby2.setPosY(40);
+		boby2.resetFall();		
 		boby2.perderVida();
 	}
 	if(boby3.getPosY()>600){
 		if (nivel ==2){
 			boby3.setCoordenadaY(boby3.obtenerCoordenadaY()+40 - boby3.getPosY());
 		}
-		boby3.setPosY(40);		
+		boby3.setPosY(40);
+		boby3.resetFall();
 		boby3.perderVida();
 	}
 	if(boby4.getPosY()>600){
 		if (nivel ==2){
 			boby4.setCoordenadaY(boby4.obtenerCoordenadaY()+40 - boby4.getPosY());
 		}
-		boby4.setPosY(40);		
+		boby4.setPosY(40);
+		boby4.resetFall();
 		boby4.perderVida();
 	}
 

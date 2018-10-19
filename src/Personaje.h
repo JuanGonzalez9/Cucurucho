@@ -92,7 +92,7 @@ public:
 	void decrementarPosY(int y);
 	void decrementarPosX(int x);
 	void bajar();
-	void flotar();
+	void resetFall();
 	void hacerComoQueCamina();
 	
 //<<<<<<< HEAD

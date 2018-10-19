@@ -343,8 +343,8 @@ void Personaje::bajar(){
 	if(!grisado) velocidadY= 1;
 }
 
-void Personaje::flotar(){
-	velocidadY= -3;
+void Personaje::resetFall(){
+	velocidadY= 0;
 }
 
 void Personaje::subirCoordenadaXEn(int cantidad){
