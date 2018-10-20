@@ -5,6 +5,9 @@ contra_LDADD= $(XML_LIBS) -lSDL2 -lSDL2_image -ldl
 contradir = $(prefix)/bin
 
 imagenes=	personaje.png \
+         	personaje2.png \
+         	personaje3.png \
+         	personaje4.png \
 		fondo1.png \
 		fondo2.png \
 		fondo3.png \
@@ -39,6 +42,9 @@ imagenes=	personaje.png \
 		puente2.png
 		
 imagenes_o=	imagen-personaje.o \
+		imagen-personaje2.o \
+		imagen-personaje3.o \
+		imagen-personaje4.o \
 		imagen-fondo1.o \
 		imagen-fondo2.o \
 		imagen-fondo3.o \

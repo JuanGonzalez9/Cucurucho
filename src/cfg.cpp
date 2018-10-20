@@ -245,8 +245,8 @@ std::string configuracion::obtener_s (const char *camino, std::function<bool(std
 		}
 		s = obtener_s_del_xml (camino, contexto_omision);
 		if (s.empty() || !validar (s, true)) {
-			s.clear();
 			lanzar ("opcion por defecto '" << s << "' para " << camino << " invalida.");
+			s.clear();
 		} else {
 			logerror ("se usa el valor por omision '" << s << "' para '" << camino << "'.");
 		}
@@ -408,37 +408,59 @@ SDL_Texture *configuracion::obtener_textura (const char *camino, SDL_Renderer *r
 		SDL_FreeSurface (superficie);
 		return true;
 	});
+	return nullptr != textura ? textura : configuracion::obtener_textura_por_omision (s, renderer);
+}
+
+SDL_Texture *configuracion::obtener_textura_grisada (const char *camino, SDL_Renderer *renderer)
+{
+	SDL_Texture *textura = nullptr;
+	std::string s = obtener_s (camino, [this, renderer, &textura] (std::string & s, bool omision) {
+		try {
+			std::string sc = s;
+			textura = configuracion::obtener_textura_por_omision (sc, renderer);
+			return true;
+		} catch (...) {
+			if (omision) {
+				throw;
+			} else {
+				return false;
+			}
+		}
+	});
+	return textura;
+}
+
+SDL_Texture *configuracion::obtener_textura_por_omision (std::string & s, SDL_Renderer *renderer)
+{
+	logerror ("la imagen '" << s << "' no pudo cargarse, se usa la imagen por omision.");
+
+	/* imagenes/foo.png  ->  _binary_ ______ imagenes_foo_png _start
+	 *                                ../../ imagenes/foo.png _start
+	 */
+	std::replace (s.begin(), s.end(), '/', '_');
+	std::replace (s.begin(), s.end(), '.', '_');
+	std::replace (s.begin(), s.end(), ' ', '_');
+	s.insert (0, "_binary_imagen_gris_");
+	std::string se = s;
+	s.append ("_start");
+	se.append ("_end");
+	uint8_t *comienzo = obtener_direccion_de_simbolo (s);
+	uint8_t *fin = obtener_direccion_de_simbolo (se);
+	if (fin == nullptr) {
+		lanzar ("fallo dlsym: " << dlerror());
+	}
+
+	SDL_RWops *rw = SDL_RWFromMem ( comienzo, (size_t)(fin-comienzo) );
+	if (rw == nullptr) {
+		lanzar ("fallo SDL_RWFromMem: " << SDL_GetError());
+	}
+	SDL_Surface *superficie = IMG_Load_RW (rw, 1);
+	if (superficie == nullptr) {
+		lanzar ("fallo IMG_Load_RW: " << SDL_GetError());
+	}
+	SDL_Texture *textura = SDL_CreateTextureFromSurface ( renderer, superficie);
 	if (textura == nullptr) {
-		logerror ("la imagen '" << s << "' no pudo cargarse, se usa la imagen por omision.");
-
-		/* imagenes/foo.png  ->  _binary_ ______ imagenes_foo_png _start
-		 *                                ../../ imagenes/foo.png _start
-		 */
-		std::replace (s.begin(), s.end(), '/', '_');
-		std::replace (s.begin(), s.end(), '.', '_');
-		std::replace (s.begin(), s.end(), ' ', '_');
-		s.insert (0, "_binary_imagen_gris_");
-		std::string se = s;
-		s.append ("_start");
-		se.append ("_end");
-		uint8_t *comienzo = obtener_direccion_de_simbolo (s);
-		uint8_t *fin = obtener_direccion_de_simbolo (se);
-		if (fin == nullptr) {
-			lanzar ("fallo dlsym: " << dlerror());
-		}
-
-		SDL_RWops *rw = SDL_RWFromMem ( comienzo, (size_t)(fin-comienzo) );
-		if (rw == nullptr) {
-			lanzar ("fallo SDL_RWFromMem: " << SDL_GetError());
-		}
-		SDL_Surface *superficie = IMG_Load_RW (rw, 1);
-		if (superficie == nullptr) {
-			lanzar ("fallo IMG_Load_RW: " << SDL_GetError());
-		}
-		textura = SDL_CreateTextureFromSurface ( renderer, superficie);
-		if (textura == nullptr) {
-			lanzar ("fallo SDL_CreateTextureFromSurface: " << SDL_GetError());
-		}
+		lanzar ("fallo SDL_CreateTextureFromSurface: " << SDL_GetError());
 	}
 	return textura;
 }
