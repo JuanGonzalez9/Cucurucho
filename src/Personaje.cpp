@@ -206,16 +206,100 @@ void Personaje::pararse(){
 		estado = Quieto;
 }
 
-void Personaje::disparar(){
+void Personaje::verSiBalasPegan(Enemigo* malo){
+	for(unsigned i=0; i<bullets.size();i++){
+		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
+			malo->perderVida();
+			bullets.erase(bullets.begin() + i);
+			}
+	}
+}
+
+void Personaje::dibujarBalas(SDL_Renderer* renderer){
+	for(unsigned i = 0; i < bullets.size();i++){
+		bullets[i]->dibujar(renderer);
+	}
+}
+
+void Personaje::disparar(int dirX, int dirY,SDL_Texture *text){
+	
+	//ajusto posicion de la bala por estado
+	int x=posX;
+	int y=posY;
+	if(estado == CuerpoATierra){
+		dirY = 0;
+		if(dirX > 0){
+			x += 40;
+		}
+		y += 30;
+	}
+
+	if(estado == Personaje::Caminando){
+		if(dirX < 0){
+			x -= 10;
+		}
+		else{
+		x += 10;
+		}
+	}
+
+	//si esta apuntando para la derecha
+	if(dirX > 0){
+		//si esta apuntando para abajo
+		if(dirY > 0){
+			y -= 5;
+			x += 10;
+		}
+
+		//si esta apuntando para arriba
+		if(dirY < 0){
+			y -= 12;
+			x += 14;
+		}
+
+		//si apunta dereche
+		if(dirY == 0)
+			x += 15;
+	}
+
+	//si esta apuntando para la izquierda
+	if(dirX < 0){
+		//si esta apuntando para abajo
+		if(dirY > 0){
+			y += 10;
+		}
+
+		//si esta apuntando para arriba
+		if(dirY < 0){
+			y -= 20;
+		}
+
+	}
+
+	Bullet* nuevaBala;
+	nuevaBala = new Bullet(x,y,dirX,dirY);
+	nuevaBala->asignarTextura(text);
+	bullets.push_back(nuevaBala);
 	//shoot timer = rateOfFire
 	shootTimer = 10;
 }
+
 
 void Personaje::pelarElChumbo(){
 	disparando = true;
 }
 
 void Personaje::refreshBullets(){
+	//Actualizo balas
+	for(unsigned i = 0; i < bullets.size(); i++){
+		bullets[i]->move();
+	}
+	//borro las balas que exceden su rango para que no sigan hasta el infinito
+	for(unsigned i = 0; i < bullets.size(); i++){
+		if(bullets[i]->getDuracion() == 0){
+			bullets.erase(bullets.begin() + i);
+		}
+	}
 	if(shootTimer > 0)
 		shootTimer--;
 }
@@ -267,8 +351,8 @@ void Personaje::bajar(){
 	if(!grisado) velocidadY= 1;
 }
 
-void Personaje::flotar(){
-	velocidadY= -3;
+void Personaje::resetFall(){
+	velocidadY= 0;
 }
 
 void Personaje::subirCoordenadaXEn(int cantidad){
@@ -391,5 +475,9 @@ void Personaje::refreshIFrames(){
 
 Personaje::~Personaje() {
 	//se destruye en el padre
+	for(unsigned i = 0;i < bullets.size();i++){
+		bullets[i]->~Bullet();
+	}
+
 }
 

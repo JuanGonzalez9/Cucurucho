@@ -28,8 +28,17 @@ R"(<?xml version="1.0"?>
   </personajes>
   <items>
     <bala>
-	    <sprite>imagenes/bullet.png</sprite>
+	    <sprite>imagenes/bulletP1.png</sprite>
     </bala>
+    <bala2>
+	    <sprite>imagenes/bulletP2.png</sprite>
+    </bala2>
+    <bala3>
+	    <sprite>imagenes/bulletP3.png</sprite>
+    </bala3>
+    <bala4>
+	    <sprite>imagenes/bulletP4.png</sprite>
+    </bala4>
   </items>
   <plataformas>
     <piedra>

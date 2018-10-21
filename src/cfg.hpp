@@ -57,6 +57,7 @@ public:
 	double obtener_d (const char *camino, std::function<bool(double n, bool omision)> validar);
 	long double obtener_ld (const char *camino, std::function<bool(long double n, bool omision)> validar);
 	SDL_Texture *obtener_textura (const char *camino, SDL_Renderer *renderer);
+	SDL_Texture *obtener_textura_grisada (const char *camino, SDL_Renderer *renderer);
 	void obtener_plataformas (const char *camino, std::list<plataforma> &l, const plataforma & plataforma_omision);
 private:
 	template<typename t> class tipos
@@ -79,6 +80,7 @@ private:
 	void obtener_plataformas (const char *camino, std::function<void(xmlNode *node)> funcion);
 	bool obtener_padre (std::string &camino);
 	xmlNode *obtener_nodo_mas_profundo (const char *camino, xmlXPathContextPtr contexto);
+	SDL_Texture *obtener_textura_por_omision (std::string & imagen, SDL_Renderer *renderer);
 };
 
 class excepcion_configuracion: public std::invalid_argument
