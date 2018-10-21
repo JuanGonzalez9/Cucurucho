@@ -17,18 +17,6 @@ public:
 	bool enAccion();
 	virtual ~EscuchadorDeAcciones();
 
-	/*enum BitAccion{
-		derecha,
-		izquierda,
-		arriba,
-		abajo,
-		disparo,
-		salto,
-		agacharse,
-		nivel2,
-		nivel3
-	};*/
-
 private:
 	bitset<9> acciones;
 	bool jugando;

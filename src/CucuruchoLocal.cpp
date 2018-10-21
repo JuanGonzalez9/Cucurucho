@@ -33,6 +33,8 @@ int main (int argc, char *argv[]){
 		Socket* soqueteCliente = new Socket();
 		soqueteCliente->conectar(serverAdress,puerto);
 
+		char respuestaServidor[TAMANIO_RESPUESTA_SERVIDOR + 1];
+
 		while(escuchador->enAccion()){
 			string acciones = escuchador->obtenerAcciones();
 			//if(acciones != "000000000"){
@@ -41,6 +43,11 @@ int main (int argc, char *argv[]){
 				if(enviados == -1){
 					cout<<"Error en la conexion"<<endl;
 				}
+
+				int llegaron = 
+					soqueteCliente->recibir(soqueteCliente->getSocketId(),respuestaServidor,TAMANIO_RESPUESTA_SERVIDOR);
+				respuestaServidor[TAMANIO_RESPUESTA_SERVIDOR] = 0;
+				cout<<"llegaron "<<llegaron<<" bytes. Dice: "<<respuestaServidor<<endl;
 			//}
 
 			SDL_Delay(20);
@@ -93,6 +100,8 @@ int main (int argc, char *argv[]){
 				j.setAcciones(mensaje);
 				j.manejar_eventos ();
 				j.actualizar ();
+				string respuesta = j.armarRespuesta();
+				soquete->enviar(soquete->getAcceptedSocket(),respuesta.c_str(),TAMANIO_RESPUESTA_SERVIDOR);
 				j.dibujar ();
 				j.presentar ();
 			}

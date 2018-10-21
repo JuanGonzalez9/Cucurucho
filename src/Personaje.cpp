@@ -48,6 +48,10 @@ Personaje::Estado Personaje::getEstado(){
 	return estado;
 }
 
+Personaje::DireccionDisparo Personaje::getDireccionDisparo(){
+	return direccionDisparo;
+}
+
 int Personaje::getPosX(){
 	return posX;
 }
@@ -132,6 +136,10 @@ void Personaje::actualizar(){
 
 bool Personaje::estaMirandoALaDerecha(){
 	return mirandoALaDerecha;
+}
+
+bool Personaje::estaDisparando(){
+	return disparando;
 }
 
 void Personaje::activar(){

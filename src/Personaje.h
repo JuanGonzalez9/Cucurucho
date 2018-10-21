@@ -11,7 +11,7 @@
 #include "EntidadDibujable.h"
 #include "Sprite.h"
 #include "plataformas.hpp"
- #include "iocontra.hpp"
+#include "iocontra.hpp"
 
 class Personaje : public EntidadDibujable{
 
@@ -23,8 +23,6 @@ public:
 	enum Estado{
 		Quieto,
 		Caminando,
-		Retrocediendo,
-		CaminandoYDisparando,
 		CuerpoATierra,
 		HaciendoComoQueCamina
 	};
@@ -37,6 +35,7 @@ public:
 
 	//----GET--SET
 	Personaje::Estado getEstado();
+	Personaje::DireccionDisparo getDireccionDisparo();
 	int getPosX();
 	int getPosY();
 	void setPosX(int x);
@@ -45,6 +44,7 @@ public:
 	void setCoordenadaY(int y);
 	bool estaMirandoALaDerecha();
 	bool estaSaltando();
+	bool estaDisparando();
 	bool estaCercaDelFinalDelNivel1();
 	bool estaCercaDelFinalDelNivel2();
 	bool estaCercaDelFinalDelNivel3();

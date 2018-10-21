@@ -10,6 +10,7 @@
 #include <vector>
 #include "iocontra.hpp"
 #include "traductorDelCliente.h"
+#include "ArmadorDeRespuesta.h"
 #include "Constantes.h"
 using namespace std;
 
@@ -28,6 +29,7 @@ public:
 	void setAcciones(char* msj);
 	void manejar_eventos ();
 	void actualizar ();
+	string armarRespuesta();
 	void dibujar ();
 	void presentar ();
 	bool jugando ();
@@ -43,6 +45,7 @@ protected:
 	SDL_Texture *textura_fondo3, *textura_objetivo, *textura_bala;
 	Plataformas plataformas;
 	traductorDelCliente* cliente;
+	ArmadorDeRespuesta* armador;
 
 	//balas
 	bool collision(SDL_Rect rect1,SDL_Rect rect2);

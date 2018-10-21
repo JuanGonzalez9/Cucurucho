@@ -1,5 +1,5 @@
 bin_PROGRAMS = contra
-contra_SOURCES = traductorDelCliente.cpp Socket.cpp EscuchadorDeAcciones.cpp Bullet.cpp Enemigo.cpp Personaje.cpp Sprite.cpp EntidadDibujable.cpp plataformas.cpp iocontra.cpp temporizador.cpp juego.cpp registro.cpp cfg.cpp CucuruchoLocal.cpp
+contra_SOURCES = ArmadorDeRespuesta.cpp traductorDelCliente.cpp Socket.cpp EscuchadorDeAcciones.cpp Bullet.cpp Enemigo.cpp Personaje.cpp Sprite.cpp EntidadDibujable.cpp plataformas.cpp iocontra.cpp temporizador.cpp juego.cpp registro.cpp cfg.cpp CucuruchoLocal.cpp
 contra_CPPFLAGS = -Wall $(XML_CPPFLAGS) -std=c++11
 contra_LDADD= $(XML_LIBS) -lSDL2 -lSDL2_image -ldl
 contradir = $(prefix)/bin

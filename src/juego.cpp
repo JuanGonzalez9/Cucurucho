@@ -22,7 +22,8 @@ juego::juego ():
 	ventana (nullptr),
 	renderer (nullptr),
 	textura_objetivo (nullptr),
-	cliente(nullptr)
+	cliente(nullptr),
+	armador(nullptr)
 {
 	atexit (SDL_Quit);
 
@@ -105,6 +106,7 @@ juego::juego ():
 
 	//Traductor
 	cliente = new traductorDelCliente();
+	armador = new ArmadorDeRespuesta();
 
 	//evita que se estire el fondo si al principio voy para atras
 	fondo1.avanzarOrigen(50);
@@ -796,6 +798,29 @@ void juego::actualizar ()
 	
 }
 
+string juego::armarRespuesta(){
+	armador->setNivel(nivel);
+	armador->setFondo1(fondo1.getRectaOrigen().x,fondo1.getRectaOrigen().y);
+	armador->setFondo2(fondo2.getRectaOrigen().x,fondo2.getRectaOrigen().y);
+	armador->setFondo3(rect_origen_fondo3.x,rect_origen_fondo3.y);
+	
+	armador->setPosPersonaje(444,555);
+	armador->setSaltando(boby.estaSaltando());
+	armador->setDisparando(boby.estaDisparando());
+	armador->setMirandoALaDerecha(boby.estaMirandoALaDerecha());
+	armador->setActivo(boby.esActivo());
+	armador->setGrisado(boby.esGrisado());
+
+	armador->setEstado( (Constantes::Estado) boby.getEstado());
+	armador->setDireccionDisparo( (Constantes::DireccionDisparo) boby.getDireccionDisparo());
+	
+	//armador->setEnemigo()
+
+
+
+	return armador->dameLaRespuesta();
+}
+
 void juego::dibujar ()
 {
 	loginfo("Se comienza a dibujar juego");
@@ -978,6 +1003,7 @@ juego::~juego ()
 	}
 
 	cliente->~traductorDelCliente();
+	armador->~ArmadorDeRespuesta();
 
 	loginfo("Se destruyo juego");
 	
