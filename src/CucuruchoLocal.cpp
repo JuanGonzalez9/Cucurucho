@@ -8,6 +8,7 @@
 #include <iostream>
 #include "EscuchadorDeAcciones.h"
 #include "Socket.h"
+#include "Parser.h"
 
 #define TAMANIO_MENSAJE_TECLAS 9
 
@@ -25,6 +26,7 @@ int main (int argc, char *argv[]){
 	if(strcmp(comportamiento,"cliente") == 0){
 
 		cout << "Arranca el cliente" << endl;
+		Parser parser;
 		EscuchadorDeAcciones* escuchador = new EscuchadorDeAcciones();
 		SDL_Window* ventana = SDL_CreateWindow ("Jugador 1", 1200, 400, 100, 100, 0);
 		const char* serverAdress = "127.0.0.1";
@@ -48,6 +50,10 @@ int main (int argc, char *argv[]){
 					soqueteCliente->recibir(soqueteCliente->getSocketId(),respuestaServidor,TAMANIO_RESPUESTA_SERVIDOR);
 				respuestaServidor[TAMANIO_RESPUESTA_SERVIDOR] = 0;
 				cout<<"llegaron "<<llegaron<<" bytes. Dice: "<<respuestaServidor<<endl;
+				string respuestaSinParsear(respuestaServidor);
+				parser.parsear(respuestaSinParsear);
+				cout<<"la pos en Y del personaje es: "<<parser.getPosPersonajeY()<<endl;
+				if(parser.estaSaltando()) cout<<"saltando"<<endl;
 			//}
 
 			SDL_Delay(20);

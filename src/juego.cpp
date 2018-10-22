@@ -867,7 +867,7 @@ string juego::armarRespuesta(){
 	armador->setFondo2(fondo2.getRectaOrigen().x,fondo2.getRectaOrigen().y);
 	armador->setFondo3(rect_origen_fondo3.x,rect_origen_fondo3.y);
 	
-	armador->setPosPersonaje(444,555);
+	armador->setPosPersonaje(boby.getPosX(),boby.getPosY());
 	armador->setSaltando(boby.estaSaltando());
 	armador->setDisparando(boby.estaDisparando());
 	armador->setMirandoALaDerecha(boby.estaMirandoALaDerecha());
