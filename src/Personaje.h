@@ -14,6 +14,7 @@
 #include "Bullet.h"
 #include "Enemigo.h"
 #include "iocontra.hpp"
+#include "Constantes.h"
 
 class Personaje : public EntidadDibujable{
 
@@ -44,6 +45,8 @@ public:
 	void setPosY(int y);
 	void setCoordenadaX(int x);
 	void setCoordenadaY(int y);
+	void setEstados(bool salto,bool disp,bool mirando,bool act,bool gris);
+	void setEstadosEnumerados(Constantes::Estado est,Constantes::DireccionDisparo dir);
 	bool estaMirandoALaDerecha();
 	bool estaSaltando();
 	bool estaDisparando();
@@ -116,6 +119,8 @@ private:
 	vector<Bullet*> bullets;
 	int coordenadaX;
 	int coordenadaY;
+
+	void actualizarRectDestino();
 
 	// manejo de vida
 	int hitPoints;

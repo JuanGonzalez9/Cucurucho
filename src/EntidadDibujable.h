@@ -25,6 +25,8 @@ public:
 	SDL_Rect getRectaOrigen();
 	SDL_Rect getRectaDestino();
 	SDL_Texture* getTextura();
+	void setRectOrigenX(int x);
+	void setRectOrigenY(int y);
 	void setRectOrigen(int x,int y,int w,int h);
 	void setRectDestino(int x,int y,int w,int h);
 

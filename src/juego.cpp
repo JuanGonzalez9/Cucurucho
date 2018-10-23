@@ -7,7 +7,7 @@ static const int periodo=1000000/60; // TODO averiguar
 static const int ancho=800;
 static const int alto=800;
 
-juego::juego ():
+juego::juego (string comportamiento):
 	termino (false),
 	cambioNivel(false),
 	us (periodo),
@@ -32,12 +32,18 @@ juego::juego ():
 		std::cerr << "No pudo inicializarse SDL: " << SDL_GetError () << '\n';
 		return;
 	}
-	ventana = SDL_CreateWindow ("Titulo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
+	
+	Uint32 flags;
+	if(comportamiento == "cliente") flags = 0;
+	else flags = SDL_WINDOW_HIDDEN;
+
+	ventana = SDL_CreateWindow ("Contra", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
 	if (nullptr == ventana) {
 		logerror("No pudo crease la ventana");
 		std::cerr << "No pudo crease la ventana: " << SDL_GetError () << '\n';
 		return;
 	}
+
 	renderer = SDL_CreateRenderer (ventana, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (nullptr == renderer) {
 		logerror("No pudo crease el renderer");

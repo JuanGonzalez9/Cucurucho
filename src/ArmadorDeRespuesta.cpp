@@ -93,6 +93,7 @@ string ArmadorDeRespuesta::fondoToString(int f){
 }
 
 string ArmadorDeRespuesta::posicionToString(int p){
+
 	string respuesta = "000";
 	string nuevo = to_string(p);
 
@@ -110,7 +111,7 @@ string ArmadorDeRespuesta::dameLaRespuesta(){
 	respuesta += fondoToString(fondo3);
 
 	respuesta += posicionToString(posPersonajeX);
-	respuesta += posicionToString(posPersonajeY);
+	respuesta += fondoToString(posPersonajeY);
 
 	respuesta += to_string(saltando);
 	respuesta += to_string(disparando);

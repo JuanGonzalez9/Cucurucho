@@ -76,6 +76,19 @@ void Personaje::setCoordenadaY(int y){
 	coordenadaY= y;
 }
 
+void Personaje::setEstados(bool salto,bool disp,bool mirando,bool act,bool gris){
+	saltando = salto;
+	disparando = disp;
+	mirandoALaDerecha = mirando;
+	activo = act;
+	grisado = gris;
+}
+
+void Personaje::setEstadosEnumerados(Constantes::Estado est,Constantes::DireccionDisparo dir){
+	estado = (Personaje::Estado) est;
+	direccionDisparo = (Personaje::DireccionDisparo) dir;
+}
+
 int Personaje::obtenerCoordenadaX(){
 	return coordenadaX;
 }
@@ -110,7 +123,9 @@ void Personaje::actualizar(){
 	posX += velocidadX;
 	posY += velocidadY;
 	coordenadaY += velocidadY;
-	rectDestino.x = posX;
+
+	actualizarRectDestino();
+	/*rectDestino.x = posX;
 	rectDestino.y = posY;
 
 
@@ -122,7 +137,7 @@ void Personaje::actualizar(){
 	else{
 		rectDestino.w = 34;
 		rectDestino.h = 72;
-	}
+	}*/
 
 	if(estado != HaciendoComoQueCamina && estado != CuerpoATierra && velocidadX == 0 && !saltando)
 		estado = Quieto;
@@ -406,10 +421,27 @@ bool Personaje::estaCercaDelFinalDelNivel3(){
 	return (coordenadaX >= 7400);
 }
 
+void Personaje::actualizarRectDestino(){
+	rectDestino.x = posX;
+	rectDestino.y = posY;
+
+
+	if(estado == CuerpoATierra && !saltando){
+		rectDestino.y += 40;
+		rectDestino.w = 72;
+		rectDestino.h = 34;
+	}
+	else{
+		rectDestino.w = 34;
+		rectDestino.h = 72;
+	}
+}
+
 
 void Personaje::dibujar(SDL_Renderer* renderer){
 	loginfo("Se comenzo a dibujar personaje");
 
+	actualizarRectDestino();
 	SDL_Rect rect_origen;
 	if(saltando){
 		rect_origen = spritesJugador->getFrameSaltando();

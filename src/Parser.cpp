@@ -29,25 +29,33 @@ void Parser::parsear(string msj){
 	posFondo2 = stoi(msj.substr(5,4));
 	posFondo3 = stoi(msj.substr(9,4));
 	posPersonajeX = stoi(msj.substr(13,3));
-	posPersonajeY = stoi(msj.substr(16,3));
+	parsearPosY(msj.substr(16,4));
 
-	if(msj[19] == '1') saltando = true;
+	if(msj[20] == '1') saltando = true;
 	else saltando = false;
 
-	if(msj[20] == '1') disparando = true;
+	if(msj[21] == '1') disparando = true;
 	else disparando = false;
 
-	if(msj[21] == '1') mirandoALaDerecha = true;
+	if(msj[22] == '1') mirandoALaDerecha = true;
 	else mirandoALaDerecha = false;
 
-	if(msj[22] == '1') activo = true;
+	if(msj[23] == '1') activo = true;
 	else activo = false;
 
-	if(msj[23] == '1') grisado = true;
+	if(msj[24] == '1') grisado = true;
 	else grisado = false;
 
-	estado = (Constantes::Estado) (msj[24] - '0');
-	direccionDisparo = (Constantes::DireccionDisparo) (msj[25] - '0');
+	estado = (Constantes::Estado) (msj[25] - '0');
+	direccionDisparo = (Constantes::DireccionDisparo) (msj[26] - '0');
+}
+
+void Parser::parsearPosY(string substr){
+	unsigned pos = substr.find_first_of("-");
+	if(pos > 3) posPersonajeY = stoi(substr);
+	else{
+		posPersonajeY = stoi(substr.substr(pos,4-pos));
+	}
 }
 
 int Parser::getNivel(){

@@ -24,7 +24,7 @@ extern "C"
 class juego
 {
 public:
-	juego ();
+	juego (string strComportamiento);
 	~juego ();
 	void setAcciones(char* msj);
 	void manejar_eventos ();

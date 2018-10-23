@@ -43,6 +43,14 @@ void EntidadDibujable::setRectOrigen(int x,int y,int w,int h){
 	rectOrigen = {x,y,w,h};
 }
 
+void EntidadDibujable::setRectOrigenX(int x){
+	rectOrigen.x = x;
+}
+
+void EntidadDibujable::setRectOrigenY(int y){
+	rectOrigen.y = y;
+}
+
 SDL_Texture* EntidadDibujable::getTextura(){
 	return textura;
 }

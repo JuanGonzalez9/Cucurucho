@@ -44,6 +44,8 @@ private:
 	Constantes::Estado estado;
 	Constantes::DireccionDisparo direccionDisparo;
 
+	void parsearPosY(string substr);
+
 };
 
 
