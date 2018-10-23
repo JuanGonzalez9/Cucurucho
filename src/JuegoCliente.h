@@ -20,6 +20,7 @@ private:
 	Parser p;
 	string msjServer;
 	Sprite* miPersonajeSprites;
+	int nivel;
 
 	SDL_Rect pj_rectOrigen;
 	SDL_Rect pj_rectDestino;

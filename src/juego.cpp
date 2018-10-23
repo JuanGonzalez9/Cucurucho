@@ -588,6 +588,88 @@ void juego::manejar_eventos ()
 
 	loginfo("Se termina de manejar eventos de juego");
 }
+
+void juego::actualizarNivel1(){
+	
+	cambioNivel=false;
+	nivel=2;
+	fondo1.obtenerTextura("//configuracion//escenarios//nivel2//fondo1", renderer);
+	fondo2.obtenerTextura("//configuracion//escenarios//nivel2//fondo2", renderer);
+
+	SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel2//fondo3", renderer);
+	SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
+	textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
+	SDL_DestroyTexture (textura_fondo3_temp);
+	plataformas.cargarValoresFijos(textura_fondo3,renderer,2);
+
+	fondo1.setRectOrigen(0,3600-600,800,600);
+	fondo2.setRectOrigen(0,3600-600,800,600);
+	rect_origen_fondo3={0,3600-600,800,600};
+	boby.setPosX(50);
+	boby.setPosY(400);
+	boby.setCoordenadaX(0+50);
+	boby.setCoordenadaY(3600-(600-400));
+
+	boby2.setPosX(250);
+	boby2.setPosY(400);
+	boby2.setCoordenadaX(0+250);
+	boby2.setCoordenadaY(3600-(600-400));
+
+	boby3.setPosX(450);
+	boby3.setPosY(400);
+	boby3.setCoordenadaX(0+450);
+	boby3.setCoordenadaY(3600-(600-400));
+
+	boby4.setPosX(650);
+	boby4.setPosY(400);
+	boby4.setCoordenadaX(0+650);
+	boby4.setCoordenadaY(3600-(600-400));
+	
+}
+
+void juego::actualizarNivel2(){
+	cambioNivel=false;
+	nivel=3;		
+	fondo1.obtenerTextura("//configuracion//escenarios//nivel3//fondo1", renderer);
+	fondo2.obtenerTextura("//configuracion//escenarios//nivel3//fondo2", renderer);
+
+	SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel3//fondo3", renderer);
+	SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
+	textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
+	SDL_DestroyTexture (textura_fondo3_temp);
+	plataformas.cargarValoresFijos(textura_fondo3,renderer,3);
+
+	fondo1.setRectOrigen(0,0,800,600);
+	fondo2.setRectOrigen(0,0,800,600);
+	rect_origen_fondo3={0,0,800,600};
+
+	boby.setPosX(50);
+	boby.setPosY(280);	
+	boby.setCoordenadaX(0+50);
+	boby.setCoordenadaY(280);
+
+	boby2.setPosX(150);
+	boby2.setPosY(280);
+	boby2.setCoordenadaX(0+150);
+	boby2.setCoordenadaY(280);
+
+	boby3.setPosX(250);
+	boby3.setPosY(280);
+	boby3.setCoordenadaX(0+250);
+	boby3.setCoordenadaY(280);
+
+	boby4.setPosX(350);
+	boby4.setPosY(280);
+	boby4.setCoordenadaX(0+350);
+	boby4.setCoordenadaY(280);
+
+	fondo1.avanzarOrigen(50);
+	fondo2.avanzarOrigen(50);
+}
+
+void juego::actualizarNivel3(){
+	termino = true;
+}
 	
 
 void juego::actualizar ()
@@ -714,91 +796,9 @@ void juego::actualizar ()
 		
 	}
 
-	if((nivel==1)&& (boby.llegoAlFinalDelNivel1() || cambioNivel==true))
-	{	
-		cambioNivel=false;
-		nivel=2;
-		fondo1.obtenerTextura("//configuracion//escenarios//nivel2//fondo1", renderer);
-		fondo2.obtenerTextura("//configuracion//escenarios//nivel2//fondo2", renderer);
-
-		SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel2//fondo3", renderer);
-		SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
-		textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
-		SDL_DestroyTexture (textura_fondo3_temp);
-		plataformas.cargarValoresFijos(textura_fondo3,renderer,2);
-
-		fondo1.setRectOrigen(0,3600-600,800,600);
-		fondo2.setRectOrigen(0,3600-600,800,600);
-		rect_origen_fondo3={0,3600-600,800,600};
-		boby.setPosX(50);
-		boby.setPosY(400);
-		boby.setCoordenadaX(0+50);
-		boby.setCoordenadaY(3600-(600-400));
-
-		boby2.setPosX(250);
-		boby2.setPosY(400);
-		boby2.setCoordenadaX(0+250);
-		boby2.setCoordenadaY(3600-(600-400));
-
-		boby3.setPosX(450);
-		boby3.setPosY(400);
-		boby3.setCoordenadaX(0+450);
-		boby3.setCoordenadaY(3600-(600-400));
-		
-		boby4.setPosX(650);
-		boby4.setPosY(400);
-		boby4.setCoordenadaX(0+650);
-		boby4.setCoordenadaY(3600-(600-400));
-		
-	}
-
-	if((nivel==2)&& (boby.llegoAlFinalDelNivel2() || cambioNivel== true))
-	{	
-		
-		cambioNivel=false;
-		nivel=3;		
-		fondo1.obtenerTextura("//configuracion//escenarios//nivel3//fondo1", renderer);
-		fondo2.obtenerTextura("//configuracion//escenarios//nivel3//fondo2", renderer);
-
-		SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel3//fondo3", renderer);
-		SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
-		textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
-		SDL_DestroyTexture (textura_fondo3_temp);
-		plataformas.cargarValoresFijos(textura_fondo3,renderer,3);
-
-		fondo1.setRectOrigen(0,0,800,600);
-		fondo2.setRectOrigen(0,0,800,600);
-		rect_origen_fondo3={0,0,800,600};
-
-		boby.setPosX(50);
-		boby.setPosY(280);	
-		boby.setCoordenadaX(0+50);
-		boby.setCoordenadaY(280);
-
-		boby2.setPosX(150);
-		boby2.setPosY(280);
-		boby2.setCoordenadaX(0+150);
-		boby2.setCoordenadaY(280);
-
-		boby3.setPosX(250);
-		boby3.setPosY(280);
-		boby3.setCoordenadaX(0+250);
-		boby3.setCoordenadaY(280);
-
-		boby4.setPosX(350);
-		boby4.setPosY(280);
-		boby4.setCoordenadaX(0+350);
-		boby4.setCoordenadaY(280);
-
-		fondo1.avanzarOrigen(50);
-		fondo2.avanzarOrigen(50);
-		
-		
-	}
-
-	if((nivel ==3) && boby.llegoAlFinalDelNivel3()){
-		termino = true;
-	}
+	if((nivel==1)&& (boby.llegoAlFinalDelNivel1() || cambioNivel== true)) actualizarNivel1();
+	if((nivel==2)&& (boby.llegoAlFinalDelNivel2() || cambioNivel== true)) actualizarNivel2();
+	if((nivel ==3) && boby.llegoAlFinalDelNivel3()) actualizarNivel3();
 
 	//actualiza el shootTimer del jugador (para que no tire 500 tiros por segundo)
 	//tambien el movimiento de las balas y borro las que exceden su rango

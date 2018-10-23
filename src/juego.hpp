@@ -46,6 +46,9 @@ protected:
 	Plataformas plataformas;
 	traductorDelCliente* cliente;
 	ArmadorDeRespuesta* armador;
+	void actualizarNivel1();
+	void actualizarNivel2();
+	void actualizarNivel3();
 
 	//balas
 	bool collision(SDL_Rect rect1,SDL_Rect rect2);

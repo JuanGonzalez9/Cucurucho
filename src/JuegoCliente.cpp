@@ -10,6 +10,7 @@
 JuegoCliente::JuegoCliente(string comportamiento) : juego(comportamiento){
 	//juego(comportamiento);
 	miPersonajeSprites = new Sprite();
+	nivel = 1;
 
 	pj_rectOrigen = {0,0,0,0};
 	pj_rectDestino = {0,0,0,0};
@@ -17,6 +18,14 @@ JuegoCliente::JuegoCliente(string comportamiento) : juego(comportamiento){
 
 void JuegoCliente::setMensajeDelServidor(string msj){
 	p.parsear(msj);
+	if(nivel == 1 && p.getNivel() == 2){
+		actualizarNivel1();
+		nivel = 2;
+	}
+	else if(nivel == 2 && p.getNivel() == 3){
+		actualizarNivel2();
+		nivel = 3;	
+	}
 }
 
 void JuegoCliente::actualizarFondos(){
