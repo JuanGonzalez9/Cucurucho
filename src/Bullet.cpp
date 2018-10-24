@@ -18,6 +18,10 @@ Bullet::Bullet(int x,int y,int xVel,int yVel)
 
 }
 
+Bullet::Bullet(int x,int y){
+	Bullet(x,y,0,0);
+}
+
 
 int Bullet::posY()
 {

@@ -13,6 +13,11 @@ ArmadorDeRespuesta::ArmadorDeRespuesta() {
 	fondo2 = 0;
 	fondo3 = 0;
 
+	int longitudStringBalas = MAX_BALAS * TAMANIO_POS_BALAS;
+	string aux(longitudStringBalas,'0');
+	strBalas = aux;
+	resetBalas = aux;
+	balasActuales = 0;
 }
 
 // --------------- setter getter
@@ -80,6 +85,11 @@ void ArmadorDeRespuesta::setDireccionDisparo(Constantes::DireccionDisparo dir){
 	this->dirDisparo = dir;
 }
 
+void ArmadorDeRespuesta::setCantidadDeBalas(int balas){
+	this->cantidadDeBalas = balas;
+	balasActuales = 0;
+}
+
 
 //------------ METODOS ------------
 string ArmadorDeRespuesta::fondoToString(int f){
@@ -103,15 +113,38 @@ string ArmadorDeRespuesta::posicionToString(int p){
 	return respuesta;
 }
 
+string ArmadorDeRespuesta::pasarAStringDeTamanio(int tamanio,int valor){
+
+	string respuesta(tamanio,'0');
+
+	string nuevo = to_string(valor);
+	respuesta.replace(tamanio - nuevo.size(),nuevo.size(),nuevo);
+
+	return respuesta;
+}
+
+void ArmadorDeRespuesta::sumarBalas(vector<Bullet*> nuevasBalas){
+	for(unsigned i = 0; i < nuevasBalas.size();i++){
+		string nuevoX = pasarAStringDeTamanio(RESPUESTA_POSX + 1,nuevasBalas[i]->getRectaDestino().x);
+		
+		strBalas.replace(TAMANIO_POS_BALAS * balasActuales,RESPUESTA_POSX + 1,nuevoX);
+
+		string nuevoY = pasarAStringDeTamanio(RESPUESTA_POSY,nuevasBalas[i]->getRectaDestino().y);
+		strBalas.replace(TAMANIO_POS_BALAS * balasActuales + RESPUESTA_POSX + 1,RESPUESTA_POSY,nuevoY);
+
+		balasActuales++;
+	}
+}
+
 string ArmadorDeRespuesta::dameLaRespuesta(){
 	string respuesta = to_string(nivel);
 
-	respuesta += fondoToString(fondo1);
-	respuesta += fondoToString(fondo2);
-	respuesta += fondoToString(fondo3);
+	respuesta += pasarAStringDeTamanio(RESPUESTA_FONDO,fondo1);
+	respuesta += pasarAStringDeTamanio(RESPUESTA_FONDO,fondo2);
+	respuesta += pasarAStringDeTamanio(RESPUESTA_FONDO,fondo3);
 
-	respuesta += posicionToString(posPersonajeX);
-	respuesta += fondoToString(posPersonajeY);
+	respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,posPersonajeX);
+	respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,posPersonajeY);
 
 	respuesta += to_string(saltando);
 	respuesta += to_string(disparando);
@@ -122,9 +155,13 @@ string ArmadorDeRespuesta::dameLaRespuesta(){
 	respuesta += to_string(estado);
 	respuesta += to_string(dirDisparo);
 
+	respuesta += pasarAStringDeTamanio(MENSAJE_CANT_BALAS,cantidadDeBalas);
+	respuesta += strBalas;
+	strBalas = resetBalas;
+
 	return respuesta;
 }
-//------------ DESTRUCTOR
+//------------ DESTRUCTOR------------------
 ArmadorDeRespuesta::~ArmadorDeRespuesta() {
 }
 

@@ -3,6 +3,8 @@
 
 #include <string>
 #include "Constantes.h"
+#include <vector>
+#include "Bullet.h"
 
 using namespace std;
 
@@ -24,6 +26,7 @@ public:
 	bool estaGrisado();
 	Constantes::Estado getEstado();
 	Constantes::DireccionDisparo getDireccionDisparo();
+	vector< pair<int,int> > getBalas();
 
 	//..........METODO........
 	void parsear(string msj);
@@ -43,8 +46,13 @@ private:
 	bool grisado;
 	Constantes::Estado estado;
 	Constantes::DireccionDisparo direccionDisparo;
+	int cantBalas;
+	vector< pair<int,int> > balas;
 
 	void parsearPosY(string substr);
+	void parsearBalas(string sub);
+	int dameElInt(string sub);
+	void resetearBalas();
 
 };
 

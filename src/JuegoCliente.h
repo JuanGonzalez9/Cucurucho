@@ -22,12 +22,13 @@ private:
 	Sprite* miPersonajeSprites;
 	int nivel;
 
-	SDL_Rect pj_rectOrigen;
-	SDL_Rect pj_rectDestino;
+	SDL_Rect bala_rectOrigen;
+	SDL_Rect bala_rectDestino;
 
 	void actualizarFondos();
 	void actualizarPosicionDeMiPersonaje();
 	void actualizarEstadoDeMiPersonaje();
+	void dibujarBalas(vector< pair<int,int> > balas);
 };
 
 #endif /* JUEGOCLIENTE_H_ */

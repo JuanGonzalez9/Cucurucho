@@ -60,6 +60,21 @@ int Personaje::getPosY(){
 	return posY;
 }
 
+int Personaje::getCantidadDeBalas(){
+	return bullets.size();
+}
+
+vector<Bullet*> Personaje::getBalas(){
+	return bullets;
+}
+
+void Personaje::setBalas(vector<Bullet*> balas){
+	for(unsigned i = 0;i < bullets.size();i++){
+		delete bullets[i];	
+	}
+	bullets = balas;
+}
+
 void Personaje::setPosX(int x){
 	posX=x;
 }
@@ -232,7 +247,9 @@ void Personaje::verSiBalasPegan(Enemigo* malo){
 
 void Personaje::dibujarBalas(SDL_Renderer* renderer){
 	for(unsigned i = 0; i < bullets.size();i++){
+		cout<<"voy a dibujar"<<endl;
 		bullets[i]->dibujar(renderer);
+		cout<<"la dibuje"<<endl;
 	}
 }
 

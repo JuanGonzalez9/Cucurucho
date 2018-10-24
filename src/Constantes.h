@@ -14,7 +14,12 @@
 #define RESPUESTA_POSY 4	//el valor de Y puede ser negativo cuando se va para arriba, fuera de la ventana
 #define RESPUESTA_ESTADOS 7
 
-#define TAMANIO_RESPUESTA_SERVIDOR RESPUESTA_NIVEL + RESPUESTA_FONDO * 3 + RESPUESTA_POSX + RESPUESTA_POSY + RESPUESTA_ESTADOS
+#define MENSAJE_CANT_BALAS 2  //dos bytes el mensaje '99'
+#define MAX_BALAS 12
+#define TAMANIO_POS_BALAS (RESPUESTA_POSX + RESPUESTA_POSY + 1) //posX ahora puede ser valor negativo,por eso se suma 1
+
+#define TAMANIO_RESPUESTA_SERVIDOR RESPUESTA_NIVEL + RESPUESTA_FONDO * 3 + RESPUESTA_POSX + RESPUESTA_POSY + RESPUESTA_ESTADOS + MENSAJE_CANT_BALAS + MAX_BALAS * TAMANIO_POS_BALAS
+
 
 class Constantes{
 public:

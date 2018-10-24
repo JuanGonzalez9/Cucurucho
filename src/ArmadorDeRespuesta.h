@@ -10,6 +10,10 @@
 #include <unistd.h>
 #include <iostream>
 #include "Constantes.h"
+#include <vector>
+#include "Bullet.h"
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
 
 using namespace std;
 
@@ -30,6 +34,8 @@ public:
 	void setGrisado(bool grisado);
 	void setEstado(Constantes::Estado estado);
 	void setDireccionDisparo(Constantes::DireccionDisparo dir);
+	void setCantidadDeBalas(int cant);
+	void sumarBalas(vector<Bullet*> nuevasBalas);
 
 	//.......metodos...........................
 	string dameLaRespuesta();
@@ -37,8 +43,11 @@ public:
 	virtual ~ArmadorDeRespuesta();
 
 private:
+	string strBalas;
+	string resetBalas;
 	string fondoToString(int f);
 	string posicionToString(int p);
+	string pasarAStringDeTamanio(int tamanio,int valor);
 	int nivel;
 	int fondo1;
 	int fondo2;
@@ -52,6 +61,8 @@ private:
 	bool mirandoALaDerecha;
 	bool activo;
 	bool grisado;
+	int cantidadDeBalas;
+	int balasActuales;
 
 	Constantes::Estado estado;
 	Constantes::DireccionDisparo dirDisparo;

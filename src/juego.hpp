@@ -27,6 +27,7 @@ public:
 	juego (string strComportamiento);
 	~juego ();
 	void setAcciones(char* msj);
+	int getCantidadDeBalas();
 	void manejar_eventos ();
 	void actualizar ();
 	string armarRespuesta();

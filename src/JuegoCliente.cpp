@@ -12,8 +12,8 @@ JuegoCliente::JuegoCliente(string comportamiento) : juego(comportamiento){
 	miPersonajeSprites = new Sprite();
 	nivel = 1;
 
-	pj_rectOrigen = {0,0,0,0};
-	pj_rectDestino = {0,0,0,0};
+	bala_rectOrigen = {0,0,32,32};
+	bala_rectDestino = {0,0,8,8};
 }
 
 void JuegoCliente::setMensajeDelServidor(string msj){
@@ -53,6 +53,14 @@ void JuegoCliente::actualizarEstadoDeMiPersonaje(){
 	boby.setEstadosEnumerados(p.getEstado(),p.getDireccionDisparo());
 }
 
+void JuegoCliente::dibujarBalas(vector< pair<int,int> > balas){
+	for(unsigned i = 0; i < balas.size();i++){
+		bala_rectDestino.x = balas[i].first;
+		bala_rectDestino.y = balas[i].second;
+		SDL_RenderCopy(renderer, textura_bala, & bala_rectOrigen , & bala_rectDestino);
+	}
+}
+
 void JuegoCliente::dibujar(){
 	SDL_SetTextureBlendMode (textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget (renderer, textura_objetivo);
@@ -69,6 +77,9 @@ void JuegoCliente::dibujar(){
 	actualizarPosicionDeMiPersonaje();
 	actualizarEstadoDeMiPersonaje();
 	boby.dibujar(renderer);
+
+	vector< pair<int,int> > balas = p.getBalas();
+	dibujarBalas(balas);
 }
 
 JuegoCliente::~JuegoCliente() {

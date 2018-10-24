@@ -37,7 +37,7 @@ juego::juego (string comportamiento):
 	if(comportamiento == "cliente") flags = 0;
 	else flags = SDL_WINDOW_HIDDEN;
 
-	ventana = SDL_CreateWindow ("Contra", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
+	ventana = SDL_CreateWindow ("Contra", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, flags);
 	if (nullptr == ventana) {
 		logerror("No pudo crease la ventana");
 		std::cerr << "No pudo crease la ventana: " << SDL_GetError () << '\n';
@@ -882,6 +882,9 @@ string juego::armarRespuesta(){
 
 	armador->setEstado( (Constantes::Estado) boby.getEstado());
 	armador->setDireccionDisparo( (Constantes::DireccionDisparo) boby.getDireccionDisparo());
+
+	armador->setCantidadDeBalas(getCantidadDeBalas());
+	armador->sumarBalas(boby.getBalas());
 	
 	//armador->setEnemigo()
 
@@ -1056,6 +1059,16 @@ bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
 
 void juego::setAcciones(char* msj){
 	cliente->setMensajeATraducir(msj);
+}
+
+int juego::getCantidadDeBalas(){
+	int cantidad = 0;
+	cantidad += boby.getCantidadDeBalas();
+	cantidad += boby2.getCantidadDeBalas();
+	cantidad += boby3.getCantidadDeBalas();
+	cantidad += boby4.getCantidadDeBalas();
+
+	return cantidad;
 }
 
 juego::~juego ()

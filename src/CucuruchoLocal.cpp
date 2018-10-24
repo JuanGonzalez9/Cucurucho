@@ -11,6 +11,7 @@
 #include "Socket.h"
 #include "Parser.h"
 #include "JuegoCliente.h"
+#include "Constantes.h"
 
 #define TAMANIO_MENSAJE_TECLAS 9
 
@@ -19,6 +20,16 @@ void uso ()
 	std::cout << "uso: contra [-h | -d (ERROR|INFO|DEBUG)]\n\n";
 	std::cout << "  -h         Muestra esta ayuda y finaliza\n";
 	std::cout << "  -d OPCION  Estable a OPCION como nivel de depuracion\n\n";
+}
+
+void enviarBalas(int cantDeBalas,Socket* soquete){
+	string balas = "00";
+	string nuevo = to_string(cantDeBalas);
+	balas.replace(2 - nuevo.size(),nuevo.size(),nuevo);
+
+	soquete->enviar(soquete->getAcceptedSocket(),balas.c_str(),MENSAJE_CANT_BALAS);
+
+	//el resto
 }
 
 int main (int argc, char *argv[]){
@@ -66,6 +77,7 @@ int main (int argc, char *argv[]){
 		soqueteCliente->conectar(serverAdress,puerto);
 
 		char respuestaServidor[TAMANIO_RESPUESTA_SERVIDOR + 1];
+		char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
 		JuegoCliente juegoCliente("cliente");
 
 		while(escuchador->enAccion()){
@@ -80,13 +92,13 @@ int main (int argc, char *argv[]){
 				int llegaron = 
 					soqueteCliente->recibir(soqueteCliente->getSocketId(),respuestaServidor,TAMANIO_RESPUESTA_SERVIDOR);
 				respuestaServidor[TAMANIO_RESPUESTA_SERVIDOR] = 0;
-				string respuestaSinParsear(respuestaServidor);
 				
+				string respuestaSinParsear(respuestaServidor);
 				juegoCliente.setMensajeDelServidor(respuestaSinParsear);
+	
 				juegoCliente.dibujar();
 				juegoCliente.presentar();
 
-				//SDL_Delay(10);
 			//}
 
 		}
@@ -113,8 +125,9 @@ int main (int argc, char *argv[]){
 				j.actualizar ();
 				string respuesta = j.armarRespuesta();
 				soquete->enviar(soquete->getAcceptedSocket(),respuesta.c_str(),TAMANIO_RESPUESTA_SERVIDOR);
-				j.dibujar ();
-				j.presentar ();
+
+				//j.dibujar ();
+				//j.presentar ();
 			}
 			soquete->~Socket();
 		

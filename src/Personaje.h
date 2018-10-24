@@ -41,6 +41,9 @@ public:
 	Personaje::DireccionDisparo getDireccionDisparo();
 	int getPosX();
 	int getPosY();
+	int getCantidadDeBalas();
+	vector<Bullet*> getBalas();
+	void setBalas(vector<Bullet*> balas);
 	void setPosX(int x);
 	void setPosY(int y);
 	void setCoordenadaX(int x);

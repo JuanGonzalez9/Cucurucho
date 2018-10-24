@@ -21,9 +21,12 @@ Parser::Parser() {
 	grisado = false;
 	estado = Constantes::Quieto;
 	direccionDisparo = Constantes::Centro;
+	cantBalas = 0;
 }
 
 void Parser::parsear(string msj){
+	resetearBalas();
+
 	nivel = msj[0] - '0';
 	posFondo1 = stoi(msj.substr(1,4));
 	posFondo2 = stoi(msj.substr(5,4));
@@ -48,6 +51,10 @@ void Parser::parsear(string msj){
 
 	estado = (Constantes::Estado) (msj[25] - '0');
 	direccionDisparo = (Constantes::DireccionDisparo) (msj[26] - '0');
+
+	cantBalas = stoi(msj.substr(27,2));
+	parsearBalas(msj.substr(29,TAMANIO_POS_BALAS * cantBalas));
+
 }
 
 void Parser::parsearPosY(string substr){
@@ -56,6 +63,32 @@ void Parser::parsearPosY(string substr){
 	else{
 		posPersonajeY = stoi(substr.substr(pos,4-pos));
 	}
+}
+
+int Parser::dameElInt(string sub){
+	int respuesta;
+	unsigned pos = sub.find_first_of("-");
+	if(pos > 3) respuesta = stoi(sub);
+	else{
+		respuesta = stoi(sub.substr(pos,4-pos));
+	}
+	return respuesta;	
+}
+
+void Parser::parsearBalas(string sub){
+	int x,y;
+	for(int i = 0; i < cantBalas; i++){
+		x = dameElInt(sub.substr(TAMANIO_POS_BALAS * i,4));
+		y = dameElInt(sub.substr(TAMANIO_POS_BALAS * i + 4,4));
+		pair<int,int> nuevaBala;
+		nuevaBala.first = x;
+		nuevaBala.second = y;
+		balas.push_back(nuevaBala);
+	}
+}
+
+void Parser::resetearBalas(){
+	balas.clear();
 }
 
 int Parser::getNivel(){
@@ -108,6 +141,10 @@ Constantes::Estado Parser::getEstado(){
 
 Constantes::DireccionDisparo Parser::getDireccionDisparo(){
 	return direccionDisparo;
+}
+
+vector< pair<int,int> > Parser::getBalas(){
+	return balas;
 }
 
 Parser::~Parser() {
