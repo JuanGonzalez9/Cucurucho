@@ -35,10 +35,10 @@ void Parser::parsear(string msj){
 
 	printf("hola2\n");
 	
-	parsearPersonaje(msj,13);
+	parsearPersonaje1(msj,13);
 
 	printf("hola3\n");
-	parsearPersonaje(msj,27);
+	parsearPersonaje2(msj,27);
 
 	printf("hola4\n");
 	cantBalas = stoi(msj.substr(31,2));
@@ -50,7 +50,7 @@ void Parser::parsear(string msj){
 }
 
 
-void Parser::parsearPersonaje(string msj,int i){
+void Parser::parsearPersonaje1(string msj,int i){
 	
 	posPersonajeX = stoi(msj.substr(i,3));
 	parsearPosY(msj.substr(i+3,4));
@@ -77,11 +77,46 @@ void Parser::parsearPersonaje(string msj,int i){
 
 }
 
+void Parser::parsearPersonaje2(string msj,int i){
+	
+	posPersonajeX2 = stoi(msj.substr(i,3));
+	parsearPosY2(msj.substr(i+3,4));
+
+	if(msj[i+7] == '1') saltando2 = true;
+	else saltando2 = false;
+
+	if(msj[i+8] == '1') disparando2 = true;
+	else disparando2 = false;
+
+	if(msj[i+9] == '1') mirandoALaDerecha2 = true;
+	else mirandoALaDerecha2 = false;
+
+	if(msj[i+10] == '1') activo2 = true;
+	else activo2 = false;
+
+	if(msj[i+11] == '1') grisado2 = true;
+	else grisado2 = false;
+
+	estado2 = (Constantes::Estado) (msj[i+12] - '0');
+	direccionDisparo2 = (Constantes::DireccionDisparo) (msj[i+13] - '0');
+
+
+
+}
+
 void Parser::parsearPosY(string substr){
 	unsigned pos = substr.find_first_of("-");
 	if(pos > 3) posPersonajeY = stoi(substr);
 	else{
 		posPersonajeY = stoi(substr.substr(pos,4-pos));
+	}
+}
+
+void Parser::parsearPosY2(string substr){
+	unsigned pos = substr.find_first_of("-");
+	if(pos > 3) posPersonajeY2 = stoi(substr);
+	else{
+		posPersonajeY2 = stoi(substr.substr(pos,4-pos));
 	}
 }
 

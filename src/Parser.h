@@ -39,7 +39,9 @@ public:
 
 	//..........METODO........
 	void parsear(string msj);
-	void parsearPersonaje(string msj,int i);
+	void parsearPersonaje1(string msj,int i);
+	void parsearPersonaje2(string msj,int i);
+
 
 	virtual ~Parser();
 private:
@@ -67,11 +69,12 @@ private:
 	Constantes::Estado estado2;
 	Constantes::DireccionDisparo direccionDisparo2;
 
-	
+
 	int cantBalas;
 	vector< pair<int,int> > balas;
 
 	void parsearPosY(string substr);
+	void parsearPosY2(string substr);
 	void parsearBalas(string sub);
 	int dameElInt(string sub);
 	void resetearBalas();

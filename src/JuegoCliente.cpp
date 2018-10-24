@@ -54,13 +54,13 @@ void JuegoCliente::actualizarEstadoDeMiPersonaje(){
 }
 
 void JuegoCliente::actualizarPosicionDeMiPersonaje2(){
-	boby2.setPosX(p.getPosPersonajeX());
-	boby2.setPosY(p.getPosPersonajeY());
+	boby2.setPosX(p.getPosPersonajeX2());
+	boby2.setPosY(p.getPosPersonajeY2());
 }
 
 void JuegoCliente::actualizarEstadoDeMiPersonaje2(){
-	boby2.setEstados(p.estaSaltando(),p.estaDisparando(),p.estaMirandoALaDerecha(),p.estaActivo(),p.estaGrisado());
-	boby2.setEstadosEnumerados(p.getEstado(),p.getDireccionDisparo());
+	boby2.setEstados(p.estaSaltando2(),p.estaDisparando2(),p.estaMirandoALaDerecha2(),p.estaActivo2(),p.estaGrisado2());
+	boby2.setEstadosEnumerados(p.getEstado2(),p.getDireccionDisparo2());
 }
 
 void JuegoCliente::dibujarBalas(vector< pair<int,int> > balas){
