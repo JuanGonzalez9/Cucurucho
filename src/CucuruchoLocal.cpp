@@ -76,9 +76,10 @@ int main (int argc, char *argv[]){
 		Socket* soqueteCliente = new Socket();
 		soqueteCliente->conectar(serverAdress,puerto);
 
+
 		char respuestaServidor[TAMANIO_RESPUESTA_SERVIDOR + 1];
 		char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
-		JuegoCliente juegoCliente("cliente", 4);
+		JuegoCliente juegoCliente("cliente", 2);
 
 		while(escuchador->enAccion()){
 			string acciones = escuchador->obtenerAcciones();
@@ -116,18 +117,40 @@ int main (int argc, char *argv[]){
 			Socket* soquete = new Socket();
 			soquete->bindAndListen(puerto);
 			soquete->aceptar();
-			juego j("servidor", 4);
+
+			char mensaje2[TAMANIO_MENSAJE_TECLAS + 1];
+			Socket* soquete2 = new Socket();
+			soquete2->bindAndListen(puerto+1);
+			soquete2->aceptar();
+
+
+			juego j("servidor", 2);
 			while (j.jugando ()) {
+				
+							
+
+
 				int recibidos = soquete->recibir(soquete->getAcceptedSocket(),mensaje,TAMANIO_MENSAJE_TECLAS);
 				mensaje[TAMANIO_MENSAJE_TECLAS] = 0;
-				j.setAcciones(mensaje);
+				j.setAcciones(mensaje,1);
+				
+		
+				int recibidos2 = soquete2->recibir(soquete2->getAcceptedSocket(),mensaje2,TAMANIO_MENSAJE_TECLAS);	
+				mensaje2[TAMANIO_MENSAJE_TECLAS] = 0;
+				j.setAcciones(mensaje2,2);
+				
+
 				j.manejar_eventos ();
 				j.actualizar ();
-				string respuesta = j.armarRespuesta();
+
+				string respuesta = j.armarRespuesta(1);
 				soquete->enviar(soquete->getAcceptedSocket(),respuesta.c_str(),TAMANIO_RESPUESTA_SERVIDOR);
 
-				//j.dibujar ();
-				//j.presentar ();
+				string respuesta2 = j.armarRespuesta(2);
+				soquete2->enviar(soquete2->getAcceptedSocket(),respuesta2.c_str(),TAMANIO_RESPUESTA_SERVIDOR);
+
+				j.dibujar ();
+				j.presentar ();
 			}
 			soquete->~Socket();
 		

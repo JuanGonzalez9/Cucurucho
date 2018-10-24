@@ -26,11 +26,11 @@ class juego
 public:
 	juego (string strComportamiento, int cantidadJugadores);
 	~juego ();
-	void setAcciones(char* msj);
+	void setAcciones(char* msj, int numeroCliente);
 	int getCantidadDeBalas();
 	void manejar_eventos ();
 	void actualizar ();
-	string armarRespuesta();
+	string armarRespuesta(int numeroJugador);
 	void dibujar ();
 	void presentar ();
 	bool jugando ();
@@ -45,7 +45,10 @@ protected:
 	SDL_Renderer *renderer;
 	SDL_Texture *textura_fondo3, *textura_objetivo, *textura_bala, *textura_bala2, *textura_bala3, *textura_bala4;
 	Plataformas plataformas;
+
 	traductorDelCliente* cliente;
+	traductorDelCliente* cliente2;
+
 	ArmadorDeRespuesta* armador;
 	void actualizarNivel1();
 	void actualizarNivel2();

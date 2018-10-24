@@ -23,6 +23,7 @@ juego::juego (string comportamiento, int cantidadJugadores):
 	renderer (nullptr),
 	textura_objetivo (nullptr),
 	cliente(nullptr),
+	cliente2(nullptr),
 	armador(nullptr)
 {
 	atexit (SDL_Quit);
@@ -115,6 +116,7 @@ juego::juego (string comportamiento, int cantidadJugadores):
 
 	//Traductor
 	cliente = new traductorDelCliente();
+	cliente2 = new traductorDelCliente();
 	armador = new ArmadorDeRespuesta();
 
 	//evita que se estire el fondo si al principio voy para atras
@@ -122,6 +124,7 @@ juego::juego (string comportamiento, int cantidadJugadores):
 	fondo2.avanzarOrigen(50);
 
 	//activo los jugadores al principio
+	//inicializo la posicion de los bobys en el primer nivel
 	boby.activar();
 	boby.setPosX(50);
 	boby.setPosY(200);
@@ -147,15 +150,8 @@ juego::juego (string comportamiento, int cantidadJugadores):
 		boby4.setPosY(200);
 		boby4.setCoordenadaX(0+350);
 		boby4.setCoordenadaY(200);
-
-
-	//inicializo la posicion de los bobys en el primer nivel
 	
 	
-	
-
-	
-
 }
 
 bool juego::jugando ()
@@ -270,7 +266,7 @@ void juego::manejar_eventos ()
 		bobyPuede=true;
 
 	//NOTA: por ahora uso esta tecla para los otros 3 pero hay que cambiarla al input correspondiente
-	if((boby2.esActivo())&&(apretandoplayer2derecha(state))&&(boby2.getPosX() > (ancho / 2)))
+	if((boby2.esActivo())&&(cliente2->quiereAccion(Constantes::derecha))&&(boby2.getPosX() > (ancho / 2)))
 		boby2Puede=true;
 
 	if((boby3.esActivo())&&(apretandoplayer2derecha(state))&&(boby3.getPosX() > (ancho / 2)))
@@ -305,7 +301,8 @@ void juego::manejar_eventos ()
 				boby.decrementarPosX(d3);
 			}
 		}
-		if (apretandoplayer2derecha(state)){
+		//era apretandoplayer2derecha(state)
+		if (cliente2->quiereAccion(Constantes::derecha)){
 			boby2.hacerComoQueCamina();
 			boby2.subirCoordenadaXEn(d3);
 		}else{
@@ -348,7 +345,7 @@ void juego::manejar_eventos ()
 			boby.avanzar();
 			boby.subirCoordenadaXEn(d3);
 		}
-		if ((apretandoplayer2derecha(state))&&(boby2.getPosX() < 760)){
+		if ((cliente2->quiereAccion(Constantes::derecha))&&(boby2.getPosX() < 760)){
 			boby2.avanzar();
 			boby2.subirCoordenadaXEn(d3);
 		}
@@ -373,7 +370,7 @@ void juego::manejar_eventos ()
 		}
 	}
 	//muevo los otros jugadores (usar el input apropiado)
-	if(!boby2.esGrisado()&&(apretandoplayer2izquierda(state))&&(boby2.getPosX() > 0 )){
+	if(!boby2.esGrisado()&&(cliente2->quiereAccion(Constantes::izquierda))&&(boby2.getPosX() > 0 )){
 		boby2.retroceder();
 		boby2.subirCoordenadaXEn(-d3);		
 	}
@@ -399,11 +396,11 @@ void juego::manejar_eventos ()
 		}
 	}
 
-	if(apretandoplayer2salto(state) && apretandoAbajo(state) && !boby2.estaSaltando()){
+	if(cliente2->quiereAccion(Constantes::salto) && cliente2->quiereAccion(Constantes::abajo) && !boby2.estaSaltando()){
 		boby2.bajar();		
 	}
 	else{
-		if(apretandoplayer2salto(state))
+		if(cliente2->quiereAccion(Constantes::salto))
 				boby2.saltar();
 	}
 	if(apretandoplayer2salto(state) && apretandoAbajo(state) && !boby3.estaSaltando()){
@@ -431,9 +428,12 @@ void juego::manejar_eventos ()
 		boby.pararse();
 	}
 
-	if(apretandoAgacharse(state) && !(apretandoDerecha(state) || apretandoIzquierda(state))) boby2.agacharse();
-	if(! apretandoAgacharse(state)) boby2.pararse();
-
+	if(cliente2->quiereAccion(Constantes::agacharse) && !(cliente2->quiereAccion(Constantes::derecha) || cliente2->quiereAccion(Constantes::izquierda))){
+	 boby2.agacharse();
+	}
+	if(! cliente2->quiereAccion(Constantes::agacharse)){
+	 boby2.pararse();
+	}
 	if(apretandoAgacharse(state) && !(apretandoDerecha(state) || apretandoIzquierda(state))) boby3.agacharse();
 	if(! apretandoAgacharse(state)) boby3.pararse();
 
@@ -469,7 +469,7 @@ void juego::manejar_eventos ()
 		}
 	}
 
-	if(!boby2.esGrisado()&&boby2.esActivo()&&apretandoDisparo(state)){
+	if(!boby2.esGrisado()&&boby2.esActivo()&&cliente2->quiereAccion(Constantes::disparo)){
 		boby2.pelarElChumbo();
 		if(boby2.puedeDisparar()){
 			direccionDeBala = 0;
@@ -520,11 +520,15 @@ void juego::manejar_eventos ()
 	if(! cliente->quiereAccion(Constantes::disparo)){
 		boby.dejarDeDisparar();
 	}
+
+	if(! cliente2->quiereAccion(Constantes::disparo)){
+		boby2.dejarDeDisparar();
+	}
+
 	//reemplazar por input para cada uno
 	if(! apretandoDisparo(state)){
 		boby4.dejarDeDisparar();
 		boby3.dejarDeDisparar();
-		boby4.dejarDeDisparar();
 	}
 
 
@@ -535,13 +539,18 @@ void juego::manejar_eventos ()
 		boby.apuntarAbajo();
 	}
 
-	if(apretandoArriba(state)){
+	if(cliente2->quiereAccion(Constantes::arriba)){
 		boby2.apuntarArriba();
+	}
+	if(cliente2->quiereAccion(Constantes::abajo)){
+		boby2.apuntarAbajo();
+	}
+
+	if(apretandoArriba(state)){
 		boby3.apuntarArriba();
 		boby4.apuntarArriba();
 	}
 	if(apretandoAbajo(state)){
-		boby2.apuntarAbajo();
 		boby3.apuntarAbajo();
 		boby4.apuntarAbajo();
 	}
@@ -572,8 +581,13 @@ void juego::manejar_eventos ()
 	if(! cliente->quiereAccion(Constantes::arriba) && ! cliente->quiereAccion(Constantes::abajo)){
 		boby.dejarDeApuntar();
 	}
-	if(! apretandoArriba(state) && ! apretandoAbajo(state)){
+
+	if(! cliente2->quiereAccion(Constantes::arriba) && ! cliente2->quiereAccion(Constantes::abajo)){
 		boby2.dejarDeApuntar();
+	}
+
+	if(! apretandoArriba(state) && ! apretandoAbajo(state)){
+		
 		boby3.dejarDeApuntar();
 		boby4.dejarDeApuntar();
 	}
@@ -871,7 +885,10 @@ void juego::actualizar ()
 	
 }
 
-string juego::armarRespuesta(){
+string juego::armarRespuesta(int numeroJugador){
+
+	if(numeroJugador == 1){ 
+
 	armador->setNivel(nivel);
 	armador->setFondo1(fondo1.getRectaOrigen().x,fondo1.getRectaOrigen().y);
 	armador->setFondo2(fondo2.getRectaOrigen().x,fondo2.getRectaOrigen().y);
@@ -889,6 +906,29 @@ string juego::armarRespuesta(){
 
 	armador->setCantidadDeBalas(getCantidadDeBalas());
 	armador->sumarBalas(boby.getBalas());
+
+	}
+
+	else if(numeroJugador ==2 ){
+	armador->setNivel(nivel);
+	armador->setFondo1(fondo1.getRectaOrigen().x,fondo1.getRectaOrigen().y);
+	armador->setFondo2(fondo2.getRectaOrigen().x,fondo2.getRectaOrigen().y);
+	armador->setFondo3(rect_origen_fondo3.x,rect_origen_fondo3.y);
+	
+	armador->setPosPersonaje(boby2.getPosX(),boby2.getPosY());
+	armador->setSaltando(boby2.estaSaltando());
+	armador->setDisparando(boby2.estaDisparando());
+	armador->setMirandoALaDerecha(boby2.estaMirandoALaDerecha());
+	armador->setActivo(boby2.esActivo());
+	armador->setGrisado(boby2.esGrisado());
+
+	armador->setEstado( (Constantes::Estado) boby2.getEstado());
+	armador->setDireccionDisparo( (Constantes::DireccionDisparo) boby2.getDireccionDisparo());
+
+	armador->setCantidadDeBalas(getCantidadDeBalas());
+	armador->sumarBalas(boby2.getBalas());
+
+	}
 	
 	//armador->setEnemigo()
 
@@ -1061,8 +1101,13 @@ bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
 	return true;
 }
 
-void juego::setAcciones(char* msj){
-	cliente->setMensajeATraducir(msj);
+void juego::setAcciones(char* msj, int numeroCliente){
+	if(numeroCliente == 1){
+		cliente->setMensajeATraducir(msj);
+	}
+	else if (numeroCliente == 2){
+		cliente2->setMensajeATraducir(msj);
+	}
 }
 
 int juego::getCantidadDeBalas(){
