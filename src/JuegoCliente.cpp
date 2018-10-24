@@ -53,6 +53,16 @@ void JuegoCliente::actualizarEstadoDeMiPersonaje(){
 	boby.setEstadosEnumerados(p.getEstado(),p.getDireccionDisparo());
 }
 
+void JuegoCliente::actualizarPosicionDeMiPersonaje2(){
+	boby2.setPosX(p.getPosPersonajeX());
+	boby2.setPosY(p.getPosPersonajeY());
+}
+
+void JuegoCliente::actualizarEstadoDeMiPersonaje2(){
+	boby2.setEstados(p.estaSaltando(),p.estaDisparando(),p.estaMirandoALaDerecha(),p.estaActivo(),p.estaGrisado());
+	boby2.setEstadosEnumerados(p.getEstado(),p.getDireccionDisparo());
+}
+
 void JuegoCliente::dibujarBalas(vector< pair<int,int> > balas){
 	for(unsigned i = 0; i < balas.size();i++){
 		bala_rectDestino.x = balas[i].first;
@@ -78,6 +88,14 @@ void JuegoCliente::dibujar(){
 	actualizarEstadoDeMiPersonaje();
 	boby.dibujar(renderer);
 
+	if (boby2.esActivo()){
+		
+		printf("estoy activo personaje 2");
+		actualizarPosicionDeMiPersonaje2();
+		actualizarEstadoDeMiPersonaje2();
+		boby2.dibujar(renderer);
+	}
+
 	vector< pair<int,int> > balas = p.getBalas();
 	dibujarBalas(balas);
 }
@@ -85,4 +103,5 @@ void JuegoCliente::dibujar(){
 JuegoCliente::~JuegoCliente() {
 	miPersonajeSprites->~Sprite();
 }
+
 

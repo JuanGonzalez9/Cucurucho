@@ -28,6 +28,8 @@ private:
 	void actualizarFondos();
 	void actualizarPosicionDeMiPersonaje();
 	void actualizarEstadoDeMiPersonaje();
+	void actualizarPosicionDeMiPersonaje2();
+	void actualizarEstadoDeMiPersonaje2();
 	void dibujarBalas(vector< pair<int,int> > balas);
 };
 

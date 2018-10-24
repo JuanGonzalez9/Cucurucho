@@ -27,33 +27,53 @@ Parser::Parser() {
 void Parser::parsear(string msj){
 	resetearBalas();
 
+	printf("hola1%s\n",msj);
 	nivel = msj[0] - '0';
 	posFondo1 = stoi(msj.substr(1,4));
 	posFondo2 = stoi(msj.substr(5,4));
 	posFondo3 = stoi(msj.substr(9,4));
-	posPersonajeX = stoi(msj.substr(13,3));
-	parsearPosY(msj.substr(16,4));
 
-	if(msj[20] == '1') saltando = true;
+	printf("hola2\n");
+	
+	parsearPersonaje(msj,13);
+
+	printf("hola3\n");
+	parsearPersonaje(msj,27);
+
+	printf("hola4\n");
+	cantBalas = stoi(msj.substr(31,2));
+	printf("hola5 %d\n", cantBalas);
+	//parsearBalas(msj.substr(33,TAMANIO_POS_BALAS * cantBalas));
+
+	printf("hola6\n");
+	
+}
+
+
+void Parser::parsearPersonaje(string msj,int i){
+	
+	posPersonajeX = stoi(msj.substr(i,3));
+	parsearPosY(msj.substr(i+3,4));
+
+	if(msj[i+7] == '1') saltando = true;
 	else saltando = false;
 
-	if(msj[21] == '1') disparando = true;
+	if(msj[i+8] == '1') disparando = true;
 	else disparando = false;
 
-	if(msj[22] == '1') mirandoALaDerecha = true;
+	if(msj[i+9] == '1') mirandoALaDerecha = true;
 	else mirandoALaDerecha = false;
 
-	if(msj[23] == '1') activo = true;
+	if(msj[i+10] == '1') activo = true;
 	else activo = false;
 
-	if(msj[24] == '1') grisado = true;
+	if(msj[i+11] == '1') grisado = true;
 	else grisado = false;
 
-	estado = (Constantes::Estado) (msj[25] - '0');
-	direccionDisparo = (Constantes::DireccionDisparo) (msj[26] - '0');
+	estado = (Constantes::Estado) (msj[i+12] - '0');
+	direccionDisparo = (Constantes::DireccionDisparo) (msj[i+13] - '0');
 
-	cantBalas = stoi(msj.substr(27,2));
-	parsearBalas(msj.substr(29,TAMANIO_POS_BALAS * cantBalas));
+
 
 }
 
@@ -141,6 +161,42 @@ Constantes::Estado Parser::getEstado(){
 
 Constantes::DireccionDisparo Parser::getDireccionDisparo(){
 	return direccionDisparo;
+}
+
+int Parser::getPosPersonajeX2(){
+	return posPersonajeX2;
+}
+
+int Parser::getPosPersonajeY2(){
+	return posPersonajeY2;
+}
+
+bool Parser::estaSaltando2(){
+	return saltando2;
+}
+
+bool Parser::estaDisparando2(){
+	return disparando2;
+}
+
+bool Parser::estaMirandoALaDerecha2(){
+	return mirandoALaDerecha2;
+}
+
+bool Parser::estaActivo2(){
+	return activo2;
+}
+
+bool Parser::estaGrisado2(){
+	return grisado2;
+}
+
+Constantes::Estado Parser::getEstado2(){
+	return estado2;
+}
+
+Constantes::DireccionDisparo Parser::getDireccionDisparo2(){
+	return direccionDisparo2;
 }
 
 vector< pair<int,int> > Parser::getBalas(){

@@ -24,12 +24,22 @@ public:
 	bool estaMirandoALaDerecha();
 	bool estaActivo();
 	bool estaGrisado();
+	int getPosPersonajeX2();
+	int getPosPersonajeY2();
+	bool estaSaltando2();
+	bool estaDisparando2();
+	bool estaMirandoALaDerecha2();
+	bool estaActivo2();
+	bool estaGrisado2();
 	Constantes::Estado getEstado();
 	Constantes::DireccionDisparo getDireccionDisparo();
+	Constantes::Estado getEstado2();
+	Constantes::DireccionDisparo getDireccionDisparo2();
 	vector< pair<int,int> > getBalas();
 
 	//..........METODO........
 	void parsear(string msj);
+	void parsearPersonaje(string msj,int i);
 
 	virtual ~Parser();
 private:
@@ -46,6 +56,18 @@ private:
 	bool grisado;
 	Constantes::Estado estado;
 	Constantes::DireccionDisparo direccionDisparo;
+
+	int posPersonajeX2;
+	int posPersonajeY2;
+	bool saltando2;
+	bool disparando2;
+	bool mirandoALaDerecha2;
+	bool activo2;
+	bool grisado2;
+	Constantes::Estado estado2;
+	Constantes::DireccionDisparo direccionDisparo2;
+
+	
 	int cantBalas;
 	vector< pair<int,int> > balas;
 

@@ -37,6 +37,16 @@ public:
 	void setCantidadDeBalas(int cant);
 	void sumarBalas(vector<Bullet*> nuevasBalas);
 
+	void setPosPersonaje2(int x,int y);
+	void setSaltando2(bool saltando);
+	void setDisparando2(bool disp);
+	void setMirandoALaDerecha2(bool mirando);
+	void setActivo2(bool active);
+	void setGrisado2(bool grisado);
+	void setEstado2(Constantes::Estado estado);
+	void setDireccionDisparo2(Constantes::DireccionDisparo dir);
+
+
 	//.......metodos...........................
 	string dameLaRespuesta();
 
@@ -44,7 +54,12 @@ public:
 
 private:
 	string strBalas;
+
+
 	string resetBalas;
+
+
+
 	string fondoToString(int f);
 	string posicionToString(int p);
 	string pasarAStringDeTamanio(int tamanio,int valor);
@@ -55,7 +70,6 @@ private:
 	//posiciones relativas a la ventana
 	int posPersonajeX;
 	int posPersonajeY;
-
 	bool saltando;
 	bool disparando;
 	bool mirandoALaDerecha;
@@ -63,9 +77,23 @@ private:
 	bool grisado;
 	int cantidadDeBalas;
 	int balasActuales;
+	//posicion del otro jugador
+	int posPersonajeX2;
+	int posPersonajeY2;
+	bool saltando2;
+	bool disparando2;
+	bool mirandoALaDerecha2;
+	bool activo2;
+	bool grisado2;
+	int cantidadDeBalas2;
+	int balasActuales2;
+
 
 	Constantes::Estado estado;
 	Constantes::DireccionDisparo dirDisparo;
+
+	Constantes::Estado estado2;
+	Constantes::DireccionDisparo dirDisparo2;
 };
 
 #endif /* ARMADORDERESPUESTA_H_ */

@@ -907,6 +907,20 @@ string juego::armarRespuesta(int numeroJugador){
 	armador->setCantidadDeBalas(getCantidadDeBalas());
 	armador->sumarBalas(boby.getBalas());
 
+	armador->setPosPersonaje2(boby2.getPosX(),boby2.getPosY());
+	armador->setSaltando2(boby2.estaSaltando());
+	armador->setDisparando2(boby2.estaDisparando());
+	armador->setMirandoALaDerecha2(boby2.estaMirandoALaDerecha());
+	armador->setActivo2(boby2.esActivo());
+	armador->setGrisado2(boby2.esGrisado());
+
+	armador->setEstado2( (Constantes::Estado) boby2.getEstado());
+	armador->setDireccionDisparo2( (Constantes::DireccionDisparo) boby2.getDireccionDisparo());
+
+	
+	armador->sumarBalas(boby2.getBalas());
+
+
 	}
 
 	else if(numeroJugador ==2 ){
@@ -927,6 +941,18 @@ string juego::armarRespuesta(int numeroJugador){
 
 	armador->setCantidadDeBalas(getCantidadDeBalas());
 	armador->sumarBalas(boby2.getBalas());
+
+	armador->setPosPersonaje2(boby.getPosX(),boby.getPosY());
+	armador->setSaltando2(boby.estaSaltando());
+	armador->setDisparando2(boby.estaDisparando());
+	armador->setMirandoALaDerecha2(boby.estaMirandoALaDerecha());
+	armador->setActivo2(boby.esActivo());
+	armador->setGrisado2(boby.esGrisado());
+
+	armador->setEstado2( (Constantes::Estado) boby.getEstado());
+	armador->setDireccionDisparo2( (Constantes::DireccionDisparo) boby.getDireccionDisparo());
+
+	armador->sumarBalas(boby.getBalas());
 
 	}
 	

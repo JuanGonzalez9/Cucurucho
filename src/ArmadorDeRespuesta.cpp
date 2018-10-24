@@ -57,38 +57,72 @@ void ArmadorDeRespuesta::setPosPersonaje(int x,int y){
 	posPersonajeY = y;
 }
 
+void ArmadorDeRespuesta::setPosPersonaje2(int x,int y){
+	posPersonajeX2 = x;
+	posPersonajeY2 = y;
+}
+
 void ArmadorDeRespuesta::setSaltando(bool saltando){
 	this->saltando = saltando;
+}
+
+void ArmadorDeRespuesta::setSaltando2(bool saltando){
+	this->saltando2 = saltando;
 }
 
 void ArmadorDeRespuesta::setDisparando(bool disp){
 	this->disparando = disp;
 }
 
+void ArmadorDeRespuesta::setDisparando2(bool disp){
+	this->disparando2 = disp;
+}
+
 void ArmadorDeRespuesta::setMirandoALaDerecha(bool mirando){
 	this->mirandoALaDerecha = mirando;
+}
+
+void ArmadorDeRespuesta::setMirandoALaDerecha2(bool mirando){
+	this->mirandoALaDerecha2 = mirando;
 }
 
 void ArmadorDeRespuesta::setActivo(bool active){
 	this->activo = active;
 }
 
+void ArmadorDeRespuesta::setActivo2(bool active){
+	this->activo2 = active;
+}
+
 void ArmadorDeRespuesta::setGrisado(bool grisado){
 	this->grisado = grisado;
+}
+
+void ArmadorDeRespuesta::setGrisado2(bool grisado){
+	this->grisado2 = grisado;
 }
 
 void ArmadorDeRespuesta::setEstado(Constantes::Estado estado){
 	this->estado = estado;
 }
 
+void ArmadorDeRespuesta::setEstado2(Constantes::Estado estado){
+	this->estado2 = estado;
+}
+
 void ArmadorDeRespuesta::setDireccionDisparo(Constantes::DireccionDisparo dir){
 	this->dirDisparo = dir;
+}
+
+void ArmadorDeRespuesta::setDireccionDisparo2(Constantes::DireccionDisparo dir){
+	this->dirDisparo2 = dir;
 }
 
 void ArmadorDeRespuesta::setCantidadDeBalas(int balas){
 	this->cantidadDeBalas = balas;
 	balasActuales = 0;
 }
+
 
 
 //------------ METODOS ------------
@@ -155,9 +189,25 @@ string ArmadorDeRespuesta::dameLaRespuesta(){
 	respuesta += to_string(estado);
 	respuesta += to_string(dirDisparo);
 
+	
+
+	respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,posPersonajeX2);
+	respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,posPersonajeY2);
+
+	respuesta += to_string(saltando2);
+	respuesta += to_string(disparando2);
+	respuesta += to_string(mirandoALaDerecha2);
+	respuesta += to_string(activo2);
+	respuesta += to_string(grisado2);
+
+	respuesta += to_string(estado2);
+	respuesta += to_string(dirDisparo2);
+
 	respuesta += pasarAStringDeTamanio(MENSAJE_CANT_BALAS,cantidadDeBalas);
 	respuesta += strBalas;
 	strBalas = resetBalas;
+
+
 
 	return respuesta;
 }
