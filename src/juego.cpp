@@ -7,7 +7,7 @@ static const int periodo=1000000/60; // TODO averiguar
 static const int ancho=800;
 static const int alto=800;
 
-juego::juego (string comportamiento):
+juego::juego (string comportamiento, int cantidadJugadores):
 	termino (false),
 	cambioNivel(false),
 	us (periodo),
@@ -17,7 +17,7 @@ juego::juego (string comportamiento):
 	d3 (5),
 	nivel (1),
 	cascada(0),
-	num_jugadores(1),
+	num_jugadores(cantidadJugadores),
 	rect_origen_fondo3 {0, 0, 800, 600},
 	ventana (nullptr),
 	renderer (nullptr),
@@ -123,34 +123,38 @@ juego::juego (string comportamiento):
 
 	//activo los jugadores al principio
 	boby.activar();
-	if(num_jugadores>=2)
-		boby2.activar();
-	if(num_jugadores>=3)
-		boby3.activar();
-	if(num_jugadores>=4)
-		boby4.activar();
-
-	//inicializo la posicion de los bobys en el primer nivel
 	boby.setPosX(50);
 	boby.setPosY(200);
 	boby.setCoordenadaX(0+50);
 	boby.setCoordenadaY(200);
 
-	boby2.setPosX(150);
-	boby2.setPosY(200);
-	boby2.setCoordenadaX(0+150);
-	boby2.setCoordenadaY(200);
+	if(num_jugadores>=2)
+		boby2.activar();
+		boby2.setPosX(150);
+		boby2.setPosY(200);
+		boby2.setCoordenadaX(0+150);
+		boby2.setCoordenadaY(200);
 
-	boby3.setPosX(250);
-	boby3.setPosY(200);
-	boby3.setCoordenadaX(0+250);
-	boby3.setCoordenadaY(200);
+	if(num_jugadores>=3)
+		boby3.activar();
+		boby3.setPosX(250);
+		boby3.setPosY(200);
+		boby3.setCoordenadaX(0+250);
+		boby3.setCoordenadaY(200);
+	if(num_jugadores>=4)
+		boby4.activar();
+		boby4.setPosX(350);
+		boby4.setPosY(200);
+		boby4.setCoordenadaX(0+350);
+		boby4.setCoordenadaY(200);
 
-	boby4.setPosX(350);
-	boby4.setPosY(200);
-	boby4.setCoordenadaX(0+350);
-	boby4.setCoordenadaY(200);
 
+	//inicializo la posicion de los bobys en el primer nivel
+	
+	
+	
+
+	
 
 }
 

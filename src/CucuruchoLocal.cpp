@@ -78,7 +78,7 @@ int main (int argc, char *argv[]){
 
 		char respuestaServidor[TAMANIO_RESPUESTA_SERVIDOR + 1];
 		char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
-		JuegoCliente juegoCliente("cliente");
+		JuegoCliente juegoCliente("cliente", 4);
 
 		while(escuchador->enAccion()){
 			string acciones = escuchador->obtenerAcciones();
@@ -116,7 +116,7 @@ int main (int argc, char *argv[]){
 			Socket* soquete = new Socket();
 			soquete->bindAndListen(puerto);
 			soquete->aceptar();
-			juego j("servidor");
+			juego j("servidor", 4);
 			while (j.jugando ()) {
 				int recibidos = soquete->recibir(soquete->getAcceptedSocket(),mensaje,TAMANIO_MENSAJE_TECLAS);
 				mensaje[TAMANIO_MENSAJE_TECLAS] = 0;
