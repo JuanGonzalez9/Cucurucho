@@ -89,8 +89,6 @@ void JuegoCliente::dibujar(){
 	boby.dibujar(renderer);
 
 	if (boby2.esActivo()){
-		
-		printf("estoy activo personaje 2");
 		actualizarPosicionDeMiPersonaje2();
 		actualizarEstadoDeMiPersonaje2();
 		boby2.dibujar(renderer);

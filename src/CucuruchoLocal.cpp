@@ -149,8 +149,8 @@ int main (int argc, char *argv[]){
 				string respuesta2 = j.armarRespuesta(2);
 				soquete2->enviar(soquete2->getAcceptedSocket(),respuesta2.c_str(),TAMANIO_RESPUESTA_SERVIDOR);
 
-				j.dibujar ();
-				j.presentar ();
+				//j.dibujar ();
+				//j.presentar ();
 			}
 			soquete->~Socket();
 		

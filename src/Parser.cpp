@@ -27,25 +27,20 @@ Parser::Parser() {
 void Parser::parsear(string msj){
 	resetearBalas();
 
-	printf("hola1%s\n",msj);
 	nivel = msj[0] - '0';
 	posFondo1 = stoi(msj.substr(1,4));
 	posFondo2 = stoi(msj.substr(5,4));
 	posFondo3 = stoi(msj.substr(9,4));
-
-	printf("hola2\n");
 	
 	parsearPersonaje1(msj,13);
 
-	printf("hola3\n");
 	parsearPersonaje2(msj,27);
 
-	printf("hola4\n");
-	cantBalas = stoi(msj.substr(31,2));
-	printf("hola5 %d\n", cantBalas);
-	//parsearBalas(msj.substr(33,TAMANIO_POS_BALAS * cantBalas));
+	cantBalas = stoi(msj.substr(41,2));
+	cout<<"la cantidad de balas es "<<cantBalas<<endl;
+	parsearBalas(msj.substr(43,TAMANIO_POS_BALAS * cantBalas));
 
-	printf("hola6\n");
+
 	
 }
 
