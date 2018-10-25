@@ -37,7 +37,6 @@ void Parser::parsear(string msj){
 	parsearPersonaje2(msj,27);
 
 	cantBalas = stoi(msj.substr(41,2));
-	cout<<"la cantidad de balas es "<<cantBalas<<endl;
 	parsearBalas(msj.substr(43,TAMANIO_POS_BALAS * cantBalas));
 
 

@@ -473,9 +473,9 @@ void juego::manejar_eventos ()
 		boby2.pelarElChumbo();
 		if(boby2.puedeDisparar()){
 			direccionDeBala = 0;
-			if(apretandoArriba(state))
+			if(cliente2->quiereAccion(Constantes::arriba))
 				direccionDeBala--;
-			if(apretandoAbajo(state))
+			if(cliente2->quiereAccion(Constantes::abajo))
 				direccionDeBala++;
 
 			int posBala = 10;
