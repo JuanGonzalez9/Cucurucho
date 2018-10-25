@@ -12,7 +12,7 @@ Parser::Parser() {
 	posFondo1 = 0;
 	posFondo2 = 0;
 	posFondo3 = 0;
-	posPersonajeX = 0;
+	/*posPersonajeX = 0;
 	posPersonajeY = 0;
 	saltando = false;
 	disparando = false;
@@ -20,7 +20,7 @@ Parser::Parser() {
 	activo = true;
 	grisado = false;
 	estado = Constantes::Quieto;
-	direccionDisparo = Constantes::Centro;
+	direccionDisparo = Constantes::Centro;*/
 	cantBalas = 0;
 }
 
@@ -32,9 +32,8 @@ void Parser::parsear(string msj){
 	posFondo2 = stoi(msj.substr(5,4));
 	posFondo3 = stoi(msj.substr(9,4));
 	
-	parsearPersonaje1(msj,13);
-
-	parsearPersonaje2(msj,27);
+	parsearPersonaje(msj,13,1);
+	parsearPersonaje(msj,27,2);
 
 	cantBalas = stoi(msj.substr(41,2));
 	parsearBalas(msj.substr(43,TAMANIO_POS_BALAS * cantBalas));
@@ -43,75 +42,49 @@ void Parser::parsear(string msj){
 	
 }
 
-
-void Parser::parsearPersonaje1(string msj,int i){
-	
-	posPersonajeX = stoi(msj.substr(i,3));
-	parsearPosY(msj.substr(i+3,4));
-
-	if(msj[i+7] == '1') saltando = true;
-	else saltando = false;
-
-	if(msj[i+8] == '1') disparando = true;
-	else disparando = false;
-
-	if(msj[i+9] == '1') mirandoALaDerecha = true;
-	else mirandoALaDerecha = false;
-
-	if(msj[i+10] == '1') activo = true;
-	else activo = false;
-
-	if(msj[i+11] == '1') grisado = true;
-	else grisado = false;
-
-	estado = (Constantes::Estado) (msj[i+12] - '0');
-	direccionDisparo = (Constantes::DireccionDisparo) (msj[i+13] - '0');
-
-
-
-}
-
-void Parser::parsearPersonaje2(string msj,int i){
-	
-	posPersonajeX2 = stoi(msj.substr(i,3));
-	parsearPosY2(msj.substr(i+3,4));
-
-	if(msj[i+7] == '1') saltando2 = true;
-	else saltando2 = false;
-
-	if(msj[i+8] == '1') disparando2 = true;
-	else disparando2 = false;
-
-	if(msj[i+9] == '1') mirandoALaDerecha2 = true;
-	else mirandoALaDerecha2 = false;
-
-	if(msj[i+10] == '1') activo2 = true;
-	else activo2 = false;
-
-	if(msj[i+11] == '1') grisado2 = true;
-	else grisado2 = false;
-
-	estado2 = (Constantes::Estado) (msj[i+12] - '0');
-	direccionDisparo2 = (Constantes::DireccionDisparo) (msj[i+13] - '0');
-
-
-
-}
-
-void Parser::parsearPosY(string substr){
-	unsigned pos = substr.find_first_of("-");
-	if(pos > 3) posPersonajeY = stoi(substr);
-	else{
-		posPersonajeY = stoi(substr.substr(pos,4-pos));
+DatosPersonaje* Parser::dameAlBobyNumero(int numeroDePersonaje){
+	DatosPersonaje* datosP;
+	switch(numeroDePersonaje){
+		case (1):
+			datosP = &datosBoby;
+			break;
+		case (2):
+			datosP = &datosBoby2;
+			break;
+		default:
+			break;
 	}
+
+	return datosP;
 }
 
-void Parser::parsearPosY2(string substr){
+
+void Parser::parsearPersonaje(string msj,int i,int numeroDePersonaje){
+
+	DatosPersonaje* datosP = dameAlBobyNumero(numeroDePersonaje);
+	
+	datosP->setPosX(stoi(msj.substr(i,3)));
+	datosP->setPosY(parsearPosY(msj.substr(i+3,4)));
+
+	datosP->setSaltando(msj[i+7] == '1');
+	datosP->setDisparando(msj[i+8] == '1');
+	datosP->setMirandoALaDerecha(msj[i+9] == '1');
+	datosP->setActivo(msj[i+10] == '1');
+	datosP->setGrisado(msj[i+11] == '1');
+
+	datosP->setEstado((Constantes::Estado) (msj[i+12] - '0'));
+	datosP->setDireccionDisparo((Constantes::DireccionDisparo) (msj[i+13] - '0'));
+}
+
+int Parser::parsearPosY(string substr){
+	int respuesta;
 	unsigned pos = substr.find_first_of("-");
-	if(pos > 3) posPersonajeY2 = stoi(substr);
+	if(pos > 3) respuesta = stoi(substr);
 	else{
-		posPersonajeY2 = stoi(substr.substr(pos,4-pos));
+		respuesta = stoi(substr.substr(pos,4-pos));
 	}
+
+	return respuesta;
 }
 
 int Parser::dameElInt(string sub){
@@ -157,75 +130,75 @@ int Parser::getPosFondo3(){
 }
 
 int Parser::getPosPersonajeX(){
-	return posPersonajeX;
+	return datosBoby.getPosX();
 }
 
 int Parser::getPosPersonajeY(){
-	return posPersonajeY;
+	return datosBoby.getPosY();
 }
 
 bool Parser::estaSaltando(){
-	return saltando;
+	return datosBoby.estaSaltando();
 }
 
 bool Parser::estaDisparando(){
-	return disparando;
+	return datosBoby.estaDisparando();
 }
 
 bool Parser::estaMirandoALaDerecha(){
-	return mirandoALaDerecha;
+	return datosBoby.estaMirandoALaDerecha();
 }
 
 bool Parser::estaActivo(){
-	return activo;
+	return datosBoby.estaActivo();
 }
 
 bool Parser::estaGrisado(){
-	return grisado;
+	return datosBoby.estaGrisado();
 }
 
 Constantes::Estado Parser::getEstado(){
-	return estado;
+	return datosBoby.getEstado();
 }
 
 Constantes::DireccionDisparo Parser::getDireccionDisparo(){
-	return direccionDisparo;
+	return datosBoby.getDireccionDisparo();
 }
 
 int Parser::getPosPersonajeX2(){
-	return posPersonajeX2;
+	return datosBoby2.getPosX();
 }
 
 int Parser::getPosPersonajeY2(){
-	return posPersonajeY2;
+	return datosBoby2.getPosY();
 }
 
 bool Parser::estaSaltando2(){
-	return saltando2;
+	return datosBoby2.estaSaltando();
 }
 
 bool Parser::estaDisparando2(){
-	return disparando2;
+	return datosBoby2.estaDisparando();
 }
 
 bool Parser::estaMirandoALaDerecha2(){
-	return mirandoALaDerecha2;
+	return datosBoby2.estaMirandoALaDerecha();
 }
 
 bool Parser::estaActivo2(){
-	return activo2;
+	return datosBoby2.estaActivo();
 }
 
 bool Parser::estaGrisado2(){
-	return grisado2;
+	return datosBoby2.estaGrisado();
 }
 
 Constantes::Estado Parser::getEstado2(){
-	return estado2;
+	return datosBoby2.getEstado();
 }
 
 Constantes::DireccionDisparo Parser::getDireccionDisparo2(){
-	return direccionDisparo2;
+	return datosBoby2.getDireccionDisparo();
 }
 
 vector< pair<int,int> > Parser::getBalas(){

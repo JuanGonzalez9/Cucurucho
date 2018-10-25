@@ -5,6 +5,7 @@
 #include "Constantes.h"
 #include <vector>
 #include "Bullet.h"
+#include "DatosPersonaje.h"
 
 using namespace std;
 
@@ -39,9 +40,6 @@ public:
 
 	//..........METODO........
 	void parsear(string msj);
-	void parsearPersonaje1(string msj,int i);
-	void parsearPersonaje2(string msj,int i);
-
 
 	virtual ~Parser();
 private:
@@ -49,35 +47,18 @@ private:
 	int posFondo1;
 	int posFondo2;
 	int posFondo3;
-	int posPersonajeX;
-	int posPersonajeY;
-	bool saltando;
-	bool disparando;
-	bool mirandoALaDerecha;
-	bool activo;
-	bool grisado;
-	Constantes::Estado estado;
-	Constantes::DireccionDisparo direccionDisparo;
 
-	int posPersonajeX2;
-	int posPersonajeY2;
-	bool saltando2;
-	bool disparando2;
-	bool mirandoALaDerecha2;
-	bool activo2;
-	bool grisado2;
-	Constantes::Estado estado2;
-	Constantes::DireccionDisparo direccionDisparo2;
-
-
+	DatosPersonaje datosBoby,datosBoby2;
+	
 	int cantBalas;
 	vector< pair<int,int> > balas;
 
-	void parsearPosY(string substr);
-	void parsearPosY2(string substr);
+	int parsearPosY(string substr);
 	void parsearBalas(string sub);
 	int dameElInt(string sub);
 	void resetearBalas();
+	void parsearPersonaje(string msj,int i,int numeroDePersonaje);
+	DatosPersonaje* dameAlBobyNumero(int numeroDePersonaje);
 
 };
 
