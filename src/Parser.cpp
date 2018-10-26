@@ -8,23 +8,16 @@
 #include "Parser.h"
 
 Parser::Parser() {
+	cantJugadores = 1;
 	nivel = 1;
 	posFondo1 = 0;
 	posFondo2 = 0;
 	posFondo3 = 0;
-	/*posPersonajeX = 0;
-	posPersonajeY = 0;
-	saltando = false;
-	disparando = false;
-	mirandoALaDerecha = false;
-	activo = true;
-	grisado = false;
-	estado = Constantes::Quieto;
-	direccionDisparo = Constantes::Centro;*/
 	cantBalas = 0;
 }
 
-void Parser::parsear(string msj){
+void Parser::parsear(string msj,int jugadores){
+	cantJugadores = jugadores;
 	resetearBalas();
 
 	nivel = msj[0] - '0';
@@ -33,10 +26,13 @@ void Parser::parsear(string msj){
 	posFondo3 = stoi(msj.substr(9,4));
 	
 	parsearPersonaje(msj,13,1);
-	parsearPersonaje(msj,27,2);
 
-	cantBalas = stoi(msj.substr(41,2));
-	parsearBalas(msj.substr(43,TAMANIO_POS_BALAS * cantBalas));
+	if(cantJugadores >= 2){
+		parsearPersonaje(msj,27,2);		
+	}
+
+	cantBalas = stoi(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores,2));
+	parsearBalas(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores + 2,TAMANIO_POS_BALAS * cantBalas));
 
 
 	
@@ -129,76 +125,49 @@ int Parser::getPosFondo3(){
 	return posFondo3;
 }
 
-int Parser::getPosPersonajeX(){
-	return datosBoby.getPosX();
+int Parser::getPosPersonajeX(int numeroDePersonaje){
+	DatosPersonaje* datosP = dameAlBobyNumero(numeroDePersonaje);
+	return datosP->getPosX();
 }
 
-int Parser::getPosPersonajeY(){
-	return datosBoby.getPosY();
+int Parser::getPosPersonajeY(int numeroDePersonaje){
+	DatosPersonaje* datosP = dameAlBobyNumero(numeroDePersonaje);
+	return datosP->getPosY();
 }
 
-bool Parser::estaSaltando(){
-	return datosBoby.estaSaltando();
+bool Parser::estaSaltando(int numeroDePersonaje){
+	DatosPersonaje* datosP = dameAlBobyNumero(numeroDePersonaje);
+	return datosP->estaSaltando();
 }
 
-bool Parser::estaDisparando(){
-	return datosBoby.estaDisparando();
+bool Parser::estaDisparando(int numeroDePersonaje){
+	DatosPersonaje* datosP = dameAlBobyNumero(numeroDePersonaje);
+	return datosP->estaDisparando();
 }
 
-bool Parser::estaMirandoALaDerecha(){
-	return datosBoby.estaMirandoALaDerecha();
+bool Parser::estaMirandoALaDerecha(int numeroDePersonaje){
+	DatosPersonaje* datosP = dameAlBobyNumero(numeroDePersonaje);
+	return datosP->estaMirandoALaDerecha();
 }
 
-bool Parser::estaActivo(){
-	return datosBoby.estaActivo();
+bool Parser::estaActivo(int numeroDePersonaje){
+	DatosPersonaje* datosP = dameAlBobyNumero(numeroDePersonaje);
+	return datosP->estaActivo();
 }
 
-bool Parser::estaGrisado(){
-	return datosBoby.estaGrisado();
+bool Parser::estaGrisado(int numeroDePersonaje){
+	DatosPersonaje* datosP = dameAlBobyNumero(numeroDePersonaje);
+	return datosP->estaGrisado();
 }
 
-Constantes::Estado Parser::getEstado(){
-	return datosBoby.getEstado();
+Constantes::Estado Parser::getEstado(int numeroDePersonaje){
+	DatosPersonaje* datosP = dameAlBobyNumero(numeroDePersonaje);
+	return datosP->getEstado();
 }
 
-Constantes::DireccionDisparo Parser::getDireccionDisparo(){
-	return datosBoby.getDireccionDisparo();
-}
-
-int Parser::getPosPersonajeX2(){
-	return datosBoby2.getPosX();
-}
-
-int Parser::getPosPersonajeY2(){
-	return datosBoby2.getPosY();
-}
-
-bool Parser::estaSaltando2(){
-	return datosBoby2.estaSaltando();
-}
-
-bool Parser::estaDisparando2(){
-	return datosBoby2.estaDisparando();
-}
-
-bool Parser::estaMirandoALaDerecha2(){
-	return datosBoby2.estaMirandoALaDerecha();
-}
-
-bool Parser::estaActivo2(){
-	return datosBoby2.estaActivo();
-}
-
-bool Parser::estaGrisado2(){
-	return datosBoby2.estaGrisado();
-}
-
-Constantes::Estado Parser::getEstado2(){
-	return datosBoby2.getEstado();
-}
-
-Constantes::DireccionDisparo Parser::getDireccionDisparo2(){
-	return datosBoby2.getDireccionDisparo();
+Constantes::DireccionDisparo Parser::getDireccionDisparo(int numeroDePersonaje){
+	DatosPersonaje* datosP = dameAlBobyNumero(numeroDePersonaje);
+	return datosP->getDireccionDisparo();
 }
 
 vector< pair<int,int> > Parser::getBalas(){

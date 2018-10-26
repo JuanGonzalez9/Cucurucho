@@ -18,31 +18,32 @@ public:
 	int getPosFondo1();
 	int getPosFondo2();
 	int getPosFondo3();
-	int getPosPersonajeX();
-	int getPosPersonajeY();
-	bool estaSaltando();
-	bool estaDisparando();
-	bool estaMirandoALaDerecha();
-	bool estaActivo();
-	bool estaGrisado();
-	int getPosPersonajeX2();
+	int getPosPersonajeX(int numeroDePersonaje);
+	int getPosPersonajeY(int numeroDePersonaje);
+	bool estaSaltando(int numeroDePersonaje);
+	bool estaDisparando(int numeroDePersonajeint);
+	bool estaMirandoALaDerecha(int numeroDePersonaje);
+	bool estaActivo(int numeroDePersonaje);
+	bool estaGrisado(int numeroDePersonaje);
+	/*int getPosPersonajeX2();
 	int getPosPersonajeY2();
 	bool estaSaltando2();
 	bool estaDisparando2();
 	bool estaMirandoALaDerecha2();
 	bool estaActivo2();
-	bool estaGrisado2();
-	Constantes::Estado getEstado();
-	Constantes::DireccionDisparo getDireccionDisparo();
-	Constantes::Estado getEstado2();
-	Constantes::DireccionDisparo getDireccionDisparo2();
+	bool estaGrisado2();*/
+	Constantes::Estado getEstado(int numeroDePersonaje);
+	Constantes::DireccionDisparo getDireccionDisparo(int numeroDePersonaje);
+	/*Constantes::Estado getEstado2();
+	Constantes::DireccionDisparo getDireccionDisparo2();*/
 	vector< pair<int,int> > getBalas();
 
 	//..........METODO........
-	void parsear(string msj);
+	void parsear(string msj,int jugadores);
 
 	virtual ~Parser();
 private:
+	int cantJugadores;
 	int nivel;
 	int posFondo1;
 	int posFondo2;

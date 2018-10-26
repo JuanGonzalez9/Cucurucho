@@ -38,6 +38,8 @@ int main (int argc, char *argv[]){
 	registro.registrar (LogEventos::info, "Comenzo el juego");
 	//int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
 	int cantidadJugadores = 2;
+	
+	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
 
 	int r = 1;
 	if (argc == 5 && argv[1][0] == '-') {
@@ -79,7 +81,7 @@ int main (int argc, char *argv[]){
 		soqueteCliente->conectar(serverAdress,puerto);
 
 
-		char respuestaServidor[TAMANIO_RESPUESTA_SERVIDOR + 1];
+		char respuestaServidor[tamanio_respuestaServidor + 1];
 		char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
 		JuegoCliente juegoCliente("cliente", cantidadJugadores);
 
@@ -93,8 +95,8 @@ int main (int argc, char *argv[]){
 				}
 
 				int llegaron = 
-					soqueteCliente->recibir(soqueteCliente->getSocketId(),respuestaServidor,TAMANIO_RESPUESTA_SERVIDOR);
-				respuestaServidor[TAMANIO_RESPUESTA_SERVIDOR] = 0;
+					soqueteCliente->recibir(soqueteCliente->getSocketId(),respuestaServidor,tamanio_respuestaServidor);
+				respuestaServidor[tamanio_respuestaServidor] = 0;
 				
 				string respuestaSinParsear(respuestaServidor);
 				juegoCliente.setMensajeDelServidor(respuestaSinParsear);
@@ -179,21 +181,21 @@ int main (int argc, char *argv[]){
 				j.actualizar ();
 
 				string respuesta = j.armarRespuesta();
-				soquete->enviar(soquete->getAcceptedSocket(),respuesta.c_str(),TAMANIO_RESPUESTA_SERVIDOR);
+				soquete->enviar(soquete->getAcceptedSocket(),respuesta.c_str(),tamanio_respuestaServidor);
 
 				if(cantidadJugadores >= 2){
 					string respuesta2 = j.armarRespuesta();
-					soquete2->enviar(soquete2->getAcceptedSocket(),respuesta2.c_str(),TAMANIO_RESPUESTA_SERVIDOR);
+					soquete2->enviar(soquete2->getAcceptedSocket(),respuesta2.c_str(),tamanio_respuestaServidor);
 				}
 
 				if(cantidadJugadores >= 3){
 					string respuesta3 = j.armarRespuesta();
-					soquete3->enviar(soquete3->getAcceptedSocket(),respuesta3.c_str(),TAMANIO_RESPUESTA_SERVIDOR);
+					soquete3->enviar(soquete3->getAcceptedSocket(),respuesta3.c_str(),tamanio_respuestaServidor);
 				}
 
 				if(cantidadJugadores == 4){
 					string respuesta4 = j.armarRespuesta();
-					soquete4->enviar(soquete4->getAcceptedSocket(),respuesta4.c_str(),TAMANIO_RESPUESTA_SERVIDOR);
+					soquete4->enviar(soquete4->getAcceptedSocket(),respuesta4.c_str(),tamanio_respuestaServidor);
 				}
 
 				//j.dibujar ();

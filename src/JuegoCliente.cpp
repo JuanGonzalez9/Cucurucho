@@ -11,13 +11,14 @@ JuegoCliente::JuegoCliente(string comportamiento, int cantidadJugadores) : juego
 	//juego(comportamiento);
 	miPersonajeSprites = new Sprite();
 	nivel = 1;
+	cantJugadores = cantidadJugadores;
 
 	bala_rectOrigen = {0,0,32,32};
 	bala_rectDestino = {0,0,8,8};
 }
 
 void JuegoCliente::setMensajeDelServidor(string msj){
-	p.parsear(msj);
+	p.parsear(msj,cantJugadores);
 	if(nivel == 1 && p.getNivel() == 2){
 		actualizarNivel1();
 		nivel = 2;
@@ -43,25 +44,26 @@ void JuegoCliente::actualizarFondos(){
 	}
 }
 
-void JuegoCliente::actualizarPosicionDeMiPersonaje(){
-	boby.setPosX(p.getPosPersonajeX());
-	boby.setPosY(p.getPosPersonajeY());
+void JuegoCliente::actualizarPosicionDeMiPersonaje(int numeroPersonaje){
+	boby.setPosX(p.getPosPersonajeX(numeroPersonaje));
+	boby.setPosY(p.getPosPersonajeY(numeroPersonaje));
 }
 
-void JuegoCliente::actualizarEstadoDeMiPersonaje(){
-	boby.setEstados(p.estaSaltando(),p.estaDisparando(),p.estaMirandoALaDerecha(),p.estaActivo(),p.estaGrisado());
-	boby.setEstadosEnumerados(p.getEstado(),p.getDireccionDisparo());
+void JuegoCliente::actualizarEstadoDeMiPersonaje(int numeroP){
+	//le paso el numero del personaje q quiero actualizar
+	boby.setEstados(p.estaSaltando(numeroP),p.estaDisparando(numeroP),p.estaMirandoALaDerecha(numeroP),p.estaActivo(numeroP),p.estaGrisado(numeroP));
+	boby.setEstadosEnumerados(p.getEstado(numeroP),p.getDireccionDisparo(numeroP));
 }
 
-void JuegoCliente::actualizarPosicionDeMiPersonaje2(){
-	boby2.setPosX(p.getPosPersonajeX2());
-	boby2.setPosY(p.getPosPersonajeY2());
+/*void JuegoCliente::actualizarPosicionDeMiPersonaje2(){
+	boby2.setPosX(p.getPosPersonajeX(2));
+	boby2.setPosY(p.getPosPersonajeY(2));
 }
 
 void JuegoCliente::actualizarEstadoDeMiPersonaje2(){
-	boby2.setEstados(p.estaSaltando2(),p.estaDisparando2(),p.estaMirandoALaDerecha2(),p.estaActivo2(),p.estaGrisado2());
-	boby2.setEstadosEnumerados(p.getEstado2(),p.getDireccionDisparo2());
-}
+	boby2.setEstados(p.estaSaltando(2),p.estaDisparando(2),p.estaMirandoALaDerecha(2),p.estaActivo(2),p.estaGrisado(2));
+	boby2.setEstadosEnumerados(p.getEstado(2),p.getDireccionDisparo(2));
+}*/
 
 void JuegoCliente::dibujarBalas(vector< pair<int,int> > balas){
 	for(unsigned i = 0; i < balas.size();i++){
@@ -84,13 +86,13 @@ void JuegoCliente::dibujar(){
 	SDL_SetRenderTarget (renderer, nullptr);
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
 
-	actualizarPosicionDeMiPersonaje();
-	actualizarEstadoDeMiPersonaje();
+	actualizarPosicionDeMiPersonaje(1);
+	actualizarEstadoDeMiPersonaje(1);
 	boby.dibujar(renderer);
 
-	if (boby2.esActivo()){
-		actualizarPosicionDeMiPersonaje2();
-		actualizarEstadoDeMiPersonaje2();
+	if (num_jugadores >= 2 && boby2.esActivo()){
+		actualizarPosicionDeMiPersonaje(2);
+		actualizarEstadoDeMiPersonaje(2);
 		boby2.dibujar(renderer);
 	}
 

@@ -21,15 +21,14 @@ private:
 	string msjServer;
 	Sprite* miPersonajeSprites;
 	int nivel;
+	int cantJugadores;
 
 	SDL_Rect bala_rectOrigen;
 	SDL_Rect bala_rectDestino;
 
 	void actualizarFondos();
-	void actualizarPosicionDeMiPersonaje();
-	void actualizarEstadoDeMiPersonaje();
-	void actualizarPosicionDeMiPersonaje2();
-	void actualizarEstadoDeMiPersonaje2();
+	void actualizarPosicionDeMiPersonaje(int numPersonaje);
+	void actualizarEstadoDeMiPersonaje(int numPersonaje);
 	void dibujarBalas(vector< pair<int,int> > balas);
 };
 
