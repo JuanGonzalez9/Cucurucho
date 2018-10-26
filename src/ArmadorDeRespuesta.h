@@ -14,6 +14,7 @@
 #include "Bullet.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include "DatosPersonaje.h"
 
 using namespace std;
 
@@ -26,6 +27,7 @@ public:
 	void setFondo1(int x,int y);
 	void setFondo2(int x,int y);
 	void setFondo3(int x,int y);
+
 	void setPosPersonaje(int x,int y);
 	void setSaltando(bool saltando);
 	void setDisparando(bool disp);
@@ -34,21 +36,24 @@ public:
 	void setGrisado(bool grisado);
 	void setEstado(Constantes::Estado estado);
 	void setDireccionDisparo(Constantes::DireccionDisparo dir);
-	void setCantidadDeBalas(int cant);
-	void sumarBalas(vector<Bullet*> nuevasBalas);
+	
 
-	void setPosPersonaje2(int x,int y);
+	/*void setPosPersonaje2(int x,int y);
 	void setSaltando2(bool saltando);
 	void setDisparando2(bool disp);
 	void setMirandoALaDerecha2(bool mirando);
 	void setActivo2(bool active);
 	void setGrisado2(bool grisado);
 	void setEstado2(Constantes::Estado estado);
-	void setDireccionDisparo2(Constantes::DireccionDisparo dir);
+	void setDireccionDisparo2(Constantes::DireccionDisparo dir);*/
 
-
+	
+	void setCantidadDeBalas(int cant);
+	void sumarBalas(vector<Bullet*> nuevasBalas);
 	//.......metodos...........................
-	string dameLaRespuesta();
+	/*string dameLaRespuesta();*/
+	string dameLaRespuestaPara(int jugadores, DatosPersonaje, DatosPersonaje, DatosPersonaje, DatosPersonaje);
+
 
 	virtual ~ArmadorDeRespuesta();
 
@@ -78,7 +83,7 @@ private:
 	int cantidadDeBalas;
 	int balasActuales;
 	//posicion del otro jugador
-	int posPersonajeX2;
+	/*int posPersonajeX2;
 	int posPersonajeY2;
 	bool saltando2;
 	bool disparando2;
@@ -86,14 +91,14 @@ private:
 	bool activo2;
 	bool grisado2;
 	int cantidadDeBalas2;
-	int balasActuales2;
+	int balasActuales2;*/
 
 
 	Constantes::Estado estado;
 	Constantes::DireccionDisparo dirDisparo;
 
-	Constantes::Estado estado2;
-	Constantes::DireccionDisparo dirDisparo2;
+	/*Constantes::Estado estado2;
+	Constantes::DireccionDisparo dirDisparo2;*/
 };
 
 #endif /* ARMADORDERESPUESTA_H_ */

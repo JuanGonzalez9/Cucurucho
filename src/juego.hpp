@@ -30,7 +30,7 @@ public:
 	int getCantidadDeBalas();
 	void manejar_eventos ();
 	void actualizar ();
-	string armarRespuesta(int numeroJugador);
+	string armarRespuesta();
 	void dibujar ();
 	void presentar ();
 	bool jugando ();
@@ -48,6 +48,10 @@ protected:
 
 	traductorDelCliente* cliente;
 	traductorDelCliente* cliente2;
+	traductorDelCliente* cliente3;
+	traductorDelCliente* cliente4;
+
+	DatosPersonaje* datosBoby, *datosBoby2, * datosBoby3, * datosBoby4;
 
 	ArmadorDeRespuesta* armador;
 	void actualizarNivel1();
