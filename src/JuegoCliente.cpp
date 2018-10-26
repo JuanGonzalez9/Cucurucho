@@ -45,25 +45,37 @@ void JuegoCliente::actualizarFondos(){
 }
 
 void JuegoCliente::actualizarPosicionDeMiPersonaje(int numeroPersonaje){
-	boby.setPosX(p.getPosPersonajeX(numeroPersonaje));
-	boby.setPosY(p.getPosPersonajeY(numeroPersonaje));
+	Personaje* unBoby;
+	switch(numeroPersonaje){
+		case (1):
+			unBoby = &boby;
+			break;
+		case (2):
+			unBoby = &boby2;
+			break;
+		default:
+			break;
+	}
+
+	unBoby->setPosX(p.getPosPersonajeX(numeroPersonaje));
+	unBoby->setPosY(p.getPosPersonajeY(numeroPersonaje));
 }
 
 void JuegoCliente::actualizarEstadoDeMiPersonaje(int numeroP){
-	//le paso el numero del personaje q quiero actualizar
-	boby.setEstados(p.estaSaltando(numeroP),p.estaDisparando(numeroP),p.estaMirandoALaDerecha(numeroP),p.estaActivo(numeroP),p.estaGrisado(numeroP));
-	boby.setEstadosEnumerados(p.getEstado(numeroP),p.getDireccionDisparo(numeroP));
+	Personaje* unBoby;
+	switch(numeroP){
+		case (1):
+			unBoby = &boby;
+			break;
+		case (2):
+			unBoby = &boby2;
+			break;
+		default:
+			break;
+	}
+	unBoby->setEstados(p.estaSaltando(numeroP),p.estaDisparando(numeroP),p.estaMirandoALaDerecha(numeroP),p.estaActivo(numeroP),p.estaGrisado(numeroP));
+	unBoby->setEstadosEnumerados(p.getEstado(numeroP),p.getDireccionDisparo(numeroP));
 }
-
-/*void JuegoCliente::actualizarPosicionDeMiPersonaje2(){
-	boby2.setPosX(p.getPosPersonajeX(2));
-	boby2.setPosY(p.getPosPersonajeY(2));
-}
-
-void JuegoCliente::actualizarEstadoDeMiPersonaje2(){
-	boby2.setEstados(p.estaSaltando(2),p.estaDisparando(2),p.estaMirandoALaDerecha(2),p.estaActivo(2),p.estaGrisado(2));
-	boby2.setEstadosEnumerados(p.getEstado(2),p.getDireccionDisparo(2));
-}*/
 
 void JuegoCliente::dibujarBalas(vector< pair<int,int> > balas){
 	for(unsigned i = 0; i < balas.size();i++){
