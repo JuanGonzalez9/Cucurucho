@@ -44,35 +44,38 @@ void JuegoCliente::actualizarFondos(){
 	}
 }
 
-void JuegoCliente::actualizarPosicionDeMiPersonaje(int numeroPersonaje){
+Personaje* JuegoCliente::dameAlBobyNumero(int numeroDeBoby){
 	Personaje* unBoby;
-	switch(numeroPersonaje){
+	switch(numeroDeBoby){
 		case (1):
 			unBoby = &boby;
 			break;
 		case (2):
 			unBoby = &boby2;
 			break;
+		case (3):
+			unBoby = &boby3;
+			break;
+		case (4):
+			unBoby = &boby4;
+			break;
 		default:
 			break;
 	}
+
+	return unBoby;
+}
+
+void JuegoCliente::actualizarPosicionDeMiPersonaje(int numeroPersonaje){
+	Personaje* unBoby = dameAlBobyNumero(numeroPersonaje);
 
 	unBoby->setPosX(p.getPosPersonajeX(numeroPersonaje));
 	unBoby->setPosY(p.getPosPersonajeY(numeroPersonaje));
 }
 
 void JuegoCliente::actualizarEstadoDeMiPersonaje(int numeroP){
-	Personaje* unBoby;
-	switch(numeroP){
-		case (1):
-			unBoby = &boby;
-			break;
-		case (2):
-			unBoby = &boby2;
-			break;
-		default:
-			break;
-	}
+	Personaje* unBoby = dameAlBobyNumero(numeroP);
+
 	unBoby->setEstados(p.estaSaltando(numeroP),p.estaDisparando(numeroP),p.estaMirandoALaDerecha(numeroP),p.estaActivo(numeroP),p.estaGrisado(numeroP));
 	unBoby->setEstadosEnumerados(p.getEstado(numeroP),p.getDireccionDisparo(numeroP));
 }

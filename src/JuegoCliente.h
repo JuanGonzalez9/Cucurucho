@@ -30,6 +30,7 @@ private:
 	void actualizarPosicionDeMiPersonaje(int numPersonaje);
 	void actualizarEstadoDeMiPersonaje(int numPersonaje);
 	void dibujarBalas(vector< pair<int,int> > balas);
+	Personaje* dameAlBobyNumero(int numeroDeBoby);
 };
 
 #endif /* JUEGOCLIENTE_H_ */
