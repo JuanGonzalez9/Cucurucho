@@ -131,10 +131,10 @@ juego::juego (string comportamiento, int cantidadJugadores):
 	boby.setPosY(200);
 	boby.setCoordenadaX(0+50);
 	boby.setCoordenadaY(200);
-	DatosPersonaje* datosBoby = new DatosPersonaje();
+	/*DatosPersonaje* datosBoby = new DatosPersonaje();
 	DatosPersonaje* datosBoby2 = new DatosPersonaje();
 	DatosPersonaje* datosBoby3 = new DatosPersonaje();
-	DatosPersonaje* datosBoby4 = new DatosPersonaje();
+	DatosPersonaje* datosBoby4 = new DatosPersonaje();*/
 	
 
 	if(num_jugadores>=2)
@@ -896,26 +896,24 @@ void juego::actualizar ()
 
 string juego::armarRespuesta(){
 
-	
 	//esto armo siempre
 	armador->setNivel(nivel);
 	armador->setFondo1(fondo1.getRectaOrigen().x,fondo1.getRectaOrigen().y);
 	armador->setFondo2(fondo2.getRectaOrigen().x,fondo2.getRectaOrigen().y);
 	armador->setFondo3(rect_origen_fondo3.x,rect_origen_fondo3.y);
 
-
 	//Cargo los datos segun cuantos jugadores alla.
 
 	if (num_jugadores >= 1){
-		datosBoby->setPosX(boby.getPosX());
-		datosBoby->setPosY(boby.getPosY());
-		datosBoby->setSaltando(boby.estaSaltando());
-		datosBoby->setDisparando(boby.estaDisparando());
-		datosBoby->setMirandoALaDerecha(boby.estaMirandoALaDerecha());
-		datosBoby->setActivo(boby.esActivo());
-		datosBoby->setGrisado(boby.esGrisado());
-		datosBoby->setEstado( (Constantes::Estado) boby.getEstado());
-		datosBoby->setDireccionDisparo( (Constantes::DireccionDisparo) boby.getDireccionDisparo());
+		datosBoby.setPosX(boby.getPosX());
+		datosBoby.setPosY(boby.getPosY());
+		datosBoby.setSaltando(boby.estaSaltando());
+		datosBoby.setDisparando(boby.estaDisparando());
+		datosBoby.setMirandoALaDerecha(boby.estaMirandoALaDerecha());
+		datosBoby.setActivo(boby.esActivo());
+		datosBoby.setGrisado(boby.esGrisado());
+		datosBoby.setEstado( (Constantes::Estado) boby.getEstado());
+		datosBoby.setDireccionDisparo( (Constantes::DireccionDisparo) boby.getDireccionDisparo());
 
 		armador->setCantidadDeBalas(getCantidadDeBalas());
 		armador->sumarBalas(boby.getBalas());
@@ -923,51 +921,50 @@ string juego::armarRespuesta(){
 	}
 
 	if(num_jugadores >= 2){
-		datosBoby2->setPosX(boby2.getPosX());
-		datosBoby2->setPosY(boby2.getPosY());
-		datosBoby2->setSaltando(boby2.estaSaltando());
-		datosBoby2->setDisparando(boby2.estaDisparando());
-		datosBoby2->setMirandoALaDerecha(boby2.estaMirandoALaDerecha());
-		datosBoby2->setActivo(boby2.esActivo());
-		datosBoby2->setGrisado(boby2.esGrisado());
-		datosBoby2->setEstado( (Constantes::Estado) boby2.getEstado());
-		datosBoby2->setDireccionDisparo( (Constantes::DireccionDisparo) boby2.getDireccionDisparo());
+		datosBoby2.setPosX(boby2.getPosX());
+		datosBoby2.setPosY(boby2.getPosY());
+		datosBoby2.setSaltando(boby2.estaSaltando());
+		datosBoby2.setDisparando(boby2.estaDisparando());
+		datosBoby2.setMirandoALaDerecha(boby2.estaMirandoALaDerecha());
+		datosBoby2.setActivo(boby2.esActivo());
+		datosBoby2.setGrisado(boby2.esGrisado());
+		datosBoby2.setEstado( (Constantes::Estado) boby2.getEstado());
+		datosBoby2.setDireccionDisparo( (Constantes::DireccionDisparo) boby2.getDireccionDisparo());
 
 
 		armador->sumarBalas(boby2.getBalas());
 	}
 
 	if (num_jugadores >= 3){
-		datosBoby3->setPosX(boby3.getPosX());
-		datosBoby3->setPosY(boby3.getPosY());
-		datosBoby3->setSaltando(boby3.estaSaltando());
-		datosBoby3->setDisparando(boby3.estaDisparando());
-		datosBoby3->setMirandoALaDerecha(boby3.estaMirandoALaDerecha());
-		datosBoby3->setActivo(boby3.esActivo());
-		datosBoby3->setGrisado(boby3.esGrisado());
-		datosBoby3->setEstado( (Constantes::Estado) boby3.getEstado());
-		datosBoby3->setDireccionDisparo( (Constantes::DireccionDisparo) boby3.getDireccionDisparo());
+		datosBoby3.setPosX(boby3.getPosX());
+		datosBoby3.setPosY(boby3.getPosY());
+		datosBoby3.setSaltando(boby3.estaSaltando());
+		datosBoby3.setDisparando(boby3.estaDisparando());
+		datosBoby3.setMirandoALaDerecha(boby3.estaMirandoALaDerecha());
+		datosBoby3.setActivo(boby3.esActivo());
+		datosBoby3.setGrisado(boby3.esGrisado());
+		datosBoby3.setEstado( (Constantes::Estado) boby3.getEstado());
+		datosBoby3.setDireccionDisparo( (Constantes::DireccionDisparo) boby3.getDireccionDisparo());
 
 
 		armador->sumarBalas(boby3.getBalas());
 	}
 
 	if (num_jugadores == 4){
-		datosBoby4->setPosX(boby4.getPosX());
-		datosBoby4->setPosY(boby4.getPosY());
-		datosBoby4->setSaltando(boby4.estaSaltando());
-		datosBoby4->setDisparando(boby4.estaDisparando());
-		datosBoby4->setMirandoALaDerecha(boby4.estaMirandoALaDerecha());
-		datosBoby4->setActivo(boby4.esActivo());
-		datosBoby4->setGrisado(boby4.esGrisado());
-		datosBoby4->setEstado( (Constantes::Estado) boby4.getEstado());
-		datosBoby4->setDireccionDisparo( (Constantes::DireccionDisparo) boby4.getDireccionDisparo());
+		datosBoby4.setPosX(boby4.getPosX());
+		datosBoby4.setPosY(boby4.getPosY());
+		datosBoby4.setSaltando(boby4.estaSaltando());
+		datosBoby4.setDisparando(boby4.estaDisparando());
+		datosBoby4.setMirandoALaDerecha(boby4.estaMirandoALaDerecha());
+		datosBoby4.setActivo(boby4.esActivo());
+		datosBoby4.setGrisado(boby4.esGrisado());
+		datosBoby4.setEstado( (Constantes::Estado) boby4.getEstado());
+		datosBoby4.setDireccionDisparo( (Constantes::DireccionDisparo) boby4.getDireccionDisparo());
 
 		armador->sumarBalas(boby4.getBalas());
 	}
 
-	
-	return armador->dameLaRespuestaPara(num_jugadores, *datosBoby, *datosBoby2, *datosBoby3, *datosBoby4);
+	return armador->dameLaRespuestaPara(num_jugadores, &datosBoby, &datosBoby2, &datosBoby3, &datosBoby4);
 	
 
 	/* Esto es para q ande de la manera antigua

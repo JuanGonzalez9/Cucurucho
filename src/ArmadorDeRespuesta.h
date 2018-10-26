@@ -52,7 +52,7 @@ public:
 	void sumarBalas(vector<Bullet*> nuevasBalas);
 	//.......metodos...........................
 	/*string dameLaRespuesta();*/
-	string dameLaRespuestaPara(int jugadores, DatosPersonaje, DatosPersonaje, DatosPersonaje, DatosPersonaje);
+	string dameLaRespuestaPara(int jugadores, DatosPersonaje* pj1, DatosPersonaje* pj2, DatosPersonaje* pj3, DatosPersonaje* pj4);
 
 
 	virtual ~ArmadorDeRespuesta();

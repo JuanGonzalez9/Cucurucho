@@ -212,7 +212,7 @@ void ArmadorDeRespuesta::sumarBalas(vector<Bullet*> nuevasBalas){
 	return respuesta;
 }*/
 
-string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje datosBoby, DatosPersonaje datosBoby2, DatosPersonaje datosBoby3, DatosPersonaje datosBoby4){
+string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* datosBoby, DatosPersonaje* datosBoby2, DatosPersonaje* datosBoby3, DatosPersonaje* datosBoby4){
 
 	//Estan cargado desde juego los parametros universales para los 4 jugadores
 	string respuesta = to_string(nivel);
@@ -222,51 +222,51 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje dat
 
 	//Dependiendo los jugadores se codifica de alguna manera
 
-	respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby.getPosX());
-	respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby.getPosY());
-	respuesta += to_string(datosBoby.estaSaltando());
-	respuesta += to_string(datosBoby.estaDisparando());
-	respuesta += to_string(datosBoby.estaMirandoALaDerecha());
-	respuesta += to_string(datosBoby.estaActivo());
-	respuesta += to_string(datosBoby.estaGrisado());
-	respuesta += to_string(datosBoby.getEstado());
-	respuesta += to_string(datosBoby.getDireccionDisparo());
+	respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby->getPosX());
+	respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby->getPosY());
+	respuesta += to_string(datosBoby->estaSaltando());
+	respuesta += to_string(datosBoby->estaDisparando());
+	respuesta += to_string(datosBoby->estaMirandoALaDerecha());
+	respuesta += to_string(datosBoby->estaActivo());
+	respuesta += to_string(datosBoby->estaGrisado());
+	respuesta += to_string(datosBoby->getEstado());
+	respuesta += to_string(datosBoby->getDireccionDisparo());
 
 	if(jugadores >= 2){
-		respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby2.getPosX());
-		respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby2.getPosY());
-		respuesta += to_string(datosBoby2.estaSaltando());
-		respuesta += to_string(datosBoby2.estaDisparando());
-		respuesta += to_string(datosBoby2.estaMirandoALaDerecha());
-		respuesta += to_string(datosBoby2.estaActivo());
-		respuesta += to_string(datosBoby2.estaGrisado());
-		respuesta += to_string(datosBoby2.getEstado());
-		respuesta += to_string(datosBoby2.getDireccionDisparo());
+		respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby2->getPosX());
+		respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby2->getPosY());
+		respuesta += to_string(datosBoby2->estaSaltando());
+		respuesta += to_string(datosBoby2->estaDisparando());
+		respuesta += to_string(datosBoby2->estaMirandoALaDerecha());
+		respuesta += to_string(datosBoby2->estaActivo());
+		respuesta += to_string(datosBoby2->estaGrisado());
+		respuesta += to_string(datosBoby2->getEstado());
+		respuesta += to_string(datosBoby2->getDireccionDisparo());
 
 	}
 
 	if(jugadores >= 3){
-		respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby3.getPosX());
-		respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby3.getPosY());
-		respuesta += to_string(datosBoby3.estaSaltando());
-		respuesta += to_string(datosBoby3.estaDisparando());
-		respuesta += to_string(datosBoby3.estaMirandoALaDerecha());
-		respuesta += to_string(datosBoby3.estaActivo());
-		respuesta += to_string(datosBoby3.estaGrisado());
-		respuesta += to_string(datosBoby3.getEstado());
-		respuesta += to_string(datosBoby3.getDireccionDisparo());
+		respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby3->getPosX());
+		respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby3->getPosY());
+		respuesta += to_string(datosBoby3->estaSaltando());
+		respuesta += to_string(datosBoby3->estaDisparando());
+		respuesta += to_string(datosBoby3->estaMirandoALaDerecha());
+		respuesta += to_string(datosBoby3->estaActivo());
+		respuesta += to_string(datosBoby3->estaGrisado());
+		respuesta += to_string(datosBoby3->getEstado());
+		respuesta += to_string(datosBoby3->getDireccionDisparo());
 	}
 
 	if(jugadores == 4){
-		respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby4.getPosX());
-		respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby4.getPosY());
-		respuesta += to_string(datosBoby4.estaSaltando());
-		respuesta += to_string(datosBoby4.estaDisparando());
-		respuesta += to_string(datosBoby4.estaMirandoALaDerecha());
-		respuesta += to_string(datosBoby4.estaActivo());
-		respuesta += to_string(datosBoby4.estaGrisado());
-		respuesta += to_string(datosBoby4.getEstado());
-		respuesta += to_string(datosBoby4.getDireccionDisparo());
+		respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby4->getPosX());
+		respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby4->getPosY());
+		respuesta += to_string(datosBoby4->estaSaltando());
+		respuesta += to_string(datosBoby4->estaDisparando());
+		respuesta += to_string(datosBoby4->estaMirandoALaDerecha());
+		respuesta += to_string(datosBoby4->estaActivo());
+		respuesta += to_string(datosBoby4->estaGrisado());
+		respuesta += to_string(datosBoby4->getEstado());
+		respuesta += to_string(datosBoby4->getDireccionDisparo());
 	}
 
 	respuesta += pasarAStringDeTamanio(MENSAJE_CANT_BALAS,cantidadDeBalas);

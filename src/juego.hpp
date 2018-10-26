@@ -51,7 +51,7 @@ protected:
 	traductorDelCliente* cliente3;
 	traductorDelCliente* cliente4;
 
-	DatosPersonaje* datosBoby, *datosBoby2, * datosBoby3, * datosBoby4;
+	DatosPersonaje datosBoby, datosBoby2, datosBoby3, datosBoby4;
 
 	ArmadorDeRespuesta* armador;
 	void actualizarNivel1();

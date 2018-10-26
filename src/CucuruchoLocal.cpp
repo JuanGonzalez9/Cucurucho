@@ -152,8 +152,6 @@ int main (int argc, char *argv[]){
 
 			juego j("servidor", cantidadJugadores);
 			while (j.jugando ()) {							
-
-
 				int recibidos = soquete->recibir(soquete->getAcceptedSocket(),mensaje,TAMANIO_MENSAJE_TECLAS);
 				mensaje[TAMANIO_MENSAJE_TECLAS] = 0;
 				j.setAcciones(mensaje,1);
@@ -179,7 +177,6 @@ int main (int argc, char *argv[]){
 
 				j.manejar_eventos ();
 				j.actualizar ();
-
 
 				string respuesta = j.armarRespuesta();
 				soquete->enviar(soquete->getAcceptedSocket(),respuesta.c_str(),TAMANIO_RESPUESTA_SERVIDOR);
