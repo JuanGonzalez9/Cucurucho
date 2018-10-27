@@ -37,7 +37,7 @@ int main (int argc, char *argv[]){
 	registro.borrarEventos();
 	registro.registrar (LogEventos::info, "Comenzo el juego");
 	//int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
-	int cantidadJugadores = 2;
+	int cantidadJugadores = 3;
 	
 	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
 

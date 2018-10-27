@@ -31,6 +31,14 @@ void Parser::parsear(string msj,int jugadores){
 		parsearPersonaje(msj,27,2);		
 	}
 
+	if(cantJugadores >= 3){
+		parsearPersonaje(msj,41,2);		
+	}
+
+	if(cantJugadores == 4){
+		parsearPersonaje(msj,55,2);		
+	}
+
 	cantBalas = stoi(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores,2));
 	parsearBalas(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores + 2,TAMANIO_POS_BALAS * cantBalas));
 
