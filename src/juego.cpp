@@ -555,10 +555,10 @@ void juego::manejar_eventos ()
 		boby4.dejarDeDisparar();
 	}
 
-
 	if(cliente->quiereAccion(Constantes::arriba)){
 		boby.apuntarArriba();
 	}
+	
 	if(cliente->quiereAccion(Constantes::abajo)){
 		boby.apuntarAbajo();
 	}
@@ -571,17 +571,17 @@ void juego::manejar_eventos ()
 	}
  	
  	if(cliente3->quiereAccion(Constantes::arriba)){
-		boby.apuntarArriba();
+		boby3.apuntarArriba();
 	}
 	if(cliente3->quiereAccion(Constantes::abajo)){
-		boby.apuntarAbajo();
+		boby3.apuntarAbajo();
 	}
 
 	if(cliente4->quiereAccion(Constantes::arriba)){
-		boby.apuntarArriba();
+		boby4.apuntarArriba();
 	}
 	if(cliente4->quiereAccion(Constantes::abajo)){
-		boby.apuntarAbajo();
+		boby4.apuntarAbajo();
 	}
 
 
@@ -616,11 +616,11 @@ void juego::manejar_eventos ()
 	}
 
 	if(! cliente3->quiereAccion(Constantes::arriba) && ! cliente3->quiereAccion(Constantes::abajo)){
-		boby.dejarDeApuntar();
+		boby3.dejarDeApuntar();
 	}
 
 	if(! cliente4->quiereAccion(Constantes::arriba) && ! cliente4->quiereAccion(Constantes::abajo)){
-		boby.dejarDeApuntar();
+		boby4.dejarDeApuntar();
 	}
 
 	while (SDL_PollEvent (&e) != 0) {

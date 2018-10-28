@@ -111,6 +111,18 @@ void JuegoCliente::dibujar(){
 		boby2.dibujar(renderer);
 	}
 
+	if(num_jugadores >= 3 && boby3.esActivo()){
+		actualizarPosicionDeMiPersonaje(3);
+		actualizarEstadoDeMiPersonaje(3);
+		boby3.dibujar(renderer);
+	}
+
+	if(num_jugadores >= 4 && boby4.esActivo()){
+		actualizarPosicionDeMiPersonaje(4);
+		actualizarEstadoDeMiPersonaje(4);
+		boby4.dibujar(renderer);
+	}
+
 	vector< pair<int,int> > balas = p.getBalas();
 	dibujarBalas(balas);
 }

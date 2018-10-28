@@ -32,11 +32,11 @@ void Parser::parsear(string msj,int jugadores){
 	}
 
 	if(cantJugadores >= 3){
-		parsearPersonaje(msj,41,2);		
+		parsearPersonaje(msj,41,3);		
 	}
 
 	if(cantJugadores == 4){
-		parsearPersonaje(msj,55,2);		
+		parsearPersonaje(msj,55,4);		
 	}
 
 	cantBalas = stoi(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores,2));
@@ -54,6 +54,12 @@ DatosPersonaje* Parser::dameAlBobyNumero(int numeroDePersonaje){
 			break;
 		case (2):
 			datosP = &datosBoby2;
+			break;
+		case (3):
+			datosP = &datosBoby3;
+			break;
+		case (4):
+			datosP = &datosBoby4;
 			break;
 		default:
 			break;

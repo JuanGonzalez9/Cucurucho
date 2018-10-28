@@ -49,7 +49,7 @@ private:
 	int posFondo2;
 	int posFondo3;
 
-	DatosPersonaje datosBoby,datosBoby2;
+	DatosPersonaje datosBoby,datosBoby2,datosBoby3,datosBoby4;
 	
 	int cantBalas;
 	vector< pair<int,int> > balas;
