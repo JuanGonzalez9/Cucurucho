@@ -78,7 +78,7 @@ imagenes_o=	imagen-personaje.o \
 		imagen-monstruolevel3.o \
 		imagen-puente2.o
 		
-contra_LDFLAGS= $(imagenes_o) -rdynamic
+contra_LDFLAGS= $(imagenes_o) -rdynamic -pthread
 nodist_contra_SOURCES = $(imagenes_o)
 BUILT_SOURCES = $(imagenes)
 CLEANFILES = $(imagenes_o)
