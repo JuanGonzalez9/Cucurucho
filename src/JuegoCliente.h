@@ -14,6 +14,7 @@ public:
 	JuegoCliente(string comportamiento, int cantidadJugadores);
 	void setMensajeDelServidor(string msj);
 	void dibujar();
+	void manejarCierre();
 	virtual ~JuegoCliente();
 
 private:

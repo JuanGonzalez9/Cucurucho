@@ -37,7 +37,7 @@ int main (int argc, char *argv[]){
 	registro.borrarEventos();
 	registro.registrar (LogEventos::info, "Comenzo el juego");
 	//int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
-	int cantidadJugadores = 3;
+	int cantidadJugadores = 2;
 	
 	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
 
@@ -85,7 +85,7 @@ int main (int argc, char *argv[]){
 		char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
 		JuegoCliente juegoCliente("cliente", cantidadJugadores);
 
-		while(escuchador->enAccion()){
+		while(escuchador->enAccion() && juegoCliente.jugando()){
 			string acciones = escuchador->obtenerAcciones();
 			//if(acciones != "000000000"){
 				// mas adelante enviamos solo si esta apretando alguna tecla (si las acciones es distinto de todo 0)
@@ -103,6 +103,7 @@ int main (int argc, char *argv[]){
 	
 				juegoCliente.dibujar();
 				juegoCliente.presentar();
+				juegoCliente.manejarCierre();
 
 			//}
 

@@ -88,6 +88,20 @@ void JuegoCliente::dibujarBalas(vector< pair<int,int> > balas){
 	}
 }
 
+void JuegoCliente::manejarCierre(){
+	while (SDL_PollEvent (&e) != 0) {
+		switch(e.type){
+
+			case (SDL_QUIT):
+				termino = true;
+				break;
+
+			default:
+				break;
+		}
+	}
+}
+
 void JuegoCliente::dibujar(){
 	SDL_SetTextureBlendMode (textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget (renderer, textura_objetivo);
