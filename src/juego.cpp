@@ -41,7 +41,7 @@ juego::juego (string comportamiento, int cantidadJugadores):
 	if(comportamiento == "cliente") flags = 0;
 	else flags = SDL_WINDOW_HIDDEN;
 
-	ventana = SDL_CreateWindow ("Contra", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, flags);
+	ventana = SDL_CreateWindow ("Contra", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
 	if (nullptr == ventana) {
 		logerror("No pudo crease la ventana");
 		std::cerr << "No pudo crease la ventana: " << SDL_GetError () << '\n';
@@ -718,6 +718,25 @@ void juego::actualizarNivel2(){
 
 void juego::actualizarNivel3(){
 	termino = true;
+}
+
+void juego::grisarJugador(int numeroDeJugador){
+	switch(numeroDeJugador){
+		case (1):
+			boby.grisar();
+			break;
+		case (2):
+			boby2.grisar();
+			break;
+		case (3):
+			boby3.grisar();
+			break;
+		case (4):
+			boby4.grisar();
+			break;
+		default:
+			break;
+	}
 }
 	
 

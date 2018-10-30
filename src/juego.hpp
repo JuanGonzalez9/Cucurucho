@@ -31,6 +31,7 @@ public:
 	void manejar_eventos ();
 	void actualizar ();
 	string armarRespuesta();
+	void grisarJugador(int numeroDeJugador);
 	void dibujar ();
 	void presentar ();
 	bool jugando ();

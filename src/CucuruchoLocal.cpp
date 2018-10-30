@@ -228,6 +228,9 @@ int main (int argc, char *argv[]){
 		if(cantidadJugadores >= 4){
 			tenviar4.join();
 		}
+		j.dibujar();
+		j.presentar();
+		
 	}
 	soquete->~Socket();
        
@@ -249,7 +252,10 @@ void funcionrecibir(int numeroCliente, Socket* socket, juego* j  ){
 	m.lock();
 	if(socket->estaConectado()){
 		int recibidos = socket->recibir(socket->getAcceptedSocket(),mensaje,TAMANIO_MENSAJE_TECLAS);
-		if(recibidos == -1) socket->setConexion(false);
+		if(recibidos == -1){
+			socket->setConexion(false);
+			j->grisarJugador(numeroCliente);
+		} 
 	}
 	mensaje[TAMANIO_MENSAJE_TECLAS] = 0;
 	j->setAcciones(mensaje,numeroCliente);
