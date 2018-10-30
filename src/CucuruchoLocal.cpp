@@ -19,7 +19,7 @@
 #define TAMANIO_MENSAJE_TECLAS 9
  
 void funcionrecibir(int numeroCliente, Socket* socket, juego* j  );
-void funcionEnviar(int numeroCliente, Socket* socket, juego* j, int  tamanio_respuestaServidor );
+void funcionEnviar(string respuesta, Socket* socket, juego* j, int  tamanio_respuestaServidor );
  
  
 void uso ()
@@ -92,7 +92,7 @@ int main (int argc, char *argv[]){
         char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
         JuegoCliente juegoCliente("cliente", cantidadJugadores);
  
-        while(escuchador->enAccion()){
+        while(escuchador->enAccion() && juegoCliente.jugando()){
             string acciones = escuchador->obtenerAcciones();
             //if(acciones != "000000000"){
                 // mas adelante enviamos solo si esta apretando alguna tecla (si las acciones es distinto de todo 0)
@@ -110,6 +110,7 @@ int main (int argc, char *argv[]){
    
                 juegoCliente.dibujar();
                 juegoCliente.presentar();
+		juegoCliente.manejarCierre();
  
             //}
  
@@ -197,19 +198,20 @@ int main (int argc, char *argv[]){
 		       
 		j.manejar_eventos ();
 		j.actualizar ();
+		string respuesta = j.armarRespuesta();
 
-		tenviar1 = std::thread{std::bind(funcionEnviar, 1, soquete, &j, tamanio_respuestaServidor)};
+		tenviar1 = std::thread{std::bind(funcionEnviar, respuesta, soquete, &j, tamanio_respuestaServidor)};
 
 		if(cantidadJugadores >= 2){
-		    tenviar2 = std::thread{std::bind(funcionEnviar, 2, soquete2, &j, tamanio_respuestaServidor)};
+		    tenviar2 = std::thread{std::bind(funcionEnviar, respuesta, soquete2, &j, tamanio_respuestaServidor)};
 		}
 
 		if(cantidadJugadores >= 3){
-		    tenviar3 = std::thread{std::bind(funcionEnviar, 3, soquete3, &j, tamanio_respuestaServidor)};
+		    tenviar3 = std::thread{std::bind(funcionEnviar, respuesta, soquete3, &j, tamanio_respuestaServidor)};
 		}
 
 		if(cantidadJugadores == 4){
-		    tenviar4 = std::thread{std::bind(funcionEnviar, 4 , soquete4, &j, tamanio_respuestaServidor)};
+		    tenviar4 = std::thread{std::bind(funcionEnviar, respuesta , soquete4, &j, tamanio_respuestaServidor)};
 		}
 
 
@@ -240,44 +242,30 @@ int main (int argc, char *argv[]){
  
 void funcionrecibir(int numeroCliente, Socket* socket, juego* j  ){
  
-    	char mensaje[TAMANIO_MENSAJE_TECLAS + 1];
+    	char mensaje[TAMANIO_MENSAJE_TECLAS + 1] = "000000000";
    
 	static std::mutex m;
  
 	m.lock();
-	int recibidos = socket->recibir(socket->getAcceptedSocket(),mensaje,TAMANIO_MENSAJE_TECLAS);
+	if(socket->estaConectado()){
+		int recibidos = socket->recibir(socket->getAcceptedSocket(),mensaje,TAMANIO_MENSAJE_TECLAS);
+		if(recibidos == -1) socket->setConexion(false);
+	}
 	mensaje[TAMANIO_MENSAJE_TECLAS] = 0;
 	j->setAcciones(mensaje,numeroCliente);
 	m.unlock();
 }
  
-void funcionEnviar(int numeroCliente, Socket* socket, juego* j, int tamanio_respuestaServidor){
+void funcionEnviar(string respuesta, Socket* socket, juego* j, int tamanio_respuestaServidor){
  
 	static std::mutex m;
-	if (numeroCliente == 1){
-	m.lock();
-	string respuesta = j->armarRespuesta();
-	m.unlock();
-	socket->enviar(socket->getAcceptedSocket(),respuesta.c_str(),tamanio_respuestaServidor);
+
+	if(socket->estaConectado()){
+		m.lock();
+		socket->enviar(socket->getAcceptedSocket(),respuesta.c_str(),tamanio_respuestaServidor);
+		m.unlock();
 	}
-	else if (numeroCliente ==2){
-	m.lock();
-	string respuesta2 = j->armarRespuesta();
-	m.unlock();
-	socket->enviar(socket->getAcceptedSocket(),respuesta2.c_str(),tamanio_respuestaServidor);
-	}
-	else if (numeroCliente ==3){
-	m.lock();
-	string respuesta3 = j->armarRespuesta();
-	m.unlock();
-	socket->enviar(socket->getAcceptedSocket(),respuesta3.c_str(),tamanio_respuestaServidor);
-	}
-	else if (numeroCliente ==4){
-	m.lock();
-	string respuesta4 = j->armarRespuesta();
-	m.unlock();
-	socket->enviar(socket->getAcceptedSocket(),respuesta4.c_str(),tamanio_respuestaServidor);
-	}
+	
 }
 
 

@@ -9,12 +9,16 @@
 using namespace std;
 
 Socket::Socket() {
+	conectado = false;
 	cantMaximaDeJugadores = 4;
 	idSocket = socket(PF_INET,SOCK_STREAM,0);
 
 	if(idSocket == -1){
 		cout<<"No se pudo crear el socket"<<endl;
 		return;
+	}
+	else{
+		conectado = true;	
 	}
 }
 
@@ -80,7 +84,7 @@ int Socket::enviar(int idSock,const char* buffer, int length){
 	//guardo la cantidad de bytes que ya envie
 	int sent = 0;
 	while(sent < length && sent != -1){
-		sent = send(idSock,buffer + sent,length - sent,MSG_NOSIGNAL);
+		sent += send(idSock,buffer + sent,length - sent,MSG_NOSIGNAL);
 	}
 	return sent;
 }
@@ -88,8 +92,13 @@ int Socket::enviar(int idSock,const char* buffer, int length){
 int Socket::recibir(int idSock,char* buffer, int length){
 
 	int recieved = 0;
+	int cantDeCeros = 0;
 	while(recieved < length && recieved != -1){
 		recieved += recv(idSock,buffer + recieved,length - recieved,0);
+		if(recieved == 0){
+			cantDeCeros++;
+			if(cantDeCeros == 10) recieved = -1;
+		}
 	}
 	return recieved;
 }
@@ -106,6 +115,14 @@ int Socket::getAcceptedSocket(){
 
 void Socket::setSocketId(int valor){
 	idSocket = valor;
+}
+
+void Socket::setConexion(bool conectado){
+	this->conectado = conectado;
+}
+
+bool Socket::estaConectado(){
+	return conectado;
 }
 
 Socket::~Socket() {

@@ -32,11 +32,14 @@ public:
 	int getSocketId();
 	int getAcceptedSocket();
 	void setSocketId(int valor);
+	void setConexion(bool conectado);
+	bool estaConectado();
 
 private:
 	int idSocket;
 	int accepted_socket;
 	int cantMaximaDeJugadores;
+	bool conectado;
 };
 
 #endif /* SOCKET_H_ */

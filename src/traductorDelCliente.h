@@ -17,6 +17,7 @@ public:
 
 private:
 	bitset<9> mensajeSinTraducir;
+	bitset<9> desconectado;
 };
 
 #endif /* TRADUCTORDELCLIENTE_H_ */
