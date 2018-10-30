@@ -137,10 +137,10 @@ int main (int argc, char *argv[]){
 	std::thread trecibir1;
 	std::thread tenviar2;
 	std::thread trecibir2;
-	/*std::thread tenviar3;
+	std::thread tenviar3;
 	std::thread trecibir3;
 	std::thread tenviar4;
-	std::thread trecibir4;*/
+	std::thread trecibir4;
 
 	if (cantidadJugadores >=2){
 	soquete2 = new Socket();
@@ -149,7 +149,7 @@ int main (int argc, char *argv[]){
 
 	}
 
-	/*if (cantidadJugadores >=3 ){
+	if (cantidadJugadores >=3 ){
 	soquete3 = new Socket();
 	soquete3->bindAndListen(puerto+2);
 	soquete3->aceptar();
@@ -162,7 +162,7 @@ int main (int argc, char *argv[]){
 	soquete4->bindAndListen(puerto+3);
 	soquete4->aceptar();
 
-	}*/
+	}
            
  
  
@@ -174,26 +174,26 @@ int main (int argc, char *argv[]){
 			trecibir2 = std::thread{std::bind(funcionrecibir, 2, soquete2, &j)};
 		}
 
-		/*if(cantidadJugadores >= 3){
-			std::thread trecibir3{std::bind(funcionrecibir, 3 , soquete3, &j)};
+		if(cantidadJugadores >= 3){
+			trecibir3 = std::thread{std::bind(funcionrecibir, 3 , soquete3, &j)};
 		}
 
 		if(cantidadJugadores >= 4){
-			std::thread trecibir4{std::bind(funcionrecibir, 4, soquete4, &j)};
-		}*/
+			trecibir4 = std::thread{std::bind(funcionrecibir, 4, soquete4, &j)};
+		}
 
 		trecibir1.join();
 		if(cantidadJugadores >= 2){
 			trecibir2.join();
 		}
 
-		/*if(cantidadJugadores >= 3){
+		if(cantidadJugadores >= 3){
 			trecibir3.join();
 		}
 
 		if(cantidadJugadores >= 4){
 			trecibir4.join();
-		}*/
+		}
 		       
 		j.manejar_eventos ();
 		j.actualizar ();
@@ -204,13 +204,13 @@ int main (int argc, char *argv[]){
 		    tenviar2 = std::thread{std::bind(funcionEnviar, 2, soquete2, &j, tamanio_respuestaServidor)};
 		}
 
-		/*if(cantidadJugadores >= 3){
-		    std::thread tenviar3{std::bind(funcionEnviar, 3, soquete3, &j, tamanio_respuestaServidor)};
+		if(cantidadJugadores >= 3){
+		    tenviar3 = std::thread{std::bind(funcionEnviar, 3, soquete3, &j, tamanio_respuestaServidor)};
 		}
 
 		if(cantidadJugadores == 4){
-		    std::thread tenviar4{std::bind(funcionEnviar, 4 , soquete4, &j, tamanio_respuestaServidor)};
-		}*/
+		    tenviar4 = std::thread{std::bind(funcionEnviar, 4 , soquete4, &j, tamanio_respuestaServidor)};
+		}
 
 
 
@@ -219,19 +219,15 @@ int main (int argc, char *argv[]){
 			tenviar2.join();
 		}
 
-		/*if(cantidadJugadores >= 3){
+		if(cantidadJugadores >= 3){
 			tenviar3.join();
 		}
 
 		if(cantidadJugadores >= 4){
 			tenviar4.join();
-		}*/
+		}
 	}
 	soquete->~Socket();
-
-   
- 
- 
        
  
         registro.registrar (LogEventos::info, "Finalizo el juego");
