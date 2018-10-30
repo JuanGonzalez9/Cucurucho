@@ -41,44 +41,42 @@ void enviarBalas(int cantDeBalas,Socket* soquete){
  
 int main (int argc, char *argv[]){
  
-    registro.borrarEventos();
-    registro.registrar (LogEventos::info, "Comenzo el juego");
-    int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
-    //int cantidadJugadores = 2;
-	cout<<cantidadJugadores<<endl;
+	registro.borrarEventos();
+	registro.registrar (LogEventos::info, "Comenzo el juego");
+	int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
    
-    int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
+	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
+
+	int r = 1;
+	if (argc == 5 && argv[1][0] == '-') {
+	if (argv[1][1] == 'd') {
+	    if (!strcmp (argv[2], "ERROR")) {
+		registro.definirTipoLog (LogEventos::error);
+		r = 0;
+	    } else if (!strcmp (argv[2], "INFO")) {
+		registro.definirTipoLog (LogEventos::info);
+		r = 0;
+	    } else if (!strcmp (argv[2], "DEBUG")) {
+		registro.definirTipoLog (LogEventos::debug);
+		r = 0;
+	    } else {
+		std::stringstream ss;
+		ss << "Opcion de depurado '" << argv[2] << "' no reconida";
+		registro.registrar (LogEventos::error, ss.str().c_str());
+	    }
+	}
+	} else {
+	r = argc != 1;
+	}
+
+	if (r) {
+	uso ();
+	} else {
  
-    int r = 1;
-    if (argc == 5 && argv[1][0] == '-') {
-        if (argv[1][1] == 'd') {
-            if (!strcmp (argv[2], "ERROR")) {
-                registro.definirTipoLog (LogEventos::error);
-                r = 0;
-            } else if (!strcmp (argv[2], "INFO")) {
-                registro.definirTipoLog (LogEventos::info);
-                r = 0;
-            } else if (!strcmp (argv[2], "DEBUG")) {
-                registro.definirTipoLog (LogEventos::debug);
-                r = 0;
-            } else {
-                std::stringstream ss;
-                ss << "Opcion de depurado '" << argv[2] << "' no reconida";
-                registro.registrar (LogEventos::error, ss.str().c_str());
-            }
-        }
-    } else {
-        r = argc != 1;
-    }
- 
-    if (r) {
-        uso ();
-    } else {
- 
-    char* comportamiento = argv[3];
-    unsigned short puerto = atoi(argv[4]);
-    if(strcmp(comportamiento,"cliente") == 0){
- 
+	char* comportamiento = argv[3];
+	unsigned short puerto = atoi(argv[4]);
+	if(strcmp(comportamiento,"cliente") == 0){
+
         cout << "Arranca el cliente" << endl;
         Parser parser;
         EscuchadorDeAcciones* escuchador = new EscuchadorDeAcciones();
