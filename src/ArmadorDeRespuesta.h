@@ -37,17 +37,6 @@ public:
 	void setEstado(Constantes::Estado estado);
 	void setDireccionDisparo(Constantes::DireccionDisparo dir);
 	
-
-	/*void setPosPersonaje2(int x,int y);
-	void setSaltando2(bool saltando);
-	void setDisparando2(bool disp);
-	void setMirandoALaDerecha2(bool mirando);
-	void setActivo2(bool active);
-	void setGrisado2(bool grisado);
-	void setEstado2(Constantes::Estado estado);
-	void setDireccionDisparo2(Constantes::DireccionDisparo dir);*/
-
-	
 	void setCantidadDeBalas(int cant);
 	void sumarBalas(vector<Bullet*> nuevasBalas);
 	//.......metodos...........................
@@ -82,23 +71,9 @@ private:
 	bool grisado;
 	int cantidadDeBalas;
 	int balasActuales;
-	//posicion del otro jugador
-	/*int posPersonajeX2;
-	int posPersonajeY2;
-	bool saltando2;
-	bool disparando2;
-	bool mirandoALaDerecha2;
-	bool activo2;
-	bool grisado2;
-	int cantidadDeBalas2;
-	int balasActuales2;*/
-
-
+	
 	Constantes::Estado estado;
 	Constantes::DireccionDisparo dirDisparo;
-
-	/*Constantes::Estado estado2;
-	Constantes::DireccionDisparo dirDisparo2;*/
 };
 
 #endif /* ARMADORDERESPUESTA_H_ */
