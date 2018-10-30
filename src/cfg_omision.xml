@@ -3,6 +3,7 @@ R"(<?xml version="1.0"?>
   <debug>
     <level>ERROR</level>
   </debug>
+  <cantidad_jugadores> 2 </cantidad_jugadores>
   <personajes>
     <heroe>
 	    <sprite>imagenes/personaje.png</sprite>
