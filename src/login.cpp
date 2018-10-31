@@ -3,8 +3,6 @@
 #include "login.hpp"
 #include "conector.hpp"
 
-static int puerto = 1235;
-
 static gboolean al_cumplir_tiempo (gpointer data)
 {
 	ventana_login *login = (ventana_login*)data;
@@ -103,7 +101,7 @@ static gboolean al_terminar_hilo (gpointer data)
 static void comprobar_credencial (ventana_login *login)
 {
 	// Hilo secundario
-	login->fd = comprobar_credencial_en_servidor (puerto, login->usuario, login->clave, login->resultado, login->jugadores);
+	login->fd = comprobar_credencial_en_servidor (login->puerto, login->usuario, login->clave, login->resultado, login->jugadores);
 	if (login->resultado == usuario::aceptado) {
 		gdk_threads_add_idle (al_ser_aceptado, login);
 		std::cout << "esperando ok para " << login->usuario << " en fd " << login->fd << "\n";
@@ -227,7 +225,7 @@ static void activate (GtkApplication* app, gpointer user_data)
 	gtk_widget_show_all (login->ventana);
 }
 
-void esperar_jugadores (int jugadores, autenticados &a)
+void esperar_jugadores (int jugadores, unsigned short puerto, autenticados &a)
 {
 	a.cantidad = 0;
 	a.requeridos = jugadores;
@@ -239,9 +237,10 @@ void esperar_jugadores (int jugadores, autenticados &a)
 	std::cout << "Cupo de jugadores alcanzado\n";
 }
 
-bool login (int &fd, int &jugadores, ventana_login & login)
+bool login (unsigned short puerto, int &fd, int &jugadores, ventana_login & login)
 {
 	login.app = gtk_application_new (NULL, G_APPLICATION_FLAGS_NONE);
+	login.puerto = puerto;
 	std::cout << "login.app: " << sizeof(login.app) << " " << (void*)login.app << "\n";
 	g_signal_connect (login.app, "activate", G_CALLBACK (activate), &login);
 	g_application_run (G_APPLICATION (login.app), 0, nullptr);

@@ -82,7 +82,7 @@ int main (int argc, char *argv[]){
  
 	int fd, cantidadJugadores;
 	ventana_login ventana;
-	if (!login (fd, cantidadJugadores, ventana)) {
+	if (!login (puerto, fd, cantidadJugadores, ventana)) {
 		return 0;
 	}
 	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
@@ -132,7 +132,7 @@ int main (int argc, char *argv[]){
 	int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
 	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
 	autenticados a;
-	esperar_jugadores (cantidadJugadores, a);
+	esperar_jugadores (cantidadJugadores, puerto, a);
  
 	Socket* soquete = new Socket(a.usuarios[0].fd);
 	soquete->setConexion(true);

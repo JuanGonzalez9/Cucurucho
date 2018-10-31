@@ -47,10 +47,11 @@ typedef struct
 	std::thread hilo;
 	usuario::estado resultado;
 	int jugadores, fd;
+	unsigned short puerto;
 } ventana_login;
 
-bool login (int &fd, int &jugadores, ventana_login &login);
-void esperar_jugadores (int jugadores, autenticados &a);
+bool login (unsigned short puerto, int &fd, int &jugadores, ventana_login &login);
+void esperar_jugadores (int jugadores, unsigned short puerto, autenticados &a);
 
 #endif
 
