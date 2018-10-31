@@ -32,6 +32,7 @@ public:
 	void actualizar ();
 	string armarRespuesta();
 	void grisarJugador(int numeroDeJugador);
+	void desgrisarJugador(int numeroDeJugador);
 	void dibujar ();
 	void presentar ();
 	bool jugando ();

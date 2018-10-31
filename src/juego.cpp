@@ -744,6 +744,25 @@ void juego::grisarJugador(int numeroDeJugador){
 	}
 }
 	
+void juego::desgrisarJugador(int numeroDeJugador){
+	switch(numeroDeJugador){
+		case (1):
+			boby.desgrisar();
+			break;
+		case (2):
+			boby2.desgrisar();
+			break;
+		case (3):
+			boby3.desgrisar();
+			break;
+		case (4):
+			boby4.desgrisar();
+			break;
+		default:
+			break;
+	}
+}
+	
 
 void juego::actualizar ()
 {

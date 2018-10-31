@@ -5,6 +5,7 @@
 #include <iostream> 
 #include <stdlib.h>
 #include <ctime>
+#include <mutex>
 
 
 
@@ -18,6 +19,7 @@ public:
 	void mostrarEventos();
 protected:
 	TipoLog tipoLog;
+	std::mutex mutex;
 };
 
 #ifndef IOCONTRA_HPP

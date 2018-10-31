@@ -10,6 +10,7 @@ using namespace std; // se usa esta linea para no anteponer en cada cout el std
 struct tm* gmtime(const time_t* tPtr);
 
 void LogEventos::registrar(LogEventos::TipoLog tipoEvento,const char* evento_ocurrido){
+	std::lock_guard<std::mutex> lock(mutex);
 	if(tipoLog >= tipoEvento){
 
 		ofstream archivo("registro.txt",ios::app);

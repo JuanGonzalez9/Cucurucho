@@ -140,7 +140,7 @@ static usuario::estado autenticar_usuario (autenticados *a, std::string & usuari
 		std::cout << ss.str() << "\n";
 		return usuario::rechazado;
 	}
-	std::cout << "Comparando " << c << " con " << clave << "\n";
+	//std::cout << "Comparando " << c << " con " << clave << "\n";
 	
 	if (clave == c) {
 		std::lock_guard<std::mutex> lock(a->mutex);
@@ -152,6 +152,16 @@ static usuario::estado autenticar_usuario (autenticados *a, std::string & usuari
 			std::cout << "Aceptado: " << usuario << "\n";
 			return usuario::aceptado;
 		} else {
+			for (int i = 0; i < a->cantidad; i++) {
+				std::cout << "Comparando '" << usuario << "' con '" << a->usuarios[i].nombre << "'\n";
+				if (a->usuarios[i].nombre == usuario) {
+					a->usuarios[i].fd = fd;
+					a->usuarios[i].nombre = usuario;
+					a->usuarios[i].esperando_ok = true;
+					std::cout << "Reconectando: " << usuario << "\n";
+					return usuario::aceptado;
+				}
+			}
 			// TODO aceptar a usuario ya registrado
 			std::cout << "Cupo: " << usuario << "\n";
 			return usuario::cupo;

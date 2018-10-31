@@ -18,7 +18,7 @@
  
 #define TAMANIO_MENSAJE_TECLAS 9
  
-void funcionrecibir(int numeroCliente, Socket* socket, juego* j  );
+void funcionrecibir(int numeroCliente, Socket* socket, juego* j, autenticados *a  );
 void funcionEnviar(string respuesta, Socket* socket, juego* j, int  tamanio_respuestaServidor );
  
  
@@ -186,18 +186,18 @@ int main (int argc, char *argv[]){
  
 	juego j("servidor", cantidadJugadores);
 	while (j.jugando ()) {                         
-		trecibir1 = std::thread{std::bind(funcionrecibir, 1, soquete, &j)};
+		trecibir1 = std::thread{std::bind(funcionrecibir, 1, soquete, &j, &a)};
 
 		if(cantidadJugadores >= 2){
-			trecibir2 = std::thread{std::bind(funcionrecibir, 2, soquete2, &j)};
+			trecibir2 = std::thread{std::bind(funcionrecibir, 2, soquete2, &j, &a)};
 		}
 
 		if(cantidadJugadores >= 3){
-			trecibir3 = std::thread{std::bind(funcionrecibir, 3 , soquete3, &j)};
+			trecibir3 = std::thread{std::bind(funcionrecibir, 3 , soquete3, &j, &a)};
 		}
 
 		if(cantidadJugadores >= 4){
-			trecibir4 = std::thread{std::bind(funcionrecibir, 4, soquete4, &j)};
+			trecibir4 = std::thread{std::bind(funcionrecibir, 4, soquete4, &j, &a)};
 		}
 
 		trecibir1.join();
@@ -259,18 +259,31 @@ int main (int argc, char *argv[]){
 }
  
  
-void funcionrecibir(int numeroCliente, Socket* socket, juego* j  ){
+void funcionrecibir(int numeroCliente, Socket* socket, juego* j, autenticados *a  ){
  
     	char mensaje[TAMANIO_MENSAJE_TECLAS + 1] = "000000000";
    
 	static std::mutex m;
  
 	m.lock();
+	if(!socket->estaConectado()){
+		std::lock_guard<std::mutex> lock(a->mutex);
+		if (a->usuarios[numeroCliente-1].fd != -1) {
+			std::cout << "Reconectando cliente: " << numeroCliente << "\n";
+			socket->setSocketId(a->usuarios[numeroCliente-1].fd);
+			j->desgrisarJugador(numeroCliente);
+			socket->setConexion(true);
+		}
+	}
+	
 	if(socket->estaConectado()){
 		int recibidos = socket->recibir(socket->getAcceptedSocket(),mensaje,TAMANIO_MENSAJE_TECLAS);
 		if(recibidos == -1){
+			std::lock_guard<std::mutex> lock(a->mutex);
 			socket->setConexion(false);
 			j->grisarJugador(numeroCliente);
+			std::cout << "Anulando cliente: " << numeroCliente << "\n";
+			a->usuarios[numeroCliente-1].fd = -1;
 		} 
 	}
 	mensaje[TAMANIO_MENSAJE_TECLAS] = 0;

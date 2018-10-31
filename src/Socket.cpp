@@ -139,7 +139,9 @@ int Socket::getAcceptedSocket(){
 }
 
 void Socket::setSocketId(int valor){
-	idSocket = valor;
+	//idSocket = valor;
+	// ATENCION: ahora asigno accept a accepted_socket directamente.
+	accepted_socket = idSocket = valor;
 }
 
 void Socket::setConexion(bool conectado){
