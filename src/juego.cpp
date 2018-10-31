@@ -961,19 +961,25 @@ void juego::actualizar ()
 
 void juego::setDatosEnemigo(){
 	bool hayEnemigo = false;
+	bool cerca = (boby.estaCercaDelFinalDelNivel1() || boby2.estaCercaDelFinalDelNivel1() || boby3.estaCercaDelFinalDelNivel1() || boby4.estaCercaDelFinalDelNivel1());
+
+	bool cerca2 = (boby.estaCercaDelFinalDelNivel2() || boby2.estaCercaDelFinalDelNivel2() || boby3.estaCercaDelFinalDelNivel2() || boby4.estaCercaDelFinalDelNivel2());
+
+	bool cerca3 = (boby.estaCercaDelFinalDelNivel3() || boby2.estaCercaDelFinalDelNivel3() || boby3.estaCercaDelFinalDelNivel3() || boby4.estaCercaDelFinalDelNivel3());
+
 	switch(nivel){
 		case (1):
-			if(boby.estaCercaDelFinalDelNivel1() && !enemigoNivel1->derrotado()){
+			if(cerca && !enemigoNivel1->derrotado()){
 				hayEnemigo = true;
 			}
 			break;
 		case (2):
-			if(boby.estaCercaDelFinalDelNivel2() && !enemigoNivel2->derrotado()){
+			if(cerca2 && !enemigoNivel2->derrotado()){
 				hayEnemigo = true;
 			}
 			break;
 		case (3):
-			if(boby.estaCercaDelFinalDelNivel3() && !enemigoNivel3->derrotado()){
+			if(cerca3 && !enemigoNivel3->derrotado()){
 				hayEnemigo = true;
 			}
 			break;
