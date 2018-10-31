@@ -103,7 +103,9 @@ static void comprobar_credencial (ventana_login *login)
 	// Hilo secundario
 	login->fd = comprobar_credencial_en_servidor (login->puerto, login->usuario, login->clave, login->resultado, login->jugadores);
 	if (login->resultado == usuario::aceptado) {
+		gdk_threads_enter ();
 		gdk_threads_add_idle (al_ser_aceptado, login);
+		gdk_threads_leave ();
 		std::cout << "esperando ok para " << login->usuario << " en fd " << login->fd << "\n";
 		esperar_ok (login->fd);
 		std::cout << "ok recibido\n";

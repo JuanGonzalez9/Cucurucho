@@ -175,12 +175,12 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 			std::lock_guard<std::mutex> lock(a->mutex);
 			if (a->cantidad == a->requeridos) {
 				std::cout << "Cupo alcanzado\n";
+				if (!a->comenzo) {
+					a->comenzo = true;
+					std::cout << "Notifico que se cumplió el cupo de jugadores\n";
+					a->condicion.notify_one();
+				}
 				for (int i = 0; i < a->cantidad; i++) {
-					if (!a->comenzo) {
-						a->comenzo = true;
-						std::cout << "Notifico que se cumplió el cupo de jugadores\n";
-						a->condicion.notify_one();
-					}
 					if (a->usuarios[i].esperando_ok) {
 						std::cout << "enviando ok a " << a->usuarios[i].nombre << " en fd " << a->usuarios[i].fd << "\n";
 						a->usuarios[i].esperando_ok = false;
