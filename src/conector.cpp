@@ -154,7 +154,7 @@ static usuario::estado autenticar_usuario (autenticados *a, std::string & usuari
 		} else {
 			for (int i = 0; i < a->cantidad; i++) {
 				std::cout << "Comparando '" << usuario << "' con '" << a->usuarios[i].nombre << "'\n";
-				if (a->usuarios[i].nombre == usuario) {
+				if (a->usuarios[i].nombre == usuario && a->usuarios[i].fd == -1) {
 					a->usuarios[i].fd = fd;
 					a->usuarios[i].nombre = usuario;
 					a->usuarios[i].esperando_ok = true;
