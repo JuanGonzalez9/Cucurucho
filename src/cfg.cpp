@@ -233,18 +233,10 @@ xmlNode *configuracion::obtener_nodo_mas_profundo (const char *camino, xmlXPathC
 std::string configuracion::obtener_s (const char *camino, std::function<bool(std::string & s, bool omision)> validar)
 {
 	std::string s = obtener_s_del_xml (camino, contexto);
-	if (s.empty() || !validar (s, false)) {
-		if (s.empty()) {
-			if ((unodo = obtener_nodo_mas_profundo (camino, contexto))) {
-				cfgerror (unodo, "falta el valor de '" << camino << "'.");
-			} else {
-				logerror ("falta el valor de '" << camino << "'.");
-			}
-		} else {
-			cfgerror (unodo, "el valor '" << s << "' es invalido para <" << unodo->name << ">.");
-		}
+	if (!validar (s, false)) {
+		cfgerror (unodo, "el valor '" << s << "' es invalido para <" << unodo->name << ">.");
 		s = obtener_s_del_xml (camino, contexto_omision);
-		if (s.empty() || !validar (s, true)) {
+		if (!validar (s, true)) {
 			lanzar ("opcion por defecto '" << s << "' para " << camino << " invalida.");
 			s.clear();
 		} else {

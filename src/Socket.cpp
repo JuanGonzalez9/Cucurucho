@@ -24,7 +24,8 @@ Socket::Socket() {
 
 Socket::Socket(int accept){
 	cantMaximaDeJugadores = 4;
-	idSocket = accept;
+	// ATENCION: ahora asigno accept a accepted_socket directamente.
+	accepted_socket = idSocket = accept;
 
 	if(idSocket < 0){
 		cout<<"Error en el accept"<<endl;
@@ -83,24 +84,48 @@ int Socket::aceptar(){
 int Socket::enviar(int idSock,const char* buffer, int length){
 	//guardo la cantidad de bytes que ya envie
 	int sent = 0;
+	//std::cout << "Enviar: " << length << "\n";
 	while(sent < length && sent != -1){
 		sent += send(idSock,buffer + sent,length - sent,MSG_NOSIGNAL);
+		//std::cout << "Enviados: " << sent << "\n";
 	}
+	//std::cout << "Enviados: total: " << sent << "\n";
 	return sent;
+	#if 0
+	int escritos = 0, r;
+	std::cout << "Enviar: " << length << " en " << idSock << "\n";
+	while (escritos < length && (r = send (idSock, buffer+escritos, length-escritos, 0)) != -1) {
+		escritos += r;
+		std::cout << "Enviados: " << escritos << "\n";
+	}
+	std::cout << "Enviados: total: " << escritos << "\n";
+	return escritos;
+	#endif
 }
 
 int Socket::recibir(int idSock,char* buffer, int length){
-
 	int recieved = 0;
 	int cantDeCeros = 0;
+	//std::cout << "Recibir: " << length << "\n";
 	while(recieved < length && recieved != -1){
 		recieved += recv(idSock,buffer + recieved,length - recieved,0);
+		//std::cout << "Recibidos: " << recieved << "\n";
 		if(recieved == 0){
 			cantDeCeros++;
 			if(cantDeCeros == 10) recieved = -1;
 		}
 	}
+	//std::cout << "Recibidos: total: " << recieved << "\n";
 	return recieved;
+	#if 0
+	int leidos = 0, r;
+	std::cout << "Recibir: " << length << " en " << idSock << "\n";
+	while (leidos < length && (r = recv (idSock, buffer+leidos, length-leidos, 0)) > 0) {
+		leidos += r;
+		std::cout << "Recibidos: " << leidos << "\n";
+	}
+	std::cout << "Recibidos: total: " << leidos << "\n";
+	#endif
 }
 
 //--------SET y GET--------------------------

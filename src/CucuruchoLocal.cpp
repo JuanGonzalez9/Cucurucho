@@ -14,7 +14,7 @@
 #include "Constantes.h"
 #include <thread>
 #include <mutex>
- 
+#include "login.hpp"
  
 #define TAMANIO_MENSAJE_TECLAS 9
  
@@ -43,10 +43,7 @@ int main (int argc, char *argv[]){
  
 	registro.borrarEventos();
 	registro.registrar (LogEventos::info, "Comenzo el juego");
-	int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
    
-	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
-
 	int r = 1;
 	if (argc == 5 && argv[1][0] == '-') {
 	if (argv[1][1] == 'd') {
@@ -83,14 +80,23 @@ int main (int argc, char *argv[]){
         const char* serverAdress = "127.0.0.1";
         cout<<"el puerto es "<<puerto<<" y la adress es "<<serverAdress<<endl;
  
-        Socket* soqueteCliente = new Socket();
-        soqueteCliente->conectar(serverAdress,puerto);
- 
+	int fd, cantidadJugadores;
+	ventana_login ventana;
+	if (!login (fd, cantidadJugadores, ventana)) {
+		return 0;
+	}
+	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
+	std::cout << "Cliente: fd: " << fd << ", jugadores: " << cantidadJugadores << "\n";
+
+        Socket* soqueteCliente = new Socket(fd);
+        //soqueteCliente->conectar(serverAdress,puerto);
+  	std::cout << "Iniciando cliente: " << soqueteCliente->getSocketId() << "\n";
+
  
         char respuestaServidor[tamanio_respuestaServidor + 1];
         char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
         JuegoCliente juegoCliente("cliente", cantidadJugadores);
- 
+
         while(escuchador->enAccion() && juegoCliente.jugando()){
             string acciones = escuchador->obtenerAcciones();
             //if(acciones != "000000000"){
@@ -122,16 +128,22 @@ int main (int argc, char *argv[]){
     if(strcmp(comportamiento,"servidor") == 0){
    
         cout<<"Arranca el servidor"<<endl;
+
+	int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
+	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
+	autenticados a;
+	esperar_jugadores (cantidadJugadores, a);
  
- 
-	Socket* soquete = new Socket();
+	Socket* soquete = new Socket(a.usuarios[0].fd);
+	soquete->setConexion(true);
 	Socket* soquete2;
 	Socket* soquete3;
 	Socket* soquete4;
 
-
+	/*
 	soquete->bindAndListen(puerto);
 	soquete->aceptar();
+	*/
 
 	std::thread tenviar1;
 	std::thread trecibir1;
@@ -143,28 +155,34 @@ int main (int argc, char *argv[]){
 	std::thread trecibir4;
 
 	if (cantidadJugadores >=2){
-	soquete2 = new Socket();
+	soquete2 = new Socket(a.usuarios[1].fd);
+	soquete2->setConexion(true);
+	/*
 	soquete2->bindAndListen(puerto+1);
 	soquete2->aceptar();
-
+	*/
 	}
 
 	if (cantidadJugadores >=3 ){
-	soquete3 = new Socket();
+	soquete3 = new Socket(a.usuarios[2].fd);
+	soquete3->setConexion(true);
+	/*
 	soquete3->bindAndListen(puerto+2);
 	soquete3->aceptar();
-
+	*/
 
 	}
 
 	if (cantidadJugadores == 4){
-	soquete4 = new Socket();
+	soquete4 = new Socket(a.usuarios[3].fd);
+	soquete4->setConexion(true);
+	/*
 	soquete4->bindAndListen(puerto+3);
 	soquete4->aceptar();
-
+	*/
 	}
            
- 
+ 	std::cout << "Iniciando ciclo\n";
  
 	juego j("servidor", cantidadJugadores);
 	while (j.jugando ()) {                         
@@ -229,7 +247,6 @@ int main (int argc, char *argv[]){
 		}
 		j.dibujar();
 		j.presentar();
-		
 	}
 	soquete->~Socket();
        
