@@ -99,7 +99,9 @@ void Personaje::setEstados(bool salto,bool disp,bool mirando,bool act,bool gris)
 	if(grisado == false && gris == true){
 		this->grisar();
 	}
-	grisado = gris;
+	else if(grisado == true && gris == false){
+		this->desgrisar();
+	}
 }
 
 void Personaje::setEstadosEnumerados(Constantes::Estado est,Constantes::DireccionDisparo dir){
@@ -123,14 +125,12 @@ int Personaje::obtenerVelocidadX(){
 	return velocidadX;
 }
 
-//<<<<<<< HEAD
 void Personaje::subirPosX(){
 	posX+=3;
 }
-//=======
+
 int Personaje::getInvincibilityFrames(){
 	return invincibilityFrames;
-//>>>>>>> 6100df544e34c0d07915ef9e808d20fe90d8f406
 }
 
 void Personaje::agregarGris(const char* path,SDL_Renderer* renderer){
