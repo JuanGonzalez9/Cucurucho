@@ -83,6 +83,11 @@ juego::juego (string comportamiento, int cantidadJugadores):
 	boby4.obtenerTextura("//configuracion//personajes//heroe4//sprite", renderer);
 	boby4.setRectOrigen(0,0,480,480);
 
+	boby.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
+	boby2.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
+	boby3.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
+	boby4.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
+
 	//enemigoNivel1->crearTextura("imagenes/enemigo.png",renderer);
 	enemigoNivel1 = new Enemigo(600,150,5);
 	enemigoNivel1->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
@@ -758,7 +763,7 @@ void juego::actualizar ()
 	int maxVel=0;
 
 	//vemos si pasa 1)
-	if((!boby.esGrisado()&&boby.esActivo()&&(boby.getPosY()>580))||(!boby2.esGrisado()&&boby2.esActivo()&&(boby2.getPosY()>580))||(!boby3.esGrisado()&&boby3.esActivo()&&(boby3.getPosY()>580))||(!boby4.esGrisado()&&boby4.esActivo()&&(boby4.getPosY()>580))||(nivel!=2)){
+	if((!boby.esGrisado()&&boby.esActivo()&&(boby.getPosY()>520))||(!boby2.esGrisado()&&boby2.esActivo()&&(boby2.getPosY()>520))||(!boby3.esGrisado()&&boby3.esActivo()&&(boby3.getPosY()>520))||(!boby4.esGrisado()&&boby4.esActivo()&&(boby4.getPosY()>520))||(nivel!=2)){
 		scrolleando=false;
 	}
 

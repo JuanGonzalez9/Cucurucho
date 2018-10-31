@@ -61,6 +61,7 @@ public:
 	bool llegoAlFinalDelNivel3();
 	bool esActivo();
 	bool esGrisado();
+	void agregarGris(const char* path,SDL_Renderer* renderer);
 
 	//----METODOS
 	void activar();
@@ -137,6 +138,8 @@ private:
 	bool activo;
 	bool grisado;
 	bool mirandoALaDerecha;
+	SDL_Texture* tex2;
+	void swapTextures();
 };
 
 #endif /* PERSONAJE_H_ */

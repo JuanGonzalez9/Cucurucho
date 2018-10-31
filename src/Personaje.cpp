@@ -130,7 +130,23 @@ int Personaje::getInvincibilityFrames(){
 //>>>>>>> 6100df544e34c0d07915ef9e808d20fe90d8f406
 }
 
+void Personaje::agregarGris(const char* path,SDL_Renderer* renderer){
+	tex2 = cfg.obtener_textura_grisada (path, renderer);
+}
+
+
+
+
+
 //-------Metodos----------
+
+void Personaje::swapTextures(){
+	SDL_Texture* backupTex;
+	backupTex = tex2;
+	tex2 = textura;
+	textura = backupTex;
+}
+
 
 void Personaje::actualizar(){
 	loginfo("Se comenzo actualizar personaje");
@@ -183,11 +199,13 @@ bool Personaje::esActivo(){
 }
 
 void Personaje::grisar(){
+	if (!grisado) this->swapTextures();
 	velocidadY = 0;
 	velocidadX = 0;
 	grisado=true;
 }
 void Personaje::desgrisar(){
+	if (grisado) this->swapTextures();
 	grisado=false;
 }
 bool Personaje::esGrisado(){
@@ -495,10 +513,12 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 		}
 	}
 
+	if (!grisado) rectOrigen = rect_origen;
+	
 	if(mirandoALaDerecha)
-		SDL_RenderCopy(renderer, textura, & rect_origen , &rectDestino);
+		SDL_RenderCopy(renderer, textura, & rectOrigen , &rectDestino);
 	else
-		SDL_RenderCopyEx(renderer,textura,& rect_origen,&rectDestino,180.0,NULL,SDL_FLIP_VERTICAL);
+		SDL_RenderCopyEx(renderer,textura,& rectOrigen,&rectDestino,180.0,NULL,SDL_FLIP_VERTICAL);
 
 	loginfo("Se termino de dibujar personaje");
 }
