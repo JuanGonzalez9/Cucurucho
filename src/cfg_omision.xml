@@ -4,6 +4,10 @@ R"(<?xml version="1.0"?>
     <level>ERROR</level>
   </debug>
   <cantidad_jugadores> 2 </cantidad_jugadores>
+  <usuarios>
+	<juan>aaaaa</juan>
+	<dalma>bbbbb</dalma>
+  </usuarios>
   <personajes>
     <heroe>
 	    <sprite>imagenes/personaje.png</sprite>

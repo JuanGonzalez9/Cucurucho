@@ -265,9 +265,7 @@ void Personaje::verSiBalasPegan(Enemigo* malo){
 
 void Personaje::dibujarBalas(SDL_Renderer* renderer){
 	for(unsigned i = 0; i < bullets.size();i++){
-		cout<<"voy a dibujar"<<endl;
 		bullets[i]->dibujar(renderer);
-		cout<<"la dibuje"<<endl;
 	}
 }
 
