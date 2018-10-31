@@ -96,6 +96,9 @@ void Personaje::setEstados(bool salto,bool disp,bool mirando,bool act,bool gris)
 	disparando = disp;
 	mirandoALaDerecha = mirando;
 	activo = act;
+	if(grisado == false && gris == true){
+		this->grisar();
+	}
 	grisado = gris;
 }
 
