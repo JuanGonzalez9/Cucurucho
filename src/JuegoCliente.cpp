@@ -102,6 +102,22 @@ void JuegoCliente::manejarCierre(){
 	}
 }
 
+void JuegoCliente::dibujarEnemigo(){
+	switch(nivel){
+		case (1):
+			enemigoNivel1->dibujar(renderer);
+			break;
+		case (2):
+			enemigoNivel2->dibujar(renderer);
+			break;
+		case (3):
+			enemigoNivel3->dibujar(renderer);
+			break;
+		default:
+			break;
+	}
+}
+
 void JuegoCliente::dibujar(){
 	SDL_SetTextureBlendMode (textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget (renderer, textura_objetivo);
@@ -139,6 +155,8 @@ void JuegoCliente::dibujar(){
 
 	vector< pair<int,int> > balas = p.getBalas();
 	dibujarBalas(balas);
+
+	if(p.estaElEnemigo()) dibujarEnemigo();
 }
 
 JuegoCliente::~JuegoCliente() {

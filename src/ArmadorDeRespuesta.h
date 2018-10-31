@@ -36,6 +36,7 @@ public:
 	void setGrisado(bool grisado);
 	void setEstado(Constantes::Estado estado);
 	void setDireccionDisparo(Constantes::DireccionDisparo dir);
+	void setEnemigo(bool hay);
 	
 	void setCantidadDeBalas(int cant);
 	void sumarBalas(vector<Bullet*> nuevasBalas);
@@ -74,6 +75,8 @@ private:
 	
 	Constantes::Estado estado;
 	Constantes::DireccionDisparo dirDisparo;
+
+	bool hayEnemigo;
 };
 
 #endif /* ARMADORDERESPUESTA_H_ */

@@ -25,17 +25,10 @@ public:
 	bool estaMirandoALaDerecha(int numeroDePersonaje);
 	bool estaActivo(int numeroDePersonaje);
 	bool estaGrisado(int numeroDePersonaje);
-	/*int getPosPersonajeX2();
-	int getPosPersonajeY2();
-	bool estaSaltando2();
-	bool estaDisparando2();
-	bool estaMirandoALaDerecha2();
-	bool estaActivo2();
-	bool estaGrisado2();*/
 	Constantes::Estado getEstado(int numeroDePersonaje);
 	Constantes::DireccionDisparo getDireccionDisparo(int numeroDePersonaje);
-	/*Constantes::Estado getEstado2();
-	Constantes::DireccionDisparo getDireccionDisparo2();*/
+	bool estaElEnemigo();
+
 	vector< pair<int,int> > getBalas();
 
 	//..........METODO........
@@ -53,6 +46,7 @@ private:
 	
 	int cantBalas;
 	vector< pair<int,int> > balas;
+	bool hayEnemigo;
 
 	int parsearPosY(string substr);
 	void parsearBalas(string sub);

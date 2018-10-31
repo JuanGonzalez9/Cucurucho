@@ -12,6 +12,7 @@ ArmadorDeRespuesta::ArmadorDeRespuesta() {
 	fondo1 = 0;
 	fondo2 = 0;
 	fondo3 = 0;
+	hayEnemigo = false;
 
 	int longitudStringBalas = MAX_BALAS * TAMANIO_POS_BALAS;
 	string aux(longitudStringBalas,'0');
@@ -90,6 +91,9 @@ void ArmadorDeRespuesta::setCantidadDeBalas(int balas){
 	balasActuales = 0;
 }
 
+void ArmadorDeRespuesta::setEnemigo(bool hay){
+	this->hayEnemigo = hay;
+}
 
 
 //------------ METODOS ------------
@@ -196,6 +200,9 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* da
 
 	respuesta += pasarAStringDeTamanio(MENSAJE_CANT_BALAS,cantidadDeBalas);
 	respuesta += strBalas;
+
+	respuesta += to_string(hayEnemigo);
+
 	strBalas = resetBalas;
 
 	return respuesta;

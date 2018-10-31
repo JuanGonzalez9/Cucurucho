@@ -14,6 +14,7 @@ Parser::Parser() {
 	posFondo2 = 0;
 	posFondo3 = 0;
 	cantBalas = 0;
+	hayEnemigo = false;
 }
 
 void Parser::parsear(string msj,int jugadores){
@@ -42,8 +43,7 @@ void Parser::parsear(string msj,int jugadores){
 	cantBalas = stoi(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores,2));
 	parsearBalas(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores + 2,TAMANIO_POS_BALAS * cantBalas));
 
-
-	
+	hayEnemigo = (msj[13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS] == '1');	
 }
 
 DatosPersonaje* Parser::dameAlBobyNumero(int numeroDePersonaje){
@@ -182,6 +182,10 @@ Constantes::Estado Parser::getEstado(int numeroDePersonaje){
 Constantes::DireccionDisparo Parser::getDireccionDisparo(int numeroDePersonaje){
 	DatosPersonaje* datosP = dameAlBobyNumero(numeroDePersonaje);
 	return datosP->getDireccionDisparo();
+}
+
+bool Parser::estaElEnemigo(){
+	return hayEnemigo;
 }
 
 vector< pair<int,int> > Parser::getBalas(){

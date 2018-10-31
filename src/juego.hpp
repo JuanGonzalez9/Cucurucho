@@ -55,6 +55,7 @@ protected:
 	DatosPersonaje datosBoby, datosBoby2, datosBoby3, datosBoby4;
 
 	ArmadorDeRespuesta* armador;
+	void setDatosEnemigo();
 	void actualizarNivel1();
 	void actualizarNivel2();
 	void actualizarNivel3();

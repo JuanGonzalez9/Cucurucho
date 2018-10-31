@@ -940,6 +940,30 @@ void juego::actualizar ()
 	
 }
 
+void juego::setDatosEnemigo(){
+	bool hayEnemigo = false;
+	switch(nivel){
+		case (1):
+			if(boby.estaCercaDelFinalDelNivel1() && !enemigoNivel1->derrotado()){
+				hayEnemigo = true;
+			}
+			break;
+		case (2):
+			if(boby.estaCercaDelFinalDelNivel2() && !enemigoNivel2->derrotado()){
+				hayEnemigo = true;
+			}
+			break;
+		case (3):
+			if(boby.estaCercaDelFinalDelNivel3() && !enemigoNivel3->derrotado()){
+				hayEnemigo = true;
+			}
+			break;
+			
+	}
+
+	armador->setEnemigo(hayEnemigo);
+}
+
 string juego::armarRespuesta(){
 
 	//esto armo siempre
@@ -1009,6 +1033,8 @@ string juego::armarRespuesta(){
 
 		armador->sumarBalas(boby4.getBalas());
 	}
+
+	setDatosEnemigo();
 
 	return armador->dameLaRespuestaPara(num_jugadores, &datosBoby, &datosBoby2, &datosBoby3, &datosBoby4);
 	
