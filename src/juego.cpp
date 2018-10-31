@@ -869,9 +869,9 @@ void juego::actualizar ()
 		
 	}
 
-	if((nivel==1)&& (boby.llegoAlFinalDelNivel1() || cambioNivel== true)) actualizarNivel1();
-	if((nivel==2)&& (boby.llegoAlFinalDelNivel2() || cambioNivel== true)) actualizarNivel2();
-	if((nivel ==3) && boby.llegoAlFinalDelNivel3()) actualizarNivel3();
+	if((nivel==1)&& (((!boby.esGrisado() && boby.llegoAlFinalDelNivel1()) || (!boby2.esGrisado() && boby2.llegoAlFinalDelNivel1()) || (!boby3.esGrisado() && boby3.llegoAlFinalDelNivel1()) || (!boby4.esGrisado() && boby4.llegoAlFinalDelNivel1())) || cambioNivel== true)) actualizarNivel1();
+	if((nivel==2)&& (((!boby.esGrisado() && boby.llegoAlFinalDelNivel2()) || (!boby2.esGrisado() && boby2.llegoAlFinalDelNivel2()) || (!boby3.esGrisado() && boby3.llegoAlFinalDelNivel2()) || (!boby4.esGrisado() && boby4.llegoAlFinalDelNivel2())) || cambioNivel== true)) actualizarNivel2();
+	if((nivel ==3) && ((!boby.esGrisado() && boby.llegoAlFinalDelNivel3()) || (!boby2.esGrisado() && boby2.llegoAlFinalDelNivel3()) || (!boby3.esGrisado() && boby3.llegoAlFinalDelNivel3()) || (!boby4.esGrisado() && boby4.llegoAlFinalDelNivel3()))) actualizarNivel3();
 
 	//actualiza el shootTimer del jugador (para que no tire 500 tiros por segundo)
 	//tambien el movimiento de las balas y borro las que exceden su rango
