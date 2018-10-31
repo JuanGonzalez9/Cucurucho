@@ -101,7 +101,7 @@ static gboolean al_terminar_hilo (gpointer data)
 static void comprobar_credencial (ventana_login *login)
 {
 	// Hilo secundario
-	login->fd = comprobar_credencial_en_servidor (login->puerto, login->usuario, login->clave, login->resultado, login->jugadores);
+	login->fd = comprobar_credencial_en_servidor (login->dir, login->puerto, login->usuario, login->clave, login->resultado, login->jugadores);
 	if (login->resultado == usuario::aceptado) {
 		gdk_threads_enter ();
 		gdk_threads_add_idle (al_ser_aceptado, login);
@@ -239,10 +239,11 @@ void esperar_jugadores (int jugadores, unsigned short puerto, autenticados &a)
 	std::cout << "Cupo de jugadores alcanzado\n";
 }
 
-bool login (unsigned short puerto, int &fd, int &jugadores, ventana_login & login)
+bool login (const char *dir, unsigned short puerto, int &fd, int &jugadores, ventana_login & login)
 {
 	login.app = gtk_application_new (NULL, G_APPLICATION_FLAGS_NONE);
 	login.puerto = puerto;
+	login.dir = dir;
 	std::cout << "login.app: " << sizeof(login.app) << " " << (void*)login.app << "\n";
 	g_signal_connect (login.app, "activate", G_CALLBACK (activate), &login);
 	g_application_run (G_APPLICATION (login.app), 0, nullptr);

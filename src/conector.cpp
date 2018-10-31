@@ -265,7 +265,8 @@ void escuchar (autenticados *a, int puerto, int jugadores)
 	*/
 }
 
-int comprobar_credencial_en_servidor (int puerto, const std::string &usuario, const std::string &clave,
+int comprobar_credencial_en_servidor (const char *dir, int puerto, const std::string &usuario,
+							const std::string &clave,
 							usuario::estado & estado, int & jugadores)
 {
 	estado = usuario::fallido;
@@ -275,7 +276,7 @@ int comprobar_credencial_en_servidor (int puerto, const std::string &usuario, co
 		return fd;
 	}
 
-	sockaddr_in addr = {AF_INET, htons(puerto), inet_addr("127.0.0.1")};
+	sockaddr_in addr = {AF_INET, htons(puerto), inet_addr(dir)};
 	int r = connect (fd, (sockaddr*)&addr, sizeof(struct sockaddr_in));
 	if (r == -1) {
 		std::cout << "Fallo connect: " << strerror(errno) << "\n";

@@ -45,7 +45,7 @@ int main (int argc, char *argv[]){
 	registro.registrar (LogEventos::info, "Comenzo el juego");
    
 	int r = 1;
-	if (argc == 5 && argv[1][0] == '-') {
+	if (argc >= 5 && argv[1][0] == '-') {
 	if (argv[1][1] == 'd') {
 	    if (!strcmp (argv[2], "ERROR")) {
 		registro.definirTipoLog (LogEventos::error);
@@ -78,11 +78,14 @@ int main (int argc, char *argv[]){
         Parser parser;
         EscuchadorDeAcciones* escuchador = new EscuchadorDeAcciones();
         const char* serverAdress = "127.0.0.1";
+	if (argc == 6) {
+		serverAdress = argv[5];
+	} 
         cout<<"el puerto es "<<puerto<<" y la adress es "<<serverAdress<<endl;
- 
+
 	int fd, cantidadJugadores;
 	ventana_login ventana;
-	if (!login (puerto, fd, cantidadJugadores, ventana)) {
+	if (!login (serverAdress, puerto, fd, cantidadJugadores, ventana)) {
 		return 0;
 	}
 	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
