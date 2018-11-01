@@ -31,7 +31,7 @@ public:
 	SDL_Texture* crearTexturaParaElFondo(SDL_Texture*,SDL_Renderer*,int w,int h);
 	bool hayColision(int otroX, int otroY, int otroW, int otroH, int nivel);
 	bool hayColisionSuperior(int otroX, int otroY, int otroW, int otroH, int nivel);
-	int hayPlataformaEn(int otroX, int nivel);
+	plataforma hayPlataformaEn(int coordenada, int nivel, int rangoAtras, int rangoAdelante);
 	int aproximarPosicionAPlataforma(int otroX, int otroY, int otroW, int otroH, int velocidad, int nivel);
 
 protected:

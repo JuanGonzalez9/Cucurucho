@@ -214,10 +214,8 @@ bool Plataformas::hayColision(int otroX, int otroY, int otroW, int otroH, int ni
 	return false;
 }
 
-int Plataformas::hayPlataformaEn(int otroX,int nivel){
+plataforma Plataformas::hayPlataformaEn(int coordenada,int nivel, int rangoAtras, int rangoAdelante){
 
-	int parte_lateral_izq_plataforma;
-	int parte_lateral_der_plataforma;
 
 	list<plataforma> lista_plataformas;
 	
@@ -226,24 +224,55 @@ int Plataformas::hayPlataformaEn(int otroX,int nivel){
 	}
 	else if (nivel == 2){
 		lista_plataformas = lista_plataformas_nivel2;
+		for(int i=coordenada-rangoAtras; i< coordenada+rangoAdelante; i+=5){ //RECORRO Y
+			for(int coordenadaX=0; coordenadaX < 800 ; coordenadaX+=5){ //RECORRO X
+				for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){ //XCADA X EN TAL Y, BUSCO UNA PLATAFORMA
+					plataforma &plataformaActual = *it;
+	
+					if (coordenadaX  < plataformaActual.xf && coordenadaX > plataformaActual.xi){
+						return plataformaActual; //Devuelvo la plataforma en la cual me voy a parar
+					}
+
+				}
+			}
+		}
 	}
-	else if (nivel == 3){
+	
+	else if(nivel == 3){
 		lista_plataformas = lista_plataformas_nivel3;
 	}
 
+	
 	for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
 		plataforma &plataformaActual = *it;
 		
-		parte_lateral_izq_plataforma = plataformaActual.xi;
-		parte_lateral_der_plataforma = plataformaActual.xf;
-
-		if (otroX < plataformaActual.xf && otroX > plataformaActual.xi){
-			return plataformaActual.y;
+		if (coordenada < plataformaActual.xf && coordenada > plataformaActual.xi){
+			return plataformaActual;
+			//si encontro una plataforma en el lugar donde estaba, retorna esa.
 		}
 
 	}
 
-	return -1;
+	//si no encontro en ese mismo "x(nivel 1 o 3) entonces busca en el rango de la pantalla"
+	//por cada "coordenada" busco de izquierda a derecha una plataforma
+	for(int i=coordenada-rangoAtras; i< coordenada+rangoAdelante; i+=5){
+
+		for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
+			plataforma &plataformaActual = *it;
+	
+			if (coordenada  < plataformaActual.xf && coordenada > plataformaActual.xi){
+				return plataformaActual; //Devuelvo la plataforma en la cual me voy a parar
+			}
+
+		}
+	
+
+	}
+	
+	plataforma p;
+	return p; //No debería ocurrir nunca (Si es que el mapa esta bien hecho).
+	logerror("No se encontro ninguna plataforma para la reconexion del jugador");
+	
 }
 
 

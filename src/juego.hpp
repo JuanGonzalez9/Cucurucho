@@ -36,6 +36,7 @@ public:
 	void dibujar ();
 	void presentar ();
 	bool jugando ();
+	SDL_Window *ventana;
 protected:
 	bool termino, cambioNivel;
 	int us, cuadros, d1, d2, d3, nivel, cascada, num_jugadores;
@@ -43,7 +44,6 @@ protected:
 	temporizador t_ciclo, t_fps;
 	SDL_Event e;
 	SDL_Rect rect_origen_fondo3;
-	SDL_Window *ventana;
 	SDL_Renderer *renderer;
 	SDL_Texture *textura_fondo3, *textura_objetivo, *textura_bala, *textura_bala2, *textura_bala3, *textura_bala4;
 	Plataformas plataformas;
