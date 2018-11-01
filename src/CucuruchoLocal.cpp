@@ -15,12 +15,25 @@
 #include <thread>
 #include <mutex>
 #include "login.hpp"
+#include <signal.h>
  
 #define TAMANIO_MENSAJE_TECLAS 9
  
 void funcionrecibir(int numeroCliente, Socket* socket, juego* j, autenticados *a  );
 void funcionEnviar(string respuesta, Socket* socket, juego* j, int  tamanio_respuestaServidor );
- 
+
+volatile bool salir = false; 
+autenticados *pa = nullptr;
+void al_interrumpir (int s)
+{
+	if (pa && s == SIGINT) {
+		std::cout << "Interrupcion manejada por el servidor\n";
+		salir = true;
+		std::lock_guard<std::mutex> lock(pa->mutex);
+		pa->cantidad = pa->requeridos; // Fuerzo condicion solo para que salga
+		pa->condicion.notify_one();
+	}
+}
  
 void uso ()
 {
@@ -129,12 +142,14 @@ int main (int argc, char *argv[]){
     else{
  
     if(strcmp(comportamiento,"servidor") == 0){
+    	signal (SIGINT, al_interrumpir);
    
         cout << "Arranca el servidor en " << serverAdress << ":" << puerto << "\n";
 
 	int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
 	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
 	autenticados a;
+	pa = &a;
 	esperar_jugadores (cantidadJugadores, serverAdress, puerto, a);
  
 	Socket* soquete = new Socket(a.usuarios[0].fd);
@@ -188,7 +203,7 @@ int main (int argc, char *argv[]){
  	std::cout << "Iniciando ciclo\n";
  
 	juego j("servidor", cantidadJugadores);
-	while (j.jugando ()) {                         
+	while (!salir && j.jugando ()) {                         
 		trecibir1 = std::thread{std::bind(funcionrecibir, 1, soquete, &j, &a)};
 
 		if(cantidadJugadores >= 2){
@@ -251,6 +266,12 @@ int main (int argc, char *argv[]){
 		//j.dibujar();
 		//j.presentar();
 	}
+	if (salir) {
+		std::cout << "Saliendo por señal de interrupción\n";
+	}
+	std::unique_lock<std::mutex> lock (a.mutex);
+	a.hilo.detach ();
+	lock.unlock ();
 	soquete->~Socket();
        
  
