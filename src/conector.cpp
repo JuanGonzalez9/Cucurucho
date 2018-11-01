@@ -214,7 +214,7 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 	std::cout << "Termino la autenticacion\n";
 }
 
-void escuchar (autenticados *a, int puerto, int jugadores)
+void escuchar (autenticados *a, const char *dir, int puerto, int jugadores)
 {
 	int fd = socket (AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
 	if (fd == -1) {
@@ -222,7 +222,7 @@ void escuchar (autenticados *a, int puerto, int jugadores)
 		return;
 	}
 
-	sockaddr_in addr = {AF_INET, htons(puerto), inet_addr("127.0.0.1")};
+	sockaddr_in addr = {AF_INET, htons(puerto), inet_addr(dir)};
 	int r = bind (fd, (sockaddr*)&addr, sizeof(struct sockaddr_in));
 	if (r == -1) {
 		std::cout << "Fallo bind: " << strerror(errno) << "\n";

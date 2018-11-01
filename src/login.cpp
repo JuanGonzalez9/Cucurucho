@@ -227,12 +227,12 @@ static void activate (GtkApplication* app, gpointer user_data)
 	gtk_widget_show_all (login->ventana);
 }
 
-void esperar_jugadores (int jugadores, unsigned short puerto, autenticados &a)
+void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, autenticados &a)
 {
 	a.cantidad = 0;
 	a.requeridos = jugadores;
 	a.comenzo = false;
-	a.hilo = std::thread{ escuchar, &a, puerto, jugadores };
+	a.hilo = std::thread{ escuchar, &a, dir, puerto, jugadores };
 	std::unique_lock<std::mutex> lock(a.mutex);
 	std::cout << "Esperando que se cumpla el cupo de jugadores\n";
 	a.condicion.wait (lock, [&a]{return a.cantidad == a.requeridos;});

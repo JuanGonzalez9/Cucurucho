@@ -52,7 +52,7 @@ typedef struct
 } ventana_login;
 
 bool login (const char *dir, unsigned short puerto, int &fd, int &jugadores, ventana_login &login);
-void esperar_jugadores (int jugadores, unsigned short puerto, autenticados &a);
+void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, autenticados &a);
 
 #endif
 

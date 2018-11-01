@@ -67,21 +67,21 @@ int main (int argc, char *argv[]){
 	}
 
 	if (r) {
-	uso ();
+		uso ();
 	} else {
+	
+	const char* serverAdress = "127.0.0.1";
+	if (argc == 6) {
+		serverAdress = argv[5];
+	} 
  
 	char* comportamiento = argv[3];
 	unsigned short puerto = atoi(argv[4]);
 	if(strcmp(comportamiento,"cliente") == 0){
 
-        cout << "Arranca el cliente" << endl;
+        cout << "Arranca el cliente en " << serverAdress << ":" << puerto << "\n";
         Parser parser;
         EscuchadorDeAcciones* escuchador = new EscuchadorDeAcciones();
-        const char* serverAdress = "127.0.0.1";
-	if (argc == 6) {
-		serverAdress = argv[5];
-	} 
-        cout<<"el puerto es "<<puerto<<" y la adress es "<<serverAdress<<endl;
 
 	int fd, cantidadJugadores;
 	ventana_login ventana;
@@ -130,12 +130,12 @@ int main (int argc, char *argv[]){
  
     if(strcmp(comportamiento,"servidor") == 0){
    
-        cout<<"Arranca el servidor"<<endl;
+        cout << "Arranca el servidor en " << serverAdress << ":" << puerto << "\n";
 
 	int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
 	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
 	autenticados a;
-	esperar_jugadores (cantidadJugadores, puerto, a);
+	esperar_jugadores (cantidadJugadores, serverAdress, puerto, a);
  
 	Socket* soquete = new Socket(a.usuarios[0].fd);
 	soquete->setConexion(true);
