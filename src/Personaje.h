@@ -109,6 +109,7 @@ public:
 	void perderVida();
 	bool muerto();
 	void refreshIFrames();
+	void godmodeSwitch();
 
 private:
 	Sprite* spritesJugador;
@@ -137,6 +138,7 @@ private:
 	bool disparando;
 	bool activo;
 	bool grisado;
+	bool godmode;
 	bool mirandoALaDerecha;
 	SDL_Texture* tex2;
 	void swapTextures();

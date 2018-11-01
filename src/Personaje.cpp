@@ -17,6 +17,7 @@ Personaje::Personaje() {
 	gravedad = 1;
 	activo=false;
 	grisado=false;
+	godmode=false;
 
 	posX = 50;
 	posY = 280;
@@ -36,7 +37,7 @@ Personaje::Personaje() {
 
 	//vidas
 	//vidas = maxVidas
-	hitPoints = 5;
+	hitPoints = 3;
 	invincibilityFrames = 0;
 
 	loginfo("Se construyo personaje");
@@ -527,8 +528,10 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 // Manejo de vidas -- guerreando
 void Personaje::perderVida(){
 	//cout<<"perdi vida ahora me queda "<<hitPoints<<endl;
-	hitPoints--;
-	invincibilityFrames = 90;
+	if (!godmode && (invincibilityFrames == 0)) {
+		hitPoints--;
+		invincibilityFrames = 90;
+	}
 	//invincibilityFrames = IFramesMAX
 }
 
@@ -539,7 +542,18 @@ bool Personaje::muerto(){
 void Personaje::refreshIFrames(){
 	if(invincibilityFrames > 0)
 		invincibilityFrames--;
+	if ((invincibilityFrames == 40) && godmode)
+		invincibilityFrames = 44;
 }
+
+void Personaje::godmodeSwitch(){
+	if (invincibilityFrames ==0){
+		godmode = true;
+		invincibilityFrames = 90;
+	} else if (invincibilityFrames <= 44)
+		godmode = false;
+}
+
 
 //--------Destructor-------
 
