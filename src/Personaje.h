@@ -36,6 +36,13 @@ public:
 		Abajo
 	};
 
+	enum Arma{
+		Pistola,
+		Ametralladora,
+		Escopeta,
+		Bazooka
+	};
+
 	//----GET--SET
 	Personaje::Estado getEstado();
 	Personaje::DireccionDisparo getDireccionDisparo();
@@ -74,6 +81,7 @@ public:
 	void agacharse();
 	void pararse();
 	void disparar(int dirX, int dirY,SDL_Texture *text);
+	void cambiarArma(int nroArma);
 	void verSiBalasPegan(Enemigo* malo);
 	void dibujarBalas(SDL_Renderer* renderer);
 	void pelarElChumbo();
@@ -131,6 +139,7 @@ private:
 	int hitPoints;
 	int invincibilityFrames;
 
+	Personaje::Arma arma;
 	Personaje::Estado estado;
 	Personaje::DireccionDisparo direccionDisparo;
 	//el estado de saltando o no se guarda en este booleano para no mezclar
