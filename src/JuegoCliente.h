@@ -11,7 +11,7 @@ using namespace std;
 
 class JuegoCliente : public juego{
 public:
-	JuegoCliente(string comportamiento, int cantidadJugadores);
+	JuegoCliente(const std::string &titulo, string comportamiento, int cantidadJugadores);
 	void setMensajeDelServidor(string msj);
 	void dibujar();
 	void manejarCierre();

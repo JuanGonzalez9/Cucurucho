@@ -7,7 +7,7 @@
 
 #include "JuegoCliente.h"
 
-JuegoCliente::JuegoCliente(string comportamiento, int cantidadJugadores) : juego(comportamiento,cantidadJugadores){
+JuegoCliente::JuegoCliente(const std::string &titulo, string comportamiento, int cantidadJugadores) : juego(titulo, comportamiento,cantidadJugadores){
 	//juego(comportamiento);
 	miPersonajeSprites = new Sprite();
 	nivel = 1;

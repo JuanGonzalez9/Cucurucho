@@ -8,7 +8,7 @@ static const int periodo=1000000/60; // TODO averiguar
 static const int ancho=800;
 static const int alto=800;
 
-juego::juego (string comportamiento, int cantidadJugadores):
+juego::juego (const std::string &titulo, string comportamiento, int cantidadJugadores):
 	termino (false),
 	cambioNivel(false),
 	us (periodo),
@@ -41,7 +41,7 @@ juego::juego (string comportamiento, int cantidadJugadores):
 	if(comportamiento == "cliente") flags = 0;
 	else flags = SDL_WINDOW_HIDDEN;
 
-	ventana = SDL_CreateWindow ("Contra", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, flags);
+	ventana = SDL_CreateWindow (titulo.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, flags);
 	if (nullptr == ventana) {
 		logerror("No pudo crease la ventana");
 		std::cerr << "No pudo crease la ventana: " << SDL_GetError () << '\n';

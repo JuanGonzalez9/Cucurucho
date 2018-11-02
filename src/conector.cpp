@@ -18,7 +18,7 @@ extern "C"
 	#include <unistd.h>
 }
 
-static bool separar (char *t, std::string & a, std::string & b)
+static bool separar (char *t, std::string &a, std::string &b)
 {
 	char * u = t;
 	char * c = u;
@@ -34,6 +34,20 @@ static bool separar (char *t, std::string & a, std::string & b)
 	}
 	a = u;
 	b = c ;
+	return true;
+}
+
+static bool separar (std::string &t, std::string &a)
+{
+	size_t pos = t.find (",");
+	if (pos == std::string::npos) {
+		return false;		
+	}
+	a = t.substr (pos+1);
+	t.erase(pos);
+	if (t.length() == 0 || a.length() == 0) {
+		return false;
+	}
 	return true;
 }
 
@@ -63,11 +77,11 @@ static bool leer_credencial (int fd, std::string & usuario, std::string & clave)
 	return true;
 }
 
-static void escribir_resultado_autenticacion (int fd, const char * msg, int jugadores)
+static void escribir_resultado_autenticacion (const char * msg, int fd, int orden, int jugadores)
 {
 	// Hilo secundario
 	std::stringstream ss;
-	ss << msg << "," << jugadores;
+	ss << msg << "," << jugadores << "," << orden;
 	std::string s = ss.str();
 	msg = s.c_str();
 	std::cout << "Escribiendo '" << msg << "' en fd: " << fd << "\n";
@@ -81,7 +95,7 @@ static void escribir_resultado_autenticacion (int fd, const char * msg, int juga
 	}
 }
 
-static bool leer_resultado_autenticacion (int fd, usuario::estado & estado, int & jugadores)
+static bool leer_resultado_autenticacion (int fd, usuario::estado &estado, int &jugadores, int &orden)
 {
 	// Hilo secundario
 	std::cout << "Recibiendo resultado en fd: " << fd << "\n";
@@ -101,19 +115,26 @@ static bool leer_resultado_autenticacion (int fd, usuario::estado & estado, int 
 	msg[leidos] = '\0';
 	std::cout << "Recibido: " << msg << "\n";
 	
-	std::string e, j;
+	std::string e, j, o;
 	if (!separar (msg, e, j)) {
+		std::cout << "El servidor no envio una respuesta al intento de login\n";
+		return false;		
+	}
+	if (!separar (j, o)) {
 		std::cout << "El servidor no envio una respuesta al intento de login\n";
 		return false;		
 	}
 	try {
 		jugadores = std::stoi (j);
+		orden = std::stoi (o);
 		if (e == "aceptado") {
 			estado = usuario::aceptado;
 		} else if (e == "rechazado") {
 			estado = usuario::rechazado;
 		} else if (e == "cupo") {
 			estado = usuario::cupo;
+		} else if (e == "jugando") {
+			estado = usuario::jugando;
 		} else {
 			return false;
 		}
@@ -124,12 +145,19 @@ static bool leer_resultado_autenticacion (int fd, usuario::estado & estado, int 
 	return true;
 }
 
-static usuario::estado autenticar_usuario (autenticados *a, std::string & usuario, std::string & clave, int fd)
+static void establecer_usuario (struct usuario & u, int fd, const std::string &usuario, bool esperando_ok)
+{
+	u.fd = fd;
+	u.nombre = usuario;
+	u.esperando_ok = true;
+}
+
+static usuario::estado autenticar_usuario (autenticados *a, std::string &usuario, std::string &clave, int &orden, int fd)
 {
 	std::stringstream camino;
 	camino << "//configuracion//usuarios//" << usuario;
 	std::cout << "Buscando cadena en " << camino.str() << "\n";
-	std::string c = cfg.obtener_s (camino.str().c_str(), [](std::string & cadena, bool omision) {return true;});
+	std::string c = cfg.obtener_s (camino.str().c_str(), [](std::string &cadena, bool omision) {return true;});
 	const char *ws = " \t\n\r\v\f";
 	c.erase(c.find_last_not_of(ws) + 1);
 	c.erase(0, c.find_first_not_of(ws));
@@ -144,26 +172,28 @@ static usuario::estado autenticar_usuario (autenticados *a, std::string & usuari
 	
 	if (clave == c) {
 		std::lock_guard<std::mutex> lock(a->mutex);
+		for (int i = 0; i < a->cantidad; i++) {
+			std::cout << "Comparando '" << usuario << "' con '" << a->usuarios[i].nombre << "'\n";
+			if (a->usuarios[i].nombre == usuario) {
+				orden = i;
+				if (a->usuarios[i].fd == -1) {
+					establecer_usuario (a->usuarios[orden], fd, usuario, true);
+					std::cout << "Reconectado: " << usuario << "\n";
+					return usuario::aceptado;
+				} else {
+					std::cout << "Rechazado por estar jugando: " << usuario << "\n";
+					return usuario::jugando;
+				}
+			}
+		}
 		if (a->cantidad < a->requeridos) {
-			a->usuarios[a->cantidad].fd = fd;
-			a->usuarios[a->cantidad].nombre = usuario;
-			a->usuarios[a->cantidad].esperando_ok = true;
+			orden = a->cantidad;
+			establecer_usuario (a->usuarios[orden], fd, usuario, true);
 			a->cantidad++;
 			std::cout << "Aceptado: " << usuario << "\n";
 			return usuario::aceptado;
 		} else {
-			for (int i = 0; i < a->cantidad; i++) {
-				std::cout << "Comparando '" << usuario << "' con '" << a->usuarios[i].nombre << "'\n";
-				if (a->usuarios[i].nombre == usuario && a->usuarios[i].fd == -1) {
-					a->usuarios[i].fd = fd;
-					a->usuarios[i].nombre = usuario;
-					a->usuarios[i].esperando_ok = true;
-					std::cout << "Reconectando: " << usuario << "\n";
-					return usuario::aceptado;
-				}
-			}
-			// TODO aceptar a usuario ya registrado
-			std::cout << "Cupo: " << usuario << "\n";
+			std::cout << "Rechazado por cupo alcanzado: " << usuario << "\n";
 			return usuario::cupo;
 		}
 	}
@@ -175,13 +205,14 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 {
 	// Hilo secundario
 	std::string usuario, clave;
+	int orden = 0;
 	if (!leer_credencial (fd, usuario, clave) )
 	{
 		return;
 	}
-	switch (autenticar_usuario (a, usuario, clave, fd) ) {
+	switch (autenticar_usuario (a, usuario, clave, orden, fd) ) {
 		case usuario::aceptado: {
-			escribir_resultado_autenticacion (fd, "aceptado", jugadores);
+			escribir_resultado_autenticacion ("aceptado", fd, orden, jugadores);
 			std::lock_guard<std::mutex> lock(a->mutex);
 			if (a->cantidad == a->requeridos) {
 				std::cout << "Cupo alcanzado\n";
@@ -202,13 +233,16 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 			break;
 		}
 		case usuario::rechazado:
-			escribir_resultado_autenticacion (fd, "rechazado", jugadores);
+			escribir_resultado_autenticacion ("rechazado", fd, orden, jugadores);
 			break;
 		case usuario::cupo:
-			escribir_resultado_autenticacion (fd, "cupo", jugadores);
+			escribir_resultado_autenticacion ("cupo", fd, orden, jugadores);
 			break;
 		case usuario::fallido:
-			escribir_resultado_autenticacion (fd, "fallido", jugadores);
+			escribir_resultado_autenticacion ("fallido", fd, orden, jugadores);
+			break;
+		case usuario::jugando:
+			escribir_resultado_autenticacion ("jugando", fd, orden, jugadores);
 			break;
 	};
 	std::cout << "Termino la autenticacion\n";
@@ -265,18 +299,16 @@ void escuchar (autenticados *a, const char *dir, int puerto, int jugadores)
 	*/
 }
 
-int comprobar_credencial_en_servidor (const char *dir, int puerto, const std::string &usuario,
-							const std::string &clave,
-							usuario::estado & estado, int & jugadores)
+int comprobar_credencial_en_servidor (ventana_login &login)
 {
-	estado = usuario::fallido;
+	login.resultado = usuario::fallido;
 	int fd = socket (AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
 	if (fd == -1) {
 		std::cout << "Fallo socket: " << strerror(errno) << "\n";
 		return fd;
 	}
 
-	sockaddr_in addr = {AF_INET, htons(puerto), inet_addr(dir)};
+	sockaddr_in addr = {AF_INET, htons(login.puerto), inet_addr(login.dir)};
 	int r = connect (fd, (sockaddr*)&addr, sizeof(struct sockaddr_in));
 	if (r == -1) {
 		std::cout << "Fallo connect: " << strerror(errno) << "\n";
@@ -286,7 +318,7 @@ int comprobar_credencial_en_servidor (const char *dir, int puerto, const std::st
 	}
 	
 	std::stringstream ss;
-	ss << usuario << "," << clave;
+	ss << login.usuario << "," << login.clave;
 	std::string s = ss.str();
 	std::cout << "Escribiendo: " << s.c_str() << "\n";
 	const char *msg = s.c_str();
@@ -301,8 +333,8 @@ int comprobar_credencial_en_servidor (const char *dir, int puerto, const std::st
 	}
 	std::cout << "Escrito: " << msg << "\n";
 	
-	if (leer_resultado_autenticacion (fd, estado, jugadores)) {
-		switch (estado) {
+	if (leer_resultado_autenticacion (fd, login.resultado, login.jugadores, login.orden)) {
+		switch (login.resultado) {
 			case usuario::aceptado:
 				std::cout << "Respuesta: aceptado\n";
 				break;
@@ -311,6 +343,9 @@ int comprobar_credencial_en_servidor (const char *dir, int puerto, const std::st
 				break;
 			case usuario::cupo:
 				std::cout << "Respuesta: cupo\n";
+				break;
+			case usuario::jugando:
+				std::cout << "Respuesta: jugando\n";
 				break;
 		};
 		return fd;

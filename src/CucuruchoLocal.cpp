@@ -86,8 +86,8 @@ int main (int argc, char *argv[]){
 	const char* serverAdress = "127.0.0.1";
 	if (argc == 6) {
 		serverAdress = argv[5];
-	} 
- 
+	}
+	
 	char* comportamiento = argv[3];
 	unsigned short puerto = atoi(argv[4]);
 	if(strcmp(comportamiento,"cliente") == 0){
@@ -96,22 +96,24 @@ int main (int argc, char *argv[]){
         Parser parser;
         EscuchadorDeAcciones* escuchador = new EscuchadorDeAcciones();
 
-	int fd, cantidadJugadores;
 	ventana_login ventana;
-	if (!login (serverAdress, puerto, fd, cantidadJugadores, ventana)) {
+	if (!login (serverAdress, puerto, ventana)) {
 		return 0;
 	}
-	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
-	std::cout << "Cliente: fd: " << fd << ", jugadores: " << cantidadJugadores << "\n";
+	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * ventana.jugadores;
+	std::cout << "Cliente: fd: " << ventana.fd << ", jugadores: " << ventana.jugadores << "\n";
 
-        Socket* soqueteCliente = new Socket(fd);
+	std::stringstream titulo;
+	titulo << ventana.usuario << "(" << ventana.orden << ") - Contra";
+
+        Socket* soqueteCliente = new Socket(ventana.fd);
         //soqueteCliente->conectar(serverAdress,puerto);
   	std::cout << "Iniciando cliente: " << soqueteCliente->getSocketId() << "\n";
 
  
         char respuestaServidor[tamanio_respuestaServidor + 1];
         char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
-        JuegoCliente juegoCliente("cliente", cantidadJugadores);
+        JuegoCliente juegoCliente(titulo.str(), "cliente", ventana.jugadores);
 
         while(escuchador->enAccion() && juegoCliente.jugando()){
             string acciones = escuchador->obtenerAcciones();
@@ -202,7 +204,8 @@ int main (int argc, char *argv[]){
            
  	std::cout << "Iniciando ciclo\n";
  
-	juego j("servidor", cantidadJugadores);
+ 	std::string titulo = "Contra";
+	juego j(titulo, "servidor", cantidadJugadores);
 	while (!salir && j.jugando ()) {                         
 		trecibir1 = std::thread{std::bind(funcionrecibir, 1, soquete, &j, &a)};
 

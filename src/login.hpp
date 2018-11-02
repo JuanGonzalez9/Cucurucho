@@ -21,7 +21,7 @@ struct usuario
 	std::string nombre;
 	int fd;
 	bool esperando_ok;
-	typedef enum {aceptado, rechazado, cupo, fallido} estado;
+	typedef enum {aceptado, rechazado, cupo, jugando, fallido} estado;
 };
 
 struct autenticados
@@ -46,12 +46,12 @@ typedef struct
 	std::string usuario, clave;
 	std::thread hilo;
 	usuario::estado resultado;
-	int jugadores, fd;
+	int jugadores, fd, orden;
 	unsigned short puerto;
 	const char *dir;
 } ventana_login;
 
-bool login (const char *dir, unsigned short puerto, int &fd, int &jugadores, ventana_login &login);
+bool login (const char *dir, unsigned short puerto, ventana_login &login);
 void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, autenticados &a);
 
 #endif
