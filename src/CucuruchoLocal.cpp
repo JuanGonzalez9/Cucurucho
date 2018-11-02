@@ -113,7 +113,7 @@ int main (int argc, char *argv[]){
  
         char respuestaServidor[tamanio_respuestaServidor + 1];
         char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
-        JuegoCliente juegoCliente(titulo.str(), "cliente", ventana.jugadores);
+        JuegoCliente juegoCliente(titulo.str(), "cliente", ventana.jugadores,ventana.orden);
 
         while(escuchador->enAccion() && juegoCliente.jugando()){
             string acciones = escuchador->obtenerAcciones();
