@@ -18,14 +18,16 @@ extern "C"
 	#include <unistd.h>
 }
 
-static bool separar (char *t, std::string &a, std::string &b)
+#define MAX_SOCKET_MSG (10*1024)
+
+static bool separar (char *t, std::string &a, std::string &b, char sep)
 {
 	char * u = t;
 	char * c = u;
-	while (*c && *c != ',') {
+	while (*c && *c != sep) {
 		c++;
 	}
-	if (*c != ',') {
+	if (*c != sep) {
 		return false;		
 	}
 	*c++ = '\0';
@@ -37,9 +39,9 @@ static bool separar (char *t, std::string &a, std::string &b)
 	return true;
 }
 
-static bool separar (std::string &t, std::string &a)
+static bool separar (std::string &t, std::string &a, char sep)
 {
-	size_t pos = t.find (",");
+	size_t pos = t.find (sep);
 	if (pos == std::string::npos) {
 		return false;		
 	}
@@ -51,26 +53,73 @@ static bool separar (std::string &t, std::string &a)
 	return true;
 }
 
+bool leer (int fd, std::string &s)
+{
+	std::cout << "Recibiendo en fd: " << fd << "\n";
+	std::stringstream ss;
+	const int l = 1024;
+	char msg[l+1];
+	int r;
+	if ((r = recv (fd, msg, l, 0)) <= 0) {
+		return false;
+	}
+	msg[r] = '\0';
+	char * c = msg;
+	const char sep =':';
+	while (*c && *c != sep) {
+		c++;
+	}
+	if (*c != sep) {
+		return false;		
+	}
+	*c++ = '\0';
+	int largo;
+	try {
+		largo = std::stoi (msg);
+		if (largo > MAX_SOCKET_MSG || largo <= 0) {
+			return false;
+		}
+	} catch (...) {
+		return false;
+	}
+	ss << c;
+	int leidos = strlen (c) + 1;
+	while (leidos < largo && (r = recv (fd, msg, l, 0)) > 0) {
+		leidos += r;
+		msg[leidos] = '\0';
+		ss << msg;
+	}
+	if (leidos < largo) {
+		return false;
+	}
+	s = ss.str();
+	std::cout << "Recibido: " << s << "\n";
+	return true;
+}
+
+bool escribir (int fd, std::string &s)
+{
+	int largo = s.length() + 1;
+	std::stringstream ss;
+	ss << largo << ':' << s;
+	std::string tmp = ss.str();
+	const char *msg = tmp.c_str();
+	std::cout << "Escribiendo '" << msg << "' en fd: " << fd << "\n";
+	const int l = strlen (msg)+1;
+	int escritos = 0, r;
+	while (escritos < l && (r = send (fd, msg+escritos, l-escritos, 0)) > 0) {
+		escritos += r;
+	}
+	if (r == -1) {
+		return false;
+	}
+}
+
 static bool leer_credencial (int fd, std::string & usuario, std::string & clave)
 {
 	// Hilo secundario
-	std::cout << "Recibiendo credencial en fd: " << fd << "\n";
-	const int l = 64;
-	char msg[l+1];
-	int leidos = 0, r;
-	while (leidos < l && (r = recv (fd, msg+leidos, l-leidos, 0)) > 0) {
-		leidos += r;
-		if (msg[leidos-1] == '\0') {
-			break;
-		}
-	}
-	if (r == -1) {
-		std::cout << "Fallo recv: " << strerror(errno) << "\n";
-		return false;
-	}
-	msg[leidos] = '\0';
-	std::cout << "Leido: " << msg << "\n";
-	if (!separar (msg, usuario, clave)) {
+	leer (fd, usuario);
+	if (!separar (usuario, clave, ',')) {
 		std::cout << "El cliente no envio una credencial\n";
 		return false;		
 	}
@@ -83,44 +132,19 @@ static void escribir_resultado_autenticacion (const char * msg, int fd, int orde
 	std::stringstream ss;
 	ss << msg << "," << jugadores << "," << orden;
 	std::string s = ss.str();
-	msg = s.c_str();
-	std::cout << "Escribiendo '" << msg << "' en fd: " << fd << "\n";
-	const int l = strlen (msg)+1;
-	int escritos = 0, r;
-	while (escritos < l && (r = send (fd, msg+escritos, l-escritos, 0)) > 0) {
-		escritos += r;
-	}
-	if (r == -1) {
-		std::cout << "Fallo send: " << strerror(errno) << "\n";
-	}
+	escribir (fd, s); // TODO y si falla?
 }
 
 static bool leer_resultado_autenticacion (int fd, usuario::estado &estado, int &jugadores, int &orden)
 {
 	// Hilo secundario
-	std::cout << "Recibiendo resultado en fd: " << fd << "\n";
-	const int l = 64;
-	char msg[l+1];
-	int leidos = 0, r;
-	while (leidos < l && (r = recv (fd, msg+leidos, l-leidos, 0)) > 0) {
-		leidos += r;
-		if (msg[leidos-1] == '\0') {
-			break;
-		}
-	}
-	if (r == -1) {
-		std::cout << "Fallo recv: " << strerror(errno) << "\n";
-		return false;
-	}
-	msg[leidos] = '\0';
-	std::cout << "Recibido: " << msg << "\n";
-	
 	std::string e, j, o;
-	if (!separar (msg, e, j)) {
-		std::cout << "El servidor no envio una respuesta al intento de login\n";
+	leer (fd, e);
+	if (!separar (e, j, ',')) {
+		std::cout << "El cliente no envio una credencial\n";
 		return false;		
 	}
-	if (!separar (j, o)) {
+	if (!separar (j, o, ',')) {
 		std::cout << "El servidor no envio una respuesta al intento de login\n";
 		return false;		
 	}
@@ -316,22 +340,14 @@ int comprobar_credencial_en_servidor (ventana_login &login)
 	} else {
 		std::cout << "Conectado a servidor\n";
 	}
-	
+
+
 	std::stringstream ss;
 	ss << login.usuario << "," << login.clave;
 	std::string s = ss.str();
-	std::cout << "Escribiendo: " << s.c_str() << "\n";
-	const char *msg = s.c_str();
-	const int l = strlen(msg)+1;
-	int escritos = 0;
-	while (escritos < l && (r = send (fd, msg+escritos, l-escritos, 0)) != -1) {
-		escritos += r;
-	}
-	if (r == -1) {
-		std::cout << "Fallo send: " << strerror(errno) << "\n";
+	if (!escribir (fd, s)) {
 		return fd;
 	}
-	std::cout << "Escrito: " << msg << "\n";
 	
 	if (leer_resultado_autenticacion (fd, login.resultado, login.jugadores, login.orden)) {
 		switch (login.resultado) {
@@ -355,35 +371,16 @@ int comprobar_credencial_en_servidor (ventana_login &login)
 
 void enviar_ok (int fd)
 {
-	const int l = 1;
-	char msg[l];
-	int escritos = 0, r;
-	while (escritos == 0 && (r = send (fd, msg, l, 0)) != -1) {
-		escritos += r;
-	}
-	if (r == -1) {
-		std::cout << "Fallo send: " << strerror(errno) << "\n";
-	}
+	std::string ok = "ok";
+	escribir (fd, ok);
 }
 
 void esperar_ok (int fd)
 {
-	const int l = 1;
-	char msg[l];
-	int leidos = 0, r;
-	while (leidos == 0 && (r = recv (fd, msg, l, 0)) > 0) {
-		leidos += r;
-	}
-	if (r == -1) {
-		std::cout << "Fallo recv: " << strerror(errno) << "\n";
-	}
+	std::string ok;
+	leer (fd, ok);
 }
 
-/*
- Comprobar que devuelva cero recv
- Pensar que hacer al fallar bind por TIME_WAIT
- Poder leer y escribir cadenas de longitud indeterminada
- */
 
 
 
