@@ -263,8 +263,8 @@ int main (int argc, char *argv[]){
 		if(cantidadJugadores >= 4){
 			tenviar4.join();
 		}
-		//j.dibujar();
-		//j.presentar();
+		j.dibujar();
+		j.presentar();
 	}
 	if (salir) {
 		std::cout << "Saliendo por señal de interrupción\n";
