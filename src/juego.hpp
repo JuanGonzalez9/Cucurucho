@@ -24,7 +24,7 @@ extern "C"
 class juego
 {
 public:
-	juego (string strComportamiento, int cantidadJugadores);
+	juego (const std::string &titulo, string strComportamiento, int cantidadJugadores);
 	~juego ();
 	void setAcciones(char* msj, int numeroCliente);
 	int getCantidadDeBalas();

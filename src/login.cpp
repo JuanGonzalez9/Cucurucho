@@ -65,11 +65,9 @@ static gboolean al_terminar_hilo (gpointer data)
 	ventana_login *login = (ventana_login*)data;
 	login->autenticando = false;
 	login->hilo.join ();
-	//std::string usuario = gtk_entry_get_text (GTK_ENTRY(login->editor_usuario));
 	switch (login->resultado) {
 		case usuario::aceptado:
 			std::cout << "aceptado1: " << sizeof(login->app) << " " << (void*)login->app << "\n";
-			//g_application_quit (G_APPLICATION (login->app));
 			gtk_widget_destroy (login->ventana);
 			std::cout << "aceptado2\n";
 			break;
@@ -82,6 +80,13 @@ static gboolean al_terminar_hilo (gpointer data)
 			break;
 		case usuario::cupo:
 			mostrar_info (login, "La partida ya está llena");
+			gtk_widget_set_sensitive (login->aceptar, false);
+			gtk_widget_set_sensitive (login->cancelar, true);
+			gtk_widget_set_sensitive (login->editor_usuario, false);
+			gtk_widget_set_sensitive (login->editor_clave, false);
+			break;
+		case usuario::jugando:
+			mostrar_info (login, "El usuario ya está jugando");
 			gtk_widget_set_sensitive (login->aceptar, false);
 			gtk_widget_set_sensitive (login->cancelar, true);
 			gtk_widget_set_sensitive (login->editor_usuario, false);
@@ -101,7 +106,7 @@ static gboolean al_terminar_hilo (gpointer data)
 static void comprobar_credencial (ventana_login *login)
 {
 	// Hilo secundario
-	login->fd = comprobar_credencial_en_servidor (login->dir, login->puerto, login->usuario, login->clave, login->resultado, login->jugadores);
+	login->fd = comprobar_credencial_en_servidor (*login);
 	if (login->resultado == usuario::aceptado) {
 		gdk_threads_enter ();
 		gdk_threads_add_idle (al_ser_aceptado, login);
@@ -239,7 +244,7 @@ void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, a
 	std::cout << "Cupo de jugadores alcanzado\n";
 }
 
-bool login (const char *dir, unsigned short puerto, int &fd, int &jugadores, ventana_login & login)
+bool login (const char *dir, unsigned short puerto, ventana_login &login)
 {
 	login.app = gtk_application_new (NULL, G_APPLICATION_FLAGS_NONE);
 	login.puerto = puerto;
@@ -248,8 +253,6 @@ bool login (const char *dir, unsigned short puerto, int &fd, int &jugadores, ven
 	g_signal_connect (login.app, "activate", G_CALLBACK (activate), &login);
 	g_application_run (G_APPLICATION (login.app), 0, nullptr);
 	g_object_unref (login.app);
-	fd = login.fd;
-	jugadores = login.jugadores;
 	std::cout << "sale login\n";
 	return login.resultado == usuario::aceptado;
 }

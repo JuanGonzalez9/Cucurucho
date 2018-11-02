@@ -17,6 +17,7 @@ Personaje::Personaje() {
 	gravedad = 1;
 	activo=false;
 	grisado=false;
+	godmode=false;
 
 	posX = 50;
 	posY = 280;
@@ -24,6 +25,7 @@ Personaje::Personaje() {
 	coordenadaX = posX;
 	//coordenadaY = posY; // Comienzan igual pero despues se actualizan diferentes
 
+	arma = Pistola;
 	estado = Quieto;
 	direccionDisparo = Centro;
 	saltando = false;
@@ -36,7 +38,7 @@ Personaje::Personaje() {
 
 	//vidas
 	//vidas = maxVidas
-	hitPoints = 5;
+	hitPoints = 3;
 	invincibilityFrames = 0;
 
 	loginfo("Se construyo personaje");
@@ -301,25 +303,30 @@ void Personaje::dibujarBalas(SDL_Renderer* renderer){
 }
 
 void Personaje::disparar(int dirX, int dirY,SDL_Texture *text){
-	
 	//ajusto posicion de la bala por estado
 	int x=posX;
-	int y=posY;
+	int y=posY+24;
+	//estos offset definen las balas extra para la escopeta.
+	int offsetY1=0;
+	int offsetX1=0;
+	int offsetY2=0;
+	int offsetX2=0;
+
 	if(estado == CuerpoATierra){
 		dirY = 0;
-		if(dirX > 0){
-			x += 40;
-		}
+		if(dirX > 0) x += 40;
 		y += 30;
 	}
 
 	if(estado == Personaje::Caminando){
-		if(dirX < 0){
-			x -= 10;
-		}
-		else{
-		x += 10;
-		}
+		if(dirX < 0) x -= 10;
+		else x += 10;
+	}
+
+	//ajusto por diagonal (divido por raiz de dos)
+	if (dirY!=0){
+		dirY = dirY*0.7;
+		dirX = dirX*0.7;
 	}
 
 	//si esta apuntando para la derecha
@@ -328,17 +335,33 @@ void Personaje::disparar(int dirX, int dirY,SDL_Texture *text){
 		if(dirY > 0){
 			y -= 5;
 			x += 10;
+
+			offsetY1=+1;
+			offsetX1=-1;
+			offsetY2=-1;
+			offsetX2=+2;
 		}
 
 		//si esta apuntando para arriba
 		if(dirY < 0){
 			y -= 12;
 			x += 14;
+
+			offsetY1=-2;
+			offsetX1=-1;
+			offsetY2=+1;
+			offsetX2=+2;
 		}
 
 		//si apunta dereche
-		if(dirY == 0)
+		if(dirY == 0){
 			x += 15;
+
+			offsetY1=2;
+			offsetX1=-1;
+			offsetY2=-2;
+			offsetX2=-1;
+		}
 	}
 
 	//si esta apuntando para la izquierda
@@ -346,21 +369,62 @@ void Personaje::disparar(int dirX, int dirY,SDL_Texture *text){
 		//si esta apuntando para abajo
 		if(dirY > 0){
 			y += 10;
+
+			offsetY1=+2;
+			offsetX1=1;
+			offsetY2=-1;
+			offsetX2=-2;
 		}
 
 		//si esta apuntando para arriba
 		if(dirY < 0){
 			y -= 20;
-		}
 
+			offsetY1=-2;
+			offsetX1=1;
+			offsetY2=+1;
+			offsetX2=-2;
+		}
+		//si apunta dereche
+		if(dirY == 0){
+			x += 15;
+			offsetY1=2;
+			offsetX1=1;
+			offsetY2=-2;
+			offsetX2=1;
+		}
 	}
 
+	//ajusto tamanio, el de la bazooka sera mayor
+	int size=1;
+	if (arma == Bazooka) size=4;
+
+	//ajusto duracion, la escopeta tiene menor rango
+	int duracion=60;
+	if (arma == Escopeta) duracion =40;
+
 	Bullet* nuevaBala;
-	nuevaBala = new Bullet(x,y,dirX,dirY);
+	nuevaBala = new Bullet(x,y,dirX,dirY,size,duracion);
 	nuevaBala->asignarTextura(text);
 	bullets.push_back(nuevaBala);
-	//shoot timer = rateOfFire
-	shootTimer = 10;
+
+	//para la escopeta, creo dos balas adicionales
+	if (arma == Escopeta){
+		Bullet* nuevaBala2;
+		nuevaBala2 = new Bullet(x,y,dirX+offsetX1,dirY+offsetY1,size,duracion);
+		nuevaBala2->asignarTextura(text);
+		bullets.push_back(nuevaBala2);
+
+		Bullet* nuevaBala3;
+		nuevaBala3 = new Bullet(x,y,dirX+offsetX2,dirY+offsetY2,size,duracion);
+		nuevaBala3->asignarTextura(text);
+		bullets.push_back(nuevaBala3);
+	}
+	//define tiempo de disparo entre bala y bala
+	//menor para ametralladora, mayor para bazooka
+	shootTimer=15;
+	if (arma == Ametralladora) shootTimer=5;
+	if (arma == Bazooka) shootTimer=20;
 }
 
 
@@ -370,14 +434,15 @@ void Personaje::pelarElChumbo(){
 
 void Personaje::refreshBullets(){
 	//Actualizo balas
-	for(unsigned i = 0; i < bullets.size(); i++){
+	for(int i = 0; i < bullets.size(); i++){
 		bullets[i]->move();
 	}
 	//borro las balas que exceden su rango para que no sigan hasta el infinito
-	for(unsigned i = 0; i < bullets.size(); i++){
-		if(bullets[i]->getDuracion() == 0){
+	int i=0;
+	while (i<bullets.size()){
+		if (bullets[i]->getDuracion() ==0)
 			bullets.erase(bullets.begin() + i);
-		}
+		else i++;
 	}
 	if(shootTimer > 0)
 		shootTimer--;
@@ -393,6 +458,17 @@ bool Personaje::puedeDisparar(){
 
 void Personaje::dejarDeDisparar(){
 	disparando = false;
+}
+
+void Personaje::cambiarArma(int nroArma){
+	if (nroArma ==1)
+		arma = Pistola;
+	if (nroArma ==2)
+		arma = Ametralladora;
+	if (nroArma ==3)
+		arma = Escopeta;
+	if (nroArma ==4)
+		arma = Bazooka;
 }
 
 void Personaje::apuntarAbajo(){
@@ -552,11 +628,13 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 	loginfo("Se termino de dibujar personaje");
 }
 
-// Manejo de vidas -- guerreando
+// Manejo de vidas
 void Personaje::perderVida(){
-	//cout<<"perdi vida ahora me queda "<<hitPoints<<endl;
-	hitPoints--;
-	invincibilityFrames = 90;
+	if (!godmode && (invincibilityFrames == 0)) {
+		this->cambiarArma(1);
+		hitPoints--;
+		invincibilityFrames = 90;
+	}
 	//invincibilityFrames = IFramesMAX
 }
 
@@ -567,7 +645,18 @@ bool Personaje::muerto(){
 void Personaje::refreshIFrames(){
 	if(invincibilityFrames > 0)
 		invincibilityFrames--;
+	if ((invincibilityFrames == 40) && godmode)
+		invincibilityFrames = 44;
 }
+
+void Personaje::godmodeSwitch(){
+	if (invincibilityFrames ==0){
+		godmode = true;
+		invincibilityFrames = 90;
+	} else if (invincibilityFrames <= 44)
+		godmode = false;
+}
+
 
 //--------Destructor-------
 

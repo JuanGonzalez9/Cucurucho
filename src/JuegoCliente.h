@@ -11,7 +11,7 @@ using namespace std;
 
 class JuegoCliente : public juego{
 public:
-	JuegoCliente(string comportamiento, int cantidadJugadores);
+	JuegoCliente(const std::string &titulo, string comportamiento, int cantidadJugadores,int numeroDeJugador);
 	void setMensajeDelServidor(string msj);
 	void dibujar();
 	void manejarCierre();
@@ -23,6 +23,7 @@ private:
 	Sprite* miPersonajeSprites;
 	int nivel;
 	int cantJugadores;
+	int numeroDeJugador;
 
 	SDL_Rect bala_rectOrigen;
 	SDL_Rect bala_rectDestino;
@@ -33,6 +34,7 @@ private:
 	void dibujarBalas(vector< pair<int,int> > balas);
 	Personaje* dameAlBobyNumero(int numeroDeBoby);
 	void dibujarEnemigo();
+	void dibujarJugadores();
 };
 
 #endif /* JUEGOCLIENTE_H_ */

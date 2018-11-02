@@ -13,7 +13,7 @@ private:
 
 public:
 
-	Bullet(int x,int y,int xVel, int yVel);
+	Bullet(int x,int y,int xVel, int yVel,int tamanio,int last);
 	Bullet(int x,int y);
 	virtual ~Bullet();
 	int posY();

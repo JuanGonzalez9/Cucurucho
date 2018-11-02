@@ -7,8 +7,9 @@
 
 #include "JuegoCliente.h"
 
-JuegoCliente::JuegoCliente(string comportamiento, int cantidadJugadores) : juego(comportamiento,cantidadJugadores){
+JuegoCliente::JuegoCliente(const std::string &titulo, string comportamiento, int cantidadJugadores,int numeroDeJugador) : juego(titulo, comportamiento,cantidadJugadores){
 	//juego(comportamiento);
+	this->numeroDeJugador = numeroDeJugador;
 	miPersonajeSprites = new Sprite();
 	nivel = 1;
 	cantJugadores = cantidadJugadores;
@@ -118,6 +119,24 @@ void JuegoCliente::dibujarEnemigo(){
 	}
 }
 
+void JuegoCliente::dibujarJugadores(){
+	Personaje* unBoby;
+	for(int i = 0; i < num_jugadores; i++){
+		unBoby = dameAlBobyNumero(i + 1);
+		if(i != numeroDeJugador && unBoby->esActivo()){
+			actualizarPosicionDeMiPersonaje(i+1);
+			actualizarEstadoDeMiPersonaje(i+1);
+			unBoby->dibujar(renderer);
+		}
+	}
+	
+	unBoby = dameAlBobyNumero(numeroDeJugador + 1);
+	actualizarPosicionDeMiPersonaje(numeroDeJugador + 1);
+	actualizarEstadoDeMiPersonaje(numeroDeJugador + 1);
+	unBoby->dibujar(renderer);
+	
+}
+
 void JuegoCliente::dibujar(){
 	SDL_SetTextureBlendMode (textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget (renderer, textura_objetivo);
@@ -131,27 +150,7 @@ void JuegoCliente::dibujar(){
 	SDL_SetRenderTarget (renderer, nullptr);
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
 
-	actualizarPosicionDeMiPersonaje(1);
-	actualizarEstadoDeMiPersonaje(1);
-	boby.dibujar(renderer);
-
-	if (num_jugadores >= 2 && boby2.esActivo()){
-		actualizarPosicionDeMiPersonaje(2);
-		actualizarEstadoDeMiPersonaje(2);
-		boby2.dibujar(renderer);
-	}
-
-	if(num_jugadores >= 3 && boby3.esActivo()){
-		actualizarPosicionDeMiPersonaje(3);
-		actualizarEstadoDeMiPersonaje(3);
-		boby3.dibujar(renderer);
-	}
-
-	if(num_jugadores >= 4 && boby4.esActivo()){
-		actualizarPosicionDeMiPersonaje(4);
-		actualizarEstadoDeMiPersonaje(4);
-		boby4.dibujar(renderer);
-	}
+	dibujarJugadores();
 
 	vector< pair<int,int> > balas = p.getBalas();
 	dibujarBalas(balas);
