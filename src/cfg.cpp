@@ -12,6 +12,23 @@ extern "C"
 	#include <unistd.h>
 	#include <string.h>
 	#include <errno.h>
+	#include <unistd.h>
+	#include <fcntl.h>
+}
+
+void configuracion::esperar_vblank ()
+{
+	if( drm_fd == -1 ) {
+		usleep (9000);
+	} else {
+		vblank.request.type = DRM_VBLANK_RELATIVE ;
+		vblank.request.sequence = 1 ;
+		if (drmWaitVBlank (drm_fd, &vblank) == -1) {
+			close (drm_fd);
+			drm_fd = -1;
+			std::cout << "No se pudo sincronizarcon vblank\n";
+		}
+	}
 }
 
 #define como_cadena (x) #x
@@ -120,10 +137,22 @@ configuracion::configuracion ()
 	});
 	LogEventos::TipoLog tipo = s == "ERROR" ? LogEventos::error : (s == "INFO" ? LogEventos::info : LogEventos::debug);
 	registro.definirTipoLog (tipo);
+
+	drm_fd = open( "/dev/dri/card0", O_RDWR | O_CLOEXEC);
+	if (drm_fd == -1) {
+		std::cout << "Fallo la apertura de card0\n";
+	}
+	// Obtengo el numero actual de secuencia. type debe ser DRM_VBLANK_RELATIVE y sequence 0.
+	memset (&vblank, 0, sizeof(vblank));
+	//vblank.request.sequence = 0 ;
+
+	// Establezo a type para que espere el numero de secuencia calculado en XShmBackend::Wait_for_vblank.
+	vblank.request.type = (drmVBlankSeqType)( DRM_VBLANK_ABSOLUTE | DRM_VBLANK_NEXTONMISS ) ;
 }
 
 configuracion::~configuracion ()
 {
+	close (drm_fd);
 	xmlXPathFreeContext (contexto);
 	xmlFreeDoc (doc);
 	xmlXPathFreeContext (contexto_omision);

@@ -4,11 +4,16 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <temporizador.hpp>
+#include <Constantes.h>
+#include <Socket.h>
 
 extern "C"
 {
 	#include <gtk/gtk.h>
 	#include <gdk/gdkkeysyms.h>
+	#include <sys/types.h>
+	#include <sys/socket.h>
 }
 
 #define STR_HELPER(x) #x
@@ -20,7 +25,14 @@ struct usuario
 {
 	std::string nombre;
 	int fd;
-	bool esperando_ok;
+	bool esperando_ok, conectado;
+	int recien_conectado;
+	std::mutex mutex_tmp;
+	temporizador tmp;
+	Socket *conector;
+	std::thread hilo;
+	std::mutex mutex_teclas;
+	char teclas[TAMANIO_MENSAJE_TECLAS + 1];
 	typedef enum {aceptado, rechazado, cupo, jugando, fallido} estado;
 };
 
@@ -32,6 +44,8 @@ struct autenticados
 	std::mutex mutex;
 	std::thread hilo;
 	std::condition_variable condicion;
+	std::mutex mutex_mundo;
+	std::string mundo;		
 };
 
 typedef struct

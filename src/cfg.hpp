@@ -12,6 +12,7 @@ extern "C"
 	#include <SDL2/SDL.h>
 	#include <SDL2/SDL_image.h>
 	#include <dlfcn.h>
+	#include <xf86drm.h>
 }
 
 class plataforma
@@ -59,7 +60,10 @@ public:
 	SDL_Texture *obtener_textura (const char *camino, SDL_Renderer *renderer);
 	SDL_Texture *obtener_textura_grisada (const char *camino, SDL_Renderer *renderer);
 	void obtener_plataformas (const char *camino, std::list<plataforma> &l, const plataforma & plataforma_omision);
+	void esperar_vblank ();
 private:
+	drmVBlank vblank;
+	int drm_fd;
 	template<typename t> class tipos
 	{
 	public:

@@ -17,8 +17,6 @@
 #include "login.hpp"
 #include <signal.h>
  
-#define TAMANIO_MENSAJE_TECLAS 9
- 
 void funcionrecibir(int numeroCliente, Socket* socket, juego* j, autenticados *a  );
 void funcionEnviar(string respuesta, Socket* socket, juego* j, int  tamanio_respuestaServidor );
 
@@ -29,7 +27,7 @@ void al_interrumpir (int s)
 	if (pa && s == SIGINT) {
 		std::cout << "Interrupcion manejada por el servidor\n";
 		salir = true;
-		std::lock_guard<std::mutex> lock(pa->mutex);
+		std::unique_lock<std::mutex> lock(pa->mutex);
 		pa->cantidad = pa->requeridos; // Fuerzo condicion solo para que salga
 		pa->condicion.notify_one();
 	}
@@ -51,6 +49,8 @@ void enviarBalas(int cantDeBalas,Socket* soquete){
  
     //el resto
 }
+
+void comunicar_cliente (autenticados *a, int i, int tamanio_respuestaServidor);
  
 int main (int argc, char *argv[]){
  
@@ -119,13 +119,17 @@ int main (int argc, char *argv[]){
             string acciones = escuchador->obtenerAcciones();
             //if(acciones != "000000000"){
                 // mas adelante enviamos solo si esta apretando alguna tecla (si las acciones es distinto de todo 0)
+                std::cout << "1: " << acciones << "\n";
                 int enviados = soqueteCliente->enviar(soqueteCliente->getSocketId(),acciones.c_str(),TAMANIO_MENSAJE_TECLAS);
+                std::cout << "2\n";
                 if(enviados == -1){
                     cout<<"Error en la conexion"<<endl;
                 }
  
+                std::cout << "3\n";
                 int llegaron =
                     soqueteCliente->recibir(soqueteCliente->getSocketId(),respuestaServidor,tamanio_respuestaServidor);
+                std::cout << "4\n";
                 respuestaServidor[tamanio_respuestaServidor] = 0;
                
                 string respuestaSinParsear(respuestaServidor);
@@ -153,60 +157,77 @@ int main (int argc, char *argv[]){
 	autenticados a;
 	pa = &a;
 	esperar_jugadores (cantidadJugadores, serverAdress, puerto, a);
- 
-	Socket* soquete = new Socket(a.usuarios[0].fd);
-	soquete->setConexion(true);
-	Socket* soquete2;
-	Socket* soquete3;
-	Socket* soquete4;
 
-	/*
-	soquete->bindAndListen(puerto);
-	soquete->aceptar();
-	*/
-
-	std::thread tenviar1;
-	std::thread trecibir1;
-	std::thread tenviar2;
-	std::thread trecibir2;
-	std::thread tenviar3;
-	std::thread trecibir3;
-	std::thread tenviar4;
-	std::thread trecibir4;
-
-	if (cantidadJugadores >=2){
-	soquete2 = new Socket(a.usuarios[1].fd);
-	soquete2->setConexion(true);
-	/*
-	soquete2->bindAndListen(puerto+1);
-	soquete2->aceptar();
-	*/
-	}
-
-	if (cantidadJugadores >=3 ){
-	soquete3 = new Socket(a.usuarios[2].fd);
-	soquete3->setConexion(true);
-	/*
-	soquete3->bindAndListen(puerto+2);
-	soquete3->aceptar();
-	*/
-
-	}
-
-	if (cantidadJugadores == 4){
-	soquete4 = new Socket(a.usuarios[3].fd);
-	soquete4->setConexion(true);
-	/*
-	soquete4->bindAndListen(puerto+3);
-	soquete4->aceptar();
-	*/
-	}
-           
- 	std::cout << "Iniciando ciclo\n";
- 
  	std::string titulo = "Contra";
 	juego j(titulo, "servidor", cantidadJugadores);
+
+	std::unique_lock<std::mutex> lock(a.mutex);
+	for (int i = 0; i < a.cantidad; i++) {
+		a.usuarios[i].conector = new Socket (a.usuarios[i].fd);
+		a.usuarios[i].conectado = true;
+		a.usuarios[i].hilo = std::thread {comunicar_cliente, &a, i, tamanio_respuestaServidor};
+		a.usuarios[i].tmp.ahora ();
+		a.usuarios[i].recien_conectado = 100;
+		memcpy (a.usuarios[i].teclas, "000000000", 10);
+	}
+	lock.unlock ();
+
+ 	std::cout << "Iniciando ciclo\n";
+ 
 	while (!salir && j.jugando ()) {                         
+		cfg.esperar_vblank ();
+
+		std::unique_lock<std::mutex> lock(a.mutex);
+		for (int i = 0; i < a.cantidad; i++) {
+			std::lock_guard<std::mutex> lock_tmp(a.usuarios[i].mutex_tmp);
+			//std::cout << "tiempo: " << a.usuarios[i].tmp.milisegundos () << "\n";
+			int espera;
+			if (a.usuarios[i].recien_conectado > 0) {
+				espera = 10*MAX_TIEMPO_RESPUESTA;
+				a.usuarios[i].recien_conectado--;
+			} else {
+				espera = MAX_TIEMPO_RESPUESTA;
+			}
+			if (a.usuarios[i].tmp.milisegundos () > espera) {
+				if (a.usuarios[i].fd != -1) {
+					if (!a.usuarios[i].conectado) {
+						std::cout << "Reconectando cliente: " << i << "\n";
+						j.desgrisarJugador(i+1);
+						a.usuarios[i].conectado = true;
+						a.usuarios[i].tmp.ahora ();
+						a.usuarios[i].recien_conectado = 100;
+						a.usuarios[i].hilo = std::thread {comunicar_cliente, &a, i, tamanio_respuestaServidor};
+					} else {
+						std::cout << "Anulando cliente: " << i << "\n";
+						j.grisarJugador(i+1);
+						a.usuarios[i].fd = -1;
+						a.usuarios[i].conectado = false;
+						a.usuarios[i].hilo.detach ();
+					}
+				}
+			}
+		}
+		lock.unlock ();
+
+		char teclas[a.cantidad][TAMANIO_MENSAJE_TECLAS + 1];
+		for (int i = 0; i < a.cantidad; i++) {
+			std::lock_guard<std::mutex> lock_tmp(a.usuarios[i].mutex_teclas);
+			memcpy (teclas[i], a.usuarios[i].teclas, TAMANIO_MENSAJE_TECLAS+1);
+		}
+
+		for (int i = 0; i < a.cantidad; i++) {
+			j.setAcciones (teclas[i], i+1);
+		}
+
+		j.manejar_eventos ();
+		j.actualizar ();
+		string mundo = j.armarRespuesta();
+
+		std::unique_lock<std::mutex> lock_mundo(a.mutex_mundo);
+		a.mundo = mundo;
+		lock_mundo.unlock ();
+		#if 0
+		
 		trecibir1 = std::thread{std::bind(funcionrecibir, 1, soquete, &j, &a)};
 
 		if(cantidadJugadores >= 2){
@@ -268,14 +289,17 @@ int main (int argc, char *argv[]){
 		}
 		//j.dibujar();
 		//j.presentar();
+		#endif
 	}
 	if (salir) {
 		std::cout << "Saliendo por señal de interrupción\n";
 	}
-	std::unique_lock<std::mutex> lock (a.mutex);
+	lock.lock ();
 	a.hilo.detach ();
+	for (int i = 0; i < a.cantidad; i++) {
+		delete (a.usuarios[i].conector);
+	}
 	lock.unlock ();
-	soquete->~Socket();
        
  
         registro.registrar (LogEventos::info, "Finalizo el juego");
@@ -283,6 +307,34 @@ int main (int argc, char *argv[]){
     }
     }
     }
+}
+
+void comunicar_cliente (autenticados *a, int i, int tamanio_respuestaServidor)
+{
+	while (true) {
+		// Recibe teclas
+		char teclas[TAMANIO_MENSAJE_TECLAS + 1] = "000000000";
+		std::cout << "1\n";
+		a->usuarios[i].conector->recibir(a->usuarios[i].conector->getAcceptedSocket(),teclas,TAMANIO_MENSAJE_TECLAS);
+		std::cout << "2\n";
+		// Almacena teclas
+		std::unique_lock<std::mutex> lock_teclas(a->usuarios[i].mutex_teclas);
+		memcpy (a->usuarios[i].teclas, teclas, TAMANIO_MENSAJE_TECLAS+1);
+		lock_teclas.unlock ();
+		// Lee mundo
+		std::string mundo;
+		std::unique_lock<std::mutex> lock_mundo(a->mutex_mundo);
+		mundo = a->mundo;
+		lock_mundo.unlock ();
+		// Envia mundo
+		std::cout << "3\n";
+		a->usuarios[i].conector->enviar(a->usuarios[i].conector->getAcceptedSocket(),mundo.c_str(),tamanio_respuestaServidor);
+		std::cout << "4\n";
+		// Almacena estampa temporal
+		std::lock_guard<std::mutex> lock_tmp(a->usuarios[i].mutex_tmp);
+		a->usuarios[i].tmp.ahora ();
+		std::cout << "tiempo: " << a->usuarios[i].tmp.milisegundos () << "\n";
+	}
 }
  
  

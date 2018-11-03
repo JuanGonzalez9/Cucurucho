@@ -14,9 +14,9 @@ public:
 
 	int milisegundos (bool reiniciar = false);
 	int microsegundos (bool reiniciar = false);
+	void ahora ();
 protected:
 	struct timeval comienzo;
-	void ahora ();
 };
 
 #endif
