@@ -230,6 +230,7 @@ static void activate (GtkApplication* app, gpointer user_data)
 
 	gtk_window_set_position (GTK_WINDOW(login->ventana), GTK_WIN_POS_CENTER);
 	gtk_widget_show_all (login->ventana);
+	gtk_window_present (GTK_WINDOW(login->ventana));
 }
 
 void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, autenticados &a)

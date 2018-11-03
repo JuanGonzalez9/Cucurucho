@@ -20,7 +20,7 @@ extern "C"
 
 #define MAX_SOCKET_MSG (10*1024)
 
-static bool separar (char *t, std::string &a, std::string &b, char sep)
+bool separar (char *t, std::string &a, std::string &b, char sep)
 {
 	char * u = t;
 	char * c = u;

@@ -18,9 +18,6 @@
 #include "conector.hpp"
 #include <signal.h>
  
-void funcionrecibir(int numeroCliente, Socket* socket, juego* j, autenticados *a  );
-void funcionEnviar(string respuesta, Socket* socket, juego* j, int  tamanio_respuestaServidor );
-
 volatile bool salir = false; 
 autenticados *pa = nullptr;
 void al_interrumpir (int s)
@@ -36,11 +33,16 @@ void al_interrumpir (int s)
  
 void uso ()
 {
-    std::cout << "uso: contra [-h | -d (ERROR|INFO|DEBUG)]\n\n";
-    std::cout << "  -h         Muestra esta ayuda y finaliza\n";
-    std::cout << "  -d OPCION  Estable a OPCION como nivel de depuracion\n\n";
+    std::cout << "uso: contra [-h] | ([-d (ERROR|INFO|DEBUG)] (-s|-c) (puerto|dir:puerto))\n\n";
+    std::cout << "  -h             Muestra esta ayuda y finaliza\n";
+    std::cout << "  -d OPCION      Estable a OPCION como nivel de depuracion\n";
+    std::cout << "  -s puerto      Ejecuta contra como servidor en 127.0.0.1:puerto\n";
+    std::cout << "  -s dir:puerto  Ejecuta contra como servidor en dir:puerto\n";
+    std::cout << "  -c puerto      Ejecuta contra como cliente en 127.0.0.1:puerto\n";
+    std::cout << "  -c dir:puerto  Ejecuta contra como cliente en dir:puerto\n\n";
 }
- 
+
+#if 0 
 void enviarBalas(int cantDeBalas,Socket* soquete){
     string balas = "00";
     string nuevo = to_string(cantDeBalas);
@@ -50,6 +52,7 @@ void enviarBalas(int cantDeBalas,Socket* soquete){
  
     //el resto
 }
+#endif
 
 
 // Comunicación desde el cliente hacia el servidor
@@ -60,32 +63,31 @@ void comunicar_servidor (Socket *conector, EscuchadorDeAcciones *escuchador, Jue
 	char respuestaServidor[tamanio_respuestaServidor + 1];
 	while (escuchador->enAccion() && juegoCliente->jugando()) {
 		string acciones = escuchador->obtenerAcciones();
-		// mas adelante enviamos solo si esta apretando alguna tecla (si las acciones es distinto de todo 0)
-//		std::cout << "enviar: " << acciones << "\n";
+		// std::cout << "enviar: " << acciones << "\n";
 		int enviados = conector->enviar(conector->getSocketId(),acciones.c_str(),TAMANIO_MENSAJE_TECLAS);
-//		std::cout << "enviadas\n";
+		// std::cout << "enviadas\n";
 		if (enviados == -1) {
 			cout << "Error en la conexion al enviar" << endl;
 			return;
 		}
 
-//		std::cout << "recibe\n";
+		// std::cout << "recibe\n";
 		int llegaron = conector->recibir(conector->getSocketId(),respuestaServidor,tamanio_respuestaServidor);
 		if (llegaron != tamanio_respuestaServidor) {
 			cout << "Error en la conexion al recibir" << endl;
 			return;
 		}
 		respuestaServidor[tamanio_respuestaServidor] = 0;
-//		std::cout << "recibido: " << respuestaServidor << "\n";
+		// std::cout << "recibido: " << respuestaServidor << "\n";
 
 		string respuestaSinParsear(respuestaServidor);
 		juegoCliente->setMensajeDelServidor(respuestaSinParsear);
 
-		//                std::cout << "5\n";
+		// std::cout << "5\n";
 		juegoCliente->dibujar();
 		juegoCliente->presentar();
 		juegoCliente->manejarCierre();
-		//                std::cout << "6\n";
+		// std::cout << "6\n";
 
 		std::unique_lock<std::mutex> lock_presento(*mutex_presento);
 		*presento = true;
@@ -101,9 +103,9 @@ void comunicar_cliente (autenticados *a, int i, int tamanio_respuestaServidor)
 	while (true) {
 		// Recibe teclas
 		char teclas[TAMANIO_MENSAJE_TECLAS + 1] = "000000000";
-//		std::cout << "recibe\n";
+		// std::cout << "recibe\n";
 		int r = a->usuarios[i].conector->recibir(a->usuarios[i].conector->getAcceptedSocket(),teclas,TAMANIO_MENSAJE_TECLAS);
-//		std::cout << "recibido: " << teclas << "\n";
+		// std::cout << "recibido: " << teclas << "\n";
 		if (r == -1) {
 			break;
 		}
@@ -117,93 +119,147 @@ void comunicar_cliente (autenticados *a, int i, int tamanio_respuestaServidor)
 		mundo = a->mundo;
 		lock_mundo.unlock ();
 		// Envia mundo
-//		std::cout << "envia: " << mundo << "\n";
+		// std::cout << "envia: " << mundo << "\n";
 		a->usuarios[i].conector->enviar(a->usuarios[i].conector->getAcceptedSocket(),mundo.c_str(),tamanio_respuestaServidor);
-//		std::cout << "enviados\n";
+		// std::cout << "enviados\n";
 		// Almacena estampa temporal
 		std::lock_guard<std::mutex> lock_tmp(a->usuarios[i].mutex_tmp);
 		a->usuarios[i].tmp.ahora ();
-//		std::cout << "tiempo: " << a->usuarios[i].tmp.milisegundos () << "\n";
+		// std::cout << "tiempo: " << a->usuarios[i].tmp.milisegundos () << "\n";
 	}
 }
 
-int main (int argc, char *argv[]){
- 
+bool establecer_opcion_depurado (const char *depurado)
+{
+	std::cout << "depurado: " << depurado << "\n";
+	if (!strcmp (depurado, "ERROR")) {
+		registro.definirTipoLog (LogEventos::error);
+	} else if (!strcmp (depurado, "INFO")) {
+		registro.definirTipoLog (LogEventos::info);
+	} else if (!strcmp (depurado, "DEBUG")) {
+		registro.definirTipoLog (LogEventos::debug);
+	} else {
+		std::stringstream ss;
+		ss << "Opcion de depurado '" << depurado << "' no reconida";
+		registro.registrar (LogEventos::error, ss.str().c_str());
+		return false;
+	}
+	return true;
+}
+
+bool obtener_puerto (const char *s, unsigned short &puerto)
+{
+	try {
+		std::string::size_type largo;
+		int p = std::stoi (s, &largo, 10);
+		if (largo != strlen(s) || p > 65525) {
+			return false;
+		}
+		puerto = (unsigned short)p;
+	} catch (...) {
+		return false;
+	}
+	return true;
+}
+
+bool obtener_dir_puerto (char *arg, std::string &dir, unsigned short &puerto)
+{
+	std::string tmp;
+	if (!separar (arg, dir, tmp, ':')) {
+		if (!obtener_puerto (arg, puerto)) {
+			return false;
+		}
+		dir = "127.0.0.1";
+		return true;
+	} else {
+		if (!obtener_puerto (tmp.c_str(), puerto)) {
+			return false;
+		}
+		return dir.length() >= 7;
+	}
+}
+
+int main (int argc, char *argv[]) {
 	registro.borrarEventos();
 	registro.registrar (LogEventos::info, "Comenzo el juego");
-   
-	int r = 1;
-	if (argc >= 5 && argv[1][0] == '-') {
-	if (argv[1][1] == 'd') {
-	    if (!strcmp (argv[2], "ERROR")) {
-		registro.definirTipoLog (LogEventos::error);
-		r = 0;
-	    } else if (!strcmp (argv[2], "INFO")) {
-		registro.definirTipoLog (LogEventos::info);
-		r = 0;
-	    } else if (!strcmp (argv[2], "DEBUG")) {
-		registro.definirTipoLog (LogEventos::debug);
-		r = 0;
-	    } else {
-		std::stringstream ss;
-		ss << "Opcion de depurado '" << argv[2] << "' no reconida";
-		registro.registrar (LogEventos::error, ss.str().c_str());
-	    }
-	}
-	} else {
-	r = argc != 1;
-	}
 
-	if (r) {
+	bool ayuda = false;
+	bool como_servidor = false;
+	bool como_cliente = false;
+	std::string dir;
+	unsigned short puerto;
+	while (!ayuda && *argv) {
+		if ((*argv)[0] == '-') switch ((*argv)[1]) {
+			case 'd':
+				std::cout << "debug\n";
+				argv++;
+				if (!*argv || !establecer_opcion_depurado (*argv)) {
+					ayuda = true;
+				}
+				break;
+			case 's':
+				std::cout << "servidor\n";
+				argv++;
+				if (!*argv || !obtener_dir_puerto (*argv, dir, puerto)) {
+					ayuda = true;
+				}
+				como_servidor = true;
+				break;
+			case 'c':
+				std::cout << "cliente\n";
+				argv++;
+				if (!*argv || !obtener_dir_puerto (*argv, dir, puerto)) {
+					ayuda = true;
+				}
+				como_cliente = true;
+				break;
+			default:
+				ayuda = true;
+				break;
+		};
+		argv++;
+	}
+	if (ayuda || (como_servidor == como_cliente)) {
 		uso ();
-	} else {
-	
-	const char* serverAdress = "127.0.0.1";
-	if (argc == 6) {
-		serverAdress = argv[5];
+		return 1;
 	}
-	
-	char* comportamiento = argv[3];
-	unsigned short puerto = atoi(argv[4]);
-	if(strcmp(comportamiento,"cliente") == 0){
 
-        cout << "Arranca el cliente en " << serverAdress << ":" << puerto << "\n";
-        Parser parser;
-        EscuchadorDeAcciones* escuchador = new EscuchadorDeAcciones();
+	if (como_cliente) {
+		cout << "Arranca el cliente en " << dir << ":" << puerto << "\n";
+		Parser parser;
+		EscuchadorDeAcciones* escuchador = new EscuchadorDeAcciones();
 
-	ventana_login ventana;
-	if (!login (serverAdress, puerto, ventana)) {
-		return 0;
-	}
-	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * ventana.jugadores;
-	std::cout << "Cliente: fd: " << ventana.fd << ", jugadores: " << ventana.jugadores << "\n";
+		ventana_login ventana;
+		if (!login (dir.c_str(), puerto, ventana)) {
+			return 0;
+		}
+		int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * ventana.jugadores;
+		std::cout << "Cliente: fd: " << ventana.fd << ", jugadores: " << ventana.jugadores << "\n";
 
-	std::stringstream titulo;
-	titulo << ventana.usuario << "(" << ventana.orden << ") - Contra";
+		std::stringstream titulo;
+		titulo << ventana.usuario << "(" << ventana.orden << ") - Contra";
 
-        Socket* soqueteCliente = new Socket(ventana.fd);
-        //soqueteCliente->conectar(serverAdress,puerto);
-  	std::cout << "Iniciando cliente: " << soqueteCliente->getSocketId() << "\n";
+		Socket* soqueteCliente = new Socket(ventana.fd);
+	  	std::cout << "Iniciando cliente: " << soqueteCliente->getSocketId() << "\n";
+	 
+		char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
+		JuegoCliente juegoCliente(titulo.str(), "cliente", ventana.jugadores,ventana.orden);
 
- 
-        char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
-        JuegoCliente juegoCliente(titulo.str(), "cliente", ventana.jugadores,ventana.orden);
+		std::mutex mutex_mundo;
 
-	std::mutex mutex_mundo;
-
-	std::condition_variable condicion_presento;
-	std::mutex mutex_presento;
-	bool presento = false;
-	std::thread hilo = std::thread {
-		comunicar_servidor,
-		soqueteCliente,
-		escuchador,
-		&juegoCliente,
-		&condicion_presento,
-		&mutex_presento,
-		&presento,
-		tamanio_respuestaServidor
-	};
+		std::condition_variable condicion_presento;
+		std::mutex mutex_presento;
+		bool presento = false;
+		std::thread hilo = std::thread {
+			comunicar_servidor,
+			soqueteCliente,
+			escuchador,
+			&juegoCliente,
+			&condicion_presento,
+			&mutex_presento,
+			&presento,
+			tamanio_respuestaServidor
+		};
 
 		while(escuchador->enAccion() && juegoCliente.jugando()){
 			std::unique_lock<std::mutex> lock_presento(mutex_presento);
@@ -215,7 +271,7 @@ int main (int argc, char *argv[]){
 				std::cerr << "Timed out\n";
 				std::cerr << "delete (soqueteCliente)\n";
 				delete (soqueteCliente);
-				if (!login (serverAdress, puerto, ventana)) {
+				if (!login (dir.c_str(), puerto, ventana)) {
 					soqueteCliente = nullptr;
 					break;
 				}
@@ -240,232 +296,113 @@ int main (int argc, char *argv[]){
 		delete (soqueteCliente);
 		std::cerr << "hilo.join ()\n";
 		hilo.join ();
-		std::cerr << "sale hilo principal\n";
-		return 0;
-    }
-    else{
- 
-    if(strcmp(comportamiento,"servidor") == 0){
-    	signal (SIGINT, al_interrumpir);
-   
-        cout << "Arranca el servidor en " << serverAdress << ":" << puerto << "\n";
+	} else { // como_servidor
+		signal (SIGINT, al_interrumpir);
 
-	int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
-	int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
-	autenticados a;
-	pa = &a;
-	esperar_jugadores (cantidadJugadores, serverAdress, puerto, a);
+		cout << "Arranca el servidor en " << dir << ":" << puerto << "\n";
 
- 	std::string titulo = "Contra";
-	juego j(titulo, "servidor", cantidadJugadores);
+		int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
+		int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
+		autenticados a;
+		pa = &a;
+		esperar_jugadores (cantidadJugadores, dir.c_str(), puerto, a);
 
- 	std::cout << "Crea un mundo inicial\n";
-	j.manejar_eventos ();
-	j.actualizar ();
-	a.mundo = j.armarRespuesta();
+	 	std::string titulo = "Contra";
+		juego j(titulo, "servidor", cantidadJugadores);
 
-	std::unique_lock<std::mutex> lock(a.mutex);
-	for (int i = 0; i < a.cantidad; i++) {
-		a.usuarios[i].conector = new Socket (a.usuarios[i].fd);
-		a.usuarios[i].conectado = true;
-		a.usuarios[i].hilo = std::thread {comunicar_cliente, &a, i, tamanio_respuestaServidor};
-		a.usuarios[i].tmp.ahora ();
-		a.usuarios[i].recien_conectado = 100;
-		memcpy (a.usuarios[i].teclas, "000000000", 10);
-	}
-	lock.unlock ();
-
-
-	std::cout << "Iniciando ciclo\n";
- 	while (!salir && j.jugando ()) {                         
-		cfg.esperar_vblank ();
+	 	std::cout << "Crea un mundo inicial\n";
+		j.manejar_eventos ();
+		j.actualizar ();
+		a.mundo = j.armarRespuesta();
 
 		std::unique_lock<std::mutex> lock(a.mutex);
 		for (int i = 0; i < a.cantidad; i++) {
-			std::lock_guard<std::mutex> lock_tmp(a.usuarios[i].mutex_tmp);
-			//std::cout << "tiempo: " << a.usuarios[i].tmp.milisegundos () << "\n";
-			int espera;
-			if (a.usuarios[i].recien_conectado > 0) {
-				espera = 10*MAX_TIEMPO_RESPUESTA;
-				a.usuarios[i].recien_conectado--;
-			} else {
-				espera = MAX_TIEMPO_RESPUESTA;
-			}
-			if (a.usuarios[i].tmp.milisegundos () > espera) {
-				if (a.usuarios[i].fd != -1) {
-					if (!a.usuarios[i].conectado) {
-						std::cout << "Reconectando cliente: " << i << "\n";
-						j.desgrisarJugador(i+1);
-						a.usuarios[i].conector = new Socket (a.usuarios[i].fd);
-						a.usuarios[i].conectado = true;
-						a.usuarios[i].tmp.ahora ();
-						a.usuarios[i].recien_conectado = 100;
-						a.usuarios[i].hilo = std::thread {comunicar_cliente, &a, i, tamanio_respuestaServidor};
-					} else {
-						std::cout << "Anulando cliente: " << i << "\n";
-						j.grisarJugador(i+1);
-						a.usuarios[i].fd = -1;
-						a.usuarios[i].conectado = false;
-						a.usuarios[i].hilo.detach ();
-						delete (a.usuarios[i].conector);
-						a.usuarios[i].conector = nullptr;
-					}
-				}
-			}
+			a.usuarios[i].conector = new Socket (a.usuarios[i].fd);
+			a.usuarios[i].conectado = true;
+			a.usuarios[i].hilo = std::thread {comunicar_cliente, &a, i, tamanio_respuestaServidor};
+			a.usuarios[i].tmp.ahora ();
+			a.usuarios[i].recien_conectado = 100;
+			memcpy (a.usuarios[i].teclas, "000000000", 10);
 		}
 		lock.unlock ();
 
-		char teclas[a.cantidad][TAMANIO_MENSAJE_TECLAS + 1];
+
+		std::cout << "Iniciando ciclo\n";
+	 	while (!salir && j.jugando ()) {                         
+			cfg.esperar_vblank ();
+
+			std::unique_lock<std::mutex> lock(a.mutex);
+			for (int i = 0; i < a.cantidad; i++) {
+				std::lock_guard<std::mutex> lock_tmp(a.usuarios[i].mutex_tmp);
+				//std::cout << "tiempo: " << a.usuarios[i].tmp.milisegundos () << "\n";
+				int espera;
+				if (a.usuarios[i].recien_conectado > 0) {
+					espera = 10*MAX_TIEMPO_RESPUESTA;
+					a.usuarios[i].recien_conectado--;
+				} else {
+					espera = MAX_TIEMPO_RESPUESTA;
+				}
+				if (a.usuarios[i].tmp.milisegundos () > espera) {
+					if (a.usuarios[i].fd != -1) {
+						if (!a.usuarios[i].conectado) {
+							std::cout << "Reconectando cliente: " << i << "\n";
+							j.desgrisarJugador(i+1);
+							a.usuarios[i].conector = new Socket (a.usuarios[i].fd);
+							a.usuarios[i].conectado = true;
+							a.usuarios[i].tmp.ahora ();
+							a.usuarios[i].recien_conectado = 100;
+							a.usuarios[i].hilo = std::thread {comunicar_cliente, &a, i, tamanio_respuestaServidor};
+						} else {
+							std::cout << "Anulando cliente: " << i << "\n";
+							j.grisarJugador(i+1);
+							a.usuarios[i].fd = -1;
+							a.usuarios[i].conectado = false;
+							a.usuarios[i].hilo.detach ();
+							delete (a.usuarios[i].conector);
+							a.usuarios[i].conector = nullptr;
+						}
+					}
+				}
+			}
+			lock.unlock ();
+
+			char teclas[a.cantidad][TAMANIO_MENSAJE_TECLAS + 1];
+			for (int i = 0; i < a.cantidad; i++) {
+				std::lock_guard<std::mutex> lock_tmp(a.usuarios[i].mutex_teclas);
+				memcpy (teclas[i], a.usuarios[i].teclas, TAMANIO_MENSAJE_TECLAS+1);
+			}
+
+			for (int i = 0; i < a.cantidad; i++) {
+				teclas[i][TAMANIO_MENSAJE_TECLAS] = 0;
+				j.setAcciones (teclas[i], i+1);
+			}
+
+			j.manejar_eventos ();
+			j.actualizar ();
+			string mundo = j.armarRespuesta();
+
+			std::unique_lock<std::mutex> lock_mundo(a.mutex_mundo);
+			a.mundo = mundo;
+			lock_mundo.unlock ();
+		}
+		if (salir) {
+			std::cout << "Saliendo por señal de interrupción\n";
+		}
+		lock.lock ();
+		std::cerr << "a.hilo.detach ()\n";
+		a.hilo.detach ();
 		for (int i = 0; i < a.cantidad; i++) {
-			std::lock_guard<std::mutex> lock_tmp(a.usuarios[i].mutex_teclas);
-			memcpy (teclas[i], a.usuarios[i].teclas, TAMANIO_MENSAJE_TECLAS+1);
+			std::cerr << "delete (a.usuarios[i].conector)\n";
+			delete (a.usuarios[i].conector);
+			if (a.usuarios[i].hilo.joinable ()) {
+				std::cerr << "a.usuarios[i].hilo.detach ()\n";
+				a.usuarios[i].hilo.detach ();
+			}
 		}
-
-		for (int i = 0; i < a.cantidad; i++) {
-			teclas[i][TAMANIO_MENSAJE_TECLAS] = 0;
-			j.setAcciones (teclas[i], i+1);
-		}
-
-		j.manejar_eventos ();
-		j.actualizar ();
-		string mundo = j.armarRespuesta();
-
-		std::unique_lock<std::mutex> lock_mundo(a.mutex_mundo);
-		a.mundo = mundo;
-		lock_mundo.unlock ();
-		#if 0
-		
-		trecibir1 = std::thread{std::bind(funcionrecibir, 1, soquete, &j, &a)};
-
-		if(cantidadJugadores >= 2){
-			trecibir2 = std::thread{std::bind(funcionrecibir, 2, soquete2, &j, &a)};
-		}
-
-		if(cantidadJugadores >= 3){
-			trecibir3 = std::thread{std::bind(funcionrecibir, 3 , soquete3, &j, &a)};
-		}
-
-		if(cantidadJugadores >= 4){
-			trecibir4 = std::thread{std::bind(funcionrecibir, 4, soquete4, &j, &a)};
-		}
-
-		trecibir1.join();
-		if(cantidadJugadores >= 2){
-			trecibir2.join();
-		}
-
-		if(cantidadJugadores >= 3){
-			trecibir3.join();
-		}
-
-		if(cantidadJugadores >= 4){
-			trecibir4.join();
-		}
-		       
-		j.manejar_eventos ();
-		j.actualizar ();
-		string respuesta = j.armarRespuesta();
-
-		tenviar1 = std::thread{std::bind(funcionEnviar, respuesta, soquete, &j, tamanio_respuestaServidor)};
-
-		if(cantidadJugadores >= 2){
-		    tenviar2 = std::thread{std::bind(funcionEnviar, respuesta, soquete2, &j, tamanio_respuestaServidor)};
-		}
-
-		if(cantidadJugadores >= 3){
-		    tenviar3 = std::thread{std::bind(funcionEnviar, respuesta, soquete3, &j, tamanio_respuestaServidor)};
-		}
-
-		if(cantidadJugadores == 4){
-		    tenviar4 = std::thread{std::bind(funcionEnviar, respuesta , soquete4, &j, tamanio_respuestaServidor)};
-		}
-
-
-
-		tenviar1.join();
-		if(cantidadJugadores >= 2){
-			tenviar2.join();
-		}
-
-		if(cantidadJugadores >= 3){
-			tenviar3.join();
-		}
-
-		if(cantidadJugadores >= 4){
-			tenviar4.join();
-		}
-		//j.dibujar();
-		//j.presentar();
-		#endif
+		lock.unlock ();
+		registro.registrar (LogEventos::info, "Finalizo el juego");
 	}
-	if (salir) {
-		std::cout << "Saliendo por señal de interrupción\n";
-	}
-	lock.lock ();
-	std::cerr << "a.hilo.detach ()\n";
-	a.hilo.detach ();
-	for (int i = 0; i < a.cantidad; i++) {
-		std::cerr << "delete (a.usuarios[i].conector)\n";
-		delete (a.usuarios[i].conector);
-		if (a.usuarios[i].hilo.joinable ()) {
-			std::cerr << "a.usuarios[i].hilo.detach ()\n";
-			a.usuarios[i].hilo.detach ();
-		}
-	}
-	lock.unlock ();
-       
- 
-        registro.registrar (LogEventos::info, "Finalizo el juego");
-		std::cerr << "sale hilo principal\n";
-        return r ;
-    }
-    }
-    }
+	std::cerr << "sale hilo principal\n";
+	return 0;
 }
-
-void funcionrecibir(int numeroCliente, Socket* socket, juego* j, autenticados *a  ){
- 
-    	char mensaje[TAMANIO_MENSAJE_TECLAS + 1] = "000000000";
-   
-	static std::mutex m;
- 
-	m.lock();
-	if(!socket->estaConectado()){
-		std::lock_guard<std::mutex> lock(a->mutex);
-		if (a->usuarios[numeroCliente-1].fd != -1) {
-			std::cout << "Reconectando cliente: " << numeroCliente << "\n";
-			socket->setSocketId(a->usuarios[numeroCliente-1].fd);
-			j->desgrisarJugador(numeroCliente);
-			socket->setConexion(true);
-		}
-	}
-	
-	if(socket->estaConectado()){
-		int recibidos = socket->recibir(socket->getAcceptedSocket(),mensaje,TAMANIO_MENSAJE_TECLAS);
-		if(recibidos == -1){
-			std::lock_guard<std::mutex> lock(a->mutex);
-			socket->setConexion(false);
-			j->grisarJugador(numeroCliente);
-			std::cout << "Anulando cliente: " << numeroCliente << "\n";
-			a->usuarios[numeroCliente-1].fd = -1;
-		} 
-	}
-	mensaje[TAMANIO_MENSAJE_TECLAS] = 0;
-	j->setAcciones(mensaje,numeroCliente);
-	m.unlock();
-}
- 
-void funcionEnviar(string respuesta, Socket* socket, juego* j, int tamanio_respuestaServidor){
- 
-	static std::mutex m;
-
-	if(socket->estaConectado()){
-		m.lock();
-		socket->enviar(socket->getAcceptedSocket(),respuesta.c_str(),tamanio_respuestaServidor);
-		m.unlock();
-	}
-	
-}
-
-
 

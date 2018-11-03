@@ -11,6 +11,7 @@ void enviar_ok (int fd);
 void esperar_ok (int fd);
 bool leer (int fd, std::string &s);
 bool escribir (int fd, std::string &s);
+bool separar (char *t, std::string &a, std::string &b, char sep);
 
 #endif
 
