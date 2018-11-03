@@ -41,7 +41,9 @@ juego::juego (const std::string &titulo, string comportamiento, int cantidadJuga
 	if(comportamiento == "cliente") flags = 0;
 	else flags = SDL_WINDOW_HIDDEN;
 
+
 	ventana = SDL_CreateWindow (titulo.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, flags);
+
 	if (nullptr == ventana) {
 		logerror("No pudo crease la ventana");
 		std::cerr << "No pudo crease la ventana: " << SDL_GetError () << '\n';
@@ -151,32 +153,32 @@ juego::juego (const std::string &titulo, string comportamiento, int cantidadJuga
 
 		
 
-	if(num_jugadores>=2)
+	if(num_jugadores>=2){
 		
 		boby2.activar();
 		boby2.setPosX(150);
 		boby2.setPosY(200);
 		boby2.setCoordenadaX(0+150);
 		boby2.setCoordenadaY(200);
-		
+	}
 
-	if(num_jugadores>=3)
+	if(num_jugadores>=3){
 		
 		boby3.activar();
 		boby3.setPosX(250);
 		boby3.setPosY(200);
 		boby3.setCoordenadaX(0+250);
 		boby3.setCoordenadaY(200);
-		
+	}	
 
-	if(num_jugadores>=4)
+	if(num_jugadores>=4){
 		
 		boby4.activar();
 		boby4.setPosX(350);
 		boby4.setPosY(200);
 		boby4.setCoordenadaX(0+350);
 		boby4.setCoordenadaY(200);
-		
+	}
 	
 }
 
@@ -608,7 +610,23 @@ void juego::manejar_eventos ()
 		boby2.grisar();
 	}
 	if(apretandoDesGrisP2(state)){
-		boby2.desgrisar();
+		int coordenadaY = boby.obtenerCoordenadaY();
+		int coordenadaX = boby.obtenerCoordenadaX();
+		int rangoAtras;
+		int rangoAdelante;
+
+		if (nivel == 2){
+			
+			rangoAtras = 600 - boby2.getPosY();
+			rangoAdelante =  boby2.getPosY(); 
+		}
+		else{
+			
+			rangoAtras = boby2.getPosX();
+			rangoAdelante = 800 - boby2.getPosX();
+		}
+		boby2.desgrisar(plataformas,coordenadaX,coordenadaY,nivel,rangoAtras,rangoAdelante);
+		
 	}
 
 
@@ -745,18 +763,76 @@ void juego::grisarJugador(int numeroDeJugador){
 }
 	
 void juego::desgrisarJugador(int numeroDeJugador){
+	int rangoAtras;
+	int rangoAdelante;
+	int coordenadaX;
+	int coordenadaY;
+
 	switch(numeroDeJugador){
 		case (1):
-			boby.desgrisar();
+			coordenadaY = boby.obtenerCoordenadaY();
+			coordenadaX = boby.obtenerCoordenadaX();
+
+			if (nivel == 2){
+				
+				rangoAtras = 600 - boby.getPosY();
+				rangoAdelante =  boby.getPosY(); 
+			}
+			else{
+				
+				rangoAtras = boby.getPosX();
+				rangoAdelante = 800 - boby.getPosX();
+			}
+			boby.desgrisar(plataformas,coordenadaX,coordenadaY,nivel,rangoAtras,rangoAdelante);
 			break;
 		case (2):
-			boby2.desgrisar();
+			coordenadaY = boby2.obtenerCoordenadaY();
+			coordenadaX = boby2.obtenerCoordenadaX();
+
+			if (nivel == 2){
+				
+				rangoAtras = 600 - boby2.getPosY();
+				rangoAdelante =  boby2.getPosY(); 
+			}
+			else{
+				
+				rangoAtras = boby2.getPosX();
+				rangoAdelante = 800 - boby2.getPosX();
+			}
+			boby2.desgrisar(plataformas,coordenadaX,coordenadaY,nivel, rangoAtras, rangoAdelante);
 			break;
+			
 		case (3):
-			boby3.desgrisar();
+			coordenadaY = boby3.obtenerCoordenadaY();
+			coordenadaX = boby3.obtenerCoordenadaX();
+
+			if (nivel == 2){
+				
+				rangoAtras = 600 - boby3.getPosY();
+				rangoAdelante =  boby3.getPosY(); 
+			}
+			else{
+				
+				rangoAtras = boby3.getPosX();
+				rangoAdelante = 800 - boby3.getPosX();
+			}
+			boby3.desgrisar(plataformas,coordenadaX,coordenadaY,nivel, rangoAtras, rangoAdelante);
 			break;
 		case (4):
-			boby4.desgrisar();
+			coordenadaY = boby4.obtenerCoordenadaY();
+			coordenadaX = boby4.obtenerCoordenadaX();
+
+			if (nivel == 2){
+				
+				rangoAtras = 600 - boby4.getPosY();
+				rangoAdelante =  boby4.getPosY(); 
+			}
+			else{
+				
+				rangoAtras = boby4.getPosX();
+				rangoAdelante = 800 - boby4.getPosX();
+			}
+			boby4.desgrisar(plataformas,coordenadaX,coordenadaY,nivel, rangoAtras, rangoAdelante);
 			break;
 		default:
 			break;
@@ -1000,8 +1076,12 @@ string juego::armarRespuesta(){
 	//Cargo los datos segun cuantos jugadores alla.
 
 	if (num_jugadores >= 1){
+
+		printf("posicion y en armador de respuesta: %i\n",boby.getPosY() );
 		datosBoby.setPosX(boby.getPosX());
 		datosBoby.setPosY(boby.getPosY());
+
+
 		datosBoby.setSaltando(boby.estaSaltando());
 		datosBoby.setDisparando(boby.estaDisparando());
 		datosBoby.setMirandoALaDerecha(boby.estaMirandoALaDerecha());

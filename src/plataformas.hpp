@@ -10,6 +10,16 @@
 
 using namespace std;
 
+class plataformaExtra
+{
+public:
+	
+	int xm;
+	int y;
+	int diferenciaEnX;
+	int diferenciaEnY;
+};
+
 class ImagePlataforma
 {
 public:
@@ -31,7 +41,7 @@ public:
 	SDL_Texture* crearTexturaParaElFondo(SDL_Texture*,SDL_Renderer*,int w,int h);
 	bool hayColision(int otroX, int otroY, int otroW, int otroH, int nivel);
 	bool hayColisionSuperior(int otroX, int otroY, int otroW, int otroH, int nivel);
-	plataforma hayPlataformaEn(int coordenada, int nivel, int rangoAtras, int rangoAdelante);
+	plataformaExtra hayPlataformaEn(int coordenadaX, int coordenadaY, int nivel, int rangoAtras, int rangoAdelante);
 	int aproximarPosicionAPlataforma(int otroX, int otroY, int otroW, int otroH, int velocidad, int nivel);
 
 protected:
@@ -40,5 +50,7 @@ protected:
 	list<plataforma> lista_plataformas_nivel2;
 	list<plataforma> lista_plataformas_nivel3;
 };
+
+
 
 #endif

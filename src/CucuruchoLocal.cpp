@@ -113,7 +113,7 @@ int main (int argc, char *argv[]){
  
         char respuestaServidor[tamanio_respuestaServidor + 1];
         char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
-        JuegoCliente juegoCliente(titulo.str(), "cliente", ventana.jugadores);
+        JuegoCliente juegoCliente(titulo.str(), "cliente", ventana.jugadores,ventana.orden);
 
         while(escuchador->enAccion() && juegoCliente.jugando()){
             string acciones = escuchador->obtenerAcciones();
@@ -287,9 +287,14 @@ int main (int argc, char *argv[]){
 		if(cantidadJugadores >= 4){
 			tenviar4.join();
 		}
+<<<<<<< HEAD
 		//j.dibujar();
 		//j.presentar();
 		#endif
+=======
+		j.dibujar();
+		j.presentar();
+>>>>>>> 520c3ca99ec24086d308f6e2eec15ecae0dfa8c8
 	}
 	if (salir) {
 		std::cout << "Saliendo por señal de interrupción\n";

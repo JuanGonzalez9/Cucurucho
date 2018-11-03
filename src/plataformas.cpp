@@ -214,7 +214,7 @@ bool Plataformas::hayColision(int otroX, int otroY, int otroW, int otroH, int ni
 	return false;
 }
 
-plataforma Plataformas::hayPlataformaEn(int coordenada,int nivel, int rangoAtras, int rangoAdelante){
+plataformaExtra Plataformas::hayPlataformaEn(int coordenadaX, int coordenadaY ,int nivel, int rangoAtras, int rangoAdelante){
 
 
 	list<plataforma> lista_plataformas;
@@ -223,45 +223,70 @@ plataforma Plataformas::hayPlataformaEn(int coordenada,int nivel, int rangoAtras
 		lista_plataformas = lista_plataformas_nivel1;
 	}
 	else if (nivel == 2){
-		lista_plataformas = lista_plataformas_nivel2;
-		for(int i=coordenada-rangoAtras; i< coordenada+rangoAdelante; i+=5){ //RECORRO Y
-			for(int coordenadaX=0; coordenadaX < 800 ; coordenadaX+=5){ //RECORRO X
-				for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){ //XCADA X EN TAL Y, BUSCO UNA PLATAFORMA
-					plataforma &plataformaActual = *it;
-	
-					if (coordenadaX  < plataformaActual.xf && coordenadaX > plataformaActual.xi){
-						return plataformaActual; //Devuelvo la plataforma en la cual me voy a parar
-					}
 
-				}
+		printf("Soy el nivel 2");
+
+		lista_plataformas = lista_plataformas_nivel2;
+		for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){ //XCADA X EN TAL Y, BUSCO UNA PLATAFORMA
+			plataforma &plataformaActual = *it;
+			
+			if ( ((coordenadaY-rangoAdelante) +100 < plataformaActual.y) && (plataformaActual.y < (coordenadaY + rangoAtras) -10 )){
+				plataformaExtra pE;
+				pE.xm = plataformaActual.xi + 5;
+				pE.y = plataformaActual.y;
+				pE.diferenciaEnX = coordenadaX - pE.xm; //lo que se corre en X 
+
+				pE.diferenciaEnY = (coordenadaY - pE.y); //diferenciaHAciaAdelante(Si es neg entonces es hacia atras)
+
+
+				return pE; //Devuelvo la plataforma en la cual me voy a parar
 			}
+
 		}
+			
+		
 	}
-	
+
 	else if(nivel == 3){
 		lista_plataformas = lista_plataformas_nivel3;
 	}
 
 	
-	for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
+	/*for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
 		plataforma &plataformaActual = *it;
 		
-		if (coordenada < plataformaActual.xf && coordenada > plataformaActual.xi){
-			return plataformaActual;
+		if (coordenadaX < plataformaActual.xf && coordenadaX > plataformaActual.xi){
+			plataformaExtra pE;
+			pE.xm = i;
+			pE.y = plataformaActual.y;
+			pE.diferenciaEnX = coordenadaX - pE.xm; //diferencia hacia atras(si es negativo entonces es hacia adelante)
+			pE.diferenciaEnY = coordenadaY - pE.y;
+
+
+			return pE; //Devuelvo la plataforma en la cual me voy a parar
 			//si encontro una plataforma en el lugar donde estaba, retorna esa.
 		}
 
-	}
+	}*/
 
 	//si no encontro en ese mismo "x(nivel 1 o 3) entonces busca en el rango de la pantalla"
 	//por cada "coordenada" busco de izquierda a derecha una plataforma
-	for(int i=coordenada-rangoAtras; i< coordenada+rangoAdelante; i+=5){
+	for(int i=coordenadaX-rangoAtras; i< coordenadaX+rangoAdelante; i++){
 
 		for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
 			plataforma &plataformaActual = *it;
 	
-			if (coordenada  < plataformaActual.xf && coordenada > plataformaActual.xi){
-				return plataformaActual; //Devuelvo la plataforma en la cual me voy a parar
+			if (coordenadaX  < plataformaActual.xf && coordenadaX > plataformaActual.xi){
+				plataformaExtra pE;
+				pE.xm = i; //La posicion en la que tiene q aparecer debe pertenecer al rango
+
+
+				pE.y = plataformaActual.y;
+				pE.diferenciaEnX = coordenadaX - pE.xm;
+				pE.diferenciaEnY = coordenadaY - pE.y;
+
+
+				return pE; //Devuelvo la plataforma en la cual me voy a parar
 			}
 
 		}
@@ -269,8 +294,8 @@ plataforma Plataformas::hayPlataformaEn(int coordenada,int nivel, int rangoAtras
 
 	}
 	
-	plataforma p;
-	return p; //No debería ocurrir nunca (Si es que el mapa esta bien hecho).
+	plataformaExtra pE;
+	return pE; //No debería ocurrir nunca (Si es que el mapa esta bien hecho).
 	logerror("No se encontro ninguna plataforma para la reconexion del jugador");
 	
 }
