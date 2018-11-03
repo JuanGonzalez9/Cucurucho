@@ -84,12 +84,12 @@ int Socket::aceptar(){
 int Socket::enviar(int idSock,const char* buffer, int length){
 	//guardo la cantidad de bytes que ya envie
 	int sent = 0;
-	std::cout << "Enviar: " << length << "\n";
+	//std::cout << "Enviar: " << length << "\n";
 	while(sent < length && sent != -1){
 		sent += send(idSock,buffer + sent,length - sent,MSG_NOSIGNAL);
-		std::cout << "Enviados: " << sent << "\n";
+		//std::cout << "Enviados: " << sent << "\n";
 	}
-	std::cout << "Enviados: total: " << sent << "\n";
+	//std::cout << "Enviados: total: " << sent << "\n";
 	return sent;
 	#if 0
 	int escritos = 0, r;
@@ -106,10 +106,11 @@ int Socket::enviar(int idSock,const char* buffer, int length){
 int Socket::recibir(int idSock,char* buffer, int length){
 	int recieved = 0;
 	int cantDeCeros = 0;
-	std::cout << "Recibir: " << length << "\n";
+	buffer[0] = '\0';
+	//std::cout << "Recibir: " << length << "\n";
 	while(recieved < length && recieved != -1){
 		recieved += recv(idSock,buffer + recieved,length - recieved,0);
-		std::cout << "Recibidos: " << recieved << "\n";
+		//std::cout << "Recibidos: " << recieved << "\n";
 		#if 0
 		if(recieved == 0){
 			std::cout << "recv cero\n";
@@ -118,7 +119,7 @@ int Socket::recibir(int idSock,char* buffer, int length){
 		}
 		#endif
 	}
-	std::cout << "Recibidos: total: " << recieved << "\n";
+	//std::cout << "Recibidos: total: " << recieved << "\n";
 	return recieved;
 	#if 0
 	int leidos = 0, r;

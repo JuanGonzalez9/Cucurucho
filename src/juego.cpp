@@ -1077,7 +1077,7 @@ string juego::armarRespuesta(){
 
 	if (num_jugadores >= 1){
 
-		printf("posicion y en armador de respuesta: %i\n",boby.getPosY() );
+		//printf("posicion y en armador de respuesta: %i\n",boby.getPosY() );
 		datosBoby.setPosX(boby.getPosX());
 		datosBoby.setPosY(boby.getPosY());
 
