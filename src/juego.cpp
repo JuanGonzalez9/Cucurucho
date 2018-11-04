@@ -9,6 +9,7 @@ static const int ancho=800;
 static const int alto=800;
 
 juego::juego (const std::string &titulo, string comportamiento, int cantidadJugadores):
+	ventana (nullptr),
 	termino (false),
 	cambioNivel(false),
 	us (periodo),
@@ -20,7 +21,6 @@ juego::juego (const std::string &titulo, string comportamiento, int cantidadJuga
 	cascada(0),
 	num_jugadores(cantidadJugadores),
 	rect_origen_fondo3 {0, 0, 800, 600},
-	ventana (nullptr),
 	renderer (nullptr),
 	textura_objetivo (nullptr),
 	cliente(nullptr),
@@ -31,7 +31,7 @@ juego::juego (const std::string &titulo, string comportamiento, int cantidadJuga
 {
 	atexit (SDL_Quit);
 
-	if (SDL_Init (SDL_INIT_VIDEO) < 0) {
+	if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
 		logerror("No pudo inicializarse SDL");
 		std::cerr << "No pudo inicializarse SDL: " << SDL_GetError () << '\n';
 		return;
@@ -41,7 +41,6 @@ juego::juego (const std::string &titulo, string comportamiento, int cantidadJuga
 	if(comportamiento == "cliente") flags = 0;
 	else flags = SDL_WINDOW_HIDDEN;
 
-
 	ventana = SDL_CreateWindow (titulo.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, flags);
 
 	if (nullptr == ventana) {
@@ -49,7 +48,7 @@ juego::juego (const std::string &titulo, string comportamiento, int cantidadJuga
 		std::cerr << "No pudo crease la ventana: " << SDL_GetError () << '\n';
 		return;
 	}
-
+	
 	renderer = SDL_CreateRenderer (ventana, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (nullptr == renderer) {
 		logerror("No pudo crease el renderer");
@@ -121,7 +120,6 @@ juego::juego (const std::string &titulo, string comportamiento, int cantidadJuga
 	loginfo("Se llama para cargar los valores de las plataformas en el nivel 1");
 	plataformas.cargarValoresFijos(textura_fondo3,renderer,1);
 	
-
 	loginfo("Se construyo juego");
 
 	
@@ -646,6 +644,7 @@ void juego::manejar_eventos ()
 		boby4.dejarDeApuntar();
 	}
 
+	SDL_Event e;
 	while (SDL_PollEvent (&e) != 0) {
 		switch(e.type){
 

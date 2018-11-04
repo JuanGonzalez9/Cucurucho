@@ -83,11 +83,11 @@ void comunicar_servidor (Socket *conector, EscuchadorDeAcciones *escuchador, Jue
 		string respuestaSinParsear(respuestaServidor);
 		juegoCliente->setMensajeDelServidor(respuestaSinParsear);
 
-		// std::cout << "5\n";
+		//std::cout << "5\n";
+		juegoCliente->manejarEventos();
 		juegoCliente->dibujar();
 		juegoCliente->presentar();
-		juegoCliente->manejarCierre();
-		// std::cout << "6\n";
+		//std::cout << "6\n";
 
 		std::unique_lock<std::mutex> lock_presento(*mutex_presento);
 		*presento = true;
@@ -260,7 +260,6 @@ int main (int argc, char *argv[]) {
 			&presento,
 			tamanio_respuestaServidor
 		};
-
 		while(escuchador->enAccion() && juegoCliente.jugando()){
 			std::unique_lock<std::mutex> lock_presento(mutex_presento);
 			if (!condicion_presento.wait_for (
