@@ -13,17 +13,14 @@ extern "C"
 	#include <SDL2/SDL_keycode.h>
 }
 
-JuegoCliente::JuegoCliente(const std::string &titulo, string comportamiento, int cantidadJugadores,int numeroDeJugador):
-	juego (titulo, comportamiento,cantidadJugadores),
-	usuario (10, 270, {230, 230, 230})
+JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador):
+	juego (v, cantidadJugadores)
 {
 	this->numeroDeJugador = numeroDeJugador;
 	nivel = 1;
 	cantJugadores = cantidadJugadores;
 	bala_rectOrigen = {0,0,32,32};
 	bala_rectDestino = {0,0,8,8};
-	setEstado (JuegoCliente::Registrandose);
-	usuario.escribir ("Edite o presione ENTER para continuar.");
 }
 
 void JuegoCliente::setMensajeDelServidor(string msj){
@@ -97,29 +94,7 @@ void JuegoCliente::dibujarBalas(vector< pair<int,int> > balas){
 	}
 }
 
-void JuegoCliente::manejarEventosLogin (){
-	SDL_Event e;
-	while (SDL_PollEvent (&e) != 0) { switch (e.type){
-		case SDL_QUIT:
-			termino = true;
-			break;
-		case SDL_KEYDOWN:
-			switch (e.key.keysym.sym) {
-				case SDLK_RETURN:
-					setEstado (JuegoCliente::Jugando);
-					break;
-				default:
-					usuario.manejar_evento (e);
-				      break;
-			};
-		      break;
-		default:
-			usuario.manejar_evento (e);
-			break;
-	} }
-}
-
-void JuegoCliente::manejarEventosJuego (){
+void JuegoCliente::manejarEventos (){
 	SDL_Event e;
 	while (SDL_PollEvent (&e) != 0) { switch (e.type){
 		case SDL_QUIT:
@@ -128,32 +103,6 @@ void JuegoCliente::manejarEventosJuego (){
 		default:
 			break;
 	} }
-}
-
-void JuegoCliente::manejarEventosScore (){
-	SDL_Event e;
-	while (SDL_PollEvent (&e) != 0) { switch (e.type){
-		case SDL_QUIT:
-			termino = true;
-			break;
-		default:
-			break;
-	} }
-}
-
-
-void JuegoCliente::manejarEventos(){
-	switch (estado) {
-		case JuegoCliente::Registrandose:
-			manejarEventosLogin();
-			break;
-		case JuegoCliente::Jugando:
-			manejarEventosJuego();
-			break;
-		case JuegoCliente::MostrandoScore:
-			manejarEventosScore();
-			break;
-	};
 }
 
 void JuegoCliente::dibujarEnemigo(){
@@ -191,20 +140,6 @@ void JuegoCliente::dibujarJugadores(){
 }
 
 void JuegoCliente::dibujar(){
-	switch (estado) {
-		case JuegoCliente::Registrandose:
-			dibujarLogin();
-			break;
-		case JuegoCliente::Jugando:
-			dibujarJuego();
-			break;
-		case JuegoCliente::MostrandoScore:
-			dibujarScore();
-			break;
-	};
-}
-
-void JuegoCliente::dibujarJuego(){
 	SDL_SetTextureBlendMode (textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget (renderer, textura_objetivo);
 
@@ -223,25 +158,6 @@ void JuegoCliente::dibujarJuego(){
 	dibujarBalas(balas);
 
 	if(p.estaElEnemigo()) dibujarEnemigo();
-}
-
-void JuegoCliente::dibujarLogin(){
-	SDL_SetRenderDrawColor (renderer, 20, 20, 20, 255);
-	SDL_RenderClear (renderer);
-	usuario.dibujar (renderer);
-}
-
-void JuegoCliente::dibujarScore(){
-}
-
-JuegoCliente::Estado JuegoCliente::getEstado () const
-{
-	return estado;
-}
-
-void JuegoCliente::setEstado (Estado estado)
-{
-	this->estado = estado;
 }
 
 JuegoCliente::~JuegoCliente() {

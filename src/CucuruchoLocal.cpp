@@ -16,6 +16,7 @@
 #include <mutex>
 #include "login.hpp"
 #include "conector.hpp"
+#include "ventana.hpp"
 #include <signal.h>
  
 volatile bool salir = false; 
@@ -225,25 +226,33 @@ int main (int argc, char *argv[]) {
 	}
 
 	if (como_cliente) {
-		cout << "Arranca el cliente en " << dir << ":" << puerto << "\n";
+		std::stringstream ss;
+		ss << dir << ":" << puerto;
+		cout << "Arranca el cliente en " << ss.str() << "\n";
 		Parser parser;
 		EscuchadorDeAcciones* escuchador = new EscuchadorDeAcciones();
 
-		ventana_login ventana;
-		if (!login (dir.c_str(), puerto, ventana)) {
+		ventana v (std::string ("Login - Contra"), MUNDO_ANCHO, MUNDO_ALTO);
+		vlogin vl (v, ss.str());
+		vl.correr ();
+		std::cout << "Usuario: " << vl.cred.usuario << "\n";
+		std::cout << "Clave: " << vl.cred.clave << "\n";
+		std::cout << "Direccion: " << vl.cred.direccion << "\n";
+		std::cout << "Puerto: " << vl.cred.puerto << "\n";
+		if (vl.cred.resultado != usuario::aceptado) {
 			return 0;
 		}
-		int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * ventana.jugadores;
-		std::cout << "Cliente: fd: " << ventana.fd << ", jugadores: " << ventana.jugadores << "\n";
+		int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * vl.cred.jugadores;
+		std::cout << "Cliente: fd: " << vl.cred.fd << ", jugadores: " << vl.cred.jugadores << "\n";
 
 		std::stringstream titulo;
-		titulo << ventana.usuario << "(" << ventana.orden << ") - Contra";
+		titulo << vl.cred.usuario << "(" << vl.cred.orden << ") - Contra";
+		v.titulo (titulo.str().c_str());
 
-		Socket* soqueteCliente = new Socket(ventana.fd);
+		Socket* soqueteCliente = new Socket(vl.cred.fd);
 	  	std::cout << "Iniciando cliente: " << soqueteCliente->getSocketId() << "\n";
 	 
-		char respuestaCantBalas[MENSAJE_CANT_BALAS + 1];
-		JuegoCliente juegoCliente(titulo.str(), "cliente", ventana.jugadores,ventana.orden);
+		JuegoCliente juegoCliente(v, vl.cred.jugadores, vl.cred.orden);
 
 		std::mutex mutex_mundo;
 
@@ -260,24 +269,32 @@ int main (int argc, char *argv[]) {
 			&presento,
 			tamanio_respuestaServidor
 		};
+		bool recien_conectado = true;
 		while(escuchador->enAccion() && juegoCliente.jugando()){
 			std::unique_lock<std::mutex> lock_presento(mutex_presento);
 			if (!condicion_presento.wait_for (
 				lock_presento,
-				std::chrono::milliseconds(MAX_TIEMPO_RESPUESTA),
+				std::chrono::milliseconds(recien_conectado ? MAX_TIEMPO_RESPUESTA_NUEVO : MAX_TIEMPO_RESPUESTA),
 				[&presento]{return presento;}
 			)) {
-				std::cerr << "Timed out\n";
 				std::cerr << "delete (soqueteCliente)\n";
 				delete (soqueteCliente);
-				if (!login (dir.c_str(), puerto, ventana)) {
-					soqueteCliente = nullptr;
-					break;
-				}
+
+				std::cerr << "Volviendo\n";
+				vl.cred.resultado = usuario::rechazado;
+				vl.correr ();
+				std::cout << "Usuario " << vl.cred.usuario << "\n";
+				std::cout << "Clave: " << vl.cred.clave << "\n";
+				std::cout << "Direccion: " << vl.cred.direccion << "\n";
+				std::cout << "Puerto: " << vl.cred.puerto << "\n";
+				soqueteCliente = nullptr;
+				break;
+
+				/*
 				std::cerr << "hilo.join ()\n";
 				hilo.join ();
 				std::cerr << "new Socket(ventana.fd)\n";
-				soqueteCliente = new Socket(ventana.fd);
+				soqueteCliente = new Socket(vl.cred.fd);
 				hilo = std::thread {
 					comunicar_servidor,
 					soqueteCliente,
@@ -288,8 +305,10 @@ int main (int argc, char *argv[]) {
 					&presento,
 					tamanio_respuestaServidor
 				};
+				*/
 			}
 			presento = false;
+			recien_conectado = false;
 		}
 		std::cerr << "delete (soqueteCliente)\n";
 		delete (soqueteCliente);
@@ -306,8 +325,8 @@ int main (int argc, char *argv[]) {
 		pa = &a;
 		esperar_jugadores (cantidadJugadores, dir.c_str(), puerto, a);
 
-	 	std::string titulo = "Contra";
-		juego j(titulo, "servidor", cantidadJugadores);
+		ventana v (std::string ("Servidor - Contra"), MUNDO_ANCHO, MUNDO_ALTO);
+		juego j(v, cantidadJugadores);
 
 	 	std::cout << "Crea un mundo inicial\n";
 		j.manejar_eventos ();
@@ -336,7 +355,7 @@ int main (int argc, char *argv[]) {
 				//std::cout << "tiempo: " << a.usuarios[i].tmp.milisegundos () << "\n";
 				int espera;
 				if (a.usuarios[i].recien_conectado > 0) {
-					espera = 10*MAX_TIEMPO_RESPUESTA;
+					espera = MAX_TIEMPO_RESPUESTA_NUEVO;
 					a.usuarios[i].recien_conectado--;
 				} else {
 					espera = MAX_TIEMPO_RESPUESTA;
@@ -349,7 +368,7 @@ int main (int argc, char *argv[]) {
 							a.usuarios[i].conector = new Socket (a.usuarios[i].fd);
 							a.usuarios[i].conectado = true;
 							a.usuarios[i].tmp.ahora ();
-							a.usuarios[i].recien_conectado = 100;
+							a.usuarios[i].recien_conectado = MAX_TIEMPO_RESPUESTA_NUEVO/17;
 							a.usuarios[i].hilo = std::thread {comunicar_cliente, &a, i, tamanio_respuestaServidor};
 						} else {
 							std::cout << "Anulando cliente: " << i << "\n";

@@ -1,17 +1,19 @@
 #ifndef LOGIN_HPP
 #define LOGIN_HPP
 
+#include <functional>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-#include <temporizador.hpp>
-#include <Constantes.h>
-#include <Socket.h>
+#include "temporizador.hpp"
+#include "editor.hpp"
+#include "etiqueta.hpp"
+#include "contenedor.hpp"
+#include "Constantes.h"
+#include "Socket.h"
 
 extern "C"
 {
-	#include <gtk/gtk.h>
-	#include <gdk/gdkkeysyms.h>
 	#include <sys/types.h>
 	#include <sys/socket.h>
 }
@@ -36,6 +38,14 @@ struct usuario
 	typedef enum {aceptado, rechazado, cupo, jugando, fallido} estado;
 };
 
+struct credencial
+{
+	unsigned short puerto;
+	std::string usuario, clave, direccion;
+	int jugadores, fd, orden;
+	usuario::estado resultado;
+};
+
 struct autenticados
 {
 	usuario usuarios[4];
@@ -48,24 +58,41 @@ struct autenticados
 	std::string mundo;		
 };
 
-typedef struct
+class vlogin: public contenedor
 {
-	GtkApplication *app;
-	GtkWidget *ventana;
-	GtkWidget *etiqueta_usuario, *etiqueta_clave, *etiqueta_error;
-	GtkWidget *editor_usuario, *editor_clave;
-	GtkWidget *aceptar, *cancelar;
-	guint id_temporizador;
+public:
+	vlogin (ventana &v, const std::string &direccion);
+	virtual ~vlogin();
+	virtual void correr();
+	virtual void manejar_eventos();
+	virtual void manejar_evento (SDL_Event e);
+	virtual void actualizar ();
+	virtual void dibujar ();
+	void sincronizada (std::function<void()> funcion);
+	void ejecutar_sincronizada ();
+	void al_aceptar ();
+	void al_ser_aceptado ();
+	void al_terminar_hilo ();
+	static void comprobar_credencial (vlogin *vl);
+	credencial cred;
+	static const int tiempo_infinito = -1;
+protected:
+	editor usuario, clave, direccion;
+	etiqueta mensaje;
+	int duracion_mensaje;
+	std::string mensaje_omision;
 	bool autenticando;
-	std::string usuario, clave;
 	std::thread hilo;
-	usuario::estado resultado;
-	int jugadores, fd, orden;
-	unsigned short puerto;
-	const char *dir;
-} ventana_login;
+	int fd;
+	std::mutex mutex_sinc;
+	std::function<void()> funcion_sinc;
+	std::condition_variable condicion_sinc;
+	volatile bool ejecutada_sinc;
+	void inicializar_credencial ();
+	void error (const char *msg, int duracion = tiempo_infinito);
+	void info (const char *msg, int duracion = tiempo_infinito);
+};
 
-bool login (const char *dir, unsigned short puerto, ventana_login &login);
 void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, autenticados &a);
 
 #endif

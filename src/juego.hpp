@@ -12,6 +12,8 @@
 #include "traductorDelCliente.h"
 #include "ArmadorDeRespuesta.h"
 #include "Constantes.h"
+#include "contenedor.hpp"
+
 using namespace std;
 
 extern "C"
@@ -21,10 +23,10 @@ extern "C"
 	#include <stdlib.h>
 }
 
-class juego
+class juego: public contenedor
 {
 public:
-	juego (const std::string &titulo, string strComportamiento, int cantidadJugadores);
+	juego (ventana &v, int cantidadJugadores);
 	~juego ();
 	void setAcciones(char* msj, int numeroCliente);
 	int getCantidadDeBalas();
@@ -36,7 +38,6 @@ public:
 	void dibujar ();
 	void presentar ();
 	bool jugando ();
-	SDL_Window *ventana;
 protected:
 	bool termino, cambioNivel;
 	int us, cuadros, d1, d2, d3, nivel, cascada, num_jugadores;

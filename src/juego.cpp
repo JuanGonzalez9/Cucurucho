@@ -8,8 +8,8 @@ static const int periodo=1000000/60; // TODO averiguar
 static const int ancho=800;
 static const int alto=800;
 
-juego::juego (const std::string &titulo, string comportamiento, int cantidadJugadores):
-	ventana (nullptr),
+juego::juego (ventana &v, int cantidadJugadores):
+	contenedor (v),
 	termino (false),
 	cambioNivel(false),
 	us (periodo),
@@ -29,32 +29,7 @@ juego::juego (const std::string &titulo, string comportamiento, int cantidadJuga
 	cliente4(nullptr),
 	armador(nullptr)
 {
-	atexit (SDL_Quit);
-
-	if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
-		logerror("No pudo inicializarse SDL");
-		std::cerr << "No pudo inicializarse SDL: " << SDL_GetError () << '\n';
-		return;
-	}
-	
-	Uint32 flags;
-	if(comportamiento == "cliente") flags = 0;
-	else flags = SDL_WINDOW_HIDDEN;
-
-	ventana = SDL_CreateWindow (titulo.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, flags);
-
-	if (nullptr == ventana) {
-		logerror("No pudo crease la ventana");
-		std::cerr << "No pudo crease la ventana: " << SDL_GetError () << '\n';
-		return;
-	}
-	
-	renderer = SDL_CreateRenderer (ventana, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (nullptr == renderer) {
-		logerror("No pudo crease el renderer");
-		std::cerr << "No pudo crease el renderer: " << SDL_GetError () << '\n';
-		return;
-	}
+	renderer = v.renderer ();
 
 	//cosas de balas
 	direccionDeBala = 0;
@@ -1338,8 +1313,6 @@ juego::~juego ()
 {
 	SDL_DestroyTexture (textura_fondo3);
 	SDL_DestroyTexture (textura_objetivo);
-	SDL_DestroyRenderer (renderer);
-	SDL_DestroyWindow (ventana);
 	SDL_DestroyTexture(textura_bala);
 	SDL_DestroyTexture(textura_bala2);
 	SDL_DestroyTexture(textura_bala3);

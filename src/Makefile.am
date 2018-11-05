@@ -1,7 +1,7 @@
 bin_PROGRAMS = contra
-contra_SOURCES = fuente.cpp editor.cpp conector.cpp login.cpp DatosPersonaje.cpp JuegoCliente.cpp Parser.cpp ArmadorDeRespuesta.cpp traductorDelCliente.cpp Socket.cpp EscuchadorDeAcciones.cpp Bullet.cpp Enemigo.cpp Personaje.cpp Sprite.cpp EntidadDibujable.cpp plataformas.cpp iocontra.cpp temporizador.cpp juego.cpp registro.cpp cfg.cpp CucuruchoLocal.cpp
-contra_CPPFLAGS = -Wall $(XML_CPPFLAGS) $(GTK_CFLAGS) -I/usr/include/libdrm -std=c++11
-contra_LDADD= $(XML_LIBS) $(GTK_LIBS) -lSDL2 -lSDL2_image -lSDL2_ttf -ldl -ldrm
+contra_SOURCES = etiqueta.cpp control.cpp ventana.cpp contenedor.cpp fuente.cpp editor.cpp conector.cpp login.cpp DatosPersonaje.cpp JuegoCliente.cpp Parser.cpp ArmadorDeRespuesta.cpp traductorDelCliente.cpp Socket.cpp EscuchadorDeAcciones.cpp Bullet.cpp Enemigo.cpp Personaje.cpp Sprite.cpp EntidadDibujable.cpp plataformas.cpp iocontra.cpp temporizador.cpp juego.cpp registro.cpp cfg.cpp CucuruchoLocal.cpp
+contra_CPPFLAGS = -Wall $(XML_CPPFLAGS) -I/usr/include/libdrm -std=c++11
+contra_LDADD= $(XML_LIBS) -lSDL2 -lSDL2_image -lSDL2_ttf -ldl -ldrm
 contradir = $(prefix)/bin
 
 imagenes=	personaje.png \

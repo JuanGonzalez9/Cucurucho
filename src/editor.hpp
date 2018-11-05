@@ -2,6 +2,7 @@
 #define EDITOR_HPP
 
 #include <string>
+#include "control.hpp"
 #include "fuente.hpp"
 
 extern "C"
@@ -10,20 +11,27 @@ extern "C"
 	#include <SDL2/SDL_image.h>
 }
 
-class editor
+class editor: public control
 {
 public:
-	editor (int x, int y, const SDL_Color & color);
-	~editor ();
-	void manejar_evento (SDL_Event &e);
-	void dibujar (SDL_Renderer *renderer);
-	void escribir (const char *texto);
+	editor (int x, int y, int largo);
+	virtual ~editor ();
+	virtual bool manejar_evento (SDL_Event &e);
+	virtual void dibujar (SDL_Renderer *renderer);
+	void texto (const char *texto, const char *etiqueta);
+	std::string texto () const;
+	void limitar (int largo);
+	virtual void foco (bool enfocado);
+	virtual bool enfocable ();
+	bool ocultar;
 protected:
-	std::string texto;
+	std::string entrada, etiqueta;
 	unsigned int cursor;
-	int x, y;
+	bool cursor_visible;
+	int cursor_conteo;
+	int largo, padding_x, padding_y, borde_x, borde_y;
 	fuente f;
-	SDL_Color color;
+	SDL_Color color_texto, color_borde, color_borde_foco, color_fondo, color_cursor, color_etiqueta;
 	void escribir (char c);
 	void cursor_izquierda ();
 	void cursor_derecha ();
@@ -32,6 +40,8 @@ protected:
 	void borrar_izquierda ();
 	void borrar_derecha ();
 	void mostrar ();
+	void actualizar_cursor ();
+	void establecer (const char *texto, std::string &s);
 };
 
 #endif
