@@ -33,6 +33,7 @@ Personaje::Personaje() {
 	mirandoALaDerecha = true;
 
 	rectDestino = {posX,posY,34,72};
+	rectOrigen = { 0, 7, 24 , 34};
 
 	spritesJugador = new Sprite();
 
@@ -586,27 +587,42 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 		switch(estado){
 			case Caminando:
 				if(disparando){
-					if(direccionDisparo == Centro)
+					if(direccionDisparo == Centro){
 						rect_origen = spritesJugador->getFrameDisparandoCaminando();
-					if(direccionDisparo == Arriba)
+						if(grisado) rect_origen = {0, 78, 24 , 36};
+						}
+					if(direccionDisparo == Arriba){
 						rect_origen = spritesJugador->getFrameDisparandoArribaCaminando();
-					if(direccionDisparo == Abajo)
+						if(grisado) rect_origen = {0, 149, 17 , 36};
+						}
+					if(direccionDisparo == Abajo){
 						rect_origen = spritesJugador->getFrameDisparandoAbajoCaminando();
+						if(grisado) rect_origen = {0, 221, 22 , 36};
+						}
 				}
-				else
+				else{
 					rect_origen = spritesJugador->getFrameCaminando();
+					if(grisado) rect_origen = {0, 44 , 18 , 34 };
+					}
 				break;
 			case CuerpoATierra:
 					rect_origen = spritesJugador->getFrameAgachado();
+					if(grisado) rect_origen ={78, 23 , 33 , 20 };
 					break;
 			default:
 				if(disparando){
-					if(direccionDisparo == Centro)
+					if(direccionDisparo == Centro){
 						rect_origen = spritesJugador->getFrameDisparando();
-					if(direccionDisparo == Arriba)
+						if(grisado) rect_origen ={ 0, 7, 24 , 34};
+						}
+					if(direccionDisparo == Arriba){
 						rect_origen = spritesJugador->getFrameDisparandoArriba();
-					if(direccionDisparo == Abajo)
+						if(grisado) rect_origen = {0, 149, 17 , 36};
+						}
+					if(direccionDisparo == Abajo){
 						rect_origen = spritesJugador->getFrameDisparandoAbajo();
+						if(grisado) rect_origen = {0, 221, 22 , 36};
+						}
 				}
 				else
 					rect_origen = spritesJugador->getFrameQuieto();
@@ -614,8 +630,11 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 		}
 	}
 
-	if (!grisado) rectOrigen = rect_origen;
-	
+	//CAMBIO: si esta grisado ahora actualiza el rectangulo de origen siempre, eso es lo que hacia cagada antes
+	//hardcodee un rectangulo por animacion para que el tipo se quede quieto si está grisado, despues quiza lo puedo refactorear
+
+	rectOrigen = rect_origen;	
+
 	if(mirandoALaDerecha)
 		SDL_RenderCopy(renderer, textura, & rectOrigen , &rectDestino);
 	else
