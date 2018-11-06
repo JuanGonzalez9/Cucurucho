@@ -8,34 +8,33 @@ static const int tiempo_mensaje = 4*60; // 4 segundos
 extern bool obtener_dir_puerto (char *arg, std::string &dir, unsigned short &puerto);
 
 vlogin::vlogin (ventana &v, const std::string &d):
-	contenedor (v),
-	usuario (20, 120, 12),
-	clave (20, 70, 12),
-	direccion (20, 20, 21),
-	mensaje (20, 170, 16),
+	dialogo (v),
+	pnl (10, 400, 780, 190),
+	mensaje (20, 20, 16),
+	usuario (10, 55, 12),
+	clave (10, 95, 12),
+	direccion (10, 135, 21),
 	duracion_mensaje (-1),
 	mensaje_omision ("Ingrese nombre de usuario y clave, luego presione ENTER."),
 	autenticando (false),
 	fd (-1)
 {
-	usuario.anclado_y = editor::opuesto;
 	usuario.texto (nullptr, "usuario");
-	agregar (&usuario, false);
+	pnl.agregar (&usuario, false);
 
-	clave.anclado_y = editor::opuesto;
 	clave.texto (nullptr, "clave");
 	clave.ocultar = true;
-	agregar (&clave, false);
+	pnl.agregar (&clave, false);
 
-	direccion.anclado_y = editor::opuesto;
-	direccion.texto (d.c_str(), "direccion");
-	agregar (&direccion, false);
+	direccion.texto (d.c_str(), "direccion:puerto");
+	pnl.agregar (&direccion, false);
 	
-	mensaje.anclado_y = editor::opuesto;
-	mensaje.texto (mensaje_omision.c_str());
-	agregar (&mensaje, false);
+	info (mensaje_omision.c_str(), tiempo_infinito);
+	pnl.agregar (&mensaje, false);
+
+	agregar (&pnl, false);
 	
-	enfocar (&usuario);
+	popular_enfocables ();
 }
 
 vlogin::~vlogin()
@@ -45,20 +44,20 @@ vlogin::~vlogin()
 void vlogin::correr ()
 {
 	inicializar_credencial ();
-	contenedor::correr ();
+	dialogo::correr ();
 }
 
 void vlogin::error (const char *msg, int duracion)
 {
 	duracion_mensaje = duracion;
-	mensaje.color ({150, 5, 5, 255});
+	mensaje.color ({200, 25, 25, alpha});
 	mensaje.texto (msg);
 }
 
 void vlogin::info (const char *msg, int duracion)
 {
 	duracion_mensaje = duracion;
-	mensaje.color ({15, 15, 15, 255});
+	mensaje.color ({200, 200, 200, alpha});
 	mensaje.texto (msg);
 }
 
@@ -71,32 +70,30 @@ void vlogin::manejar_eventos()
 		}
 	}
 	ejecutar_sincronizada ();
-	contenedor::manejar_eventos();
+	dialogo::manejar_eventos();
 }
 
-void vlogin::manejar_evento (SDL_Event e)
+bool vlogin::manejar_evento (SDL_Event e)
 {
 	switch (e.type) {
 		case SDL_KEYDOWN:
 			switch (e.key.keysym.sym) {
 				case SDLK_RETURN:
 					al_aceptar ();
-					return;
+					return true;
 			};
-		      break;
 	}
-	contenedor::manejar_evento (e);
+	return dialogo::manejar_evento (e);
 }
 
-void vlogin::actualizar()
+void vlogin::actualizar ()
 {
+	dialogo::actualizar ();
 }
 
-void vlogin::dibujar()
+void vlogin::dibujar ()
 {
-	SDL_SetRenderDrawColor (v.renderer (), 160, 180, 250, 255);
-	SDL_RenderClear (v.renderer ());
-	contenedor::dibujar ();
+	dialogo::dibujar ();
 }
 
 void vlogin::al_aceptar ()

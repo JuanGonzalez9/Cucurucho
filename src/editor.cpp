@@ -22,12 +22,14 @@ editor::editor (int x, int y, int largo):
 	//fuente_editor ("/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf", 32),
 	//fuente_editor ("/usr/share/fonts/truetype/freefont/FreeMono.ttf", 32),
 	//fuente_editor ("/usr/share/fonts/truetype/tlwg/TlwgMono.ttf", 32),
-	color_texto ({200, 200, 200, 255}),
-	color_borde ({80, 80, 80, 255}),
-	color_borde_foco ({100, 100, 100, 255}),
-	color_fondo ({20, 20, 20, 255}),
-	color_cursor ({150, 150, 150, 255}),
-	color_etiqueta ({100, 100, 100, 255})
+	color_texto ({200, 200, 200, alpha}),
+	//color_borde ({80, 80, 80, 255}),
+	//color_borde_foco ({100, 100, 100, 255}),
+	color_borde ({20, 20, 20, 0}),
+	color_borde_foco ({20, 20, 20, 0}),
+	color_fondo ({0, 0, 0, 40}),
+	color_cursor ({150, 150, 150, alpha}),
+	color_etiqueta ({100, 100, 100, alpha})
 {
 	limitar (largo);
 }
@@ -81,7 +83,7 @@ bool editor::manejar_evento (SDL_Event &e)
 	return control::manejar_evento (e);
 }
 
-void editor::limitar (int largo)
+void editor::limitar (unsigned int largo)
 {
 	this->largo = largo;
 	if (entrada.length () > largo) {
@@ -108,6 +110,7 @@ void editor::texto (const char *t, const char *e)
 		etiqueta.append (e);
 	}
 	limitar (largo);
+	cursor = 0;
 	mostrar ();
 }
 
@@ -207,8 +210,9 @@ void editor::actualizar_cursor ()
 	}
 }
 
-void editor::dibujar (SDL_Renderer *renderer)
+void editor::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 {
+	activar_blend (renderer);
 	// Tanto la obtencion del tamaño del control como la posicion del mismo deberian
 	// calcularse solo de ser necesario, realizando un seguimiento de los cambios que
 	// sufre el control. Pero para la duración de este proyecto se prefiere por su
@@ -220,27 +224,27 @@ void editor::dibujar (SDL_Renderer *renderer)
 	const int control_w = largo * char_w + 2*borde_x + 2*padding_x;
 	const int control_h = texto_h + 2*borde_y + 2*padding_y;
 	// Calculo posicion
-	int xx, yy;
+	int xx = cx, yy = cy;
 	switch (anclado_x) {
 		case medio:
-			xx = (MUNDO_ANCHO - control_w)/2;
+			xx += (cw - control_w)/2;
 			break;
 		case opuesto:
-			xx = MUNDO_ANCHO - control_w - x;
+			xx += cw - control_w - x;
 			break;
 		default: // case normal:
-			xx = x;
+			xx += x;
 			break;
 	};
 	switch (anclado_y) {
 		case medio:
-			yy = (MUNDO_ALTO - control_h)/2;
+			yy += (ch - control_h)/2;
 			break;
 		case opuesto:
-			yy = MUNDO_ALTO - control_h - y;
+			yy += ch - control_h - y;
 			break;
 		default: // case normal:
-			yy = y;
+			yy += y;
 			break;
 	};
 	// Relleno
@@ -295,5 +299,6 @@ void editor::dibujar (SDL_Renderer *renderer)
 	} else {
 		cursor_conteo = 0;
 	}
+	restaurar_blend (renderer);
 }
 

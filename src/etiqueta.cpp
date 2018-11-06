@@ -14,7 +14,7 @@ etiqueta::etiqueta (int x, int y, int puntos):
 	//f ("/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf", 32),
 	//f ("/usr/share/fonts/truetype/freefont/FreeMono.ttf", 32),
 	//f ("/usr/share/fonts/truetype/tlwg/TlwgMono.ttf", 32),
-	color_texto ({10, 10, 10, 255})
+	color_texto ({170, 170, 170, alpha})
 {
 }
 
@@ -35,7 +35,13 @@ std::string etiqueta::texto () const
 	return s;
 }
 
-void etiqueta::dibujar (SDL_Renderer *renderer)
+void etiqueta::metricas (SDL_Renderer *renderer, int &ancho, int &alto)
+{
+	f.dibujar (renderer, " ", x, y, color_texto, ancho, alto);
+	ancho *= s.length ();
+}
+
+void etiqueta::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 {
 	// Tanto la obtencion del tamaño del control como la posicion del mismo deberian
 	// calcularse solo de ser necesario, realizando un seguimiento de los cambios que
@@ -44,31 +50,31 @@ void etiqueta::dibujar (SDL_Renderer *renderer)
 	// Obtengo el ancho y el alto de un espacio, sirve porque uso una fuente mono-espaciada.
 	int char_w, texto_h;
 	f.dibujar (renderer, " ", x, y, color_texto, char_w, texto_h);
-	const int texto_w = s.length () * char_w;
+	// const int texto_w = s.length () * char_w;
 	const int control_w = s.length () * char_w;
 	const int control_h = texto_h;
 	// Calculo posicion
-	int xx, yy;
+	int xx = cx, yy = cy;
 	switch (anclado_x) {
 		case medio:
-			xx = (MUNDO_ANCHO - control_w)/2;
+			xx += (cw - control_w)/2;
 			break;
 		case opuesto:
-			xx = MUNDO_ANCHO - control_w - x;
+			xx += cw - control_w - x;
 			break;
 		default: // case normal:
-			xx = x;
+			xx += x;
 			break;
 	};
 	switch (anclado_y) {
 		case medio:
-			yy = (MUNDO_ALTO - control_h)/2;
+			yy += (ch - control_h)/2;
 			break;
 		case opuesto:
-			yy = MUNDO_ALTO - control_h - y;
+			yy += ch - control_h - y;
 			break;
 		default: // case normal:
-			yy = y;
+			yy += y;
 			break;
 	};
 	// Texto

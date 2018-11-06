@@ -15,6 +15,7 @@
 #include <thread>
 #include <mutex>
 #include "login.hpp"
+#include "mensaje.hpp"
 #include "conector.hpp"
 #include "ventana.hpp"
 #include <signal.h>
@@ -277,35 +278,9 @@ int main (int argc, char *argv[]) {
 				std::chrono::milliseconds(recien_conectado ? MAX_TIEMPO_RESPUESTA_NUEVO : MAX_TIEMPO_RESPUESTA),
 				[&presento]{return presento;}
 			)) {
-				std::cerr << "delete (soqueteCliente)\n";
-				delete (soqueteCliente);
-
-				std::cerr << "Volviendo\n";
-				vl.cred.resultado = usuario::rechazado;
-				vl.correr ();
-				std::cout << "Usuario " << vl.cred.usuario << "\n";
-				std::cout << "Clave: " << vl.cred.clave << "\n";
-				std::cout << "Direccion: " << vl.cred.direccion << "\n";
-				std::cout << "Puerto: " << vl.cred.puerto << "\n";
-				soqueteCliente = nullptr;
+				mensaje msg (v);
+				msg.correr (std::string ("Lo sentimos, se perdio la conexion con el servidor.\nPresioner ENTER para salir."));
 				break;
-
-				/*
-				std::cerr << "hilo.join ()\n";
-				hilo.join ();
-				std::cerr << "new Socket(ventana.fd)\n";
-				soqueteCliente = new Socket(vl.cred.fd);
-				hilo = std::thread {
-					comunicar_servidor,
-					soqueteCliente,
-					escuchador,
-					&juegoCliente,
-					&condicion_presento,
-					&mutex_presento,
-					&presento,
-					tamanio_respuestaServidor
-				};
-				*/
 			}
 			presento = false;
 			recien_conectado = false;

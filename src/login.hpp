@@ -8,7 +8,8 @@
 #include "temporizador.hpp"
 #include "editor.hpp"
 #include "etiqueta.hpp"
-#include "contenedor.hpp"
+#include "panel.hpp"
+#include "dialogo.hpp"
 #include "Constantes.h"
 #include "Socket.h"
 
@@ -58,14 +59,14 @@ struct autenticados
 	std::string mundo;		
 };
 
-class vlogin: public contenedor
+class vlogin: public dialogo
 {
 public:
 	vlogin (ventana &v, const std::string &direccion);
 	virtual ~vlogin();
 	virtual void correr();
 	virtual void manejar_eventos();
-	virtual void manejar_evento (SDL_Event e);
+	virtual bool manejar_evento (SDL_Event e);
 	virtual void actualizar ();
 	virtual void dibujar ();
 	void sincronizada (std::function<void()> funcion);
@@ -77,8 +78,9 @@ public:
 	credencial cred;
 	static const int tiempo_infinito = -1;
 protected:
-	editor usuario, clave, direccion;
+	panel pnl;
 	etiqueta mensaje;
+	editor usuario, clave, direccion;
 	int duracion_mensaje;
 	std::string mensaje_omision;
 	bool autenticando;

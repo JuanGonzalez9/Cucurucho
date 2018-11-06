@@ -12,7 +12,7 @@
 #include "traductorDelCliente.h"
 #include "ArmadorDeRespuesta.h"
 #include "Constantes.h"
-#include "contenedor.hpp"
+#include "contenedor_principal.hpp"
 
 using namespace std;
 
@@ -23,7 +23,7 @@ extern "C"
 	#include <stdlib.h>
 }
 
-class juego: public contenedor
+class juego: public contenedor_principal
 {
 public:
 	juego (ventana &v, int cantidadJugadores);

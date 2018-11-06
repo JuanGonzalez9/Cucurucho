@@ -17,10 +17,10 @@ public:
 	editor (int x, int y, int largo);
 	virtual ~editor ();
 	virtual bool manejar_evento (SDL_Event &e);
-	virtual void dibujar (SDL_Renderer *renderer);
+	virtual void dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer);
 	void texto (const char *texto, const char *etiqueta);
 	std::string texto () const;
-	void limitar (int largo);
+	void limitar (unsigned int largo);
 	virtual void foco (bool enfocado);
 	virtual bool enfocable ();
 	bool ocultar;
@@ -29,7 +29,8 @@ protected:
 	unsigned int cursor;
 	bool cursor_visible;
 	int cursor_conteo;
-	int largo, padding_x, padding_y, borde_x, borde_y;
+	unsigned int largo;
+	int padding_x, padding_y, borde_x, borde_y;
 	fuente f;
 	SDL_Color color_texto, color_borde, color_borde_foco, color_fondo, color_cursor, color_etiqueta;
 	void escribir (char c);

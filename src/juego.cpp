@@ -9,7 +9,7 @@ static const int ancho=800;
 static const int alto=800;
 
 juego::juego (ventana &v, int cantidadJugadores):
-	contenedor (v),
+	contenedor_principal (v),
 	termino (false),
 	cambioNivel(false),
 	us (periodo),

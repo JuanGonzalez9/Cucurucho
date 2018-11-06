@@ -16,9 +16,10 @@ class etiqueta: public control
 public:
 	etiqueta (int x, int y, int puntos);
 	virtual ~etiqueta ();
-	virtual void dibujar (SDL_Renderer *renderer);
+	virtual void dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer);
 	void texto (const char *texto);
 	std::string texto () const;
+	void metricas (SDL_Renderer *renderer, int &ancho, int &alto);
 	void color (const SDL_Color &color);
 protected:
 	std::string s;

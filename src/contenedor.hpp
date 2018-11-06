@@ -17,24 +17,18 @@ struct elemento
 	bool liberar;
 };
 
-class contenedor
+class contenedor: public control
 {
 public:
-	contenedor (ventana &v);
+	contenedor (int x, int y);
 	virtual ~contenedor ();
-	virtual void correr();
-	virtual void manejar_eventos();
-	virtual void manejar_evento (SDL_Event e);
-	virtual void actualizar() {}
-	virtual void dibujar();
+	virtual bool manejar_evento (SDL_Event e);
+	virtual void dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer);
+	virtual void popular (std::list<control*> &enfocables);
 
 	void agregar (control *c, bool liberar);
 	void vaciar ();
-	void enfocar (control *c);
-	void enfocar_siguiente ();
-	void enfocar_anterior ();
 protected:
-	ventana &v;
 	bool corriendo;
 	std::list<elemento*> controles;
 };
