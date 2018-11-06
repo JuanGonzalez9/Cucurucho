@@ -276,7 +276,7 @@ plataformaExtra Plataformas::hayPlataformaEn(int coordenadaX, int coordenadaY ,i
 		for(list<plataforma>::iterator it=lista_plataformas.begin(); it!=lista_plataformas.end();++it){
 			plataforma &plataformaActual = *it;
 	
-			if (coordenadaX  < plataformaActual.xf && coordenadaX > plataformaActual.xi){
+			if (i < plataformaActual.xf && i > plataformaActual.xi){
 				plataformaExtra pE;
 				pE.xm = i; //La posicion en la que tiene q aparecer debe pertenecer al rango
 

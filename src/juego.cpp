@@ -832,7 +832,7 @@ void juego::actualizar ()
 	int maxVel=0;
 
 	//vemos si pasa 1)
-	if((!boby.esGrisado()&&boby.esActivo()&&(boby.getPosY()>520))||(!boby2.esGrisado()&&boby2.esActivo()&&(boby2.getPosY()>520))||(!boby3.esGrisado()&&boby3.esActivo()&&(boby3.getPosY()>520))||(!boby4.esGrisado()&&boby4.esActivo()&&(boby4.getPosY()>520))||(nivel!=2)){
+	if((!boby.esGrisado()&&boby.esActivo()&&(boby.getPosY()>500))||(!boby2.esGrisado()&&boby2.esActivo()&&(boby2.getPosY()>500))||(!boby3.esGrisado()&&boby3.esActivo()&&(boby3.getPosY()>500))||(!boby4.esGrisado()&&boby4.esActivo()&&(boby4.getPosY()>500))||(nivel!=2)){
 		scrolleando=false;
 	}
 
@@ -960,35 +960,19 @@ void juego::actualizar ()
 
 	//veo si el jugador se cayo
 	if(boby.getPosY()>600){
-		if (nivel ==2){
-			boby.setCoordenadaY(boby.obtenerCoordenadaY()+40 - boby.getPosY());
-		}
-		boby.setPosY(40);
-		boby.resetFall();		
+		boby.resetearPosicion(plataformas, nivel);	
 		boby.perderVida();
 	}
 	if(boby2.getPosY()>600){
-		if (nivel ==2){
-			boby2.setCoordenadaY(boby2.obtenerCoordenadaY()+40 - boby2.getPosY());
-		}
-		boby2.setPosY(40);
-		boby2.resetFall();		
+		boby2.resetearPosicion(plataformas, nivel);	
 		boby2.perderVida();
 	}
 	if(boby3.getPosY()>600){
-		if (nivel ==2){
-			boby3.setCoordenadaY(boby3.obtenerCoordenadaY()+40 - boby3.getPosY());
-		}
-		boby3.setPosY(40);
-		boby3.resetFall();
+		boby3.resetearPosicion(plataformas, nivel);	
 		boby3.perderVida();
 	}
 	if(boby4.getPosY()>600){
-		if (nivel ==2){
-			boby4.setCoordenadaY(boby4.obtenerCoordenadaY()+40 - boby4.getPosY());
-		}
-		boby4.setPosY(40);
-		boby4.resetFall();
+		boby4.resetearPosicion(plataformas, nivel);	
 		boby4.perderVida();
 	}
 

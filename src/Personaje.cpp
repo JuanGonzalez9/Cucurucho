@@ -212,33 +212,37 @@ void Personaje::grisar(){
 	printf("posicion vieja: %i , coordenada vieja: %i\n", this->getPosX(), this->obtenerCoordenadaX());
 	printf("posicion viejaY: %i , coordenadaY vieja: %i\n", this->getPosY(), this->obtenerCoordenadaY());
 }
+
 void Personaje::desgrisar(Plataformas plataformas, int coordenadaX, int coordenadaY, int nivel, int rangoAtras, int rangoAdelante){
 	if (grisado) this->swapTextures();
 	grisado=false;
 	if( rangoAtras == 0 && rangoAdelante == 0){
 		return;
 	}
-	plataformaExtra pE = plataformas.hayPlataformaEn(coordenadaX,coordenadaY,nivel,rangoAtras,rangoAdelante);
 
-	printf(" aca van los atributos de pE: %i(xm) %i(diferenciaHaciaAtrasX)\n",pE.xm, pE.diferenciaEnX );
-	printf(" aca van los atributos de pE: %i(y) %i(diferenciaHaciaAtrasY)\n",pE.y, pE.diferenciaEnY );
-
-	
-
-	this->setCoordenadaX(pE.xm);
-	this->setCoordenadaY(pE.y);
-	this->setPosX(this->getPosX()-pE.diferenciaEnX);
-	this->setPosY(this->getPosY()-pE.diferenciaEnY);
-
-	
-	
-
-	
+	this->resetearPosicion(plataformas, nivel);
 
 	printf("posicionX nueva: %i , coordenadaX nueva: %i", this->getPosX(), this->obtenerCoordenadaX());
 	printf("posicionY nueva: %i , coordenadaY nueva: %i", this->getPosY(), this->obtenerCoordenadaY());
+}
 
+void Personaje::resetearPosicion(Plataformas plataformas, int nivel){
 
+	int rangoAtras = posX;
+	int rangoAdelante = 760 - posX;
+
+	if (nivel ==2){
+		rangoAtras= 600 - posY;
+		rangoAdelante= posY;
+	}
+
+	plataformaExtra pE = plataformas.hayPlataformaEn(coordenadaX,coordenadaY,nivel, rangoAtras, rangoAdelante);
+
+	coordenadaX= pE.xm;
+	coordenadaY= pE.y;
+	posX = posX -pE.diferenciaEnX;
+	posY = posY -pE.diferenciaEnY;
+	velocidadY= 0;
 }
 
 bool Personaje::esGrisado(){

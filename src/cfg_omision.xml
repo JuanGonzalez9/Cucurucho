@@ -3,11 +3,13 @@ R"(<?xml version="1.0"?>
   <debug>
     <level>ERROR</level>
   </debug>
-  <cantidad_jugadores> 3 </cantidad_jugadores>
+  <cantidad_jugadores> 2 </cantidad_jugadores>
   <usuarios>
 	<juan>12345</juan>
 	<dalma>12345</dalma>
 	<barbara>12345</barbara>
+	<martin>12345</martin>
+	<sebas>12345</sebas>
   </usuarios>
   <personajes>
     <heroe>

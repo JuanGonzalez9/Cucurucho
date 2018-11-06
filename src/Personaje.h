@@ -75,6 +75,7 @@ public:
 	void desactivar();
 	void grisar();
 	void desgrisar(Plataformas plataformas, int coordenadaX, int coordenadaY, int nivel, int rangoAtras, int rangoAdelante);
+	void resetearPosicion(Plataformas plataformas, int nivel);
 	void saltar();
 	void avanzar();
 	void retroceder();
