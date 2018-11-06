@@ -66,59 +66,64 @@ public:
 	bool llegoAlFinalDelNivel1();
 	bool llegoAlFinalDelNivel2();
 	bool llegoAlFinalDelNivel3();
+	int obtenerCoordenadaX();
+	int obtenerCoordenadaY();
+	int obtenerVelocidadY();
+	int obtenerVelocidadX();
 	bool esActivo();
 	bool esGrisado();
 	void agregarGris(const char* path,SDL_Renderer* renderer);
 
 	//----METODOS
+
+	//ESTADOS
 	void activar();
 	void desactivar();
 	void grisar();
-	void desgrisar(Plataformas plataformas, int coordenadaX, int coordenadaY, int nivel, int rangoAtras, int rangoAdelante);
-	void resetearPosicion(Plataformas plataformas, int nivel);
+	void desgrisar(Plataformas plataformas, int nivel);
+
+	//ANIMACIONES
 	void saltar();
 	void avanzar();
 	void retroceder();
 	void agacharse();
 	void pararse();
+	void apuntarArriba();
+	void apuntarAbajo();
+	void dejarDeApuntar();
+	void pelarElChumbo();
+	void dejarDeDisparar();
+	void caer();
+	void aterrizar();
+	void hacerComoQueCamina();
+	
+	//DISPAROS
 	void disparar(int dirX, int dirY,SDL_Texture *text);
 	void cambiarArma(int nroArma);
 	void verSiBalasPegan(Enemigo* malo);
 	void dibujarBalas(SDL_Renderer* renderer);
-	void pelarElChumbo();
-	void actualizar();
-	void dejarDeDisparar();
-	void apuntarArriba();
-	void apuntarAbajo();
-	//para que la posicion del arma vuelva al centro
-	void dejarDeApuntar();
 	bool puedeDisparar();
 	void refreshBullets();
-	void dibujar(SDL_Renderer* renderer);
 
-	void caer();
-	void aterrizar();
-	void subirCoordenadaXEn(int cantidad);
-	void subirCoordenadaYEn(int cantidad);
-	int obtenerCoordenadaX();
-	int obtenerCoordenadaY();
-	int obtenerVelocidadY();
-	int obtenerVelocidadX();
-	void actualizarPos(int,int  nivel);
-	void decrementarPosY(int y);
-	void decrementarPosX(int x);
-	void bajar();
-	void resetFall();
-	void hacerComoQueCamina();
-	
-	void subirPosX();
-
-	//para tirotear
+	//MANEJO DE VIDAS
 	int getInvincibilityFrames();
 	void perderVida();
 	bool muerto();
 	void refreshIFrames();
 	void godmodeSwitch();
+
+	//OTROS
+	void subirCoordenadaXEn(int cantidad);
+	void subirCoordenadaYEn(int cantidad);
+	void actualizarPos(int,int  nivel);
+	void decrementarPosY(int y);
+	void decrementarPosX(int x);
+	void bajar();
+	void actualizar();
+	void resetearPosicion(Plataformas plataformas, int nivel);
+	void dibujar(SDL_Renderer* renderer);
+	void subirPosX();
+
 
 private:
 	Sprite* spritesJugador;

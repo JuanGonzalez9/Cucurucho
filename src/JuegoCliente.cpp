@@ -128,7 +128,8 @@ void JuegoCliente::dibujarJugadores(){
 		if(i != numeroDeJugador && unBoby->esActivo()){
 			actualizarPosicionDeMiPersonaje(i+1);
 			actualizarEstadoDeMiPersonaje(i+1);
-			unBoby->dibujar(renderer);
+			if((unBoby->getInvincibilityFrames()/2) %2 ==0)
+				unBoby->dibujar(renderer);
 		}
 	}
 	

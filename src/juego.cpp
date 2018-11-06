@@ -583,22 +583,7 @@ void juego::manejar_eventos ()
 		boby2.grisar();
 	}
 	if(apretandoDesGrisP2(state)){
-		int coordenadaY = boby.obtenerCoordenadaY();
-		int coordenadaX = boby.obtenerCoordenadaX();
-		int rangoAtras;
-		int rangoAdelante;
-
-		if (nivel == 2){
-			
-			rangoAtras = 600 - boby2.getPosY();
-			rangoAdelante =  boby2.getPosY(); 
-		}
-		else{
-			
-			rangoAtras = boby2.getPosX();
-			rangoAdelante = 800 - boby2.getPosX();
-		}
-		boby2.desgrisar(plataformas,coordenadaX,coordenadaY,nivel,rangoAtras,rangoAdelante);
+		boby2.desgrisar(plataformas,nivel);
 		
 	}
 
@@ -737,76 +722,18 @@ void juego::grisarJugador(int numeroDeJugador){
 }
 	
 void juego::desgrisarJugador(int numeroDeJugador){
-	int rangoAtras;
-	int rangoAdelante;
-	int coordenadaX;
-	int coordenadaY;
-
 	switch(numeroDeJugador){
 		case (1):
-			coordenadaY = boby.obtenerCoordenadaY();
-			coordenadaX = boby.obtenerCoordenadaX();
-
-			if (nivel == 2){
-				
-				rangoAtras = 600 - boby.getPosY();
-				rangoAdelante =  boby.getPosY(); 
-			}
-			else{
-				
-				rangoAtras = boby.getPosX();
-				rangoAdelante = 800 - boby.getPosX();
-			}
-			boby.desgrisar(plataformas,coordenadaX,coordenadaY,nivel,rangoAtras,rangoAdelante);
+			boby.desgrisar(plataformas,nivel);
 			break;
 		case (2):
-			coordenadaY = boby2.obtenerCoordenadaY();
-			coordenadaX = boby2.obtenerCoordenadaX();
-
-			if (nivel == 2){
-				
-				rangoAtras = 600 - boby2.getPosY();
-				rangoAdelante =  boby2.getPosY(); 
-			}
-			else{
-				
-				rangoAtras = boby2.getPosX();
-				rangoAdelante = 800 - boby2.getPosX();
-			}
-			boby2.desgrisar(plataformas,coordenadaX,coordenadaY,nivel, rangoAtras, rangoAdelante);
+			boby2.desgrisar(plataformas,nivel);
 			break;
-			
 		case (3):
-			coordenadaY = boby3.obtenerCoordenadaY();
-			coordenadaX = boby3.obtenerCoordenadaX();
-
-			if (nivel == 2){
-				
-				rangoAtras = 600 - boby3.getPosY();
-				rangoAdelante =  boby3.getPosY(); 
-			}
-			else{
-				
-				rangoAtras = boby3.getPosX();
-				rangoAdelante = 800 - boby3.getPosX();
-			}
-			boby3.desgrisar(plataformas,coordenadaX,coordenadaY,nivel, rangoAtras, rangoAdelante);
+			boby3.desgrisar(plataformas,nivel);
 			break;
 		case (4):
-			coordenadaY = boby4.obtenerCoordenadaY();
-			coordenadaX = boby4.obtenerCoordenadaX();
-
-			if (nivel == 2){
-				
-				rangoAtras = 600 - boby4.getPosY();
-				rangoAdelante =  boby4.getPosY(); 
-			}
-			else{
-				
-				rangoAtras = boby4.getPosX();
-				rangoAdelante = 800 - boby4.getPosX();
-			}
-			boby4.desgrisar(plataformas,coordenadaX,coordenadaY,nivel, rangoAtras, rangoAdelante);
+			boby4.desgrisar(plataformas,nivel);
 			break;
 		default:
 			break;
@@ -960,20 +887,21 @@ void juego::actualizar ()
 
 	//veo si el jugador se cayo
 	if(boby.getPosY()>600){
-		boby.resetearPosicion(plataformas, nivel);	
 		boby.perderVida();
+		boby.resetearPosicion(plataformas, nivel);	
+		
 	}
 	if(boby2.getPosY()>600){
-		boby2.resetearPosicion(plataformas, nivel);	
 		boby2.perderVida();
+		boby2.resetearPosicion(plataformas, nivel);	
 	}
 	if(boby3.getPosY()>600){
-		boby3.resetearPosicion(plataformas, nivel);	
 		boby3.perderVida();
+		boby3.resetearPosicion(plataformas, nivel);	
 	}
 	if(boby4.getPosY()>600){
-		boby4.resetearPosicion(plataformas, nivel);	
 		boby4.perderVida();
+		boby4.resetearPosicion(plataformas, nivel);	
 	}
 
 	//refresco el tiempo de invincibilidad

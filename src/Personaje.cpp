@@ -103,7 +103,7 @@ void Personaje::setEstados(bool salto,bool disp,bool mirando,bool act,bool gris)
 	}
 	else if(grisado == true && gris == false){
 		Plataformas p;
-		this->desgrisar(p,0,0,0,0,0);
+		this->desgrisar(p,0);
 	}
 }
 
@@ -213,21 +213,14 @@ void Personaje::grisar(){
 	printf("posicion viejaY: %i , coordenadaY vieja: %i\n", this->getPosY(), this->obtenerCoordenadaY());
 }
 
-void Personaje::desgrisar(Plataformas plataformas, int coordenadaX, int coordenadaY, int nivel, int rangoAtras, int rangoAdelante){
+void Personaje::desgrisar(Plataformas plataformas, int nivel){
 	if (grisado) this->swapTextures();
 	grisado=false;
-	if( rangoAtras == 0 && rangoAdelante == 0){
-		return;
-	}
 
 	this->resetearPosicion(plataformas, nivel);
-
-	printf("posicionX nueva: %i , coordenadaX nueva: %i", this->getPosX(), this->obtenerCoordenadaX());
-	printf("posicionY nueva: %i , coordenadaY nueva: %i", this->getPosY(), this->obtenerCoordenadaY());
 }
 
 void Personaje::resetearPosicion(Plataformas plataformas, int nivel){
-
 	int rangoAtras = posX;
 	int rangoAdelante = 760 - posX;
 
@@ -243,6 +236,9 @@ void Personaje::resetearPosicion(Plataformas plataformas, int nivel){
 	posX = posX -pE.diferenciaEnX;
 	posY = posY -pE.diferenciaEnY;
 	velocidadY= 0;
+
+	printf("posicionX nueva: %i , coordenadaX nueva: %i", posX, coordenadaX);
+	printf("posicionY nueva: %i , coordenadaY nueva: %i", posY, coordenadaX);
 }
 
 bool Personaje::esGrisado(){
@@ -510,10 +506,6 @@ void Personaje::bajar(){
 	if(!grisado) velocidadY= 1;
 }
 
-void Personaje::resetFall(){
-	velocidadY= 0;
-}
-
 void Personaje::subirCoordenadaXEn(int cantidad){
 	coordenadaX += cantidad;
 }
@@ -637,6 +629,7 @@ void Personaje::perderVida(){
 	if (!godmode && (invincibilityFrames == 0)) {
 		this->cambiarArma(1);
 		hitPoints--;
+		printf("perdi vida");
 		invincibilityFrames = 90;
 	}
 	//invincibilityFrames = IFramesMAX
