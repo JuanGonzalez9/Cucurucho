@@ -25,13 +25,19 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 
 void JuegoCliente::setMensajeDelServidor(string msj){
 	p.parsear(msj,cantJugadores);
-	if(nivel == 1 && p.getNivel() == 2){
-		actualizarNivel1();
-		nivel = 2;
-	}
-	else if(nivel == 2 && p.getNivel() == 3){
+	if(nivel == 1 && p.getNivel() == 3){
 		actualizarNivel2();
-		nivel = 3;	
+		nivel = 3;
+	}
+	else{
+		if(nivel == 1 && p.getNivel() == 2){
+			actualizarNivel1();
+			nivel = 2;
+		}
+		else if(nivel == 2 && p.getNivel() == 3){
+			actualizarNivel2();
+			nivel = 3;	
+		}
 	}
 }
 

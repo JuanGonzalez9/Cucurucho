@@ -235,7 +235,8 @@ void Personaje::resetearPosicion(Plataformas plataformas, int nivel){
 	coordenadaX= pE.xm;
 	coordenadaY= pE.y;
 	posX = posX -pE.diferenciaEnX;
-	posY = posY -pE.diferenciaEnY;
+	if(nivel == 2) posY = posY -pE.diferenciaEnY;
+	else posY = 100;
 	velocidadY= 0;
 
 	printf("posicionX nueva: %i , coordenadaX nueva: %i", posX, coordenadaX);

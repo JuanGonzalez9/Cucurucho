@@ -80,7 +80,7 @@ void comunicar_servidor (Socket *conector, EscuchadorDeAcciones *escuchador, Jue
 			return;
 		}
 		respuestaServidor[tamanio_respuestaServidor] = 0;
-		// std::cout << "recibido: " << respuestaServidor << "\n";
+		//std::cout << "recibido: " << respuestaServidor << "\n";
 
 		string respuestaSinParsear(respuestaServidor);
 		juegoCliente->setMensajeDelServidor(respuestaSinParsear);
