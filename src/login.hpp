@@ -92,7 +92,7 @@ protected:
 	std::function<void()> funcion_sinc;
 	std::condition_variable condicion_sinc;
 	volatile bool ejecutada_sinc;
-	void inicializar_credencial ();
+	bool inicializar_credencial ();
 	void error (const char *msg, int duracion = tiempo_infinito);
 	void info (const char *msg, int duracion = tiempo_infinito);
 };
