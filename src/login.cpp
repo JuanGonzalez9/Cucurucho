@@ -118,6 +118,8 @@ void vlogin::al_aceptar ()
 		error ("Debe especificar una clave de usuario.", tiempo_mensaje);
 	} else if (c.length() < MIN_CLAVE || c.length() > MAX_CLAVE) {
 		error ("La clave debe tener entre " STR(MIN_CLAVE) " y " STR(MAX_CLAVE) " caracteres.", tiempo_mensaje);
+	} else if (!inicializar_credencial ()) {
+		error ("Debe especificar una direccion:puerto valida.", tiempo_mensaje);
 	} else {
 		info ("Comprobando credencial, espere por favor...", tiempo_infinito);
 		/*
@@ -127,12 +129,11 @@ void vlogin::al_aceptar ()
 		gtk_widget_set_sensitive (login->editor_clave, false);
 		*/
 		autenticando = true;
-		inicializar_credencial ();
 		hilo = std::thread{ comprobar_credencial, this };
 	}
 }
 
-void vlogin::inicializar_credencial ()
+bool vlogin::inicializar_credencial ()
 {
 	cred.fd = -1;
 	cred.resultado = usuario::rechazado;
@@ -142,10 +143,7 @@ void vlogin::inicializar_credencial ()
 	std::string s = direccion.texto ();
 	std::vector<char> buffer (s.begin (), s.end ());
 	buffer.push_back ('\0');
-	if (!obtener_dir_puerto (&buffer[0], cred.direccion, cred.puerto)) {
-		// TODO impedir
-		std::cout << "El usuario no puso una direccion valida\n";
-	}
+	return obtener_dir_puerto (&buffer[0], cred.direccion, cred.puerto);
 }
 
 void vlogin::comprobar_credencial (vlogin *vl)

@@ -149,15 +149,43 @@ bool establecer_opcion_depurado (const char *depurado)
 	return true;
 }
 
-bool obtener_puerto (const char *s, unsigned short &puerto)
+static bool consumir_byte (istringstream &is)
 {
+	int i;
 	try {
-		std::string::size_type largo;
-		int p = std::stoi (s, &largo, 10);
-		if (largo != strlen(s) || p > 65525) {
+		is >> i;
+		if (i < 0 || i > 255) {
 			return false;
 		}
-		puerto = (unsigned short)p;
+	} catch (...) {
+		return false;
+	}
+	return true;
+}
+
+static bool consumir (istringstream &is, char c)
+{
+	char aux;
+	try {
+		is >> aux;
+		if (aux != c) {
+			return false;
+		}
+	} catch (...) {
+		return false;
+	}
+	return true;
+}
+
+static bool consumir_puerto (istringstream &is, unsigned short &puerto)
+{
+	int i;
+	try {
+		is >> i;
+		if (i < 1024 || i > 65535) {
+			return false;
+		}
+		puerto = (unsigned short)i;
 	} catch (...) {
 		return false;
 	}
@@ -166,19 +194,27 @@ bool obtener_puerto (const char *s, unsigned short &puerto)
 
 bool obtener_dir_puerto (char *arg, std::string &dir, unsigned short &puerto)
 {
-	std::string tmp;
-	if (!separar (arg, dir, tmp, ':')) {
-		if (!obtener_puerto (arg, puerto)) {
-			return false;
-		}
-		dir = "127.0.0.1";
-		return true;
+	istringstream is (arg);
+	if (consumir_byte (is)
+		&& consumir (is, '.')
+		&& consumir_byte (is)
+		&& consumir (is, '.')
+		&& consumir_byte (is)
+		&& consumir (is, '.')
+		&& consumir_byte (is)
+		&& consumir (is, ':'))
+	{
+		int p = is.tellg();
+		arg[p-1] = '\0';
+		dir = arg;
 	} else {
-		if (!obtener_puerto (tmp.c_str(), puerto)) {
-			return false;
-		}
-		return dir.length() >= 7;
+		dir = "127.0.0.1";
+		is.seekg (0, is.beg);
 	}
+	if (!consumir_puerto (is, puerto)) {
+		return false;
+	}
+	return true;
 }
 
 int main (int argc, char *argv[]) {
