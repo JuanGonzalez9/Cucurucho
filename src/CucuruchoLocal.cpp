@@ -65,36 +65,37 @@ void comunicar_servidor (Socket *conector, EscuchadorDeAcciones *escuchador, Jue
 	char respuestaServidor[tamanio_respuestaServidor + 1];
 	while (escuchador->enAccion() && juegoCliente->jugando()) {
 		string acciones = escuchador->obtenerAcciones();
-		// std::cout << "enviar: " << acciones << "\n";
+		std::cout << "enviar: " << acciones << "\n";
 		int enviados = conector->enviar(conector->getSocketId(),acciones.c_str(),TAMANIO_MENSAJE_TECLAS);
-		// std::cout << "enviadas\n";
+		std::cout << "enviadas\n";
 		if (enviados == -1) {
 			cout << "Error en la conexion al enviar" << endl;
 			return;
 		}
 
-		// std::cout << "recibe\n";
+		std::cout << "recibe\n";
 		int llegaron = conector->recibir(conector->getSocketId(),respuestaServidor,tamanio_respuestaServidor);
 		if (llegaron != tamanio_respuestaServidor) {
 			cout << "Error en la conexion al recibir" << endl;
 			return;
 		}
 		respuestaServidor[tamanio_respuestaServidor] = 0;
-		//std::cout << "recibido: " << respuestaServidor << "\n";
+		std::cout << "recibido: " << respuestaServidor << "\n";
 
 		string respuestaSinParsear(respuestaServidor);
 		juegoCliente->setMensajeDelServidor(respuestaSinParsear);
 
-		//std::cout << "5\n";
+		std::cout << "5\n";
 		juegoCliente->manejarEventos();
 		juegoCliente->dibujar();
 		juegoCliente->presentar();
-		//std::cout << "6\n";
+		std::cout << "6\n";
 
 		std::unique_lock<std::mutex> lock_presento(*mutex_presento);
 		*presento = true;
 		lock_presento.unlock ();
 		condicion_presento->notify_all ();
+		std::cout << "7\n";
 	}
 	std::cerr << "sale hilo secundario\n";
 }
@@ -105,9 +106,9 @@ void comunicar_cliente (autenticados *a, int i, int tamanio_respuestaServidor)
 	while (true) {
 		// Recibe teclas
 		char teclas[TAMANIO_MENSAJE_TECLAS + 1] = "000000000";
-		// std::cout << "recibe\n";
+		 std::cout << "recibe" << i << ":\n";
 		int r = a->usuarios[i].conector->recibir(a->usuarios[i].conector->getAcceptedSocket(),teclas,TAMANIO_MENSAJE_TECLAS);
-		// std::cout << "recibido: " << teclas << "\n";
+		std::cout << "recibido: " << teclas << "\n";
 		if (r == -1) {
 			break;
 		}
@@ -121,9 +122,9 @@ void comunicar_cliente (autenticados *a, int i, int tamanio_respuestaServidor)
 		mundo = a->mundo;
 		lock_mundo.unlock ();
 		// Envia mundo
-		// std::cout << "envia: " << mundo << "\n";
+		 std::cout << "envia" << i << ": " << mundo << "\n";
 		a->usuarios[i].conector->enviar(a->usuarios[i].conector->getAcceptedSocket(),mundo.c_str(),tamanio_respuestaServidor);
-		// std::cout << "enviados\n";
+		 std::cout << "enviados\n";
 		// Almacena estampa temporal
 		std::lock_guard<std::mutex> lock_tmp(a->usuarios[i].mutex_tmp);
 		a->usuarios[i].tmp.ahora ();

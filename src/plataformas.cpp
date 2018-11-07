@@ -233,7 +233,7 @@ plataformaExtra Plataformas::hayPlataformaEn(int coordenadaX, int coordenadaY ,i
 			if ( ((coordenadaY-rangoAdelante) +100 < plataformaActual.y) && (plataformaActual.y < (coordenadaY + rangoAtras) -10 )){
 				plataformaExtra pE;
 				pE.xm = plataformaActual.xi + 5;
-				pE.y = plataformaActual.y;
+				pE.y = plataformaActual.y - 100;
 				pE.diferenciaEnX = coordenadaX - pE.xm; //lo que se corre en X 
 
 				pE.diferenciaEnY = (coordenadaY - pE.y); //diferenciaHAciaAdelante(Si es neg entonces es hacia atras)

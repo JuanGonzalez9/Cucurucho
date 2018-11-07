@@ -282,6 +282,7 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 
 void escuchar (autenticados *a, const char *dir, int puerto, int jugadores)
 {
+	std::unique_lock<std::mutex> lock(a->mutex);
 	int fd = socket (AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
 	if (fd == -1) {
 		std::cout << "Fallo socket: " << strerror(errno) << "\n";
@@ -307,7 +308,7 @@ void escuchar (autenticados *a, const char *dir, int puerto, int jugadores)
 
 	int conectados = 0;
 	std::list<std::thread> hilos;
-	
+	lock.unlock();
 	while (true) {
 		int fd_nuevo = accept(fd, nullptr, nullptr);
 		if (fd_nuevo == -1) {
