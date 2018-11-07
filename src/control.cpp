@@ -10,6 +10,7 @@ extern "C"
 control::control (int x, int y):
 	anclado_x (normal),
 	anclado_y (normal),
+	resaltado (false),
 	x (x),
 	y (y),
 	enfocado (false),

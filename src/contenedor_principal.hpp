@@ -33,6 +33,7 @@ protected:
 	ventana &v;
 	bool corriendo;
 	std::list<control*> enfocables;
+	control *control_resaltado;
 };
 
 #endif

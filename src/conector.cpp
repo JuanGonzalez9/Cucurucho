@@ -292,6 +292,7 @@ void escuchar (autenticados *a, const char *dir, int puerto, int jugadores)
 	int r = bind (fd, (sockaddr*)&addr, sizeof(struct sockaddr_in));
 	if (r == -1) {
 		std::cout << "Fallo bind: " << strerror(errno) << "\n";
+		// Fallo bind: Address already in use
 		return;
 	}
 
@@ -345,6 +346,7 @@ void comprobar_credencial_en_servidor (credencial &cred)
 	int r = connect (cred.fd, (sockaddr*)&addr, sizeof(struct sockaddr_in));
 	if (r == -1) {
 		std::cout << "Fallo connect: " << strerror(errno) << "\n";
+		// Fallo connect: Connection refused
 		return;
 	} else {
 		std::cout << "Conectado a servidor\n";

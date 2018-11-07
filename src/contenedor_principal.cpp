@@ -6,7 +6,8 @@
 contenedor_principal::contenedor_principal (ventana &v):
 	contenedor (0, 0),
 	v (v),
-	corriendo (false)
+	corriendo (false),
+	control_resaltado (nullptr)
 {
 }
 
@@ -97,6 +98,10 @@ void contenedor_principal::dibujar()
 
 void contenedor_principal::resaltar (int x, int y)
 {
+	if (control_resaltado) {
+		control_resaltado->resaltado = false;
+		control_resaltado = nullptr;
+	}
 	std::list<control*>::reverse_iterator i;
 	for (i = enfocables.rbegin (); i != enfocables.rend (); ++i) {
 		control *c = *i;
@@ -104,6 +109,8 @@ void contenedor_principal::resaltar (int x, int y)
 		c->relativas (rx, ry);
 		if (c->contiene (rx, ry)) {
 			c->al_mover (rx, ry);
+			control_resaltado = c;
+			control_resaltado->resaltado = true;
 			return;
 		}
 	}

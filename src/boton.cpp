@@ -22,8 +22,9 @@ boton::boton (int x, int y, const char *texto):
 	//color_borde ({80, 80, 80, 255}),
 	//color_borde_foco ({100, 100, 100, 255}),
 	color_borde ({20, 20, 20, 40}),
-	color_borde_foco ({40, 40, 40, 40}),
+	color_borde_foco ({80, 80, 80, 40}),
 	color_fondo ({0, 0, 0, 40}),
+	color_fondo_foco ({60, 60, 60, 40}),
 	color_texto ({200, 200, 200, alpha})
 {
 	this->texto = texto;
@@ -108,10 +109,14 @@ void boton::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	};
 	// Relleno
 	SDL_Rect r = {xx + borde_x, yy + borde_y, texto_w + 2*padding_x, texto_h + 2*padding_y};
-	SDL_SetRenderDrawColor (renderer, color_fondo.r, color_fondo.g, color_fondo.b, color_fondo.a);
+	if (enfocado || resaltado) {
+		SDL_SetRenderDrawColor (renderer, color_fondo_foco.r, color_fondo_foco.g, color_fondo_foco.b, color_fondo_foco.a);
+	} else {
+		SDL_SetRenderDrawColor (renderer, color_fondo.r, color_fondo.g, color_fondo.b, color_fondo.a);
+	}
 	SDL_RenderFillRect (renderer, &r);
 	// Borde superior
-	if (enfocado) {
+	if (enfocado || resaltado) {
 		SDL_SetRenderDrawColor (renderer, color_borde_foco.r, color_borde_foco.g, color_borde_foco.b, color_borde_foco.a);
 	} else {
 		SDL_SetRenderDrawColor (renderer, color_borde.r, color_borde.g, color_borde.b, color_borde.a);
