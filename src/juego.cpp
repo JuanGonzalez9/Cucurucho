@@ -172,6 +172,10 @@ void juego::manejar_eventos ()
 	int bobyPosY= nivel == 2 ? boby.obtenerCoordenadaY() : boby.getPosY();
 	int velocityBoby = boby.obtenerVelocidadY();
 
+	if(!boby.estaMirandoALaDerecha()){
+		bobyPosX += 12;
+	}
+
 	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,25,72,nivel)){
 		boby.aterrizar();
 	}
@@ -190,6 +194,10 @@ void juego::manejar_eventos ()
 	bobyPosX= nivel == 2 ? boby2.getPosX() : boby2.obtenerCoordenadaX();
 	bobyPosY= nivel == 2 ? boby2.obtenerCoordenadaY() : boby2.getPosY();
 	velocityBoby = boby2.obtenerVelocidadY();
+
+	if(!boby2.estaMirandoALaDerecha()){
+		bobyPosX += 12;
+	}
 
 	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,25,72,nivel)){
 		boby2.aterrizar();
@@ -210,6 +218,10 @@ void juego::manejar_eventos ()
 	bobyPosY= nivel == 2 ? boby3.obtenerCoordenadaY() : boby3.getPosY();
 	velocityBoby = boby3.obtenerVelocidadY();
 
+	if(!boby3.estaMirandoALaDerecha()){
+		bobyPosX += 12;
+	}
+
 	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,25,72,nivel)){
 		boby3.aterrizar();
 	}
@@ -228,7 +240,11 @@ void juego::manejar_eventos ()
 	bobyPosY= nivel == 2 ? boby4.obtenerCoordenadaY() : boby4.getPosY();
 	velocityBoby = boby4.obtenerVelocidadY();
 
-	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,20,72,nivel)){
+	if(!boby4.estaMirandoALaDerecha()){
+		bobyPosX += 12;
+	}
+
+	if(plataformas.hayColisionSuperior(bobyPosX,bobyPosY,25,72,nivel)){
 		boby4.aterrizar();
 	}
 	else if( velocityBoby > 1){
