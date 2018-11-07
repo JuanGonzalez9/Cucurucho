@@ -103,7 +103,7 @@ void LogEventos::registrarFinJuego(){
 	}
 
 	archivo << "                         "<< endl;
-    archivo << pt1->tm_hour << ":" << pt1->tm_min << ":" << pt1->tm_sec << ": " << " SE HA TERMINADO EL JUEGO ACTUAL" << endl;
+    archivo << pt1->tm_hour << ":" << pt1->tm_min << ":" << pt1->tm_sec << ": " << " SE HA CERRADO EL SERVIDOR" << endl;
     archivo << "                         "<< endl;
 
 
