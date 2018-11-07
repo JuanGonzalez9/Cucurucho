@@ -182,8 +182,8 @@ bool obtener_dir_puerto (char *arg, std::string &dir, unsigned short &puerto)
 }
 
 int main (int argc, char *argv[]) {
-	registro.borrarEventos();
-	registro.registrar (LogEventos::info, "Comenzo el juego");
+	
+	registro.registrarNuevoJuego();
 
 	bool ayuda = false;
 	bool como_servidor = false;
@@ -391,9 +391,12 @@ int main (int argc, char *argv[]) {
 			}
 		}
 		lock.unlock ();
-		registro.registrar (LogEventos::info, "Finalizo el juego");
+		registro.registrarFinJuego();
 	}
 	std::cerr << "sale hilo principal\n";
+
+
+
 	return 0;
 }
 

@@ -285,7 +285,7 @@ plataformaExtra Plataformas::hayPlataformaEn(int coordenadaX, int coordenadaY ,i
 				pE.diferenciaEnX = coordenadaX - pE.xm;
 				pE.diferenciaEnY = coordenadaY - pE.y;
 
-
+				loginfo("Se retorno plataforma para la resurreccion");
 				return pE; //Devuelvo la plataforma en la cual me voy a parar
 			}
 
@@ -302,6 +302,8 @@ plataformaExtra Plataformas::hayPlataformaEn(int coordenadaX, int coordenadaY ,i
 
 
 bool Plataformas::hayColisionSuperior(int otroX,int otroY,int otroW,int otroH, int nivel){
+	loginfo("se comprueba si hay colision superior");
+
 	int parte_inferior = otroY+otroH;
 	int parte_superior = otroY;
 	int parte_lateral_izq = otroX;

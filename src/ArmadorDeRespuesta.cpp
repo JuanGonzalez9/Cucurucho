@@ -104,6 +104,7 @@ string ArmadorDeRespuesta::fondoToString(int f){
 	//para que la respuesta ocupe exactamente 4 caracteres
 	respuesta.replace(4 - nuevo.size(),nuevo.size(),nuevo);
 
+	loginfo("Se devuelve la respuesta del fondo");
 	return respuesta;
 }
 
@@ -115,6 +116,7 @@ string ArmadorDeRespuesta::posicionToString(int p){
 	//para que la respuesta ocupe exactamente 4 caracteres
 	respuesta.replace(3 - nuevo.size(),nuevo.size(),nuevo);
 
+	loginfo("Se devuelve la respuesta de la posicion");
 	return respuesta;
 }
 
@@ -125,6 +127,7 @@ string ArmadorDeRespuesta::pasarAStringDeTamanio(int tamanio,int valor){
 	string nuevo = to_string(valor);
 	respuesta.replace(tamanio - nuevo.size(),nuevo.size(),nuevo);
 
+	loginfo("Se pasa la respuesta a string");
 	return respuesta;
 }
 
@@ -139,10 +142,13 @@ void ArmadorDeRespuesta::sumarBalas(vector<Bullet*> nuevasBalas){
 
 		balasActuales++;
 	}
+
+	loginfo("Se sumaron las balas");
 }
 
 string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* datosBoby, DatosPersonaje* datosBoby2, DatosPersonaje* datosBoby3, DatosPersonaje* datosBoby4){
 
+	loginfo("Se arma la respuesta para un respectivo jugador");
 	//Estan cargado desde juego los parametros universales para los 4 jugadores
 	string respuesta = to_string(nivel);
 	respuesta += pasarAStringDeTamanio(RESPUESTA_FONDO,fondo1);

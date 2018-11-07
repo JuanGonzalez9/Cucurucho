@@ -70,3 +70,42 @@ void LogEventos::mostrarEventos(){
 	}
 }
 
+void LogEventos::registrarNuevoJuego(){
+	time_t tSac = time(NULL);
+    struct tm* pt1 = localtime(&tSac);
+
+
+    ofstream archivo("registro.txt",ios::app);
+	
+	if(!archivo.is_open()){
+			archivo.open("registro.txt",ios::app); //app de append
+
+	}
+
+	archivo << "                         "<< endl;
+    archivo << pt1->tm_hour << ":" << pt1->tm_min << ":" << pt1->tm_sec << ": " << " SE HA INICIADO UN NUEVO JUEGO " << endl;
+    archivo << "                         "<< endl;
+
+
+    archivo.close();
+}
+
+void LogEventos::registrarFinJuego(){
+	time_t tSac = time(NULL);
+    struct tm* pt1 = localtime(&tSac);
+
+
+    ofstream archivo("registro.txt",ios::app);
+	
+	if(!archivo.is_open()){
+			archivo.open("registro.txt",ios::app); //app de append
+
+	}
+
+	archivo << "                         "<< endl;
+    archivo << pt1->tm_hour << ":" << pt1->tm_min << ":" << pt1->tm_sec << ": " << " SE HA TERMINADO EL JUEGO ACTUAL" << endl;
+    archivo << "                         "<< endl;
+
+
+    archivo.close();
+}

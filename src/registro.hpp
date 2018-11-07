@@ -17,6 +17,8 @@ public:
 	void borrarEventos();
 	void definirTipoLog(TipoLog tipo);
 	void mostrarEventos();
+	void registrarNuevoJuego();
+	void registrarFinJuego();
 protected:
 	TipoLog tipoLog;
 	std::mutex mutex;
