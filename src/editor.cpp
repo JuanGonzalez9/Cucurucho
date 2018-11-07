@@ -1,5 +1,6 @@
 #include <iostream>
 #include "editor.hpp"
+#include "cfg.hpp"
 #include "Constantes.h"
 
 extern "C"
@@ -210,6 +211,23 @@ void editor::actualizar_cursor ()
 	}
 }
 
+void editor::al_mover (int x, int y)
+{
+	cfg.establecer_cursor_texto ();
+}
+
+void editor::al_presionar (int x, int y)
+{
+	x -= (borde_x + padding_x + char_w/2);
+	cursor = x/char_w;
+	if (cursor < 0) {
+		cursor = 0;
+	}
+	if (cursor > entrada.length ()) {
+		cursor = entrada.length ();
+	}
+}
+
 void editor::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 {
 	activar_blend (renderer);
@@ -218,19 +236,20 @@ void editor::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	// sufre el control. Pero para la duración de este proyecto se prefiere por su
 	// simplicidad esta solución.
 	// Obtengo el ancho y el alto de un espacio, sirve porque uso una fuente mono-espaciada.
-	int char_w, texto_h;
-	f.dibujar (renderer, " ", x, y, color_texto, char_w, texto_h);
+	f.dibujar (renderer, " ", x, y, color_texto, char_w, char_h);
 	const int texto_w = largo * char_w;
-	const int control_w = largo * char_w + 2*borde_x + 2*padding_x;
-	const int control_h = texto_h + 2*borde_y + 2*padding_y;
+	const int texto_h = char_h;
+	w = largo * char_w + 2*borde_x + 2*padding_x;
+	h = texto_h + 2*borde_y + 2*padding_y;
 	// Calculo posicion
 	int xx = cx, yy = cy;
 	switch (anclado_x) {
 		case medio:
-			xx += (cw - control_w)/2;
+			xx += (cw - w)/2;
+			x = xx - cx; // Como no utilizo el x lo guardo
 			break;
 		case opuesto:
-			xx += cw - control_w - x;
+			xx += cw - w - x;
 			break;
 		default: // case normal:
 			xx += x;
@@ -238,10 +257,11 @@ void editor::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	};
 	switch (anclado_y) {
 		case medio:
-			yy += (ch - control_h)/2;
+			yy += (ch - h)/2;
+			y = yy - cy;
 			break;
 		case opuesto:
-			yy += ch - control_h - y;
+			yy += ch - h - y;
 			break;
 		default: // case normal:
 			yy += y;
@@ -257,21 +277,21 @@ void editor::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	} else {
 		SDL_SetRenderDrawColor (renderer, color_borde.r, color_borde.g, color_borde.b, color_borde.a);
 	}
-	r = {xx, yy, control_w, borde_y};
+	r = {xx, yy, w, borde_y};
 	SDL_RenderFillRect (renderer, &r);
 	// Borde inferior
-	r = {xx, yy + control_h - borde_y, control_w, borde_y};
+	r = {xx, yy + h - borde_y, w, borde_y};
 	SDL_RenderFillRect (renderer, &r);
 	// Borde izquierdo
-	r = {xx, yy, borde_x, control_h};
+	r = {xx, yy, borde_x, h};
 	SDL_RenderFillRect (renderer, &r);
 	// Borde derecho
-	r = {xx + control_w - borde_x, yy, borde_x, control_h};
+	r = {xx + w - borde_x, yy, borde_x, h};
 	SDL_RenderFillRect (renderer, &r);
 	// Rectangulo de foco
 	/*
 	if (enfocado) {
-		r = {xx + 1, yy + 1, control_w - 2, control_h - 2};
+		r = {xx + 1, yy + 1, w - 2, h - 2};
 		SDL_SetRenderDrawColor (renderer, color_borde_foco.r, color_borde_foco.g, color_borde_foco.b, color_borde_foco.a);
 		SDL_RenderDrawRect (renderer, &r);
 	}

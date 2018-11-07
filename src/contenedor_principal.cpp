@@ -1,5 +1,6 @@
 #include <iostream>
 #include "contenedor_principal.hpp"
+#include "cfg.hpp"
 #include "Constantes.h"
 
 contenedor_principal::contenedor_principal (ventana &v):
@@ -71,6 +72,13 @@ bool contenedor_principal::manejar_evento (SDL_Event e)
 				enfocar_siguiente ();
 				return true;
 			}
+			break;
+		case SDL_MOUSEMOTION:
+			resaltar (e.button.x, e.button.y);
+			return true;
+		case SDL_MOUSEBUTTONUP:
+			enfocar (e.button.x, e.button.y);
+			return true;
 	}
 	std::list<control*>::const_iterator i;
 	for (i = enfocables.begin (); i != enfocables.end (); ++i) {
@@ -85,6 +93,36 @@ bool contenedor_principal::manejar_evento (SDL_Event e)
 void contenedor_principal::dibujar()
 {
 	contenedor::dibujar (x, y, MUNDO_ANCHO, MUNDO_ALTO, v.renderer ());
+}
+
+void contenedor_principal::resaltar (int x, int y)
+{
+	std::list<control*>::reverse_iterator i;
+	for (i = enfocables.rbegin (); i != enfocables.rend (); ++i) {
+		control *c = *i;
+		int rx = x, ry = y;
+		c->relativas (rx, ry);
+		if (c->contiene (rx, ry)) {
+			c->al_mover (rx, ry);
+			return;
+		}
+	}
+	cfg.establecer_cursor_flecha ();
+}
+
+void contenedor_principal::enfocar (int x, int y)
+{
+	std::list<control*>::reverse_iterator i;
+	for (i = enfocables.rbegin (); i != enfocables.rend (); ++i) {
+		control *c = *i;
+		int rx = x, ry = y;
+		c->relativas (rx, ry);
+		if (c->contiene (rx, ry)) {
+			enfocar (c);
+			c->al_presionar (rx, ry);
+			return;
+		}
+	}
 }
 
 void contenedor_principal::enfocar (control *c)
@@ -109,7 +147,6 @@ void contenedor_principal::enfocar_siguiente ()
 	for (i = enfocables.begin (); i != enfocables.end (); ++i) {
 		control *e = *i;
 		if (e->foco ()) {
-			std::cout << "Encontre el enfocado\n";
 			c = e;
 			break;
 		}
@@ -121,7 +158,6 @@ void contenedor_principal::enfocar_siguiente ()
 	++i;
 	if (i != enfocables.end ()) {
 		control *e = *i;
-		std::cout << "Enfoco el siguiente\n";
 		c->foco (false);
 		e->foco (true);
 	} else {
@@ -129,13 +165,11 @@ void contenedor_principal::enfocar_siguiente ()
 		i = enfocables.begin ();
 		if (i != enfocables.end ()) {
 			control *e = *i;
-			if (e == c) { // Hay un solo control y ya tiene el foco
-				std::cout << "El control ya tiene el foco\n";
-			} else {
-				std::cout << "Enfoco el primero\n";
+			if (e != c) {
 				c->foco (false);
 				e->foco (true);
 			}
+			// else Hay un solo control y ya tiene el foco
 		}
 	}
 }
@@ -148,7 +182,6 @@ void contenedor_principal::enfocar_anterior ()
 	for (i = enfocables.rbegin (); i != enfocables.rend (); ++i) {
 		control *e = *i;
 		if (e->foco ()) {
-			std::cout << "Encontre el enfocado\n";
 			c = e;
 			break;
 		}
@@ -160,7 +193,6 @@ void contenedor_principal::enfocar_anterior ()
 	++i;
 	if (i != enfocables.rend ()) {
 		control *e = *i;
-		std::cout << "Enfoco el siguiente\n";
 		c->foco (false);
 		e->foco (true);
 	} else {
@@ -168,13 +200,11 @@ void contenedor_principal::enfocar_anterior ()
 		i = enfocables.rbegin ();
 		if (i != enfocables.rend ()) {
 			control *e = *i;
-			if (e == c) { // Hay un solo control y ya tiene el foco
-				std::cout << "El control ya tiene el foco\n";
-			} else {
-				std::cout << "Enfoco el primero\n";
+			if (e != c) {
 				c->foco (false);
 				e->foco (true);
 			}
+			// else Hay un solo control y ya tiene el foco
 		}
 	}
 }

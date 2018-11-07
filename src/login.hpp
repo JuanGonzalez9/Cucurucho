@@ -10,6 +10,7 @@
 #include "etiqueta.hpp"
 #include "panel.hpp"
 #include "dialogo.hpp"
+#include "boton.hpp"
 #include "Constantes.h"
 #include "Socket.h"
 
@@ -81,6 +82,7 @@ protected:
 	panel pnl;
 	etiqueta mensaje;
 	editor usuario, clave, direccion;
+	boton aceptar;
 	int duracion_mensaje;
 	std::string mensaje_omision;
 	bool autenticando;

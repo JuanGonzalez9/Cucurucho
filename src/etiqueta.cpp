@@ -51,16 +51,17 @@ void etiqueta::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	int char_w, texto_h;
 	f.dibujar (renderer, " ", x, y, color_texto, char_w, texto_h);
 	// const int texto_w = s.length () * char_w;
-	const int control_w = s.length () * char_w;
-	const int control_h = texto_h;
+	w = s.length () * char_w;
+	h = texto_h;
 	// Calculo posicion
 	int xx = cx, yy = cy;
 	switch (anclado_x) {
 		case medio:
-			xx += (cw - control_w)/2;
+			xx += (cw - w)/2;
+			x = xx - cx; // Como no utilizo el x lo guardo
 			break;
 		case opuesto:
-			xx += cw - control_w - x;
+			xx += cw - w - x;
 			break;
 		default: // case normal:
 			xx += x;
@@ -68,10 +69,11 @@ void etiqueta::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	};
 	switch (anclado_y) {
 		case medio:
-			yy += (ch - control_h)/2;
+			yy += (ch - h)/2;
+			y = yy - cy;
 			break;
 		case opuesto:
-			yy += ch - control_h - y;
+			yy += ch - h - y;
 			break;
 		default: // case normal:
 			yy += y;

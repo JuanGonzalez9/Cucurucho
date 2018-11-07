@@ -14,6 +14,7 @@ extern "C"
 	#include <errno.h>
 	#include <unistd.h>
 	#include <fcntl.h>
+	#include <stdlib.h>
 }
 
 void configuracion::esperar_vblank ()
@@ -87,9 +88,34 @@ excepcion_configuracion::excepcion_configuracion (const std::string &que_paso):
 {
 }
 
-configuracion::configuracion ()
+int configuracion::random (int desde, int hasta)
+{
+	if (desde > hasta) {
+		int aux = desde;
+		desde = hasta;
+		hasta = aux;
+	}
+	long int cantidad = hasta - desde + 1;
+	if (cantidad > INT_MAX) {
+		cantidad = INT_MAX;
+		logerror ("se pidio un numero aleatorio fuera de rango.");
+	}
+	long int r = ::random () % cantidad;
+	return (int) (r + desde);
+}
+
+configuracion::configuracion ():
+	doc (nullptr),
+	contexto (nullptr)
 {
 	registro.definirTipoLog (LogEventos::error);
+
+	struct timespec ts;
+	if (timespec_get (&ts, TIME_UTC)) {
+		srandom (ts.tv_nsec ^ ts.tv_sec);
+	} else {
+		srandom (696969);
+	}
 
 	dlopen_handle = dlopen (nullptr, RTLD_LOCAL | RTLD_LAZY);
 	if (dlopen_handle == nullptr) {
@@ -111,22 +137,20 @@ configuracion::configuracion ()
 	if (stat ("cfg.xml", &sb) == -1) {
 		recrear_archivo_xml ();
 		logerror("el archivo de configuracion no existia, fue recreado.");
-		return;
-	}
-
-	doc = xmlReadFile ("cfg.xml", NULL, 0);
-	if (doc == nullptr) {
-		cfg_carga_error ();
-		logerror("el archivo de configuracion no pudo cargarse, se usan las opciones por omision.");
-		return;
-	}
-	contexto = xmlXPathNewContext (doc);
-	if (contexto == nullptr) {
-		cfg_carga_error ();
-		logerror("el archivo de configuracion no pudo cargarse, se usan las opciones por omision.");
-		xmlFreeDoc (doc);
-		doc = nullptr;
-		return;
+	} else {
+		doc = xmlReadFile ("cfg.xml", NULL, 0);
+		if (doc == nullptr) {
+			cfg_carga_error ();
+			logerror("el archivo de configuracion no pudo cargarse, se usan las opciones por omision.");
+		} else {
+			contexto = xmlXPathNewContext (doc);
+			if (contexto == nullptr) {
+				cfg_carga_error ();
+				logerror("el archivo de configuracion no pudo cargarse, se usan las opciones por omision.");
+				xmlFreeDoc (doc);
+				doc = nullptr;
+			}
+		}
 	}
 
 	// Obtengo el nivel de depurado almacenado en la clave "//configuracion//debug//level"
@@ -148,10 +172,24 @@ configuracion::configuracion ()
 
 	// Establezo a type para que espere el numero de secuencia calculado en XShmBackend::Wait_for_vblank.
 	vblank.request.type = (drmVBlankSeqType)( DRM_VBLANK_ABSOLUTE | DRM_VBLANK_NEXTONMISS ) ;
+
+	atexit (SDL_Quit);
+	if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
+		logerror("No pudo inicializarse SDL");
+		std::cerr << "No pudo inicializarse SDL: " << SDL_GetError () << '\n';
+	}
+	cursor_texto = SDL_CreateSystemCursor (SDL_SYSTEM_CURSOR_IBEAM);
+	cursor_activo = cursor_flecha = SDL_CreateSystemCursor (SDL_SYSTEM_CURSOR_ARROW);
 }
 
 configuracion::~configuracion ()
 {
+	if (cursor_flecha) {
+		SDL_FreeCursor (cursor_flecha);
+	}
+	if (cursor_texto) {
+		SDL_FreeCursor (cursor_texto);
+	}
 	close (drm_fd);
 	xmlXPathFreeContext (contexto);
 	xmlFreeDoc (doc);
@@ -160,6 +198,22 @@ configuracion::~configuracion ()
 	xmlCleanupParser ();
 	if (dlopen_handle != nullptr) {
 		 dlclose (dlopen_handle);
+	}
+}
+
+void configuracion::establecer_cursor_texto ()
+{
+	if (cursor_texto && cursor_texto != cursor_activo) {
+		SDL_SetCursor (cursor_texto);
+		cursor_activo = cursor_texto;
+	}
+}
+
+void configuracion::establecer_cursor_flecha ()
+{
+	if (cursor_flecha && cursor_flecha != cursor_activo) {
+		SDL_SetCursor (cursor_flecha);
+		cursor_activo = cursor_flecha;
 	}
 }
 
@@ -210,9 +264,9 @@ void configuracion::recrear_archivo_xml ()
 	}
 }
 
-std::string configuracion::obtener_s_del_xml (const char *camino, xmlXPathContextPtr contexto)
+bool configuracion::obtener_s_del_xml (const char *camino, xmlXPathContextPtr contexto, std::string &s)
 {
-	std::string s;
+	s.clear ();
 	if (contexto != nullptr) {
 		xmlXPathObjectPtr resultado = xmlXPathEvalExpression ((const xmlChar*)camino, contexto);
 		if (resultado && !xmlXPathNodeSetIsEmpty (resultado->nodesetval)) {
@@ -223,10 +277,11 @@ std::string configuracion::obtener_s_del_xml (const char *camino, xmlXPathContex
 				const char *ws = " \t\n\r\v\f";
 				s.erase(s.find_last_not_of(ws) + 1);
 				s.erase(0, s.find_first_not_of(ws));
+				return true;
 			}
 		}
 	}
-	return s;
+	return false;
 }
 
 bool configuracion::obtener_padre (std::string &camino)
@@ -261,13 +316,21 @@ xmlNode *configuracion::obtener_nodo_mas_profundo (const char *camino, xmlXPathC
 
 std::string configuracion::obtener_s (const char *camino, std::function<bool(std::string & s, bool omision)> validar)
 {
-	std::string s = obtener_s_del_xml (camino, contexto);
-	if (!validar (s, false)) {
-		cfgerror (unodo, "el valor '" << s << "' es invalido para <" << unodo->name << ">.");
-		s = obtener_s_del_xml (camino, contexto_omision);
-		if (!validar (s, true)) {
+	std::string s;
+	bool r = obtener_s_del_xml (camino, contexto, s);
+	if (!r || !validar (s, false)) {
+		if (!r) {
+			if ((unodo = obtener_nodo_mas_profundo (camino, contexto))) {
+				cfgerror (unodo, "falta el valor de '" << camino << "'.");
+			} else {
+				logerror ("falta el valor de '" << camino << "'.");
+			}
+		} else {
+			cfgerror (unodo, "el valor '" << s << "' es invalido para <" << unodo->name << ">.");
+		}
+		r = obtener_s_del_xml (camino, contexto_omision, s);
+		if (!r || !validar (s, true)) {
 			lanzar ("opcion por defecto '" << s << "' para " << camino << " invalida.");
-			s.clear();
 		} else {
 			logerror ("se usa el valor por omision '" << s << "' para '" << camino << "'.");
 		}

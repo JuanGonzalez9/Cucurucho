@@ -23,6 +23,8 @@ public:
 	void limitar (unsigned int largo);
 	virtual void foco (bool enfocado);
 	virtual bool enfocable ();
+	virtual void al_presionar (int x, int y);
+	virtual void al_mover (int x, int y);
 	bool ocultar;
 protected:
 	std::string entrada, etiqueta;
@@ -30,7 +32,7 @@ protected:
 	bool cursor_visible;
 	int cursor_conteo;
 	unsigned int largo;
-	int padding_x, padding_y, borde_x, borde_y;
+	int padding_x, padding_y, borde_x, borde_y, char_w, char_h;
 	fuente f;
 	SDL_Color color_texto, color_borde, color_borde_foco, color_fondo, color_cursor, color_etiqueta;
 	void escribir (char c);

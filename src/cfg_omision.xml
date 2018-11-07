@@ -3,7 +3,21 @@ R"(<?xml version="1.0"?>
   <debug>
     <level>ERROR</level>
   </debug>
-  <cantidad_jugadores> 2 </cantidad_jugadores>
+  <cantidad_jugadores>1</cantidad_jugadores>
+  <dialogo>
+    <logo_c>imagenes/logo_c.png</logo_c>
+    <logo_ontra>imagenes/logo_ontra.png</logo_ontra>
+    <nube1>imagenes/nube1.png</nube1>
+    <nube2>imagenes/nube2.png</nube2>
+    <nube3>imagenes/nube3.png</nube3>
+    <nube4>imagenes/nube4.png</nube4>
+    <nube5>imagenes/nube5.png</nube5>
+    <nube6>imagenes/nube6.png</nube6>
+    <nube7>imagenes/nube7.png</nube7>
+    <nube8>imagenes/nube8.png</nube8>
+    <nube9>imagenes/nube9.png</nube9>
+    <nube10>imagenes/nube10.png</nube10>
+  </dialogo>
   <usuarios>
 	<juan>12345</juan>
 	<dalma>12345</dalma>

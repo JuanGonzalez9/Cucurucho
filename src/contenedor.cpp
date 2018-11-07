@@ -14,9 +14,7 @@ contenedor::~contenedor ()
 void contenedor::popular (std::list<control*> &enfocables)
 {
 	std::list<elemento*>::const_iterator i;
-	std::cout << "popular\n";
 	for (i = controles.begin (); i != controles.end (); ++i) {
-		std::cout << "populando\n";
 		control *c = (*i)->c;
 		c->popular (enfocables);
 	}

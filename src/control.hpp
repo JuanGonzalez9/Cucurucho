@@ -26,11 +26,15 @@ public:
 	virtual bool foco () const;
 	virtual bool enfocable ();
 	virtual void popular (std::list<control*> &enfocables);
+	virtual void al_presionar (int x, int y) {}
+	virtual void al_mover (int x, int y) {}
 	void establecer_padre (contenedor *c);
+	bool contiene (int x, int y) const;
+	void relativas (int &x, int &y);
 	typedef enum {normal, medio, opuesto} anclado;
 	anclado anclado_x, anclado_y;
 protected:
-	int x, y;
+	int x, y, w, h;
 	bool enfocado;
 	contenedor *padre;
 	SDL_BlendMode blend_mode;

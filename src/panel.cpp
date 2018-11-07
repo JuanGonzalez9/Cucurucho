@@ -3,10 +3,10 @@
 
 panel::panel (int x, int y, int w, int h):
 	contenedor (x, y),
-	color_fondo ({0, 0, 0, alpha}),
-	w (w),
-	h (h)
+	color_fondo ({0, 0, 0, alpha})
 {
+	this->w = w;
+	this->h = h;
 }
 
 panel::~panel ()
@@ -25,6 +25,7 @@ void panel::dibujar(int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	switch (anclado_x) {
 		case medio:
 			xx += (cw - w)/2;
+			x = xx - cx; // Como no utilizo el x lo guardo
 			break;
 		case opuesto:
 			xx += cw - w - x;
@@ -36,6 +37,7 @@ void panel::dibujar(int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	switch (anclado_y) {
 		case medio:
 			yy += (ch - h)/2;
+			y = yy - cy;
 			break;
 		case opuesto:
 			yy += ch - h - y;

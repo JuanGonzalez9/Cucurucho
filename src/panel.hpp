@@ -20,8 +20,6 @@ public:
 	void redimensionar (int w, int h);
 	
 	SDL_Color color_fondo;
-protected:
-	int w, h;
 };
 
 #endif

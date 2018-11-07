@@ -11,14 +11,6 @@ ventana::ventana (const std::string &titulo, int ancho, int alto):
 	us (periodo),
 	cuadros (0)
 {
-	atexit (SDL_Quit);
-
-	if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
-		logerror("No pudo inicializarse SDL");
-		std::cerr << "No pudo inicializarse SDL: " << SDL_GetError () << '\n';
-		return;
-	}
-	
 	Uint32 flags;
 	flags = SDL_WINDOW_HIDDEN;
 

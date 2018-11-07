@@ -26,6 +26,8 @@ public:
 	void enfocar (control *c);
 	void enfocar_siguiente ();
 	void enfocar_anterior ();
+	void enfocar (int x, int y);
+	void resaltar (int x, int y);
 
 protected:
 	ventana &v;

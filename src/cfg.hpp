@@ -61,6 +61,9 @@ public:
 	SDL_Texture *obtener_textura_grisada (const char *camino, SDL_Renderer *renderer);
 	void obtener_plataformas (const char *camino, std::list<plataforma> &l, const plataforma & plataforma_omision);
 	void esperar_vblank ();
+	int random (int desde, int hasta);
+	void establecer_cursor_texto ();
+	void establecer_cursor_flecha ();
 private:
 	drmVBlank vblank;
 	int drm_fd;
@@ -75,7 +78,7 @@ private:
 	xmlNode *unodo;
 	void *dlopen_handle;
 	uint8_t *obtener_direccion_de_simbolo (std::string &imagen);
-	std::string obtener_s_del_xml (const char *camino, xmlXPathContextPtr contexto);
+	bool obtener_s_del_xml (const char *camino, xmlXPathContextPtr contexto, std::string &s);
 	template <class t> t obtener_i_number (const char *camino, typename tipos<t>::funcion_i funcion, std::function<bool(int i, bool omision)> validar);
 	template <typename t> t obtener_fp_number (const char *camino, typename tipos<t>::funcion_pf funcion, std::function<bool(int i, bool omision)> validar);
 	void recrear_archivo_xml ();
@@ -85,6 +88,7 @@ private:
 	bool obtener_padre (std::string &camino);
 	xmlNode *obtener_nodo_mas_profundo (const char *camino, xmlXPathContextPtr contexto);
 	SDL_Texture *obtener_textura_por_omision (std::string & imagen, SDL_Renderer *renderer);
+	SDL_Cursor *cursor_flecha, *cursor_texto, *cursor_activo;
 };
 
 class excepcion_configuracion: public std::invalid_argument

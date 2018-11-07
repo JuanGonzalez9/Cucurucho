@@ -14,6 +14,7 @@ vlogin::vlogin (ventana &v, const std::string &d):
 	usuario (10, 55, 12),
 	clave (10, 95, 12),
 	direccion (10, 135, 21),
+	aceptar (10, 135, "Aceptar"),
 	duracion_mensaje (-1),
 	mensaje_omision ("Ingrese nombre de usuario y clave, luego presione ENTER."),
 	autenticando (false),
@@ -29,6 +30,10 @@ vlogin::vlogin (ventana &v, const std::string &d):
 	direccion.texto (d.c_str(), "direccion:puerto");
 	pnl.agregar (&direccion, false);
 	
+	aceptar.anclado_x = control::opuesto;
+	aceptar.al_presionar_callback = [this]() {al_aceptar();};
+	pnl.agregar (&aceptar, false);
+
 	info (mensaje_omision.c_str(), tiempo_infinito);
 	pnl.agregar (&mensaje, false);
 
@@ -80,6 +85,9 @@ bool vlogin::manejar_evento (SDL_Event e)
 			switch (e.key.keysym.sym) {
 				case SDLK_RETURN:
 					al_aceptar ();
+					return true;
+				case SDLK_ESCAPE:
+					corriendo = false;
 					return true;
 			};
 	}

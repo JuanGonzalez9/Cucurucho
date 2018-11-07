@@ -193,14 +193,12 @@ int main (int argc, char *argv[]) {
 	while (!ayuda && *argv) {
 		if ((*argv)[0] == '-') switch ((*argv)[1]) {
 			case 'd':
-				std::cout << "debug\n";
 				argv++;
 				if (!*argv || !establecer_opcion_depurado (*argv)) {
 					ayuda = true;
 				}
 				break;
 			case 's':
-				std::cout << "servidor\n";
 				argv++;
 				if (!*argv || !obtener_dir_puerto (*argv, dir, puerto)) {
 					ayuda = true;
@@ -208,7 +206,6 @@ int main (int argc, char *argv[]) {
 				como_servidor = true;
 				break;
 			case 'c':
-				std::cout << "cliente\n";
 				argv++;
 				if (!*argv || !obtener_dir_puerto (*argv, dir, puerto)) {
 					ayuda = true;
@@ -234,6 +231,7 @@ int main (int argc, char *argv[]) {
 		EscuchadorDeAcciones* escuchador = new EscuchadorDeAcciones();
 
 		ventana v (std::string ("Login - Contra"), MUNDO_ANCHO, MUNDO_ALTO);
+
 		vlogin vl (v, ss.str());
 		vl.correr ();
 		std::cout << "Usuario: " << vl.cred.usuario << "\n";
@@ -279,7 +277,7 @@ int main (int argc, char *argv[]) {
 				[&presento]{return presento;}
 			)) {
 				mensaje msg (v);
-				msg.correr (std::string ("Lo sentimos, se perdio la conexion con el servidor.\nPresioner ENTER para salir."));
+				msg.correr (std::string ("Lo sentimos. Se perdio la conexion con el servidor.\nPor favor, intente mas tarde."));
 				break;
 			}
 			presento = false;
