@@ -54,7 +54,7 @@ struct autenticados
 	int cantidad, requeridos;
 	bool comenzo; // comenzo el juego por alcanzar el cupo
 	std::mutex mutex;
-	std::thread hilo, hilo_local;
+	std::thread hilo;
 	std::condition_variable condicion;
 	std::mutex mutex_mundo;
 	std::string mundo;		

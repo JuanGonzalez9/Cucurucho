@@ -254,9 +254,6 @@ void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, a
 	a.cantidad = 0;
 	a.requeridos = jugadores;
 	a.comenzo = false;
-	if (strcmp (dir, "127.0.0.1")) {
-		a.hilo_local = std::thread{ escuchar, &a, "127.0.0.1", puerto, jugadores };
-	}
 	a.hilo = std::thread{ escuchar, &a, dir, puerto, jugadores };
 	std::unique_lock<std::mutex> lock(a.mutex);
 	std::cout << "Esperando que se cumpla el cupo de jugadores\n";
