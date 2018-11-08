@@ -119,6 +119,7 @@ $(imagenes): Makefile
 	FILE=`echo "$$(basename $@)"`; \
 	EXT=$${FILE##*.}; \
 	NAME=`echo "$$(basename $@ .$$EXT)"`; \
+	BITS=`getconf LONG_BIT`; \
 	if [ ! -f "imagen-$$NAME.o" ] || [ "../../imagenes/$@" -nt "imagen-$$NAME.o" ]; then \
 		echo creando $@; \
 		rm -f $(bin_PROGRAMS); \
@@ -126,7 +127,12 @@ $(imagenes): Makefile
 		cp "../../imagenes/$@" ../imagenes ; \
 		IMAGEN_DE_RESPALDO="imagen-gris-imagenes-$$NAME.$$EXT"; \
 		$(CONVERT) ../imagenes/$$FILE -modulate 100,1 $$IMAGEN_DE_RESPALDO; \
-		objcopy -I binary -O elf64-x86-64 -B i386 $$IMAGEN_DE_RESPALDO imagen-$$NAME.o; \
+		echo bits: "$BITS"; \
+		if [ "$$BITS" == "64" ]; then \
+			objcopy -I binary -O elf64-x86-64 -B i386 $$IMAGEN_DE_RESPALDO imagen-$$NAME.o; \
+		else \
+			objcopy -I binary -O elf32-i386 -B i386 $$IMAGEN_DE_RESPALDO imagen-$$NAME.o; \
+		fi; \
 	fi;
 
 install-data-local:
