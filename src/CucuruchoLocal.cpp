@@ -41,7 +41,8 @@ void uso ()
     std::cout << "  -s puerto      Ejecuta contra como servidor en 127.0.0.1:puerto\n";
     std::cout << "  -s dir:puerto  Ejecuta contra como servidor en dir:puerto\n";
     std::cout << "  -c puerto      Ejecuta contra como cliente en 127.0.0.1:puerto\n";
-    std::cout << "  -c dir:puerto  Ejecuta contra como cliente en dir:puerto\n\n";
+    std::cout << "  -c dir:puerto  Ejecuta contra como cliente en dir:puerto\n";
+    std::cout << "  -S puerto      Ejecuta como servidor en 127.0.0.1:puerto y muestra ventana\n\n";
 }
 
 #if 0 

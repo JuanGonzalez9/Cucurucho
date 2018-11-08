@@ -1,10 +1,3 @@
-/*
- * Enemigo.h
- *
- *  Created on: Sep 22, 2018
- *      Author: juan
- */
-
 #ifndef ENEMIGO_H_
 #define ENEMIGO_H_
 #include "EntidadDibujable.h"
@@ -17,8 +10,16 @@ public:
 	//GETTER SETTER
 	void perderVida();
 	bool derrotado();
+	//Metodos
+	bool pasaBorde(int nivel);
+	void empujarAtras(int i, int nivel);
+
 private:
 	int vidas;
+	int coordenadaX;
+	int coordenadaY;
+	int posX;
+	int posY;
 };
 
 #endif /* ENEMIGO_H_ */

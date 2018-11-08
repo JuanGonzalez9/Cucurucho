@@ -71,6 +71,7 @@ protected:
 	Enemigo* enemigoNivel1;
 	Enemigo* enemigoNivel2;
 	Enemigo* enemigoNivel3;
+	Enemigo* enemigoEjemplo;
 
 	bool apretandoDerecha(const Uint8* state);
 	bool apretandoIzquierda(const Uint8* state);

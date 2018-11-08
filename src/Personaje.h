@@ -72,6 +72,7 @@ public:
 	int obtenerVelocidadX();
 	bool esActivo();
 	bool esGrisado();
+	bool enJuego();
 	void agregarGris(const char* path,SDL_Renderer* renderer);
 
 	//----METODOS

@@ -64,7 +64,10 @@ juego::juego (ventana &v, int cantidadJugadores):
 	boby3.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 	boby4.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 
-	//enemigoNivel1->crearTextura("imagenes/enemigo.png",renderer);
+	enemigoEjemplo = new Enemigo(600,150,5);
+	enemigoEjemplo->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
+
+
 	enemigoNivel1 = new Enemigo(600,150,5);
 	enemigoNivel1->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 
@@ -273,23 +276,23 @@ void juego::manejar_eventos ()
 	bool boby3Puede=false;
 	bool boby4Puede=false;
 	//el nivel no scrollea si el nivel es 2 o si la posicion de uno de los jugadores activos NO GRISADOS es 0.
-	if((!boby.esGrisado()&&boby.esActivo()&&(boby.getPosX()<0))||(!boby2.esGrisado()&&boby2.esActivo()&&(boby2.getPosX()<0))||(!boby3.esGrisado()&&boby3.esActivo()&&(boby3.getPosX()<0))||(!boby4.esGrisado()&&boby4.esActivo()&&(boby4.getPosX()<0))||(nivel==2)){
+	if((boby.enJuego()&&(boby.getPosX()<0))||(boby2.enJuego()&&(boby2.getPosX()<0))||(boby3.enJuego()&&(boby3.getPosX()<0))||(boby4.enJuego()&&(boby4.getPosX()<0))||(nivel==2)){
 		scrolleando=false;
 	}
 
 	//si boby es activo, esta apretando derecha, y sobrepasa el ancho, boby puede causar un scroll.
 	//Nota: si esta grisado o no es irrelevante aca porque tecnicamente no se pueden apretar las teclas (esta desconectado).
-	if((boby.esActivo())&&(cliente->quiereAccion(Constantes::derecha))&&(boby.getPosX() > (ancho / 2)))
+	if((boby.esActivo()&&!boby.muerto())&&(cliente->quiereAccion(Constantes::derecha))&&(boby.getPosX() > (ancho / 2)))
 		bobyPuede=true;
 
 	//NOTA: por ahora uso esta tecla para los otros 3 pero hay que cambiarla al input correspondiente
-	if((boby2.esActivo())&&(cliente2->quiereAccion(Constantes::derecha))&&(boby2.getPosX() > (ancho / 2)))
+	if((boby2.esActivo()&&!boby2.muerto())&&(cliente2->quiereAccion(Constantes::derecha))&&(boby2.getPosX() > (ancho / 2)))
 		boby2Puede=true;
 
-	if((boby3.esActivo())&&(cliente3->quiereAccion(Constantes::derecha))&&(boby3.getPosX() > (ancho / 2)))
+	if((boby3.esActivo()&&!boby3.muerto())&&(cliente3->quiereAccion(Constantes::derecha))&&(boby3.getPosX() > (ancho / 2)))
 		boby3Puede=true;
 
-	if((boby4.esActivo())&&(cliente4->quiereAccion(Constantes::derecha))&&(boby4.getPosX() > (ancho / 2)))
+	if((boby4.esActivo()&&!boby4.muerto())&&(cliente4->quiereAccion(Constantes::derecha))&&(boby4.getPosX() > (ancho / 2)))
 		boby4Puede=true;
 
 	//SI NINGUNO de los 4 puede scrollear, no hay scrolleo.
@@ -329,7 +332,6 @@ void juego::manejar_eventos ()
 				boby2.decrementarPosX(d3);
 			}
 		}
-		//(para 3 y 4 cambiar el input que corresponde)
 		if (cliente3->quiereAccion(Constantes::derecha)){
 			boby3.hacerComoQueCamina();
 			boby3.subirCoordenadaXEn(d3);
@@ -350,6 +352,8 @@ void juego::manejar_eventos ()
 				boby4.decrementarPosX(d3);
 			}
 		}
+
+		enemigoEjemplo->empujarAtras(d3, nivel);
 
 	}else{
 		//esto es lo que pasa si el fondo no scrollea.
@@ -775,7 +779,7 @@ void juego::actualizar ()
 	int maxVel=0;
 
 	//vemos si pasa 1)
-	if((!boby.esGrisado()&&boby.esActivo()&&(boby.getPosY()>500))||(!boby2.esGrisado()&&boby2.esActivo()&&(boby2.getPosY()>500))||(!boby3.esGrisado()&&boby3.esActivo()&&(boby3.getPosY()>500))||(!boby4.esGrisado()&&boby4.esActivo()&&(boby4.getPosY()>500))||(nivel!=2)){
+	if((boby.enJuego()&&(boby.getPosY()>500))||(boby2.enJuego()&&(boby2.getPosY()>500))||(boby3.enJuego()&&(boby3.getPosY()>500))||(boby4.enJuego()&&(boby4.getPosY()>500))||(nivel!=2)){
 		scrolleando=false;
 	}
 
@@ -831,6 +835,7 @@ void juego::actualizar ()
 			boby4.decrementarPosY(maxVel);
 		}
 
+		enemigoEjemplo->empujarAtras(maxVel, nivel);
 
 		fondo1.avanzarOrigenY(maxVel/3);
 		fondo2.avanzarOrigenY(maxVel/2);
@@ -901,6 +906,32 @@ void juego::actualizar ()
 		}
 	}
 
+	//veo si el jugador toca al enemigo
+	if(boby.enJuego()){
+		if(! enemigoEjemplo->derrotado() && collision(boby.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+			if(boby.getInvincibilityFrames() == 0)
+				boby.perderVida();
+		}
+	}
+	if(boby2.enJuego()){
+		if(! enemigoEjemplo->derrotado() && collision(boby2.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+			if(boby2.getInvincibilityFrames() == 0)
+				boby2.perderVida();
+		}
+	}
+	if(boby3.enJuego()){
+		if(! enemigoEjemplo->derrotado() && collision(boby3.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+			if(boby3.getInvincibilityFrames() == 0)
+				boby3.perderVida();
+		}
+	}
+	if(boby4.enJuego()){
+		if(! enemigoEjemplo->derrotado() && collision(boby4.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+			if(boby4.getInvincibilityFrames() == 0)
+				boby4.perderVida();
+		}
+	}
+
 	//veo si el jugador se cayo
 	if(boby.getPosY()>600){
 		boby.perderVida();
@@ -932,6 +963,11 @@ void juego::actualizar ()
 	if(nivel == 1 && boby.estaCercaDelFinalDelNivel1()){
 		boby.verSiBalasPegan(enemigoNivel1);
 	}
+	//veo si las balas le pegan al enemigo
+	boby.verSiBalasPegan(enemigoEjemplo);
+	boby2.verSiBalasPegan(enemigoEjemplo);	
+	boby3.verSiBalasPegan(enemigoEjemplo);
+	boby4.verSiBalasPegan(enemigoEjemplo);	
 
 	loginfo("Se termina de actualizar juego");
 	
@@ -1076,6 +1112,10 @@ void juego::dibujar ()
 			enemigoNivel1->~Enemigo(); // Esto no libera memoria
 		}
 	}
+
+	if(!enemigoEjemplo->derrotado())
+		enemigoEjemplo->dibujar(renderer);
+
 
 	if(nivel == 2 && boby.estaCercaDelFinalDelNivel2()){
 		if(!enemigoNivel2->derrotado())
@@ -1248,6 +1288,10 @@ juego::~juego ()
 
 	if(! enemigoNivel1->derrotado()){
 		enemigoNivel1->~Enemigo();
+	}
+
+	if(! enemigoEjemplo->derrotado()){
+		enemigoEjemplo->~Enemigo();
 	}
 
 	cliente->~traductorDelCliente();

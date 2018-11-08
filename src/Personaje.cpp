@@ -659,6 +659,10 @@ bool Personaje::muerto(){
 	return (hitPoints <= 0);
 }
 
+bool Personaje::enJuego(){
+	return ((hitPoints>0)&&!grisado&&activo);
+}
+
 void Personaje::refreshIFrames(){
 	if(invincibilityFrames > 0)
 		invincibilityFrames--;
@@ -679,7 +683,8 @@ void Personaje::godmodeSwitch(){
 
 Personaje::~Personaje() {
 	//se destruye en el padre
-	for(unsigned i = 0;i < bullets.size();i++){
+	int size= bullets.size();
+	for(unsigned i = 0;i < size;i++){
 		bullets[i]->~Bullet();
 	}
 
