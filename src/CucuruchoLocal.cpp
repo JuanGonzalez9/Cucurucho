@@ -225,6 +225,7 @@ int main (int argc, char *argv[]) {
 	bool ayuda = false;
 	bool como_servidor = false;
 	bool como_cliente = false;
+	bool mostrar_ventana_servidor = false;
 	std::string dir;
 	unsigned short puerto;
 	while (!ayuda && *argv) {
@@ -235,6 +236,8 @@ int main (int argc, char *argv[]) {
 					ayuda = true;
 				}
 				break;
+			case 'S':
+				mostrar_ventana_servidor = true;
 			case 's':
 				argv++;
 				if (!*argv || !obtener_dir_puerto (*argv, dir, puerto)) {
@@ -336,6 +339,9 @@ int main (int argc, char *argv[]) {
 		esperar_jugadores (cantidadJugadores, dir.c_str(), puerto, a);
 
 		ventana v (std::string ("Servidor - Contra"), MUNDO_ANCHO, MUNDO_ALTO);
+		if (mostrar_ventana_servidor) {
+			v.mostrar ();
+		}
 		juego j(v, cantidadJugadores);
 
 	 	std::cout << "Crea un mundo inicial\n";
@@ -357,8 +363,10 @@ int main (int argc, char *argv[]) {
 
 		std::cout << "Iniciando ciclo\n";
 	 	while (!salir && j.jugando ()) {                         
-			cfg.esperar_vblank ();
-
+	 		if (!mostrar_ventana_servidor) {
+				cfg.esperar_vblank ();
+			}
+			
 			std::unique_lock<std::mutex> lock(a.mutex);
 			for (int i = 0; i < a.cantidad; i++) {
 				std::lock_guard<std::mutex> lock_tmp(a.usuarios[i].mutex_tmp);
@@ -412,6 +420,11 @@ int main (int argc, char *argv[]) {
 			std::unique_lock<std::mutex> lock_mundo(a.mutex_mundo);
 			a.mundo = mundo;
 			lock_mundo.unlock ();
+
+			if (mostrar_ventana_servidor) {
+				j.dibujar();
+				j.presentar();
+			}
 		}
 		if (salir) {
 			std::cout << "Saliendo por señal de interrupción\n";
