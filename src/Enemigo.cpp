@@ -21,7 +21,8 @@ Enemigo::Enemigo(int x,int y,int life, int coordenada, int nivel) {
 		coordenadaY=y;
 		coordenadaX=coordenada+posX-800;
 	}
-
+	coordenadaActiva=coordenada;
+	nivelActivo=nivel;
 	activo=false;
 }
 
@@ -37,6 +38,9 @@ Enemigo::Enemigo(int x,int y,int life) {
 
 void Enemigo::perderVida(){
 	vidas--;
+	if (this->derrotado()){
+		activo=false;
+	}
 }
 
 bool Enemigo::derrotado(){
@@ -70,15 +74,13 @@ bool Enemigo::esActivo(){
 }
 
 void Enemigo::activar(int nivel, int coordenada){
-	/*if(nivel==nivelActivo){
+	if(nivel==nivelActivo){
 		if((nivel==2)&&(coordenada<=coordenadaActiva))
 			activo=true;
 		else if ((nivel!=2)&&(coordenada>=coordenadaActiva))
 			activo=true;
-	}*/
-	if (coordenada >= 1000)
-		activo=true;
-
+	}
+	//if((nivel==nivelActivo)&&(coordenada>=coordenadaActiva)) activo=true;
 }
 
 void Enemigo::actualizar(int nivel, int coordenada){

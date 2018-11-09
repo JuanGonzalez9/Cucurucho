@@ -65,7 +65,22 @@ juego::juego (ventana &v, int cantidadJugadores):
 	boby3.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 	boby4.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 
-	enemigoEjemplo = new Enemigo(400,150,1,400,1);
+	//ejemplos para probar:
+
+	//aparece al principio del nivel 1
+	//enemigoEjemplo = new Enemigo(500,150,1,400,1);
+
+	//aparece en nivel 1 despues de scrollear un poquito
+	enemigoEjemplo = new Enemigo(800,400,1,1000,1);
+
+	//aparece en nivel 3 despues de scrollear un poquito
+	//enemigoEjemplo = new Enemigo(800,150,1,1000,3);
+
+	//pero aaaaaa en el nivel 2 no andaaaa
+	//enemigoEjemplo = new Enemigo(650,0,1,2000,2);
+
+
+
 	enemigoEjemplo->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 
 
@@ -788,22 +803,22 @@ void juego::actualizar ()
 	}
 
 	//si boby es activo, supera los 200px, se mueve para arriba y no toca el techo, boby puede causar un scroll.
-	if(boby.esActivo()&&(boby.getPosY() <=(200))&&(boby.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby.obtenerVelocidadY() > 0)){
+	if(boby.esActivo()&&!boby.muerto()&&(boby.getPosY() <=(200))&&(boby.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby.obtenerVelocidadY() > 0)){
 		bobyPuede=true;
 		if(boby.obtenerVelocidadY()<maxVel)
 			maxVel=boby.obtenerVelocidadY();
 	}
-	if(boby2.esActivo()&&(boby2.getPosY() <=(200))&&(boby2.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby2.obtenerVelocidadY() > 0)){
+	if(boby2.esActivo()&&!boby2.muerto()&&(boby2.getPosY() <=(200))&&(boby2.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby2.obtenerVelocidadY() > 0)){
 		boby2Puede=true;
 		if(boby2.obtenerVelocidadY()<maxVel)
 			maxVel=boby2.obtenerVelocidadY();
 	}
-	if(boby3.esActivo()&&(boby3.getPosY() <=(200))&&(boby3.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby3.obtenerVelocidadY() > 0)){
+	if(boby3.esActivo()&&!boby3.muerto()&&(boby3.getPosY() <=(200))&&(boby3.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby3.obtenerVelocidadY() > 0)){
 		boby3Puede=true;
 		if(boby3.obtenerVelocidadY()<maxVel)
 			maxVel=boby3.obtenerVelocidadY();
 	}
-	if(boby4.esActivo()&&(boby4.getPosY() <=(200))&&(boby4.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby4.obtenerVelocidadY() > 0)){
+	if(boby4.esActivo()&&!boby4.muerto()&&(boby4.getPosY() <=(200))&&(boby4.obtenerVelocidadY()<0)&&(rect_origen_fondo3.y + boby4.obtenerVelocidadY() > 0)){
 		boby4Puede=true;
 		if(boby4.obtenerVelocidadY()<maxVel)
 			maxVel=boby4.obtenerVelocidadY();
@@ -913,25 +928,25 @@ void juego::actualizar ()
 
 	//veo si el jugador toca al enemigo
 	if(boby.enJuego()){
-		if(enemigoEjemplo->esActivo() && collision(boby.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+		if(!enemigoEjemplo->derrotado() && collision(boby.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
 			if(boby.getInvincibilityFrames() == 0)
 				boby.perderVida();
 		}
 	}
 	if(boby2.enJuego()){
-		if(enemigoEjemplo->esActivo() && collision(boby2.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+		if(!enemigoEjemplo->derrotado() & collision(boby2.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
 			if(boby2.getInvincibilityFrames() == 0)
 				boby2.perderVida();
 		}
 	}
 	if(boby3.enJuego()){
-		if(enemigoEjemplo->esActivo() && collision(boby3.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+		if(!enemigoEjemplo->derrotado() && collision(boby3.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
 			if(boby3.getInvincibilityFrames() == 0)
 				boby3.perderVida();
 		}
 	}
 	if(boby4.enJuego()){
-		if(enemigoEjemplo->esActivo() && collision(boby4.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+		if(!enemigoEjemplo->derrotado() && collision(boby4.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
 			if(boby4.getInvincibilityFrames() == 0)
 				boby4.perderVida();
 		}
