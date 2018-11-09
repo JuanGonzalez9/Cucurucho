@@ -225,7 +225,7 @@ bool obtener_dir_puerto (char *arg, std::string &dir, unsigned short &puerto)
 }
 
 int main (int argc, char *argv[]) {
-	
+	cout<<"branch tp2"<<endl;
 	registro.registrarNuevoJuego();
 
 	bool ayuda = false;
