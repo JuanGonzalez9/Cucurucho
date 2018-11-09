@@ -40,7 +40,7 @@ public:
 	bool jugando ();
 protected:
 	bool termino, cambioNivel;
-	int us, cuadros, d1, d2, d3, nivel, cascada, num_jugadores;
+	int us, cuadros, d1, d2, d3, nivel, cascada, num_jugadores, coordenada;
 	int mundo_w, mundo_h;
 	temporizador t_ciclo, t_fps;
 	SDL_Rect rect_origen_fondo3;

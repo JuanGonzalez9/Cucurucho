@@ -19,6 +19,7 @@ juego::juego (ventana &v, int cantidadJugadores):
 	d3 (5),
 	nivel (1),
 	cascada(0),
+	coordenada(800),
 	num_jugadores(cantidadJugadores),
 	rect_origen_fondo3 {0, 0, 800, 600},
 	renderer (nullptr),
@@ -64,7 +65,7 @@ juego::juego (ventana &v, int cantidadJugadores):
 	boby3.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 	boby4.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 
-	enemigoEjemplo = new Enemigo(600,150,5);
+	enemigoEjemplo = new Enemigo(400,150,1,400,1);
 	enemigoEjemplo->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 
 
@@ -354,6 +355,7 @@ void juego::manejar_eventos ()
 		}
 
 		enemigoEjemplo->empujarAtras(d3, nivel);
+		coordenada +=d3;
 
 	}else{
 		//esto es lo que pasa si el fondo no scrollea.
@@ -644,6 +646,7 @@ void juego::actualizarNivel1(){
 	
 	cambioNivel=false;
 	nivel=2;
+	coordenada=3000;
 	fondo1.obtenerTextura("//configuracion//escenarios//nivel2//fondo1", renderer);
 	fondo2.obtenerTextura("//configuracion//escenarios//nivel2//fondo2", renderer);
 
@@ -680,7 +683,8 @@ void juego::actualizarNivel1(){
 
 void juego::actualizarNivel2(){
 	cambioNivel=false;
-	nivel=3;		
+	nivel=3;
+	coordenada=800;
 	fondo1.obtenerTextura("//configuracion//escenarios//nivel3//fondo1", renderer);
 	fondo2.obtenerTextura("//configuracion//escenarios//nivel3//fondo2", renderer);
 
@@ -836,6 +840,7 @@ void juego::actualizar ()
 		}
 
 		enemigoEjemplo->empujarAtras(maxVel, nivel);
+		coordenada -=maxVel;
 
 		fondo1.avanzarOrigenY(maxVel/3);
 		fondo2.avanzarOrigenY(maxVel/2);
@@ -871,7 +876,7 @@ void juego::actualizar ()
 		cascada+=2;
 		fondo1.avanzarOrigenY(-2);		
 		if(cascada==32){
-			fondo1.avanzarOrigenY(34);
+			fondo1.avanzarOrigenY(32);
 			cascada=0;
 		}
 	}
@@ -908,25 +913,25 @@ void juego::actualizar ()
 
 	//veo si el jugador toca al enemigo
 	if(boby.enJuego()){
-		if(! enemigoEjemplo->derrotado() && collision(boby.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+		if(enemigoEjemplo->esActivo() && collision(boby.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
 			if(boby.getInvincibilityFrames() == 0)
 				boby.perderVida();
 		}
 	}
 	if(boby2.enJuego()){
-		if(! enemigoEjemplo->derrotado() && collision(boby2.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+		if(enemigoEjemplo->esActivo() && collision(boby2.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
 			if(boby2.getInvincibilityFrames() == 0)
 				boby2.perderVida();
 		}
 	}
 	if(boby3.enJuego()){
-		if(! enemigoEjemplo->derrotado() && collision(boby3.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+		if(enemigoEjemplo->esActivo() && collision(boby3.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
 			if(boby3.getInvincibilityFrames() == 0)
 				boby3.perderVida();
 		}
 	}
 	if(boby4.enJuego()){
-		if(! enemigoEjemplo->derrotado() && collision(boby4.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
+		if(enemigoEjemplo->esActivo() && collision(boby4.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
 			if(boby4.getInvincibilityFrames() == 0)
 				boby4.perderVida();
 		}
@@ -964,10 +969,19 @@ void juego::actualizar ()
 		boby.verSiBalasPegan(enemigoNivel1);
 	}
 	//veo si las balas le pegan al enemigo
-	boby.verSiBalasPegan(enemigoEjemplo);
-	boby2.verSiBalasPegan(enemigoEjemplo);	
-	boby3.verSiBalasPegan(enemigoEjemplo);
-	boby4.verSiBalasPegan(enemigoEjemplo);	
+	if (enemigoEjemplo->esActivo()){
+		boby.verSiBalasPegan(enemigoEjemplo);
+		boby2.verSiBalasPegan(enemigoEjemplo);	
+		boby3.verSiBalasPegan(enemigoEjemplo);
+		boby4.verSiBalasPegan(enemigoEjemplo);
+	}
+
+	//actualizo el enemigo
+	enemigoEjemplo->actualizar(nivel, coordenada);
+	if (enemigoEjemplo->derrotado())
+		enemigoEjemplo->~Enemigo();
+
+
 
 	loginfo("Se termina de actualizar juego");
 	
@@ -1113,7 +1127,7 @@ void juego::dibujar ()
 		}
 	}
 
-	if(!enemigoEjemplo->derrotado())
+	if(!enemigoEjemplo->derrotado()&&enemigoEjemplo->esActivo())
 		enemigoEjemplo->dibujar(renderer);
 
 
