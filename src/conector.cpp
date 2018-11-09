@@ -86,13 +86,13 @@ bool leer (int fd, std::string &s)
 	std::stringstream ss;
 	leidos = 0;
 	int r;
-	std::vector<char> buffer (largo);
+	char *buffer = new char[largo+1];
 	int faltan = largo;
-	while (leidos < largo && (r = recv (fd, &buffer[0], faltan, 0)) > 0) {
+	while (leidos < largo && (r = recv (fd, buffer + leidos, faltan, 0)) > 0) {
 		leidos += r;
 		faltan -= r;
 		buffer[leidos] = '\0';
-		ss << &buffer[0];
+		ss << buffer;
 	}
 	if (leidos < largo) {
 		return false;
