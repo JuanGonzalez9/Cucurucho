@@ -159,6 +159,8 @@ static bool leer_resultado_autenticacion (int fd, usuario::estado &estado, int &
 		orden = std::stoi (o);
 		if (e == "aceptado") {
 			estado = usuario::aceptado;
+		} else if (e == "reaceptado") {
+			estado = usuario::reaceptado;
 		} else if (e == "rechazado") {
 			estado = usuario::rechazado;
 		} else if (e == "cupo") {
@@ -208,8 +210,8 @@ static usuario::estado autenticar_usuario (autenticados *a, std::string &usuario
 				orden = i;
 				if (a->usuarios[i].fd == -1) {
 					establecer_usuario (a->usuarios[orden], fd, usuario);
-					std::cout << "Reconectado: " << usuario << "\n";
-					return usuario::aceptado;
+					std::cout << "Reaceptado: " << usuario << "\n";
+					return usuario::reaceptado;
 				} else {
 					std::cout << "Rechazado por estar jugando: " << usuario << "\n";
 					return usuario::jugando;
@@ -243,7 +245,19 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 	switch (autenticar_usuario (a, usuario, clave, orden, fd) ) {
 		case usuario::aceptado: {
 			escribir_resultado_autenticacion ("aceptado", fd, orden, jugadores);
+			
 			std::lock_guard<std::mutex> lock(a->mutex);
+			std::cout << "esperando ok\n";
+			if (!esperar_ok (a->usuarios[orden].fd)) { // cancelo
+				std::cout << "Cancelado: " << usuario << "\n";
+				for (int i = orden; i < a->cantidad-1; i++) {
+					memcpy (&a->usuarios[i+1], &a->usuarios[i], sizeof (struct usuario) );
+				}
+				a->cantidad--;
+				break;
+			}
+			std::cout << "ok recibido\n";
+			
 			if (a->cantidad == a->requeridos) {
 				std::cout << "Cupo alcanzado\n";
 				if (!a->comenzo) {
@@ -253,13 +267,29 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 				}
 				for (int i = 0; i < a->cantidad; i++) {
 					if (a->usuarios[i].esperando_ok) {
-						std::cout << "esperando ok\n";
-						esperar_ok (a->usuarios[i].fd);
 						std::cout << "enviando ok a " << a->usuarios[i].nombre << " en fd " << a->usuarios[i].fd << "\n";
-						a->usuarios[i].esperando_ok = false;
 						enviar_ok (a->usuarios[i].fd);
 						std::cout << "ok enviado\n";
+						a->usuarios[i].esperando_ok = false;
 					}
+				}
+			}
+			break;
+		}
+		case usuario::reaceptado: {
+			escribir_resultado_autenticacion ("reaceptado", fd, orden, jugadores);
+
+			std::cout << "esperando ok\n";
+			esperar_ok (a->usuarios[orden].fd);
+			std::cout << "ok recibido\n";
+
+			std::lock_guard<std::mutex> lock(a->mutex);
+			for (int i = 0; i < a->cantidad; i++) {
+				if (a->usuarios[i].esperando_ok) {
+					std::cout << "enviando ok a " << a->usuarios[i].nombre << " en fd " << a->usuarios[i].fd << "\n";
+					a->usuarios[i].esperando_ok = false;
+					enviar_ok (a->usuarios[i].fd);
+					std::cout << "ok enviado\n";
 				}
 			}
 			break;
@@ -306,7 +336,6 @@ void escuchar (autenticados *a, const char *dir, int puerto, int jugadores)
 		return;
 	}
 
-	int conectados = 0;
 	std::list<std::thread> hilos;
 	lock.unlock();
 	while (true) {
@@ -317,7 +346,6 @@ void escuchar (autenticados *a, const char *dir, int puerto, int jugadores)
 		} else {
 			std::cout << "Cliente conectado\n";
 			hilos.push_back (std::thread{ comprobar_credencial, a, fd_nuevo, jugadores });
-			conectados++;
 		}
 		// TODO terminar hilos colgados y unirse a los que terminaron
 		//pthread_cancel(thrd.native_handle());
@@ -366,6 +394,9 @@ void comprobar_credencial_en_servidor (credencial &cred)
 			case usuario::aceptado:
 				std::cout << "Respuesta: aceptado\n";
 				break;
+			case usuario::reaceptado:
+				std::cout << "Respuesta: reaceptado\n";
+				break;
 			case usuario::rechazado:
 				std::cout << "Respuesta: rechazado\n";
 				break;
@@ -389,10 +420,20 @@ void enviar_ok (int fd)
 	escribir (fd, ok);
 }
 
-void esperar_ok (int fd)
+void enviar_cancelar (int fd)
+{
+	std::string cancelar = "cancelar";
+	escribir (fd, cancelar);
+}
+
+bool esperar_ok (int fd)
 {
 	std::string ok;
 	leer (fd, ok);
+	if (ok != "ok") {
+		std::cout << "No recibio ok, sino: " << ok << "\n";
+	}
+	return (ok == "ok");
 }
 
 

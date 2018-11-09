@@ -21,7 +21,7 @@ public:
 	virtual bool manejar_evento (SDL_Event e);
 	virtual void actualizar ();
 	virtual void dibujar ();
-	void al_aceptar ();
+	virtual void al_aceptar ();
 protected:
 	panel pnl;
 	boton aceptar;

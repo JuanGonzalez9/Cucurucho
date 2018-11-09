@@ -23,11 +23,13 @@ public:
 	virtual bool enfocable ();
 	virtual void al_presionar (int x, int y);
 	std::function<void()> al_presionar_callback;
+	void texto (const char *texto);
+	std::string texto () const;
 protected:
-	std::string texto;
+	std::string s;
 	int padding_x, padding_y, borde_x, borde_y, char_w, char_h;
 	fuente f;
-	SDL_Color color_borde, color_borde_foco, color_fondo, color_fondo_foco, color_texto;
+	SDL_Color color_borde, color_borde_foco, color_borde_resaltado, color_fondo, color_fondo_foco, color_fondo_resaltado, color_texto;
 };
 
 #endif

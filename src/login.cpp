@@ -74,7 +74,6 @@ void vlogin::manejar_eventos()
 			info (mensaje_omision.c_str());
 		}
 	}
-	ejecutar_sincronizada ();
 	dialogo::manejar_eventos();
 }
 
@@ -150,7 +149,7 @@ void vlogin::comprobar_credencial (vlogin *vl)
 {
 	// Hilo secundario
 	comprobar_credencial_en_servidor (vl->cred);
-	if (vl->cred.resultado == usuario::aceptado) {
+	if (vl->cred.resultado == usuario::aceptado || vl->cred.resultado == usuario::reaceptado) {
 		vl->sincronizada ([vl](){vl->al_ser_aceptado ();});
 		std::cout << "enviando ok\n";
 		enviar_ok (vl->cred.fd);
@@ -161,32 +160,8 @@ void vlogin::comprobar_credencial (vlogin *vl)
 	vl->sincronizada ([vl](){vl->al_terminar_hilo ();});
 }
 
-void vlogin::sincronizada (std::function<void()> funcion)
-{
-	std::unique_lock<std::mutex> lock(mutex_sinc);
-	//std::cout << "Espero ejecucion de funcion sincronizada\n";
-	funcion_sinc = funcion;
-	ejecutada_sinc = false;
-	condicion_sinc.wait (lock, [this]{return this->ejecutada_sinc;});
-	//std::cout << "Fin: Espero ejecucion de funcion sincronizada\n";
-}
-
-void vlogin::ejecutar_sincronizada ()
-{
-	std::unique_lock<std::mutex> lock(mutex_sinc);
-	if (funcion_sinc) {
-		//std::cout << "Ejecuto funcion sincronizada\n";
-		funcion_sinc ();
-		funcion_sinc = nullptr;
-		ejecutada_sinc = true;
-		condicion_sinc.notify_all ();
-		//std::cout << "Fin: Ejecuto funcion sincronizada\n";
-	}
-}
-
 void vlogin::al_ser_aceptado ()
 {
-	std::string u = usuario.texto ();
 	info ("Espere el inicio de la partida.", tiempo_infinito);
 	/*
 	gtk_widget_set_sensitive (login->aceptar, false);
@@ -203,6 +178,7 @@ void vlogin::al_terminar_hilo ()
 	hilo.detach (); // Se que saldra
 	switch (cred.resultado) {
 		case usuario::aceptado:
+		case usuario::reaceptado:
 			std::cout << "Credencial aceptada\n";
 			corriendo = false;
 			break;

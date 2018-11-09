@@ -27,6 +27,7 @@ public:
 	virtual void popular (std::list<control*> &enfocables);
 
 	void agregar (control *c, bool liberar);
+	void remover (control *c);
 	void vaciar ();
 protected:
 	bool corriendo;

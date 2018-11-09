@@ -28,7 +28,7 @@ void mensaje::vaciar ()
 	std::list<etiqueta*>::const_iterator i;
 	for (i = etiquetas.begin (); i != etiquetas.end (); ++i) {
 		etiqueta *e = *i;
-		delete (e);
+		pnl.remover (e);
 	}
 	etiquetas.clear ();
 }
@@ -36,7 +36,6 @@ void mensaje::vaciar ()
 void mensaje::correr(const std::string &msj)
 {
 	vaciar ();
-	pnl.vaciar ();
 	std::istringstream is (msj.c_str());
 	std::string s;
 	int y = 15;
@@ -53,7 +52,6 @@ void mensaje::correr(const std::string &msj)
 		if (max_ancho < ancho) {
 			max_ancho = ancho;
 		}
-		pnl.agregar (&aceptar, false);
 		etiquetas.push_back (e);
 	}
 	pnl.redimensionar (max_ancho + 40, y + 10 + 40);

@@ -40,6 +40,22 @@ void contenedor::agregar (control *c, bool liberar)
 	c->establecer_padre (this);
 }
 
+void contenedor::remover (control *c)
+{
+	std::list<elemento*>::const_iterator i;
+	for (i = controles.begin (); i != controles.end (); ++i) {
+		elemento *e = *i;
+		if (e->c == c) {
+			if (e->liberar) {
+				delete (e->c);
+			}
+			delete (e);
+			controles.erase (i);
+			return;
+		}
+	}
+}
+
 void contenedor::vaciar ()
 {
 	std::list<elemento*>::const_iterator i;

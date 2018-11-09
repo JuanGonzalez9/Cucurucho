@@ -1,10 +1,6 @@
 #ifndef LOGIN_HPP
 #define LOGIN_HPP
 
-#include <functional>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
 #include "temporizador.hpp"
 #include "editor.hpp"
 #include "etiqueta.hpp"
@@ -37,7 +33,7 @@ struct usuario
 	std::thread hilo;
 	std::mutex mutex_teclas;
 	char teclas[TAMANIO_MENSAJE_TECLAS + 1];
-	typedef enum {aceptado, rechazado, cupo, jugando, fallido} estado;
+	typedef enum {aceptado, reaceptado, rechazado, cupo, jugando, fallido} estado;
 };
 
 struct credencial
@@ -70,8 +66,6 @@ public:
 	virtual bool manejar_evento (SDL_Event e);
 	virtual void actualizar ();
 	virtual void dibujar ();
-	void sincronizada (std::function<void()> funcion);
-	void ejecutar_sincronizada ();
 	void al_aceptar ();
 	void al_ser_aceptado ();
 	void al_terminar_hilo ();
@@ -88,10 +82,6 @@ protected:
 	bool autenticando;
 	std::thread hilo;
 	int fd;
-	std::mutex mutex_sinc;
-	std::function<void()> funcion_sinc;
-	std::condition_variable condicion_sinc;
-	volatile bool ejecutada_sinc;
 	bool inicializar_credencial ();
 	void error (const char *msg, int duracion = tiempo_infinito);
 	void info (const char *msg, int duracion = tiempo_infinito);

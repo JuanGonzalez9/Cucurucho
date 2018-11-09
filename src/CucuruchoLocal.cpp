@@ -1,6 +1,5 @@
 #include <SDL2/SDL.h>
 #include "SDL2/SDL_image.h"
-#include <stdio.h>
 #include <string>
 #include <sstream>
 #include "juego.hpp"
@@ -15,11 +14,17 @@
 #include <thread>
 #include <mutex>
 #include "login.hpp"
-#include "mensaje.hpp"
+#include "mensaje_conexion.hpp"
 #include "conector.hpp"
 #include "ventana.hpp"
-#include <signal.h>
- 
+
+extern "C"
+{
+	#include <signal.h>
+	#include "ctype.h"
+	#include <stdio.h>
+}
+
 volatile bool salir = false; 
 autenticados *pa = nullptr;
 void al_interrumpir (int s)
@@ -279,9 +284,10 @@ int main (int argc, char *argv[]) {
 		std::cout << "Clave: " << vl.cred.clave << "\n";
 		std::cout << "Direccion: " << vl.cred.direccion << "\n";
 		std::cout << "Puerto: " << vl.cred.puerto << "\n";
-		if (vl.cred.resultado != usuario::aceptado) {
+		if (vl.cred.resultado != usuario::aceptado && vl.cred.resultado != usuario::reaceptado) {
 			return 0;
 		}
+
 		int tamanio_respuestaServidor = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * vl.cred.jugadores;
 		std::cout << "Cliente: fd: " << vl.cred.fd << ", jugadores: " << vl.cred.jugadores << "\n";
 
@@ -317,17 +323,60 @@ int main (int argc, char *argv[]) {
 				std::chrono::milliseconds(recien_conectado ? MAX_TIEMPO_RESPUESTA_NUEVO : MAX_TIEMPO_RESPUESTA),
 				[&presento]{return presento;}
 			)) {
-				mensaje msg (v);
-				msg.correr (std::string ("Lo sentimos. Se perdio la conexion con el servidor.\nPor favor, intente mas tarde."));
-				break;
+				std::cerr << "delete (soqueteCliente)\n";
+				delete (soqueteCliente);
+				soqueteCliente = nullptr;
+				std::cerr << "hilo.join ()\n";
+				if (hilo.joinable()) {
+					hilo.join ();
+				}
+
+				ss.str (std::string());
+				std::string usr = vl.cred.usuario;
+				usr[0] = toupper (usr[0]);
+				ss << "Lo sentimos " << usr << ". Se perdio la conexion con el servidor.\nVerifique que el mismo se encuentre corriendo en "
+				   << vl.cred.direccion << ':' << vl.cred.puerto << "\ny que tiene acceso a la red. Intentando reconectarse...";
+				mensaje_conexion msg (v, vl.cred);
+				msg.correr (ss.str());
+				if (vl.cred.resultado != usuario::reaceptado) {
+					ss.str (std::string());
+					std::string usr = vl.cred.usuario;
+					usr[0] = toupper (usr[0]);
+					ss << "Lo sentimos " << usr << ". La partida en la que participabas ya no existe mas.";
+					// TODO opcion login
+					mensaje msg (v);
+					msg.correr (ss.str());
+					break;
+				}
+
+				soqueteCliente = new Socket(vl.cred.fd);
+				presento = false;
+				recien_conectado = true;
+				std::cerr << "lanzo hilo\n";
+				hilo = std::thread {
+					comunicar_servidor,
+					soqueteCliente,
+					escuchador,
+					&juegoCliente,
+					&condicion_presento,
+					&mutex_presento,
+					&presento,
+					tamanio_respuestaServidor
+				};
+				std::cerr << "lanzado\n";
+			} else {
+				presento = false;
+				recien_conectado = false;
 			}
-			presento = false;
-			recien_conectado = false;
 		}
-		std::cerr << "delete (soqueteCliente)\n";
-		delete (soqueteCliente);
-		std::cerr << "hilo.join ()\n";
-		hilo.join ();
+		if (soqueteCliente) {
+			std::cerr << "delete (soqueteCliente)\n";
+			delete (soqueteCliente);
+		}
+		if (hilo.joinable()) {
+			std::cerr << "hilo.join ()\n";
+			hilo.join ();
+		}
 	} else { // como_servidor
 		signal (SIGINT, al_interrumpir);
 
@@ -380,7 +429,7 @@ int main (int argc, char *argv[]) {
 					espera = MAX_TIEMPO_RESPUESTA;
 				}
 				if (a.usuarios[i].tmp.milisegundos () > espera) {
-					if (a.usuarios[i].fd != -1) {
+					if (a.usuarios[i].fd != -1 && !a.usuarios[i].esperando_ok) {
 						if (!a.usuarios[i].conectado) {
 							std::cout << "Reconectando cliente: " << i << "\n";
 							j.desgrisarJugador(i+1);

@@ -27,6 +27,29 @@ void contenedor_principal::popular_enfocables ()
 	}
 }
 
+void contenedor_principal::sincronizada (std::function<void()> funcion)
+{
+	std::unique_lock<std::mutex> lock(mutex_sinc);
+	//std::cout << "Espero ejecucion de funcion sincronizada\n";
+	funcion_sinc = funcion;
+	ejecutada_sinc = false;
+	condicion_sinc.wait (lock, [this]{return this->ejecutada_sinc;});
+	//std::cout << "Fin: Espero ejecucion de funcion sincronizada\n";
+}
+
+void contenedor_principal::ejecutar_sincronizada ()
+{
+	std::unique_lock<std::mutex> lock(mutex_sinc);
+	if (funcion_sinc) {
+		//std::cout << "Ejecuto funcion sincronizada\n";
+		funcion_sinc ();
+		funcion_sinc = nullptr;
+		ejecutada_sinc = true;
+		condicion_sinc.notify_all ();
+		//std::cout << "Fin: Ejecuto funcion sincronizada\n";
+	}
+}
+
 void contenedor_principal::correr()
 {
 	v.mostrar ();
@@ -46,6 +69,7 @@ void contenedor_principal::correr()
 
 void contenedor_principal::manejar_eventos()
 {
+	ejecutar_sincronizada ();
 	SDL_Event event;
 	while (SDL_PollEvent (&event) != 0) {
 		manejar_evento (event);

@@ -7,7 +7,7 @@ extern "C"
 {
 }
 
-boton::boton (int x, int y, const char *texto):
+boton::boton (int x, int y, const char *s):
 	control (x, y),
 	padding_x (7),
 	padding_y (5),
@@ -22,16 +22,31 @@ boton::boton (int x, int y, const char *texto):
 	//color_borde ({80, 80, 80, 255}),
 	//color_borde_foco ({100, 100, 100, 255}),
 	color_borde ({20, 20, 20, 40}),
-	color_borde_foco ({80, 80, 80, 40}),
+	color_borde_foco ({70, 70, 70, 60}),
+	color_borde_resaltado ({80, 80, 80, 80}),
 	color_fondo ({0, 0, 0, 40}),
-	color_fondo_foco ({60, 60, 60, 40}),
+	color_fondo_foco ({50, 50, 50, 60}),
+	color_fondo_resaltado ({60, 60, 60, 80}),
 	color_texto ({200, 200, 200, alpha})
 {
-	this->texto = texto;
+	this->s = s;
 }
 
 boton::~boton ()
 {
+}
+
+void boton::texto (const char *t)
+{
+	if (t) {
+		s.clear ();
+		s.append (t);
+	}
+}
+
+std::string boton::texto () const
+{
+	return s;
 }
 
 bool boton::enfocable ()
@@ -50,7 +65,6 @@ bool boton::manejar_evento (SDL_Event &e)
 		case SDL_KEYDOWN:
 			switch (e.key.keysym.sym) {
 				case SDLK_SPACE:
-					std::cout << "space\n";
 					al_presionar (x, y);
 					return true;
 			};
@@ -62,7 +76,6 @@ bool boton::manejar_evento (SDL_Event &e)
 
 void boton::al_presionar (int x, int y)
 {
-	std::cout << "al_presionar\n";
 	if (al_presionar_callback) {
 		al_presionar_callback ();
 	}
@@ -77,9 +90,9 @@ void boton::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	// simplicidad esta solución.
 	// Obtengo el ancho y el alto de un espacio, sirve porque uso una fuente mono-espaciada.
 	f.dibujar (renderer, " ", x, y, color_texto, char_w, char_h);
-	const int texto_w = texto.length () * char_w;
+	const int texto_w = s.length () * char_w;
 	const int texto_h = char_h;
-	w = texto.length () * char_w + 2*borde_x + 2*padding_x;
+	w = s.length () * char_w + 2*borde_x + 2*padding_x;
 	h = texto_h + 2*borde_y + 2*padding_y;
 	// Calculo posicion
 	int xx = cx, yy = cy;
@@ -109,14 +122,18 @@ void boton::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	};
 	// Relleno
 	SDL_Rect r = {xx + borde_x, yy + borde_y, texto_w + 2*padding_x, texto_h + 2*padding_y};
-	if (enfocado || resaltado) {
+	if (resaltado) {
+		SDL_SetRenderDrawColor (renderer, color_fondo_resaltado.r, color_fondo_resaltado.g, color_fondo_resaltado.b, color_fondo_resaltado.a);
+	} else if (enfocado) {
 		SDL_SetRenderDrawColor (renderer, color_fondo_foco.r, color_fondo_foco.g, color_fondo_foco.b, color_fondo_foco.a);
 	} else {
 		SDL_SetRenderDrawColor (renderer, color_fondo.r, color_fondo.g, color_fondo.b, color_fondo.a);
 	}
 	SDL_RenderFillRect (renderer, &r);
 	// Borde superior
-	if (enfocado || resaltado) {
+	if (resaltado) {
+		SDL_SetRenderDrawColor (renderer, color_borde_resaltado.r, color_borde_resaltado.g, color_borde_resaltado.b, color_borde_resaltado.a);
+	} else if (enfocado) {
 		SDL_SetRenderDrawColor (renderer, color_borde_foco.r, color_borde_foco.g, color_borde_foco.b, color_borde_foco.a);
 	} else {
 		SDL_SetRenderDrawColor (renderer, color_borde.r, color_borde.g, color_borde.b, color_borde.a);
@@ -127,10 +144,10 @@ void boton::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	r = {xx, yy + h - borde_y, w, borde_y};
 	SDL_RenderFillRect (renderer, &r);
 	// Borde izquierdo
-	r = {xx, yy, borde_x, h};
+	r = {xx, yy + borde_y, borde_x, h - 2*borde_y};
 	SDL_RenderFillRect (renderer, &r);
 	// Borde derecho
-	r = {xx + w - borde_x, yy, borde_x, h};
+	r = {xx + w - borde_x, yy + borde_y, borde_x, h - 2*borde_y};
 	SDL_RenderFillRect (renderer, &r);
 	// Rectangulo de foco
 	/*
@@ -141,8 +158,8 @@ void boton::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	}
 	*/
 	// Texto
-	if (texto.length () > 0) {
-		f.dibujar (renderer, texto.c_str (), xx + borde_x + padding_x, yy + borde_y + padding_y, color_texto);
+	if (s.length () > 0) {
+		f.dibujar (renderer, s.c_str (), xx + borde_x + padding_x, yy + borde_y + padding_y, color_texto);
 	}
 	restaurar_blend (renderer);
 }

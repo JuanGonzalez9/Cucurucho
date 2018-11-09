@@ -2,6 +2,10 @@
 #define CONTENEDOR_PRINCIPAL_HPP
 
 #include <list>
+#include <functional>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 #include "ventana.hpp"
 #include "contenedor.hpp"
 
@@ -21,8 +25,9 @@ public:
 	virtual bool manejar_evento (SDL_Event e);
 	virtual void actualizar() {}
 	virtual void dibujar ();
-
 	virtual void popular_enfocables ();
+	void sincronizada (std::function<void()> funcion);
+	void ejecutar_sincronizada ();
 	void enfocar (control *c);
 	void enfocar_siguiente ();
 	void enfocar_anterior ();
@@ -34,6 +39,10 @@ protected:
 	bool corriendo;
 	std::list<control*> enfocables;
 	control *control_resaltado;
+	std::mutex mutex_sinc;
+	std::function<void()> funcion_sinc;
+	std::condition_variable condicion_sinc;
+	volatile bool ejecutada_sinc;
 };
 
 #endif
