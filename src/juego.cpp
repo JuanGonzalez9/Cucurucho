@@ -996,6 +996,7 @@ void juego::actualizar ()
 	if (enemigoEjemplo->derrotado())
 		enemigoEjemplo->~Enemigo();
 
+	std::cout << coordenada;
 
 
 	loginfo("Se termina de actualizar juego");

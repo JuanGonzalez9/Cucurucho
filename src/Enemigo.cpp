@@ -60,8 +60,8 @@ bool Enemigo::pasaBorde(int nivel){
 void Enemigo::empujarAtras(int i, int nivel){
 	if(activo){
 		if (nivel ==2){
-			posX= posY+i;
-			rectDestino.y=rectDestino.y+i;
+			posX= posY-i;
+			rectDestino.y=rectDestino.y-i;
 		}else{
 			posX= posX-i;
 			rectDestino.x=rectDestino.x-i;
@@ -75,12 +75,11 @@ bool Enemigo::esActivo(){
 
 void Enemigo::activar(int nivel, int coordenada){
 	if(nivel==nivelActivo){
-		if((nivel==2)&&(coordenada<=coordenadaActiva))
+		if((nivel==2)&&(coordenada==2000))
 			activo=true;
 		else if ((nivel!=2)&&(coordenada>=coordenadaActiva))
 			activo=true;
 	}
-	//if((nivel==nivelActivo)&&(coordenada>=coordenadaActiva)) activo=true;
 }
 
 void Enemigo::actualizar(int nivel, int coordenada){

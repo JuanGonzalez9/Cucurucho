@@ -3,6 +3,7 @@
 
 #include "temporizador.hpp"
 #include "plataformas.hpp"
+#include "Scrolleables.hpp"
 #include "EntidadDibujable.h"
 #include "Personaje.h"
 #include "Enemigo.h"
@@ -47,6 +48,7 @@ protected:
 	SDL_Renderer *renderer;
 	SDL_Texture *textura_fondo3, *textura_objetivo, *textura_bala, *textura_bala2, *textura_bala3, *textura_bala4;
 	Plataformas plataformas;
+	Scrolleables scrolleables;
 
 	traductorDelCliente* cliente;
 	traductorDelCliente* cliente2;
