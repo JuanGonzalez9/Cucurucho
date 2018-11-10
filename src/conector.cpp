@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+#include <memory>
 #include <mutex>
 #include <list>
 #include <vector>
@@ -83,21 +84,18 @@ bool leer (int fd, std::string &s)
 	} catch (...) {
 		return false;
 	}
-	std::stringstream ss;
 	leidos = 0;
 	int r;
-	char *buffer = new char[largo+1];
-	int faltan = largo;
-	while (leidos < largo && (r = recv (fd, buffer + leidos, faltan, 0)) > 0) {
+	std::unique_ptr<char> buffer (new char[largo]);
+	char *b = buffer.get ();
+	while (leidos < largo && (r = recv (fd, b + leidos, largo - leidos, 0)) > 0) {
 		leidos += r;
-		faltan -= r;
-		buffer[leidos] = '\0';
-		ss << buffer;
 	}
 	if (leidos < largo) {
 		return false;
 	}
-	s = ss.str();
+	b[leidos-1] = '\0';
+	s = b;
 	std::cout << "Recibido: " << s << "\n";
 	return true;
 }
