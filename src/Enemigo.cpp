@@ -49,7 +49,7 @@ bool Enemigo::derrotado(){
 
 bool Enemigo::pasaBorde(int nivel){
 	bool pasa=false;
-	if (nivel ==2){
+	if (nivel !=2){
 		pasa= ((posX+rectOrigen.w)<=0);
 	}else{
 		pasa= (posY>0);
@@ -75,21 +75,30 @@ bool Enemigo::esActivo(){
 
 void Enemigo::activar(int nivel, int coordenada){
 	if(nivel==nivelActivo){
-		if((nivel==2)&&(coordenada==2000))
-			activo=true;
-		else if ((nivel!=2)&&(coordenada>=coordenadaActiva))
+		if(coordenada>=coordenadaActiva)
 			activo=true;
 	}
 }
 
 void Enemigo::actualizar(int nivel, int coordenada){
-	if(!activo)
-		this->activar(nivel, coordenada);
-	else{
-		//aca va todo el comportamiento del enemigo
-		//moverse, disparar, actualizar algun frame, actualizar gravedad, etc.
-		//se sobreescribe para cada subclase
+	if(nivel==2){
+		if(nivelActivo==nivel)
+			activo=true;
+	}else{
+		if(!activo)
+			this->activar(nivel, coordenada);
 	}
+
+	if(activo&&(posY+rectDestino.h>0)){
+			this->hazLoTuyo();
+	}
+
+}
+
+void Enemigo::hazLoTuyo(){
+			//aca va todo el comportamiento del enemigo cuando esta activo
+			//moverse, disparar, actualizar algun frame, actualizar gravedad, etc.
+			//se sobreescribe para cada subclase
 }
 
 Enemigo::~Enemigo() {

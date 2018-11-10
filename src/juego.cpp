@@ -65,24 +65,26 @@ juego::juego (ventana &v, int cantidadJugadores):
 	boby3.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 	boby4.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 
-	//ejemplos para probar:
+	//todo lo que dice NOTA MARTIN es para implementar el vector de enemigos (clase scrolleables)
+	//indica que codigo reemplazar para que ande pero hace cagada y lo dejo comentado por ahora
+
+	//ejemplos de enemigo para probar:
 
 	//aparece al principio del nivel 1
 	//enemigoEjemplo = new Enemigo(500,150,1,400,1);
 
 	//aparece en nivel 1 despues de scrollear un poquito
 	//NOTA MARTIN: CAMBIAR POR ESTO //////////////////////////
-	enemigoEjemplo = new Enemigo(800,400,1,1000,1);
+	enemigoEjemplo = new Enemigo(800,350,1,1000,1);
 	//scrolleables.agregarEnemigo("//configuracion//personajes//enemigo1//sprite", renderer,800,400,1,1000,1);
 	///////////////////////////////////////////////////////////
 
 	//aparece en nivel 3 despues de scrollear un poquito
 	//enemigoEjemplo = new Enemigo(800,150,1,1000,3);
 
-	//pero aaaaaa en el nivel 2 no andaaaa
-	//enemigoEjemplo = new Enemigo(650,0,1,2000,2);
-
-
+	//aparece en nivel 2 despues de scrollear un poquito (notese la posY negativa)
+	//me falta ajustar bien la coordenada para enemigos en el nivel 2
+	//enemigoEjemplo = new Enemigo(600,-400,1,2600,2);
 
 	enemigoEjemplo->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 
