@@ -11,6 +11,8 @@ mensaje_conexion::mensaje_conexion (ventana &v, struct credencial &cred):
 	ciclo (0)
 {
 	aceptar.texto ("Salir");
+	// Como el dialogo continua intentado reconectarse indefinidamente, si el resultado del login
+	// es fallido, se que el usuario cancelo la operación.
 	cred.resultado = usuario::fallido;
 }
 
@@ -22,12 +24,6 @@ mensaje_conexion::~mensaje_conexion()
 	}
 	std::cout << "Sale de mensaje_conexion::~mensaje_conexion()\n";
 }
-
-/*
-void mensaje_conexion::al_aceptar ()
-{
-}
-*/
 
 void mensaje_conexion::actualizar ()
 {
@@ -55,13 +51,13 @@ void mensaje_conexion::comprobar_credencial (mensaje_conexion *m)
 		enviar_cancelar (m->cred.fd);
 		std::cout << "cancelar enviado\n";
 	}
-	m->sincronizada ([m](){m->al_terminar_hilo ();});
+	m->sincronizada ([m](){m->al_terminar_hilo ();}, false);
 }
 
 void mensaje_conexion::al_terminar_hilo ()
 {
 	std::cout << "al_terminar_hilo\n";
-	hilo.detach (); // Se que saldra
+	hilo.join ();
 	switch (cred.resultado) {
 		case usuario::reaceptado:
 			std::cout << "Credencial reaceptada\n";

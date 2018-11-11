@@ -27,13 +27,15 @@ void contenedor_principal::popular_enfocables ()
 	}
 }
 
-void contenedor_principal::sincronizada (std::function<void()> funcion)
+void contenedor_principal::sincronizada (std::function<void()> funcion, bool esperar)
 {
 	std::unique_lock<std::mutex> lock(mutex_sinc);
 	//std::cout << "Espero ejecucion de funcion sincronizada\n";
 	funcion_sinc = funcion;
 	ejecutada_sinc = false;
-	condicion_sinc.wait (lock, [this]{return this->ejecutada_sinc;});
+	if (esperar) {
+		condicion_sinc.wait (lock, [this]{return this->ejecutada_sinc;});
+	}
 	//std::cout << "Fin: Espero ejecucion de funcion sincronizada\n";
 }
 

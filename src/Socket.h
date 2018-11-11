@@ -26,6 +26,7 @@ public:
 	int aceptar();
 	int enviar(int idSock,const char* buffer, int length);
 	int recibir(int idSock,char* buffer, int length);
+	void cerrar();
 	virtual ~Socket();
 
 	//----SET y GET--------------------

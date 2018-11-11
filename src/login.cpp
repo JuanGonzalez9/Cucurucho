@@ -157,7 +157,7 @@ void vlogin::comprobar_credencial (vlogin *vl)
 		esperar_ok (vl->cred.fd);
 		std::cout << "ok recibido\n";
 	}
-	vl->sincronizada ([vl](){vl->al_terminar_hilo ();});
+	vl->sincronizada ([vl](){vl->al_terminar_hilo ();}, false);
 }
 
 void vlogin::al_ser_aceptado ()
@@ -175,7 +175,7 @@ void vlogin::al_terminar_hilo ()
 {
 	std::cout << "al_terminar_hilo\n";
 	autenticando = false;
-	hilo.detach (); // Se que saldra
+	hilo.join ();
 	switch (cred.resultado) {
 		case usuario::aceptado:
 		case usuario::reaceptado:
@@ -230,6 +230,9 @@ void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, a
 	a.cantidad = 0;
 	a.requeridos = jugadores;
 	a.comenzo = false;
+	for (int i = 0; i < 4; i++) {
+		a.usuarios[i].conector = nullptr;
+	}
 	a.hilo = std::thread{ escuchar, &a, dir, puerto, jugadores };
 	std::unique_lock<std::mutex> lock(a.mutex);
 	std::cout << "Esperando que se cumpla el cupo de jugadores\n";
