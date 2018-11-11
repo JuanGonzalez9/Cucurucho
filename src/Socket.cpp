@@ -91,21 +91,11 @@ int Socket::enviar(int idSock,const char* buffer, int length){
 	}
 	//std::cout << "Enviados: total: " << sent << "\n";
 	return sent;
-	#if 0
-	int escritos = 0, r;
-	std::cout << "Enviar: " << length << " en " << idSock << "\n";
-	while (escritos < length && (r = send (idSock, buffer+escritos, length-escritos, 0)) != -1) {
-		escritos += r;
-		std::cout << "Enviados: " << escritos << "\n";
-	}
-	std::cout << "Enviados: total: " << escritos << "\n";
-	return escritos;
-	#endif
 }
 
 int Socket::recibir(int idSock,char* buffer, int length){
 	int recieved = 0;
-	int cantDeCeros = 0;
+	//int cantDeCeros = 0;
 	buffer[0] = '\0';
 	//std::cout << "Recibir: " << length << "\n";
 	while(recieved < length && recieved != -1){
@@ -121,15 +111,6 @@ int Socket::recibir(int idSock,char* buffer, int length){
 	}
 	//std::cout << "Recibidos: total: " << recieved << "\n";
 	return recieved;
-	#if 0
-	int leidos = 0, r;
-	std::cout << "Recibir: " << length << " en " << idSock << "\n";
-	while (leidos < length && (r = recv (idSock, buffer+leidos, length-leidos, 0)) > 0) {
-		leidos += r;
-		std::cout << "Recibidos: " << leidos << "\n";
-	}
-	std::cout << "Recibidos: total: " << leidos << "\n";
-	#endif
 }
 
 //--------SET y GET--------------------------
@@ -156,8 +137,14 @@ bool Socket::estaConectado(){
 	return conectado;
 }
 
-Socket::~Socket() {
+void Socket::cerrar()
+{
 	shutdown(idSocket,0);
 	close(idSocket);
+	idSocket = -1;
+}
+
+Socket::~Socket() {
+	cerrar();
 }
 

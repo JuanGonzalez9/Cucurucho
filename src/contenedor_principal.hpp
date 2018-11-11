@@ -26,7 +26,7 @@ public:
 	virtual void actualizar() {}
 	virtual void dibujar ();
 	virtual void popular_enfocables ();
-	void sincronizada (std::function<void()> funcion);
+	void sincronizada (std::function<void()> funcion, bool esperar = true);
 	void ejecutar_sincronizada ();
 	void enfocar (control *c);
 	void enfocar_siguiente ();
