@@ -4,6 +4,7 @@
 #include "conector.hpp"
 
 static const int intervalo = 5*60; // 5 segundos
+static const int infinito = -1;
 
 mensaje_conexion::mensaje_conexion (ventana &v, struct credencial &cred):
 	mensaje (v),
@@ -28,10 +29,12 @@ mensaje_conexion::~mensaje_conexion()
 void mensaje_conexion::actualizar ()
 {
 	mensaje::actualizar ();
-	ciclo++;
+	if (ciclo != infinito) {
+		ciclo++;
+	}
 	if (ciclo > intervalo && !hilo.joinable ()) {
-		ciclo = 0;
 		std::cout << "comprobar_credencial...\n";
+		ciclo = infinito;
 		hilo = std::thread{ comprobar_credencial, this };
 	}
 }
@@ -111,5 +114,6 @@ void mensaje_conexion::al_terminar_hilo ()
 			#endif
 			break;
 	};
+	ciclo = 0;
 }
 
