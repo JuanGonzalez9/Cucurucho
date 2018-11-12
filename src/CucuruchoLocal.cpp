@@ -25,19 +25,15 @@ extern "C"
 	#include <stdio.h>
 }
 
-volatile bool salir = false; 
 autenticados *pa = nullptr;
 void al_interrumpir (int s)
 {
 	if (pa && s == SIGINT) {
 		std::cout << "Interrupcion manejada por el servidor\n";
-		salir = true;
-		std::unique_lock<std::mutex> lock(pa->mutex);
-		pa->cantidad = pa->requeridos; // Fuerzo condicion solo para que salga
-		pa->condicion.notify_one();
+		interrumpir_servidor (*pa);
 	}
 }
- 
+
 void uso ()
 {
     std::cout << "uso: contra [-h] | ([-d (ERROR|INFO|DEBUG)] (-s|-c) (puerto|dir:puerto))\n\n";
@@ -324,13 +320,14 @@ void correr_cliente (std::string dir, unsigned short puerto)
 		inicializar (dc, ds, vl.cred.fd, tamanio_respuesta, juego);
 
 		std::mutex mutex_mundo;
-		while(dc.escuchador.enAccion() && juego.jugando()){
+		while (dc.escuchador.enAccion() && juego.jugando()){
 			std::unique_lock<std::mutex> lock_presento(ds.mutex_presento);
-			if (!ds.condicion_presento.wait_for (
+			if (vl.cred.arranca_grisado || !ds.condicion_presento.wait_for (
 				lock_presento,
 				std::chrono::milliseconds(dc.recien_conectado ? MAX_TIEMPO_RESPUESTA_NUEVO : MAX_TIEMPO_RESPUESTA),
 				[&ds]{return ds.presento;}
 			)) {
+				vl.cred.arranca_grisado = false;
 				finalizar (dc, ds);
 
 				if (!informar_perdida_conexion (v, vl.cred)) {
@@ -354,25 +351,6 @@ void correr_cliente (std::string dir, unsigned short puerto)
 		}
 		finalizar (dc, ds);
 	}
-}
-
-void inicializar (usuario &u, autenticados &a, int i, int tamanio_respuesta)
-{
-	u.conector = new Socket (u.fd);
-	u.conectado = true;
-	u.hilo = std::thread {comunicar_cliente, &a, i, tamanio_respuesta};
-	u.tmp.ahora ();
-	u.recien_conectado = MAX_TIEMPO_RESPUESTA_NUEVO/17;
-	memcpy (u.teclas, "000000000", 10);
-}
-
-void inicializar (autenticados &a, int tamanio_respuesta)
-{
-	std::unique_lock<std::mutex> lock(a.mutex);
-	for (int i = 0; i < a.cantidad; i++) {
-		inicializar (a.usuarios[i], a, i, tamanio_respuesta);
-	}
-	lock.unlock ();
 }
 
 void finalizar (usuario &u)
@@ -400,6 +378,29 @@ void finalizar (autenticados &a)
 	for (int i = 0; i < a.cantidad; i++) {
 		finalizar (a.usuarios[i]);
 	}
+}
+
+void inicializar (usuario &u, autenticados &a, int i, int tamanio_respuesta)
+{
+	u.conector = new Socket (u.fd);
+	u.conectado = true;
+	u.hilo = std::thread {comunicar_cliente, &a, i, tamanio_respuesta};
+	u.tmp.ahora ();
+	u.recien_conectado = MAX_TIEMPO_RESPUESTA_NUEVO/17;
+	memcpy (u.teclas, "000000000", 10);
+	if (u.arranca_grisado) {
+		std::cout << "finalizar (u)\n";
+		finalizar (u);
+	}
+}
+
+void inicializar (autenticados &a, int tamanio_respuesta)
+{
+	std::unique_lock<std::mutex> lock(a.mutex);
+	for (int i = 0; i < a.cantidad; i++) {
+		inicializar (a.usuarios[i], a, i, tamanio_respuesta);
+	}
+	lock.unlock ();
 }
 
 void verificar_clientes (autenticados &a, juego &j, int tamanio_respuesta)
@@ -431,16 +432,15 @@ void verificar_clientes (autenticados &a, juego &j, int tamanio_respuesta)
 
 void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_ventana)
 {
+	autenticados a;
+	a.salir = false;
 	signal (SIGINT, al_interrumpir);
-
-	cout << "Arranca el servidor en " << dir << ":" << puerto << "\n";
 
 	int cantidadJugadores = cfg.obtener_i("//configuracion//cantidad_jugadores",[](int i, bool omision){return i >= 1 && i <= 4;});
 	int tamanio_respuesta = TAMANIO_RESPUESTA_SERVIDOR + RESPUESTA_PERSONAJE * cantidadJugadores;
-	autenticados a;
 	pa = &a;
 	esperar_jugadores (cantidadJugadores, dir.c_str(), puerto, a);
-	if (!salir ) {
+	if (!a.salir ) {
 		ventana v (std::string ("Servidor - Contra"), MUNDO_ANCHO, MUNDO_ALTO);
 		if (mostrar_ventana) {
 			v.mostrar ();
@@ -455,7 +455,7 @@ void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_venta
 		inicializar (a, tamanio_respuesta);
 
 		std::cout << "Iniciando ciclo\n";
-	 	while (!salir && j.jugando ()) {                         
+	 	while (!a.salir && j.jugando ()) {                         
 	 		if (!mostrar_ventana) {
 				cfg.esperar_vblank ();
 			}
@@ -496,14 +496,10 @@ void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_venta
 			}
 		}
 	}
-	if (salir) {
-		std::cout << "Saliendo por señal de interrupción\n";
-	}
 	finalizar (a);
 }
 
 int main (int argc, char *argv[]) {
-	cout<<"branch tp2"<<endl;
 	registro.registrarNuevoJuego();
 
 	bool ayuda = false;

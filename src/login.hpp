@@ -25,7 +25,7 @@ struct usuario
 {
 	std::string nombre;
 	int fd;
-	bool esperando_ok, conectado;
+	bool esperando_ok, conectado, arranca_grisado;
 	int recien_conectado;
 	std::mutex mutex_tmp;
 	temporizador tmp;
@@ -42,6 +42,7 @@ struct credencial
 	std::string usuario, clave, direccion;
 	int jugadores, fd, orden;
 	usuario::estado resultado;
+	bool arranca_grisado;
 };
 
 struct autenticados
@@ -49,6 +50,7 @@ struct autenticados
 	usuario usuarios[4];
 	int cantidad, requeridos;
 	bool comenzo; // comenzo el juego por alcanzar el cupo
+	volatile bool salir;
 	std::mutex mutex;
 	std::thread hilo;
 	std::condition_variable condicion;
@@ -88,6 +90,7 @@ protected:
 };
 
 void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, autenticados &a);
+void interrumpir_servidor (autenticados &a);
 
 #endif
 
