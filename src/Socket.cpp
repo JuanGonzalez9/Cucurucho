@@ -139,7 +139,7 @@ bool Socket::estaConectado(){
 
 void Socket::cerrar()
 {
-	shutdown(idSocket,0);
+	shutdown(idSocket, SHUT_RDWR);
 	close(idSocket);
 	idSocket = -1;
 }

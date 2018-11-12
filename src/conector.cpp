@@ -245,6 +245,7 @@ static bool recibio_ok (autenticados *a, int orden)
 			memcpy (&a->usuarios[i+1], &a->usuarios[i], sizeof (struct usuario) );
 		}
 		a->cantidad--;
+		shutdown (a->usuarios[orden].fd, SHUT_RDWR);
 		close (a->usuarios[orden].fd);
 		a->usuarios[orden].fd = -1;
 		return false;
@@ -260,6 +261,7 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 	int orden = 0;
 	if (!leer_credencial (fd, usuario, clave) )
 	{
+		shutdown (fd, SHUT_RDWR);
 		close (fd);
 		return;
 	}
@@ -278,7 +280,6 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 				for (int i = 0; i < a->cantidad; i++) {
 					if (a->usuarios[i].esperando_ok) {
 						std::cout << "enviando ok a " << a->usuarios[i].nombre << " en fd " << a->usuarios[i].fd << "\n";
-//std::cout << "Ahora...\n"; sleep (3);
 						// Ya está en la lista, si la conexión falla en este último paso, tiene que empezar grisado.
 						a->usuarios[i].arranca_grisado = !enviar_ok (a->usuarios[i].fd);
 						std::cout << "ok enviado\n";
@@ -338,6 +339,7 @@ static int abrir_socket (autenticados *a, const char *dir, int puerto)
 		sockaddr_in addr = {AF_INET, htons(p), inet_addr(dir)};
 		int r = bind (fd, (sockaddr*)&addr, sizeof(struct sockaddr_in));
 		if (r == -1) {
+			shutdown (fd, SHUT_RDWR);
 			close (fd);
 			if (errno == EADDRINUSE) {
 				p++;
@@ -349,6 +351,7 @@ static int abrir_socket (autenticados *a, const char *dir, int puerto)
 
 		r = listen (fd, SOMAXCONN);
 		if (r == -1) {
+			shutdown (fd, SHUT_RDWR);
 			close (fd);
 			if (errno == EADDRINUSE) {
 				p++;

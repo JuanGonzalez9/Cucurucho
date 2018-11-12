@@ -3,7 +3,6 @@
 #include "mensaje_conexion.hpp"
 #include "conector.hpp"
 
-static const int intervalo = 5*60; // 5 segundos
 static const int infinito = -1;
 
 mensaje_conexion::mensaje_conexion (ventana &v, struct credencial &cred):
@@ -20,7 +19,7 @@ mensaje_conexion::mensaje_conexion (ventana &v, struct credencial &cred):
 mensaje_conexion::~mensaje_conexion()
 {
 	if (hilo.joinable ()) {
-		std::cout << "hilo.join ()\n";
+		std::cout << "hilo.join 2()\n";
 		hilo.join ();
 	}
 	std::cout << "Sale de mensaje_conexion::~mensaje_conexion()\n";
@@ -32,7 +31,7 @@ void mensaje_conexion::actualizar ()
 	if (ciclo != infinito) {
 		ciclo++;
 	}
-	if (ciclo > intervalo && !hilo.joinable ()) {
+	if (ciclo > INTERVALO_RECONEXION && !hilo.joinable ()) {
 		std::cout << "comprobar_credencial...\n";
 		ciclo = infinito;
 		hilo = std::thread{ comprobar_credencial, this };
@@ -54,13 +53,13 @@ void mensaje_conexion::comprobar_credencial (mensaje_conexion *m)
 		enviar_cancelar (m->cred.fd);
 		std::cout << "cancelar enviado\n";
 	}
-	m->sincronizada ([m](){m->al_terminar_hilo ();}, false);
+	m->sincronizada ([m](){m->al_terminar_hilo ();});
 }
 
 void mensaje_conexion::al_terminar_hilo ()
 {
 	std::cout << "al_terminar_hilo\n";
-	hilo.join ();
+	hilo.detach ();
 	switch (cred.resultado) {
 		case usuario::reaceptado:
 			std::cout << "Credencial reaceptada\n";
