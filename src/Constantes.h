@@ -29,6 +29,8 @@
 #define MAX_TIEMPO_RESPUESTA		1500
 #define MAX_TIEMPO_RESPUESTA_NUEVO	3000
 
+#define MAX_PUERTOS_SERVIDOR		100
+
 class Constantes{
 public:
 	enum BitAccion{

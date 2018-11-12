@@ -150,12 +150,19 @@ void vlogin::comprobar_credencial (vlogin *vl)
 	// Hilo secundario
 	comprobar_credencial_en_servidor (vl->cred);
 	if (vl->cred.resultado == usuario::aceptado || vl->cred.resultado == usuario::reaceptado) {
-		vl->sincronizada ([vl](){vl->al_ser_aceptado ();});
 		std::cout << "enviando ok\n";
-		enviar_ok (vl->cred.fd);
-		std::cout << "esperando ok para " << vl->cred.usuario << " en fd " << vl->cred.fd << "\n";
-		esperar_ok (vl->cred.fd);
-		std::cout << "ok recibido\n";
+		if (enviar_ok (vl->cred.fd)) {
+			// Solo cuando se envía el ok se que el usuario estará en la lista de jugadores del servidor.
+			vl->sincronizada ([vl](){vl->al_ser_aceptado ();});
+			std::cout << "esperando ok para " << vl->cred.usuario << " en fd " << vl->cred.fd << "\n";
+			// Cuando el servidor no puede enviar el ok, deja al usuario en la lista y lo arranca grisado.
+			// Hago que se muestre el diálogo de reconexión.
+			vl->cred.arranca_grisado = !esperar_ok (vl->cred.fd);
+			std::cout << "ok recibido\n";
+		} else {
+			// Como no se pudo enviar el ok informo el fallo.
+			vl->cred.resultado = usuario::fallido;
+		}
 	}
 	vl->sincronizada ([vl](){vl->al_terminar_hilo ();}, false);
 }
@@ -225,6 +232,13 @@ void vlogin::al_terminar_hilo ()
 	};
 }
 
+void interrumpir_servidor (autenticados &a)
+{
+	std::unique_lock<std::mutex> lock(a.mutex);
+	a.salir = true;
+	a.condicion.notify_one();
+}
+
 void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, autenticados &a)
 {
 	a.cantidad = 0;
@@ -236,7 +250,11 @@ void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, a
 	a.hilo = std::thread{ escuchar, &a, dir, puerto, jugadores };
 	std::unique_lock<std::mutex> lock(a.mutex);
 	std::cout << "Esperando que se cumpla el cupo de jugadores\n";
-	a.condicion.wait (lock, [&a]{return a.cantidad == a.requeridos;});
-	std::cout << "Cupo de jugadores alcanzado\n";
+	a.condicion.wait (lock, [&a]{return a.salir || a.cantidad == a.requeridos;});
+	if (a.cantidad == a.requeridos) {
+		std::cout << "Cupo de jugadores alcanzado\n";
+	} else {
+		std::cout << "Se interrumpio el inicio de la partida\n";
+	}
 }
 
