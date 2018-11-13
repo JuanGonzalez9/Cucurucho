@@ -245,8 +245,8 @@ static bool recibio_ok (autenticados *a, int orden)
 			memcpy (&a->usuarios[i+1], &a->usuarios[i], sizeof (struct usuario) );
 		}
 		a->cantidad--;
-		shutdown (a->usuarios[orden].fd, SHUT_RDWR);
-		close (a->usuarios[orden].fd);
+		
+		cerrar (a->usuarios[orden].fd);
 		a->usuarios[orden].fd = -1;
 		return false;
 	}
@@ -261,8 +261,7 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 	int orden = 0;
 	if (!leer_credencial (fd, usuario, clave) )
 	{
-		shutdown (fd, SHUT_RDWR);
-		close (fd);
+		cerrar (fd);
 		return;
 	}
 	switch (autenticar_usuario (a, usuario, clave, orden, fd) ) {
@@ -338,8 +337,7 @@ static int abrir_socket (const char *dir, int puerto)
 		sockaddr_in addr = {AF_INET, htons(p), inet_addr(dir)};
 		int r = bind (fd, (sockaddr*)&addr, sizeof(struct sockaddr_in));
 		if (r == -1) {
-			shutdown (fd, SHUT_RDWR);
-			close (fd);
+			cerrar (fd);
 			if (errno == EADDRINUSE) {
 				p++;
 				continue;
@@ -350,8 +348,7 @@ static int abrir_socket (const char *dir, int puerto)
 
 		r = listen (fd, SOMAXCONN);
 		if (r == -1) {
-			shutdown (fd, SHUT_RDWR);
-			close (fd);
+			cerrar (fd);
 			if (errno == EADDRINUSE) {
 				p++;
 				continue;
@@ -408,6 +405,7 @@ void comprobar_credencial_en_servidor (credencial &cred)
 	int r = connect (cred.fd, (sockaddr*)&addr, sizeof(struct sockaddr_in));
 	if (r == -1) {
 		std::cout << "Fallo connect: " << strerror(errno) << "\n";
+		cerrar (cred.fd);
 		return;
 	} else {
 		std::cout << "Conectado a " << cred.direccion << ":" << cred.puerto << "\n";
@@ -417,6 +415,7 @@ void comprobar_credencial_en_servidor (credencial &cred)
 	ss << cred.usuario << "," << cred.clave;
 	std::string s = ss.str();
 	if (!escribir (cred.fd, s)) {
+		cerrar (cred.fd);
 		return;
 	}
 	
@@ -424,10 +423,10 @@ void comprobar_credencial_en_servidor (credencial &cred)
 		switch (cred.resultado) {
 			case usuario::aceptado:
 				std::cout << "Respuesta: aceptado\n";
-				break;
+				return;
 			case usuario::reaceptado:
 				std::cout << "Respuesta: reaceptado\n";
-				break;
+				return;
 			case usuario::rechazado:
 				std::cout << "Respuesta: rechazado\n";
 				break;
@@ -441,8 +440,8 @@ void comprobar_credencial_en_servidor (credencial &cred)
 				std::cout << "Respuesta: fallido\n";
 				break;
 		};
-		return;
 	}
+	cerrar (cred.fd);
 }
 
 bool enviar_ok (int fd)
@@ -463,7 +462,12 @@ bool esperar_ok (int fd)
 	return leer (fd, ok) && ok == "ok";
 }
 
-
+void cerrar (int &fd)
+{
+	shutdown (fd, SHUT_RDWR);
+	close (fd);
+	fd = -1;
+}
 
 
 
