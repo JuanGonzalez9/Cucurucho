@@ -322,9 +322,8 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 	std::cout << "Termino la autenticacion\n";
 }
 
-static int abrir_socket (autenticados *a, const char *dir, int puerto)
+static int abrir_socket (const char *dir, int puerto)
 {
-	std::unique_lock<std::mutex> lock(a->mutex);
 	int fd = -1;
 	bool escuchando = false;
 	int intento = 1;
@@ -373,7 +372,7 @@ static int abrir_socket (autenticados *a, const char *dir, int puerto)
 
 void escuchar (autenticados *a, const char *dir, int puerto, int jugadores)
 {
-	int fd = abrir_socket (a, dir, puerto);
+	int fd = abrir_socket (dir, puerto);
 	if (fd == -1) {
 		interrumpir_servidor (*a);
 	} else while (true) {
