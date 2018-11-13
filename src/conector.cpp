@@ -234,18 +234,19 @@ static usuario::estado autenticar_usuario (autenticados *a, std::string &usuario
 	return usuario::rechazado;
 }
 
-static bool recibio_ok (autenticados *a, int orden)
+static bool recibio_ok (autenticados *a, int orden, bool eliminar)
 {
 	// Antes de llamar a esta funcion debe protegerse con un a->mutex a 'a'.
 	std::cout << "esperando ok\n";
 	if (!esperar_ok (a->usuarios[orden].fd)) { // cancelo o fallo la conexion
-		// Solo cuando se recibe el ok el usuario debe estar en la lista de jugadores del servidor. Lo remuevo.
-		std::cout << "Cancelado: " << a->usuarios[orden].nombre << "\n";
-		for (int i = orden; i < a->cantidad-1; i++) {
-			memcpy (&a->usuarios[i+1], &a->usuarios[i], sizeof (struct usuario) );
+		if (eliminar) {
+			// Solo cuando se recibe el ok el usuario debe estar en la lista de jugadores del servidor. Lo remuevo.
+			std::cout << "Cancelado: " << a->usuarios[orden].nombre << "\n";
+			for (int i = orden; i < a->cantidad-1; i++) {
+				memcpy (&a->usuarios[i+1], &a->usuarios[i], sizeof (struct usuario) );
+			}
+			a->cantidad--;
 		}
-		a->cantidad--;
-		
 		cerrar (a->usuarios[orden].fd);
 		a->usuarios[orden].fd = -1;
 		return false;
@@ -269,7 +270,7 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 			escribir_resultado_autenticacion ("aceptado", fd, orden, jugadores);
 
 			std::lock_guard<std::mutex> lock(a->mutex);
-			if (recibio_ok (a, orden) && a->cantidad == a->requeridos) {
+			if (recibio_ok (a, orden, true) && a->cantidad == a->requeridos) {
 				std::cout << "Cupo alcanzado\n";
 				if (!a->comenzo) {
 					a->comenzo = true;
@@ -292,7 +293,7 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 			escribir_resultado_autenticacion ("reaceptado", fd, orden, jugadores);
 
 			std::lock_guard<std::mutex> lock(a->mutex);
-			if (recibio_ok (a, orden)) {
+			if (recibio_ok (a, orden, false)) {
 				for (int i = 0; i < a->cantidad; i++) {
 					if (a->usuarios[i].esperando_ok) {
 						std::cout << "enviando ok a " << a->usuarios[i].nombre << " en fd " << a->usuarios[i].fd << "\n";
@@ -393,55 +394,71 @@ void escuchar (autenticados *a, const char *dir, int puerto, int jugadores)
 }
 
 void comprobar_credencial_en_servidor (credencial &cred)
-{
-	cred.resultado = usuario::fallido;
-	cred.fd = socket (AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
-	if (cred.fd == -1) {
-		std::cout << "Fallo socket: " << strerror(errno) << "\n";
-		return;
-	}
-
-	sockaddr_in addr = {AF_INET, htons(cred.puerto), inet_addr(cred.direccion.c_str())};
-	int r = connect (cred.fd, (sockaddr*)&addr, sizeof(struct sockaddr_in));
-	if (r == -1) {
-		std::cout << "Fallo connect: " << strerror(errno) << "\n";
-		cerrar (cred.fd);
-		return;
-	} else {
-		std::cout << "Conectado a " << cred.direccion << ":" << cred.puerto << "\n";
-	}
-
-	std::stringstream ss;
-	ss << cred.usuario << "," << cred.clave;
-	std::string s = ss.str();
-	if (!escribir (cred.fd, s)) {
-		cerrar (cred.fd);
-		return;
-	}
-	
-	if (leer_resultado_autenticacion (cred.fd, cred.resultado, cred.jugadores, cred.orden)) {
-		switch (cred.resultado) {
-			case usuario::aceptado:
-				std::cout << "Respuesta: aceptado\n";
-				return;
-			case usuario::reaceptado:
-				std::cout << "Respuesta: reaceptado\n";
-				return;
-			case usuario::rechazado:
-				std::cout << "Respuesta: rechazado\n";
-				break;
-			case usuario::cupo:
-				std::cout << "Respuesta: cupo\n";
-				break;
-			case usuario::jugando:
-				std::cout << "Respuesta: jugando\n";
-				break;
-			case usuario::fallido:
-				std::cout << "Respuesta: fallido\n";
-				break;
-		};
-	}
-	cerrar (cred.fd);
+{  
+ 
+    cred.resultado = usuario::fallido;
+ 
+    std::stringstream comando;
+    comando<<"ping -c 1 "<<cred.direccion<< ">/dev/null 2>&1";
+    int resultado = system(comando.str().c_str());
+    printf("El resultado del ping es: %d\n", resultado );
+ 
+    if (resultado){
+        return;
+    }
+ 
+    std::cout <<"1\n";
+    cred.fd = socket (AF_INET, SOCK_STREAM | SOCK_CLOEXEC , 0);
+    if (cred.fd == -1) {
+        std::cout << "Fallo socket: " << strerror(errno) << "\n";
+        return;
+    }
+ 
+ 
+    sockaddr_in addr = {AF_INET, htons(cred.puerto), inet_addr(cred.direccion.c_str())};
+    std::cout <<"2\n";
+    int r = connect (cred.fd, (sockaddr*)&addr, sizeof(struct sockaddr_in));
+    if (r == -1) {
+        std::cout << "Fallo connect: " << strerror(errno) << "\n";
+        cerrar (cred.fd);
+        return;
+    } else {
+        std::cout << "Conectado a " << cred.direccion << ":" << cred.puerto << "\n";
+    }
+ 
+    std::stringstream ss;
+    ss << cred.usuario << "," << cred.clave;
+    std::string s = ss.str();
+    std::cout <<"3\n";
+    if (!escribir (cred.fd, s)) {
+        cerrar (cred.fd);
+        return;
+    }
+   
+    std::cout <<"4\n";
+    if (leer_resultado_autenticacion (cred.fd, cred.resultado, cred.jugadores, cred.orden)) {
+        switch (cred.resultado) {
+            case usuario::aceptado:
+                std::cout << "Respuesta: aceptado\n";
+                return;
+            case usuario::reaceptado:
+                std::cout << "Respuesta: reaceptado\n";
+                return;
+            case usuario::rechazado:
+                std::cout << "Respuesta: rechazado\n";
+                break;
+            case usuario::cupo:
+                std::cout << "Respuesta: cupo\n";
+                break;
+            case usuario::jugando:
+                std::cout << "Respuesta: jugando\n";
+                break;
+            case usuario::fallido:
+                std::cout << "Respuesta: fallido\n";
+                break;
+        };
+    }
+    cerrar (cred.fd);
 }
 
 bool enviar_ok (int fd)

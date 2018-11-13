@@ -423,6 +423,7 @@ void verificar_clientes (autenticados &a, juego &j, int tamanio_respuesta)
 			} else {
 				std::cout << "Anulando cliente: " << i << "\n";
 				finalizar (a.usuarios[i]);
+				memcpy (a.usuarios[i].teclas, "000000000", 10);
 				j.grisarJugador(i+1);
 			}
 		}
