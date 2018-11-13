@@ -65,21 +65,26 @@ juego::juego (ventana &v, int cantidadJugadores):
 	boby3.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 	boby4.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 
-	//ejemplos para probar:
+	//todo lo que dice NOTA MARTIN es para implementar el vector de enemigos (clase scrolleables)
+	//indica que codigo reemplazar para que ande pero hace cagada y lo dejo comentado por ahora
+
+	//ejemplos de enemigo para probar:
 
 	//aparece al principio del nivel 1
 	//enemigoEjemplo = new Enemigo(500,150,1,400,1);
 
 	//aparece en nivel 1 despues de scrollear un poquito
-	enemigoEjemplo = new Enemigo(800,400,1,1000,1);
+	//NOTA MARTIN: CAMBIAR POR ESTO //////////////////////////
+	enemigoEjemplo = new Enemigo(800,350,1,1000,1);
+	//scrolleables.agregarEnemigo("//configuracion//personajes//enemigo1//sprite", renderer,800,400,1,1000,1);
+	///////////////////////////////////////////////////////////
 
 	//aparece en nivel 3 despues de scrollear un poquito
 	//enemigoEjemplo = new Enemigo(800,150,1,1000,3);
 
-	//pero aaaaaa en el nivel 2 no andaaaa
-	//enemigoEjemplo = new Enemigo(650,0,1,2000,2);
-
-
+	//aparece en nivel 2 despues de scrollear un poquito (notese la posY negativa)
+	//me falta ajustar bien la coordenada para enemigos en el nivel 2
+	//enemigoEjemplo = new Enemigo(600,-400,1,2600,2);
 
 	enemigoEjemplo->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 
@@ -369,7 +374,10 @@ void juego::manejar_eventos ()
 			}
 		}
 
+		//NOTA MARTIN: CAMBIAR //////////////////////////////
 		enemigoEjemplo->empujarAtras(d3, nivel);
+		//scrolleables.empujarTodos(d3, nivel);
+		/////////////////////////////////////////////////////
 		coordenada +=d3;
 
 	}else{
@@ -854,7 +862,10 @@ void juego::actualizar ()
 			boby4.decrementarPosY(maxVel);
 		}
 
+		//NOTA MARTIN: CAMBIAR /////////////////////////
 		enemigoEjemplo->empujarAtras(maxVel, nivel);
+		//scrolleables.empujarTodos(maxVel, nivel);
+		////////////////////////////////////////////////
 		coordenada -=maxVel;
 
 		fondo1.avanzarOrigenY(maxVel/3);
@@ -927,6 +938,8 @@ void juego::actualizar ()
 	}
 
 	//veo si el jugador toca al enemigo
+	//NOTA MARTIN: CAMBIAR: ///////////////////////////////////
+	
 	if(boby.enJuego()){
 		if(!enemigoEjemplo->derrotado() && collision(boby.getRectaDestino(),enemigoEjemplo->getRectaDestino())){
 			if(boby.getInvincibilityFrames() == 0)
@@ -951,6 +964,20 @@ void juego::actualizar ()
 				boby4.perderVida();
 		}
 	}
+	
+	// POR ESTO:
+	/*
+	if(boby.enJuego())
+		scrolleables.personajeTocaEoB(boby);
+	if(boby2.enJuego())
+		scrolleables.personajeTocaEoB(boby2);
+	if(boby3.enJuego())
+		scrolleables.personajeTocaEoB(boby3);
+	if(boby4.enJuego())
+		scrolleables.personajeTocaEoB(boby4);
+	*/
+	////////////////////////////////////////////////////
+
 
 	//veo si el jugador se cayo
 	if(boby.getPosY()>600){
@@ -984,6 +1011,8 @@ void juego::actualizar ()
 		boby.verSiBalasPegan(enemigoNivel1);
 	}
 	//veo si las balas le pegan al enemigo
+	//NOTA MARTIN: CAMBIAR ////////////////////////////////
+	
 	if (enemigoEjemplo->esActivo()){
 		boby.verSiBalasPegan(enemigoEjemplo);
 		boby2.verSiBalasPegan(enemigoEjemplo);	
@@ -991,12 +1020,30 @@ void juego::actualizar ()
 		boby4.verSiBalasPegan(enemigoEjemplo);
 	}
 
+	// POR ESTO:
+	/*
+	if(boby.esActivo())
+		scrolleables.BalasDeJugadorPegan(boby);
+	if(boby2.esActivo())
+		scrolleables.BalasDeJugadorPegan(boby2);
+	if(boby3.esActivo())
+		scrolleables.BalasDeJugadorPegan(boby3);
+	if(boby4.esActivo())
+		scrolleables.BalasDeJugadorPegan(boby4);
+	*/
+	///////////////////////////////////////////////////////
+
 	//actualizo el enemigo
+
+	//NOTA MARTIN: CAMBIAR ///////////////////////////////
+	
 	enemigoEjemplo->actualizar(nivel, coordenada);
 	if (enemigoEjemplo->derrotado())
 		enemigoEjemplo->~Enemigo();
+	
 
-
+	//scrolleables.actualizarEnemigos(nivel, coordenada);
+	/////////////////////////////////////////////////////
 
 	loginfo("Se termina de actualizar juego");
 	
@@ -1142,8 +1189,14 @@ void juego::dibujar ()
 		}
 	}
 
+	//dibujar enemigos
+	//NOTA MARTIN: CAMBIAR ////////////////////////////////////////
 	if(!enemigoEjemplo->derrotado()&&enemigoEjemplo->esActivo())
 		enemigoEjemplo->dibujar(renderer);
+
+	//scrolleables.dibujarEnemigos(renderer);
+
+	//////////////////////////////////////////////////////////////
 
 
 	if(nivel == 2 && boby.estaCercaDelFinalDelNivel2()){
@@ -1319,9 +1372,13 @@ juego::~juego ()
 		enemigoNivel1->~Enemigo();
 	}
 
+	//NOTA MARTIN:SACAR/////////////////////////
+	
 	if(! enemigoEjemplo->derrotado()){
 		enemigoEjemplo->~Enemigo();
 	}
+	
+	////////////////////////////////////////////
 
 	cliente->~traductorDelCliente();
 	armador->~ArmadorDeRespuesta();
