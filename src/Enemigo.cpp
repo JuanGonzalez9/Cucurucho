@@ -78,13 +78,6 @@ bool Enemigo::esActivo(){
 }
 
 void Enemigo::activar(int nivel, int coordenada){
-	if(nivel==nivelActivo){
-		if(coordenada>=coordenadaActiva)
-			activo=true;
-	}
-}
-
-void Enemigo::activarV2(int nivel, int coordenada){
 	if((vidas>0)&&(nivel==nivelActivo)&&(!this->pasaBorde(nivel))){
 		if((nivel==2)&&(coordenada<=coordenadaActiva)){
 			activo=true;
@@ -95,23 +88,8 @@ void Enemigo::activarV2(int nivel, int coordenada){
 	}
 }
 
-void Enemigo::actualizarV2(int nivel, int coordenada){
-	if(activo&&(posY+rectDestino.h>0)&&(posX>0)){
-			this->hazLoTuyo();
-	}
-
-}
-
 void Enemigo::actualizar(int nivel, int coordenada){
-	if(nivel==2){
-		if(nivelActivo==nivel)
-			activo=true;
-	}else{
-		if(!activo)
-			this->activar(nivel, coordenada);
-	}
-
-	if(activo&&(posY+rectDestino.h>0)){
+	if(activo&&(posY+rectDestino.h>0)&&(posX>0)){
 			this->hazLoTuyo();
 	}
 

@@ -80,11 +80,11 @@ juego::juego (ventana &v, int cantidadJugadores):
 	///////////////////////////////////////////////////////////
 
 	//aparece en nivel 3 despues de scrollear un poquito
-	//enemigoEjemplo = new Enemigo(800,150,1,1000,3);
+	enemigoEjemplo = new Enemigo(800,150,1,1000,3);
 
 	//aparece en nivel 2 despues de scrollear un poquito (notese la posY negativa)
 	//me falta ajustar bien la coordenada para enemigos en el nivel 2
-	enemigoEjemplo = new Enemigo(600,-400,1,2600,2);
+	//enemigoEjemplo = new Enemigo(600,-400,1,2600,2);
 
 	enemigoEjemplo->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 
@@ -1038,9 +1038,9 @@ void juego::actualizar ()
 	//NOTA MARTIN: CAMBIAR ///////////////////////////////
 	int maxCoor=this->maximaCoordenadaJugadores();
 	if(!enemigoEjemplo->esActivo())
-		enemigoEjemplo->activarV2(nivel, maxCoor);
+		enemigoEjemplo->activar(nivel, maxCoor);
 	if(enemigoEjemplo->esActivo())
-		enemigoEjemplo->actualizarV2(nivel, coordenada);
+		enemigoEjemplo->actualizar(nivel, coordenada);
 	if(enemigoEjemplo->derrotado())
 		enemigoEjemplo->~Enemigo();
 	
