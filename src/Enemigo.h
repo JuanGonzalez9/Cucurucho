@@ -17,7 +17,6 @@ public:
 	void empujarAtras(int i, int nivel);
 	void activar(int nivel, int coordenada);
 	void actualizar(int nivel, int coordenada);
-	void hazLoTuyo();
 
 protected:
 	bool activo;
