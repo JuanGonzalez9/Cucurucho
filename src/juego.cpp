@@ -75,7 +75,7 @@ juego::juego (ventana &v, int cantidadJugadores):
 
 	//aparece en nivel 1 despues de scrollear un poquito
 	//NOTA MARTIN: CAMBIAR POR ESTO //////////////////////////
-	enemigoEjemplo = new Enemigo(800,350,1,1000,1);
+	//enemigoEjemplo = new Enemigo(800,350,1,1000,1);
 	//scrolleables.agregarEnemigo("//configuracion//personajes//enemigo1//sprite", renderer,800,400,1,1000,1);
 	///////////////////////////////////////////////////////////
 
@@ -84,7 +84,7 @@ juego::juego (ventana &v, int cantidadJugadores):
 
 	//aparece en nivel 2 despues de scrollear un poquito (notese la posY negativa)
 	//me falta ajustar bien la coordenada para enemigos en el nivel 2
-	//enemigoEjemplo = new Enemigo(600,-400,1,2600,2);
+	enemigoEjemplo = new Enemigo(600,-400,1,2600,2);
 
 	enemigoEjemplo->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 
@@ -1036,10 +1036,17 @@ void juego::actualizar ()
 	//actualizo el enemigo
 
 	//NOTA MARTIN: CAMBIAR ///////////////////////////////
-	
-	enemigoEjemplo->actualizar(nivel, coordenada);
-	if (enemigoEjemplo->derrotado())
+	int maxCoor=this->maximaCoordenadaJugadores();
+	if(!enemigoEjemplo->esActivo())
+		enemigoEjemplo->activarV2(nivel, maxCoor);
+	if(enemigoEjemplo->esActivo())
+		enemigoEjemplo->actualizarV2(nivel, coordenada);
+	if(enemigoEjemplo->derrotado())
 		enemigoEjemplo->~Enemigo();
+	
+	/*enemigoEjemplo->actualizar(nivel, coordenada);
+	if (enemigoEjemplo->derrotado())
+		enemigoEjemplo->~Enemigo();*/
 	
 
 	//scrolleables.actualizarEnemigos(nivel, coordenada);
@@ -1047,6 +1054,31 @@ void juego::actualizar ()
 
 	loginfo("Se termina de actualizar juego");
 	
+}
+
+int juego::maximaCoordenadaJugadores(){
+	int max=0;
+	if(nivel==2){
+		max=3600;
+		if(boby.enJuego()&&(boby.obtenerCoordenadaY()<max))
+			max=boby.obtenerCoordenadaY();
+		if(boby2.enJuego()&&(boby2.obtenerCoordenadaY()<max))
+			max=boby2.obtenerCoordenadaY();
+		if(boby3.enJuego()&&(boby3.obtenerCoordenadaY()<max))
+			max=boby3.obtenerCoordenadaY();
+		if(boby4.enJuego()&&(boby4.obtenerCoordenadaY()<max))
+			max=boby4.obtenerCoordenadaY();
+	} else{
+		if(boby.enJuego()&&(boby.obtenerCoordenadaX()>max))
+			max=boby.obtenerCoordenadaX();
+		if(boby2.enJuego()&&(boby2.obtenerCoordenadaX()>max))
+			max=boby2.obtenerCoordenadaX();
+		if(boby3.enJuego()&&(boby3.obtenerCoordenadaX()>max))
+			max=boby3.obtenerCoordenadaX();
+		if(boby4.enJuego()&&(boby4.obtenerCoordenadaX()>max))
+			max=boby4.obtenerCoordenadaX();
+	}
+	return max;
 }
 
 void juego::setDatosEnemigo(){

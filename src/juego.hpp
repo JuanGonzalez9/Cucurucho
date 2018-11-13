@@ -56,6 +56,7 @@ protected:
 	traductorDelCliente* cliente4;
 
 	DatosPersonaje datosBoby, datosBoby2, datosBoby3, datosBoby4;
+	int maximaCoordenadaJugadores();
 
 	ArmadorDeRespuesta* armador;
 	void setDatosEnemigo();

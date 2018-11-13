@@ -47,12 +47,16 @@ bool Enemigo::derrotado(){
 	return (vidas <= 0);
 }
 
+int Enemigo::obtenerCoordenadaActiva(){
+	return coordenadaActiva;
+}
+
 bool Enemigo::pasaBorde(int nivel){
 	bool pasa=false;
 	if (nivel !=2){
 		pasa= ((posX+rectOrigen.w)<=0);
 	}else{
-		pasa= (posY>0);
+		pasa= (posY>600);
 	}
 	return pasa;
 }
@@ -78,6 +82,24 @@ void Enemigo::activar(int nivel, int coordenada){
 		if(coordenada>=coordenadaActiva)
 			activo=true;
 	}
+}
+
+void Enemigo::activarV2(int nivel, int coordenada){
+	if((vidas>0)&&(nivel==nivelActivo)&&(!this->pasaBorde(nivel))){
+		if((nivel==2)&&(coordenada<=coordenadaActiva)){
+			activo=true;
+		}else{
+			if((nivel!=2)&&(coordenada>=coordenadaActiva))
+				activo=true;
+		}
+	}
+}
+
+void Enemigo::actualizarV2(int nivel, int coordenada){
+	if(activo&&(posY+rectDestino.h>0)&&(posX>0)){
+			this->hazLoTuyo();
+	}
+
 }
 
 void Enemigo::actualizar(int nivel, int coordenada){

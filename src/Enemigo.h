@@ -12,10 +12,13 @@ public:
 	void perderVida();
 	bool derrotado();
 	bool esActivo();
+	int obtenerCoordenadaActiva();
 	//Metodos
 	bool pasaBorde(int nivel);
 	void empujarAtras(int i, int nivel);
 	void activar(int nivel, int coordenada);
+	void activarV2(int nivel, int coordenada);
+	void actualizarV2(int nivel, int coordenada);
 	void actualizar(int nivel, int coordenada);
 	void hazLoTuyo();
 
