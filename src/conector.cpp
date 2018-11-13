@@ -407,7 +407,6 @@ void comprobar_credencial_en_servidor (credencial &cred)
         return;
     }
  
-    std::cout <<"1\n";
     cred.fd = socket (AF_INET, SOCK_STREAM | SOCK_CLOEXEC , 0);
     if (cred.fd == -1) {
         std::cout << "Fallo socket: " << strerror(errno) << "\n";
@@ -416,7 +415,6 @@ void comprobar_credencial_en_servidor (credencial &cred)
  
  
     sockaddr_in addr = {AF_INET, htons(cred.puerto), inet_addr(cred.direccion.c_str())};
-    std::cout <<"2\n";
     int r = connect (cred.fd, (sockaddr*)&addr, sizeof(struct sockaddr_in));
     if (r == -1) {
         std::cout << "Fallo connect: " << strerror(errno) << "\n";
@@ -429,13 +427,11 @@ void comprobar_credencial_en_servidor (credencial &cred)
     std::stringstream ss;
     ss << cred.usuario << "," << cred.clave;
     std::string s = ss.str();
-    std::cout <<"3\n";
     if (!escribir (cred.fd, s)) {
         cerrar (cred.fd);
         return;
     }
    
-    std::cout <<"4\n";
     if (leer_resultado_autenticacion (cred.fd, cred.resultado, cred.jugadores, cred.orden)) {
         switch (cred.resultado) {
             case usuario::aceptado:

@@ -648,7 +648,7 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 void Personaje::perderVida(){
 	if (!godmode && (invincibilityFrames == 0)) {
 		this->cambiarArma(1);
-		hitPoints--;
+		//hitPoints--;
 		printf("perdi vida");
 		invincibilityFrames = 90;
 	}
