@@ -241,14 +241,17 @@ void interrumpir_servidor (autenticados &a)
 
 void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, autenticados &a)
 {
+	std::unique_lock<std::mutex> lock(a.mutex);
 	a.cantidad = 0;
 	a.requeridos = jugadores;
 	a.comenzo = false;
 	for (int i = 0; i < 4; i++) {
 		a.usuarios[i].conector = nullptr;
 	}
-	a.hilo = std::thread{ escuchar, &a, dir, puerto, jugadores };
-	std::unique_lock<std::mutex> lock(a.mutex);
+	a.hilo_1 = std::thread{ escuchar, &a, dir, puerto, jugadores };
+	if (std::string ("127.0.0.1") != dir) {
+		a.hilo_2 = std::thread{ escuchar, &a, "127.0.0.1", puerto, jugadores };
+	}
 	std::cout << "Esperando que se cumpla el cupo de jugadores\n";
 	a.condicion.wait (lock, [&a]{return a.salir || a.cantidad == a.requeridos;});
 	if (a.cantidad == a.requeridos) {

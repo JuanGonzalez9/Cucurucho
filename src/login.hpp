@@ -52,7 +52,7 @@ struct autenticados
 	bool comenzo; // comenzo el juego por alcanzar el cupo
 	volatile bool salir;
 	std::mutex mutex;
-	std::thread hilo;
+	std::thread hilo_1, hilo_2;
 	std::condition_variable condicion;
 	std::mutex mutex_mundo;
 	std::string mundo;		
