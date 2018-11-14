@@ -370,7 +370,9 @@ void finalizar (autenticados &a)
 {
 	std::unique_lock<std::mutex> lock(a.mutex);
 	std::cerr << "a.hilo.detach ()\n";
-	a.hilo_1.detach ();
+	if (a.hilo_1.joinable ()) {
+		a.hilo_1.detach ();
+	}
 	if (a.hilo_2.joinable ()) {
 		a.hilo_2.detach ();
 	}

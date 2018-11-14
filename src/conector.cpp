@@ -322,7 +322,7 @@ static void comprobar_credencial (autenticados *a, int fd, int jugadores)
 	std::cout << "Termino la autenticacion\n";
 }
 
-static int abrir_socket (const char *dir, int puerto)
+int abrir_socket (const char *dir, int puerto)
 {
 	int fd = -1;
 	bool escuchando = false;
@@ -332,7 +332,7 @@ static int abrir_socket (const char *dir, int puerto)
 		fd = socket (AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
 		if (fd == -1) {
 			std::cout << "Fallo socket: " << strerror(errno) << "\n";
-			return -1;
+			break;
 		}
 
 		sockaddr_in addr = {AF_INET, htons(p), inet_addr(dir)};
@@ -344,7 +344,7 @@ static int abrir_socket (const char *dir, int puerto)
 				continue;
 			}
 			std::cout << "Fallo bind: " << strerror(errno) << "\n";
-			return -1;
+			break;
 		}
 
 		r = listen (fd, SOMAXCONN);
@@ -355,7 +355,7 @@ static int abrir_socket (const char *dir, int puerto)
 				continue;
 			}
 			std::cout << "Fallo listen: " << strerror(errno) << "\n";
-			return -1;
+			break;
 		}
 		escuchando = true;
 	}
@@ -368,12 +368,9 @@ static int abrir_socket (const char *dir, int puerto)
 	}
 }
 
-void escuchar (autenticados *a, const char *dir, int puerto, int jugadores)
+void escuchar (autenticados *a, int fd, int jugadores)
 {
-	int fd = abrir_socket (dir, puerto);
-	if (fd == -1) {
-		interrumpir_servidor (*a);
-	} else while (true) {
+	while (true) {
 		int fd_nuevo = accept(fd, nullptr, nullptr);
 		if (fd_nuevo == -1) {
 			switch (errno) {

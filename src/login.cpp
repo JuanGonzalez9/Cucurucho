@@ -241,9 +241,19 @@ void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, a
 	for (int i = 0; i < 4; i++) {
 		a.usuarios[i].conector = nullptr;
 	}
-	a.hilo_1 = std::thread{ escuchar, &a, dir, puerto, jugadores };
+	int fd = abrir_socket (dir, puerto);
+	if (fd == -1) {
+		a.salir = true;
+		return;
+	}
+	a.hilo_1 = std::thread{ escuchar, &a, fd, jugadores };
 	if (std::string ("127.0.0.1") != dir) {
-		a.hilo_2 = std::thread{ escuchar, &a, "127.0.0.1", puerto, jugadores };
+		int fd = abrir_socket ("127.0.0.1", puerto);
+		if (fd == -1) {
+			a.salir = true;
+			return;
+		}
+		a.hilo_2 = std::thread{ escuchar, &a, fd, jugadores };
 	}
 	std::cout << "Esperando que se cumpla el cupo de jugadores\n";
 	a.condicion.wait (lock, [&a]{return a.salir || a.cantidad == a.requeridos;});
