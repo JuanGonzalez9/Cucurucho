@@ -318,11 +318,11 @@ void correr_cliente (std::string dir, unsigned short puerto)
 		std::mutex mutex_mundo;
 		while (dc.escuchador.enAccion() && juego.jugando()){
 			std::unique_lock<std::mutex> lock_presento(ds.mutex_presento);
-			if (vl.cred.arranca_grisado || !ds.condicion_presento.wait_for (
+			if (vl.cred.arranca_grisado || (!ds.presento && !ds.condicion_presento.wait_for (
 				lock_presento,
 				std::chrono::milliseconds(dc.recien_conectado ? MAX_TIEMPO_RESPUESTA_NUEVO : MAX_TIEMPO_RESPUESTA),
 				[&ds]{return ds.presento;}
-			)) {
+			))) {
 				vl.cred.arranca_grisado = false;
 				finalizar (dc, ds);
 
@@ -341,6 +341,9 @@ void correr_cliente (std::string dir, unsigned short puerto)
 				// Solo ahora se que fue reaceptado.
 				inicializar (dc, ds, vl.cred.fd, tamanio_respuesta, juego);
 			} else {
+				if (ds.presento) {
+					std::cout << "PROBLEMAPROBLEMAPROBLEMAPROBLEMAPROBLEMA\n";
+				}
 				ds.presento = false;
 				dc.recien_conectado = false;
 			}
