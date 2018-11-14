@@ -281,7 +281,7 @@ void informar_jugando (ventana &v, credencial &cred)
 	std::stringstream ss;
 	std::string usr = cred.usuario;
 	usr[0] = toupper (usr[0]);
-	ss << "El usuario " << usr << " se encuentra jugando en otro cliente.";
+	ss << usr << " se encuentra jugando en otro cliente.";
 	// TODO opcion login
 	mensaje msg (v);
 	msg.correr (ss.str());

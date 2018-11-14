@@ -110,7 +110,7 @@ bool contenedor_principal::manejar_evento (SDL_Event e)
 	std::list<control*>::const_iterator i;
 	for (i = enfocables.begin (); i != enfocables.end (); ++i) {
 		control *c = *i;
-		if (c->foco () && c->manejar_evento (e)) {
+		if (c->foco () && c->activo && c->manejar_evento (e)) {
 			return true;
 		}
 	}

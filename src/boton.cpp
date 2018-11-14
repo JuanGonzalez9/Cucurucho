@@ -24,10 +24,13 @@ boton::boton (int x, int y, const char *s):
 	color_borde ({20, 20, 20, 40}),
 	color_borde_foco ({70, 70, 70, 60}),
 	color_borde_resaltado ({80, 80, 80, 80}),
+	color_borde_inactivo ({10, 10, 10, 20}),
 	color_fondo ({0, 0, 0, 40}),
 	color_fondo_foco ({50, 50, 50, 60}),
 	color_fondo_resaltado ({60, 60, 60, 80}),
-	color_texto ({200, 200, 200, alpha})
+	color_fondo_inactivo ({0, 0, 0, 20}),
+	color_texto ({200, 200, 200, alpha}),
+	color_texto_inactivo ({150, 150, 150, alpha})
 {
 	this->s = s;
 }
@@ -76,7 +79,7 @@ bool boton::manejar_evento (SDL_Event &e)
 
 void boton::al_presionar (int x, int y)
 {
-	if (al_presionar_callback) {
+	if (activo && al_presionar_callback) {
 		al_presionar_callback ();
 	}
 }
@@ -122,7 +125,9 @@ void boton::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	};
 	// Relleno
 	SDL_Rect r = {xx + borde_x, yy + borde_y, texto_w + 2*padding_x, texto_h + 2*padding_y};
-	if (resaltado) {
+	if (!activo) {
+		SDL_SetRenderDrawColor (renderer, color_fondo_inactivo.r, color_fondo_inactivo.g, color_fondo_inactivo.b, color_fondo_inactivo.a);
+	} else if (resaltado) {
 		SDL_SetRenderDrawColor (renderer, color_fondo_resaltado.r, color_fondo_resaltado.g, color_fondo_resaltado.b, color_fondo_resaltado.a);
 	} else if (enfocado) {
 		SDL_SetRenderDrawColor (renderer, color_fondo_foco.r, color_fondo_foco.g, color_fondo_foco.b, color_fondo_foco.a);
@@ -131,7 +136,9 @@ void boton::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	}
 	SDL_RenderFillRect (renderer, &r);
 	// Borde superior
-	if (resaltado) {
+	if (!activo) {
+		SDL_SetRenderDrawColor (renderer, color_borde_inactivo.r, color_borde_inactivo.g, color_borde_inactivo.b, color_borde_inactivo.a);
+	} else if (resaltado) {
 		SDL_SetRenderDrawColor (renderer, color_borde_resaltado.r, color_borde_resaltado.g, color_borde_resaltado.b, color_borde_resaltado.a);
 	} else if (enfocado) {
 		SDL_SetRenderDrawColor (renderer, color_borde_foco.r, color_borde_foco.g, color_borde_foco.b, color_borde_foco.a);
@@ -159,7 +166,11 @@ void boton::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	*/
 	// Texto
 	if (s.length () > 0) {
-		f.dibujar (renderer, s.c_str (), xx + borde_x + padding_x, yy + borde_y + padding_y, color_texto);
+		if (!activo) {
+			f.dibujar (renderer, s.c_str (), xx + borde_x + padding_x, yy + borde_y + padding_y, color_texto_inactivo);
+		} else {
+			f.dibujar (renderer, s.c_str (), xx + borde_x + padding_x, yy + borde_y + padding_y, color_texto);
+		}
 	}
 	restaurar_blend (renderer);
 }

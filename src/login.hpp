@@ -81,7 +81,7 @@ protected:
 	boton aceptar;
 	int duracion_mensaje;
 	std::string mensaje_omision;
-	bool autenticando;
+	bool autenticando, esperando_ok;
 	std::thread hilo;
 	int fd;
 	bool inicializar_credencial ();

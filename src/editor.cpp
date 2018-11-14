@@ -301,9 +301,9 @@ void editor::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 		if (ocultar) {
 			std::string a;
 			a.resize (entrada.length (), '*');
-			f.dibujar (renderer, a.c_str (), xx + borde_x + padding_x, yy + borde_y + padding_y, color_texto);
+			f.dibujar (renderer, a.c_str (), xx + borde_x + padding_x, yy + borde_y + padding_y, activo ? color_texto : color_etiqueta);
 		} else {
-			f.dibujar (renderer, entrada.c_str (), xx + borde_x + padding_x, yy + borde_y + padding_y, color_texto);
+			f.dibujar (renderer, entrada.c_str (), xx + borde_x + padding_x, yy + borde_y + padding_y, activo ? color_texto : color_etiqueta);
 		}
 	} else {
 		f.dibujar (renderer, etiqueta.c_str (), xx + borde_x + padding_x, yy + borde_y + padding_y, color_etiqueta);
@@ -311,7 +311,7 @@ void editor::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	// Cursor
 	actualizar_cursor ();
 	if (enfocado) {
-		if (cursor_visible) {
+		if (cursor_visible && activo) {
 			SDL_SetRenderDrawColor (renderer, color_cursor.r, color_cursor.g, color_cursor.b, color_cursor.a);
 			r = {xx + borde_x + padding_x + cursor * char_w - 1, yy + borde_y + padding_y, 2, texto_h};
 			SDL_RenderDrawRect (renderer, &r);
