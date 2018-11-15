@@ -341,9 +341,6 @@ void correr_cliente (std::string dir, unsigned short puerto)
 				// Solo ahora se que fue reaceptado.
 				inicializar (dc, ds, vl.cred.fd, tamanio_respuesta, juego);
 			} else {
-				if (ds.presento) {
-					std::cout << "PROBLEMAPROBLEMAPROBLEMAPROBLEMAPROBLEMA\n";
-				}
 				ds.presento = false;
 				dc.recien_conectado = false;
 			}
