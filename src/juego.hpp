@@ -48,7 +48,6 @@ protected:
 	SDL_Renderer *renderer;
 	SDL_Texture *textura_fondo3, *textura_objetivo, *textura_bala, *textura_bala2, *textura_bala3, *textura_bala4;
 	Plataformas plataformas;
-	Scrolleables scrolleables;
 
 	traductorDelCliente* cliente;
 	traductorDelCliente* cliente2;
@@ -57,6 +56,7 @@ protected:
 
 	DatosPersonaje datosBoby, datosBoby2, datosBoby3, datosBoby4;
 	int maximaCoordenadaJugadores();
+	int maximaPosicionJugadores();
 
 	ArmadorDeRespuesta* armador;
 	void setDatosEnemigo();
@@ -74,7 +74,10 @@ protected:
 	Enemigo* enemigoNivel1;
 	Enemigo* enemigoNivel2;
 	Enemigo* enemigoNivel3;
-	Enemigo* enemigoEjemplo;
+
+	vector<Bullet*> balasEnemigas;
+	vector<Enemigo*> vectorEnemigos;
+	//vector<Item*> vectorItems;
 
 	bool apretandoDerecha(const Uint8* state);
 	bool apretandoIzquierda(const Uint8* state);

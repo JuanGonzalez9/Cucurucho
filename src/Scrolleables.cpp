@@ -15,7 +15,7 @@ void Scrolleables::agregarEnemigo(const char* path,SDL_Renderer* renderer, int x
 	//crea y agrega un enemigo al vector de enemigos
 
 	Enemigo* nuevoEnemigo;
-	nuevoEnemigo = new Enemigo(x,y,life,coor,lv);
+	nuevoEnemigo = new Enemigo(x,y,life,coor,lv,1);
 	nuevoEnemigo->obtenerTextura(path, renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 }

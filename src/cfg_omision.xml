@@ -47,6 +47,9 @@ R"(<?xml version="1.0"?>
 	<enemigo3>
 	    <sprite>imagenes/monstruolevel3.bmp</sprite>
     </enemigo3>
+  <marcianito>
+      <sprite>imagenes/enemigo.png</sprite>
+    </marcianito>
   </personajes>
   <items>
     <bala>
