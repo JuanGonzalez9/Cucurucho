@@ -18,6 +18,7 @@ vlogin::vlogin (ventana &v, const std::string &d):
 	duracion_mensaje (-1),
 	mensaje_omision ("Ingrese nombre de usuario y clave, luego presione ENTER."),
 	autenticando (false),
+	esperando_ok (false),
 	fd (-1)
 {
 	usuario.texto (nullptr, "usuario");
@@ -80,14 +81,28 @@ void vlogin::manejar_eventos()
 bool vlogin::manejar_evento (SDL_Event e)
 {
 	switch (e.type) {
+		case SDL_QUIT:
+			if (esperando_ok) {
+				corriendo = false;
+				cred.arranca_grisado = true;
+				hilo.detach ();
+				cred.resultado = usuario::fallido;
+			} else if (!autenticando || esperando_ok) {
+				corriendo = false;
+			}
+			return true;
 		case SDL_KEYDOWN:
 			switch (e.key.keysym.sym) {
 				case SDLK_RETURN:
-					al_aceptar ();
-					return true;
+					if (!autenticando) {
+						al_aceptar ();
+						return true;
+					}
 				case SDLK_ESCAPE:
-					corriendo = false;
-					return true;
+					if (!autenticando) {
+						corriendo = false;
+						return true;
+					}
 			};
 	}
 	return dialogo::manejar_evento (e);
@@ -121,13 +136,10 @@ void vlogin::al_aceptar ()
 		error ("Debe especificar una direccion:puerto valida.", tiempo_mensaje);
 	} else {
 		info ("Comprobando credencial, espere por favor...", tiempo_infinito);
-		/*
-		gtk_widget_set_sensitive (login->aceptar, false);
-		gtk_widget_set_sensitive (login->cancelar, false);
-		gtk_widget_set_sensitive (login->editor_usuario, false);
-		gtk_widget_set_sensitive (login->editor_clave, false);
-		*/
+		aceptar.activo = false;
+		usuario.activo = clave.activo = direccion.activo = false;
 		autenticando = true;
+		esperando_ok = false;
 		hilo = std::thread{ comprobar_credencial, this };
 	}
 }
@@ -170,12 +182,9 @@ void vlogin::comprobar_credencial (vlogin *vl)
 void vlogin::al_ser_aceptado ()
 {
 	info ("Espere el inicio de la partida.", tiempo_infinito);
-	/*
-	gtk_widget_set_sensitive (login->aceptar, false);
-	gtk_widget_set_sensitive (login->cancelar, false);
-	gtk_widget_set_sensitive (login->editor_usuario, false);
-	gtk_widget_set_sensitive (login->editor_clave, false);
-	*/
+	aceptar.activo = false;
+	usuario.activo = clave.activo = direccion.activo = false;
+	esperando_ok = true;
 }
 
 void vlogin::al_terminar_hilo ()
@@ -192,42 +201,26 @@ void vlogin::al_terminar_hilo ()
 		case usuario::rechazado:
 			std::cout << "Credencial inválida\n";
 			error ("Credencial invalida.", tiempo_mensaje);
-			#if 0
-			gtk_widget_set_sensitive (login->aceptar, true);
-			gtk_widget_set_sensitive (login->cancelar, true);
-			gtk_widget_set_sensitive (login->editor_usuario, true);
-			gtk_widget_set_sensitive (login->editor_clave, true);
-			#endif
+			aceptar.activo = true;
+			usuario.activo = clave.activo = direccion.activo = true;
 			break;
 		case usuario::cupo:
 			std::cout << "La partida ya está llena\n";
-			info ("La partida ya esta llena.", tiempo_mensaje);
-			#if 0
-			gtk_widget_set_sensitive (login->aceptar, false);
-			gtk_widget_set_sensitive (login->cancelar, true);
-			gtk_widget_set_sensitive (login->editor_usuario, false);
-			gtk_widget_set_sensitive (login->editor_clave, false);
-			#endif
+			info ("La partida ya esta llena.", tiempo_infinito);
+			aceptar.activo = false;
+			usuario.activo = clave.activo = direccion.activo = false;
 			break;
 		case usuario::jugando:
 			std::cout << "El usuario ya está jugando\n";
 			info ("El usuario ya esta jugando.", tiempo_mensaje);
-			#if 0
-			gtk_widget_set_sensitive (login->aceptar, false);
-			gtk_widget_set_sensitive (login->cancelar, true);
-			gtk_widget_set_sensitive (login->editor_usuario, false);
-			gtk_widget_set_sensitive (login->editor_clave, false);
-			#endif
+			aceptar.activo = true;
+			usuario.activo = clave.activo = direccion.activo = true;
 			break;
 		case usuario::fallido:
 			std::cout << "Falló la conexión, inténtelo más tarde\n";
 			error ("Fallo la conexion, intentelo mas tarde.", tiempo_mensaje);
-			#if 0
-			gtk_widget_set_sensitive (login->aceptar, true);
-			gtk_widget_set_sensitive (login->cancelar, true);
-			gtk_widget_set_sensitive (login->editor_usuario, true);
-			gtk_widget_set_sensitive (login->editor_clave, true);
-			#endif
+			aceptar.activo = true;
+			usuario.activo = clave.activo = direccion.activo = true;
 			break;
 	};
 }
@@ -248,9 +241,19 @@ void esperar_jugadores (int jugadores, const char *dir, unsigned short puerto, a
 	for (int i = 0; i < 4; i++) {
 		a.usuarios[i].conector = nullptr;
 	}
-	a.hilo_1 = std::thread{ escuchar, &a, dir, puerto, jugadores };
+	int fd = abrir_socket (dir, puerto);
+	if (fd == -1) {
+		a.salir = true;
+		return;
+	}
+	a.hilo_1 = std::thread{ escuchar, &a, fd, jugadores };
 	if (std::string ("127.0.0.1") != dir) {
-		a.hilo_2 = std::thread{ escuchar, &a, "127.0.0.1", puerto, jugadores };
+		int fd = abrir_socket ("127.0.0.1", puerto);
+		if (fd == -1) {
+			a.salir = true;
+			return;
+		}
+		a.hilo_2 = std::thread{ escuchar, &a, fd, jugadores };
 	}
 	std::cout << "Esperando que se cumpla el cupo de jugadores\n";
 	a.condicion.wait (lock, [&a]{return a.salir || a.cantidad == a.requeridos;});

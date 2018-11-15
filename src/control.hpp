@@ -33,7 +33,7 @@ public:
 	void relativas (int &x, int &y);
 	typedef enum {normal, medio, opuesto} anclado;
 	anclado anclado_x, anclado_y;
-	bool resaltado;
+	bool resaltado, activo;
 protected:
 	int x, y, w, h;
 	bool enfocado;

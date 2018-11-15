@@ -281,7 +281,7 @@ void informar_jugando (ventana &v, credencial &cred)
 	std::stringstream ss;
 	std::string usr = cred.usuario;
 	usr[0] = toupper (usr[0]);
-	ss << "El usuario " << usr << " se encuentra jugando en otro cliente.";
+	ss << usr << " se encuentra jugando en otro cliente.";
 	// TODO opcion login
 	mensaje msg (v);
 	msg.correr (ss.str());
@@ -318,11 +318,11 @@ void correr_cliente (std::string dir, unsigned short puerto)
 		std::mutex mutex_mundo;
 		while (dc.escuchador.enAccion() && juego.jugando()){
 			std::unique_lock<std::mutex> lock_presento(ds.mutex_presento);
-			if (vl.cred.arranca_grisado || !ds.condicion_presento.wait_for (
+			if (vl.cred.arranca_grisado || (!ds.presento && !ds.condicion_presento.wait_for (
 				lock_presento,
 				std::chrono::milliseconds(dc.recien_conectado ? MAX_TIEMPO_RESPUESTA_NUEVO : MAX_TIEMPO_RESPUESTA),
 				[&ds]{return ds.presento;}
-			)) {
+			))) {
 				vl.cred.arranca_grisado = false;
 				finalizar (dc, ds);
 
@@ -370,7 +370,9 @@ void finalizar (autenticados &a)
 {
 	std::unique_lock<std::mutex> lock(a.mutex);
 	std::cerr << "a.hilo.detach ()\n";
-	a.hilo_1.detach ();
+	if (a.hilo_1.joinable ()) {
+		a.hilo_1.detach ();
+	}
 	if (a.hilo_2.joinable ()) {
 		a.hilo_2.detach ();
 	}
@@ -423,6 +425,7 @@ void verificar_clientes (autenticados &a, juego &j, int tamanio_respuesta)
 			} else {
 				std::cout << "Anulando cliente: " << i << "\n";
 				finalizar (a.usuarios[i]);
+				memcpy (a.usuarios[i].teclas, "000000000", 10);
 				j.grisarJugador(i+1);
 			}
 		}

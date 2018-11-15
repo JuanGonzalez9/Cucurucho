@@ -40,20 +40,46 @@ void mensaje_conexion::actualizar ()
 
 void mensaje_conexion::comprobar_credencial (mensaje_conexion *m)
 {
-	// Hilo secundario
-	comprobar_credencial_en_servidor (m->cred);
-	if (m->cred.resultado == usuario::reaceptado) {
-		std::cout << "enviando ok\n";
-		enviar_ok (m->cred.fd);
-		std::cout << "esperando ok para " << m->cred.usuario << " en fd " << m->cred.fd << "\n";
-		esperar_ok (m->cred.fd);
-		std::cout << "ok recibido\n";
-	} else if (m->cred.resultado == usuario::aceptado) {
-		std::cout << "enviando cancelar\n";
-		enviar_cancelar (m->cred.fd);
-		std::cout << "cancelar enviado\n";
-	}
-	m->sincronizada ([m](){m->al_terminar_hilo ();});
+    // Hilo secundario
+    //bool primer_intento = true;
+    //comienzo:
+    std::cout << "comprobar_credencial_en_servidor...\n";
+    comprobar_credencial_en_servidor (m->cred);
+    if (m->cred.resultado == usuario::reaceptado) {
+        /*if (primer_intento) {
+            std::cout << "enviando cancelar\n";
+            if (!enviar_cancelar (m->cred.fd)) {
+                std::cout << "cancelar fallo\n";
+            }
+            std::cout << "cancelar enviado\n";
+            primer_intento = false;
+            std::cout << "Esperando...\n";
+            sleep (5);
+            goto comienzo;
+        } else {*/
+            std::cout << "enviando ok\n";
+            if (!enviar_ok (m->cred.fd)) {
+                std::cout << "esperar_ok fallo\n";
+                m->cred.resultado = usuario::fallido;
+            }else{
+                std::cout << "esperando ok para " << m->cred.usuario << " en fd " << m->cred.fd << "\n";
+                if (!esperar_ok (m->cred.fd)) {
+                    std::cout << "esperar_ok fallo\n";
+                    m->cred.resultado = usuario::fallido;
+                }
+                else{
+                    std::cout << "ok recibido\n";
+                }
+               
+            }
+           
+        //}
+    } else if (m->cred.resultado == usuario::aceptado) {
+        std::cout << "enviando cancelar\n";
+        enviar_cancelar (m->cred.fd);
+        std::cout << "cancelar enviado\n";
+    }
+    m->sincronizada ([m](){m->al_terminar_hilo ();});
 }
 
 void mensaje_conexion::al_terminar_hilo ()

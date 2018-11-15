@@ -14,6 +14,7 @@ control::control (int x, int y):
 	x (x),
 	y (y),
 	enfocado (false),
+	activo (true),
 	padre (nullptr)
 {
 }

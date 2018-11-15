@@ -29,7 +29,9 @@ protected:
 	std::string s;
 	int padding_x, padding_y, borde_x, borde_y, char_w, char_h;
 	fuente f;
-	SDL_Color color_borde, color_borde_foco, color_borde_resaltado, color_fondo, color_fondo_foco, color_fondo_resaltado, color_texto;
+	SDL_Color	color_borde, color_borde_foco, color_borde_resaltado, color_borde_inactivo,
+			color_fondo, color_fondo_foco, color_fondo_resaltado, color_fondo_inactivo,
+			color_texto, color_texto_inactivo;
 };
 
 #endif
