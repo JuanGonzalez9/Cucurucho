@@ -4,8 +4,12 @@
 
 class Enemigo : public EntidadDibujable{
 public:
+	//constructor para juego
 	Enemigo(int x,int y,int life, int coordenada, int nivel, int tipo);
+	//constructor viejo para jefes
 	Enemigo(int x,int y,int vidas);
+	//default para los que heredan
+	Enemigo();
 	virtual ~Enemigo();
 
 	//GETTER SETTER

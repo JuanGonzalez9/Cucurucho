@@ -40,6 +40,23 @@ Enemigo::Enemigo(int x,int y,int life, int coordenada, int nivel, int tipo){
 	tipoEnemigo=tipo;
 }
 
+Enemigo::Enemigo() {
+
+	EntidadDibujable();
+	rectOrigen = {0,0,250,158};
+	rectDestino = {0,0,252,240};
+	coordenadaX=0;
+	coordenadaY=0;
+	posX=0;
+	posY=0;
+	activo=false;
+	vidas=1;
+	nivelActivo=1;
+	coordenadaActiva=0;
+	marcapasos=0;
+	tipoEnemigo=1;
+}
+
 Enemigo::Enemigo(int x,int y,int life) {
 
 	EntidadDibujable();
