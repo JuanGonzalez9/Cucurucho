@@ -86,6 +86,22 @@ int Enemigo::obtenerCoordenadaActiva(){
 	return coordenadaActiva;
 }
 
+int Enemigo::coordenadaXParaItem(){
+	return coordenadaX+(rectDestino.w/2);
+}
+
+int Enemigo::coordenadaYParaItem(){
+	return coordenadaX+(rectDestino.h/2);
+}
+
+int Enemigo::posicionXParaItem(){
+	return coordenadaX+(rectDestino.w/2);
+}
+
+int Enemigo::posicionYParaItem(){
+	return coordenadaY+(rectDestino.h/2);
+}
+
 bool Enemigo::pasaBorde(int nivel){
 	bool pasa=false;
 	if (nivel !=2){
@@ -130,7 +146,7 @@ void Enemigo::activar(int nivel, int coordenada, int pos){
 				//(coordact-coordmax)+(posmax-400)
 				activo=true;
 				//desfasaje= coordenadaActiva - coordenada +pos - 400;
-				desfasaje= coordenadaActiva - coordenada +pos;
+				//desfasaje= coordenadaActiva - coordenada +pos;
 				rectDestino.x+=desfasaje;
 				posX+=desfasaje;
 			}

@@ -290,11 +290,20 @@ void Personaje::pararse(){
 }
 
 void Personaje::verSiBalasPegan(Enemigo* malo){
+	/*
 	for(unsigned i=0; i<bullets.size();i++){
 		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
 			malo->perderVida();
 			bullets.erase(bullets.begin() + i);
 			}
+	}
+	*/
+	int i=0;
+	while (i<bullets.size()){
+		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
+			malo->perderVida();
+			bullets.erase(bullets.begin() + i);
+		}else i++;
 	}
 }
 
@@ -463,8 +472,11 @@ void Personaje::dejarDeDisparar(){
 }
 
 void Personaje::cambiarArma(int nroArma){
-	if (nroArma ==1)
+	if (nroArma ==0)
 		arma = Pistola;
+	if (nroArma ==1)
+		//arma = Pistola;
+		hitPoints++;
 	if (nroArma ==2)
 		arma = Ametralladora;
 	if (nroArma ==3)

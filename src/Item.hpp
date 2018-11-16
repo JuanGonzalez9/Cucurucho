@@ -2,7 +2,7 @@
 #define ITEM_H_
 #include "Enemigo.h"
 
-class Item : Enemigo{
+class Item : public Enemigo{
 
 public:
 	Item(int x,int y, int coorX, int coorY, int arma, int nivel);

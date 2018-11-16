@@ -49,6 +49,8 @@ Item::Item(int x,int y, int coorX, int coorY, int arma, int nivel) {
 
 void Item::actualizarItem(){
 	marcapasos--;
+	if (marcapasos==0)
+		vidas=0;
 }
 
 bool Item::puedoDibujar(){

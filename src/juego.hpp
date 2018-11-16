@@ -8,6 +8,7 @@
 #include "Personaje.h"
 #include "Enemigo.h"
 #include "Bullet.h"
+#include "Item.hpp"
 #include <vector>
 #include "iocontra.hpp"
 #include "traductorDelCliente.h"
@@ -77,7 +78,7 @@ protected:
 
 	vector<Bullet*> balasEnemigas;
 	vector<Enemigo*> vectorEnemigos;
-	//vector<Item*> vectorItems;
+	vector<Item*> vectorItems;
 
 	bool apretandoDerecha(const Uint8* state);
 	bool apretandoIzquierda(const Uint8* state);

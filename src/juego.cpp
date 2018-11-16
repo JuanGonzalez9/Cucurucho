@@ -65,11 +65,10 @@ juego::juego (ventana &v, int cantidadJugadores):
 	boby3.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 	boby4.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
 
-	//todo lo que dice NOTA MARTIN tiene que ver con los vectores de enemigos
-	//por favor dejenlo asi lo termino
+	//todo lo que dice NOTA MARTIN tiene que ver con los vectores de enemigos, items y balas
 
 	//cargo vector de enemigos
-	//NOTA MARTIN: CAMBIAR POR ESTO //////////////////////////
+	//NOTA MARTIN /////////////////////////////////////////////////////
 	Enemigo* nuevoEnemigo;
 	nuevoEnemigo = new Enemigo(750,-340,1,2700,2,2);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
@@ -88,6 +87,8 @@ juego::juego (ventana &v, int cantidadJugadores):
 	vectorEnemigos.push_back(nuevoEnemigo);
 	///////////////////////////////////////////////////////////
 
+	//jefes default
+
 	enemigoNivel1 = new Enemigo(600,150,5);
 	enemigoNivel1->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 
@@ -100,7 +101,6 @@ juego::juego (ventana &v, int cantidadJugadores):
 
 	loginfo("Se crearon los enemigos");
 
-	// Creamos textura para pegar las plataformas
 	// Creamos textura para pegar las plataformas
 
 	loginfo("Se llama a plataformas para inicializar");
@@ -376,6 +376,9 @@ void juego::manejar_eventos ()
 		//NOTA MARTIN  //////////////////////////////////////
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			vectorEnemigos[i]->empujarAtras(d3, nivel);
+		}
+		for(int i = 0; i < vectorItems.size(); i++){
+			vectorItems[i]->empujarAtras(d3, nivel);
 		}
 		/////////////////////////////////////////////////////
 		coordenada +=d3;
@@ -866,6 +869,10 @@ void juego::actualizar ()
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			vectorEnemigos[i]->empujarAtras(maxVel, nivel);
 		}
+
+		for(int i = 0; i < vectorItems.size(); i++){
+			vectorItems[i]->empujarAtras(maxVel, nivel);
+		}
 		////////////////////////////////////////////////
 		coordenada -=maxVel;
 
@@ -938,35 +945,86 @@ void juego::actualizar ()
 		}
 	}
 
-	//veo si el jugador toca los enemigos
+	//veo COLISIONES
+
 	//NOTA MARTIN ///////////////////////////////////
+	int pickup=0;
+
 	if(boby.enJuego()&&(boby.getInvincibilityFrames() == 0)){
+
+		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby.perderVida();
 			}
 		}
+
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby.cambiarArma(pickup);
+			}
+		}
+
 	}
 	if(boby2.enJuego()&&(boby2.getInvincibilityFrames() == 0)){
+
+		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby2.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby2.perderVida();
 			}
 		}
+
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby2.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby2.cambiarArma(pickup);
+			}
+		}
+
 	}
 	if(boby3.enJuego()&&(boby3.getInvincibilityFrames() == 0)){
+
+		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby3.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby3.perderVida();
 			}
 		}
+
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby3.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby3.cambiarArma(pickup);
+			}
+		}
+
 	}
 	if(boby4.enJuego()&&(boby4.getInvincibilityFrames() == 0)){
+
+		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby4.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby4.perderVida();
 			}
 		}
+
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby4.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby4.cambiarArma(pickup);
+			}
+		}
+
 	}
 	////////////////////////////////////////////////////
 
@@ -976,6 +1034,11 @@ void juego::actualizar ()
 		boby.perderVida();
 		boby.resetearPosicion(plataformas, nivel);	
 		
+		Item* nuevoItem;
+		nuevoItem = new Item(400,400,500,500,3,nivel);
+		nuevoItem->obtenerTextura("//configuracion//items//arma//sprite", renderer);
+		vectorItems.push_back(nuevoItem);
+
 	}
 	if(boby2.getPosY()>600){
 		boby2.perderVida();
@@ -1005,6 +1068,12 @@ void juego::actualizar ()
 	//veo si las balas le pegan al enemigo
 	//NOTA MARTIN /////////////////////////////////////////
 	int i=0;
+
+	int dropItem=0;
+	int coordXItem=0;
+	int coordYItem=0;
+	int posYItem=0;
+	int posXItem=0;
 	while (i<vectorEnemigos.size()){
 		if(vectorEnemigos[i]->esActivo()){
 			boby.verSiBalasPegan(vectorEnemigos[i]);
@@ -1012,8 +1081,24 @@ void juego::actualizar ()
 			boby3.verSiBalasPegan(vectorEnemigos[i]);
 			boby4.verSiBalasPegan(vectorEnemigos[i]);
 
-			if (vectorEnemigos[i]->derrotado())
+			if (vectorEnemigos[i]->derrotado()){
+				//pruebo suerte!
+				dropItem= rand() % 4 + 1;
+				if(dropItem<=4){
+					//siiii! suelta un item!
+					coordXItem= vectorEnemigos[i]->coordenadaXParaItem();
+					coordYItem= vectorEnemigos[i]->coordenadaYParaItem();
+					posXItem= vectorEnemigos[i]->posicionXParaItem();
+					posYItem= vectorEnemigos[i]->posicionYParaItem();
+
+					Item* nuevoItem;
+					//nuevoItem = new Item(posXItem,posYItem,coordXItem,coordYItem,dropItem,nivel);
+					nuevoItem = new Item(400,200,400,400,2,nivel);
+					nuevoItem->obtenerTextura("//configuracion//items//arma//sprite", renderer);
+					vectorItems.push_back(nuevoItem);
+				}
 				vectorEnemigos.erase(vectorEnemigos.begin() + i);
+			}
 			else i++;
 		} else i++;
 	}
@@ -1037,6 +1122,21 @@ void juego::actualizar ()
 	while (i<vectorEnemigos.size()){
 		if ((vectorEnemigos[i]->pasaBorde(nivel))||(nivel>(vectorEnemigos[i]->obtenerNivelActivo()))||(vectorEnemigos[i]->derrotado()))
 			vectorEnemigos.erase(vectorEnemigos.begin() + i);
+		else i++;
+	}
+
+	//actualizo los items
+
+	for(i = 0; i < vectorItems.size(); i++){
+		if(vectorItems[i]->esActivo())
+			vectorItems[i]->actualizarItem();
+	}
+
+	//borro los que se pasaron del borde o estan derrotados
+	i=0;
+	while (i<vectorItems.size()){
+		if ((vectorItems[i]->pasaBorde(nivel))||(nivel>(vectorItems[i]->obtenerNivelActivo()))||(vectorItems[i]->derrotado()))
+			vectorItems.erase(vectorItems.begin() + i);
 		else i++;
 	}
 	/////////////////////////////////////////////////////
@@ -1241,6 +1341,15 @@ void juego::dibujar ()
 		if(!vectorEnemigos[i]->derrotado()&&vectorEnemigos[i]->esActivo())
 			vectorEnemigos[i]->dibujar(renderer);
 	}
+
+	//dibujo items
+	for(int i = 0; i < vectorItems.size(); i++){
+		/*
+		if(vectorItems[i]->puedoDibujar())
+			vectorItems[i]->dibujar(renderer);
+			*/
+		vectorItems[i]->dibujar(renderer);
+	}
 	//////////////////////////////////////////////////////////////
 
 
@@ -1417,10 +1526,15 @@ juego::~juego ()
 		enemigoNivel1->~Enemigo();
 	}
 
-	//NOTA MARTIN:SACAR/////////////////////////
+	//NOTA MARTIN //////////////////////////////
 	int size= vectorEnemigos.size();
 	for(unsigned i = 0;i < size;i++){
 		vectorEnemigos[i]->~Enemigo();
+	}
+
+	size= vectorItems.size();
+	for(unsigned i = 0;i < size;i++){
+		vectorItems[i]->~Item();
 	}
 	////////////////////////////////////////////
 

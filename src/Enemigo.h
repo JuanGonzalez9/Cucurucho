@@ -18,6 +18,12 @@ public:
 	bool esActivo();
 	int obtenerCoordenadaActiva();
 	int obtenerNivelActivo();
+
+	int coordenadaXParaItem();
+	int coordenadaYParaItem();
+	int posicionXParaItem();
+	int posicionYParaItem();
+
 	//Metodos
 
 	//activacion

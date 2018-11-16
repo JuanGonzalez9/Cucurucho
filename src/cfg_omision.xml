@@ -64,6 +64,9 @@ R"(<?xml version="1.0"?>
     <bala4>
 	    <sprite>imagenes/bulletP4.png</sprite>
     </bala4>
+    <arma>
+      <sprite>imagenes/arma.png</sprite>
+    </arma>
   </items>
   <plataformas>
     <piedra>
