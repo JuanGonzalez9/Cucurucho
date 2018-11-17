@@ -31,9 +31,9 @@ Item::Item(int x,int y, int coorX, int coorY, int arma, int nivel) {
 	activo=true;
 
 	//para item, marcapasos actua como los frames de invisibilidad del personaje
-	//arranca en un valor fijo (600 -> 10 segundos) y va bajando
+	//arranca en un valor fijo (360 -> 6 segundos) y va bajando
 	//cuando se termina el marcapasos el item se borra
-	marcapasos=600;
+	marcapasos=360;
 
 	//recibe contenido desde arma.
 	//cuando muere un enemigo, este genera un numero aleatorio de 1 a 10
@@ -56,13 +56,13 @@ void Item::actualizarItem(){
 bool Item::puedoDibujar(){
 	//indica si debo dibujar el item o no
 	//true si el item es activo y no esta derrotado
-	//el resto hace que pestaniee en los ultimos 5 segundos
+	//el resto hace que pestaniee en los ultimos 2 segundos
 	bool dibujo= true;
 	if(vidas<=0)
 		dibujo=false;
 	if(!activo)
 		dibujo=false;
-	if((marcapasos<300)&&((marcapasos/2) %2 == 0)) 
+	if((marcapasos<120)&&((marcapasos/2) %2 == 0)) 
 		dibujo=false;
 	return dibujo;
 }

@@ -134,7 +134,7 @@ void Enemigo::disparo(){
 }
 
 int Enemigo::disparoXVel(){
-	return -8;
+	return -3;
 }
 
 int Enemigo::disparoYVel(){

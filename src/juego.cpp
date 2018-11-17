@@ -1122,7 +1122,7 @@ void juego::actualizar ()
 
 			if (vectorEnemigos[i]->derrotado()){
 				//pruebo suerte!
-				dropItem= rand() % 4 + 1;
+				dropItem= rand() % 10 + 1;
 				if(dropItem<=4){
 					//siiii! suelta un item!
 					coordXItem= vectorEnemigos[i]->coordenadaXParaItem();
@@ -1132,7 +1132,7 @@ void juego::actualizar ()
 
 					Item* nuevoItem;
 					//nuevoItem = new Item(posXItem,posYItem,coordXItem,coordYItem,dropItem,nivel);
-					nuevoItem = new Item(400,200,400,400,2,nivel);
+					nuevoItem = new Item(400,200,400,400,dropItem,nivel);
 					nuevoItem->obtenerTextura("//configuracion//items//arma//sprite", renderer);
 					vectorItems.push_back(nuevoItem);
 				}
@@ -1157,7 +1157,7 @@ void juego::actualizar ()
 			vectorEnemigos[i]->actualizar(nivel, coordenada);
 		if(vectorEnemigos[i]->quiereDisparar()){
 			//nuevaBala = new Bullet(vectorEnemigos[i]->posicionXParaItem(),vectorEnemigos[i]->posicionYParaItem(),vectorEnemigos[i]->disparoXVel(),vectorEnemigos[i]->disparoYVel(),2,50);
-			nuevaBala = new Bullet(400,300,-3,0,2,100);
+			nuevaBala = new Bullet(400,300,vectorEnemigos[i]->disparoXVel(),vectorEnemigos[i]->disparoYVel(),2,100);
 			nuevaBala->obtenerTextura("//configuracion//items//bala2//sprite", renderer);
 			vectorEnemigos[i]->disparo();
 			balasEnemigas.push_back(nuevaBala);
@@ -1182,7 +1182,7 @@ void juego::actualizar ()
 	//borro los que se pasaron del borde o estan derrotados
 	i=0;
 	while (i<vectorItems.size()){
-		if ((vectorItems[i]->pasaBorde(nivel))||(nivel>(vectorItems[i]->obtenerNivelActivo()))||(vectorItems[i]->derrotado()))
+		if (/*(vectorItems[i]->pasaBorde(nivel))||*/(nivel>(vectorItems[i]->obtenerNivelActivo()))||(vectorItems[i]->derrotado()))
 			vectorItems.erase(vectorItems.begin() + i);
 		else i++;
 	}
@@ -1405,11 +1405,8 @@ void juego::dibujar ()
 
 	//dibujo items
 	for(int i = 0; i < vectorItems.size(); i++){
-		/*
 		if(vectorItems[i]->puedoDibujar())
 			vectorItems[i]->dibujar(renderer);
-			*/
-		vectorItems[i]->dibujar(renderer);
 	}
 
 	//dibujo balas
