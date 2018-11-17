@@ -1082,18 +1082,22 @@ void juego::actualizar ()
 	if(boby.getPosY()>600){
 		boby.perderVida();
 		boby.resetearPosicion(plataformas, nivel);	
+		boby.cambiarArma(0);
 	}
 	if(boby2.getPosY()>600){
 		boby2.perderVida();
 		boby2.resetearPosicion(plataformas, nivel);	
+		boby2.cambiarArma(0);
 	}
 	if(boby3.getPosY()>600){
 		boby3.perderVida();
 		boby3.resetearPosicion(plataformas, nivel);	
+		boby3.cambiarArma(0);
 	}
 	if(boby4.getPosY()>600){
 		boby4.perderVida();
 		boby4.resetearPosicion(plataformas, nivel);	
+		boby4.cambiarArma(0);
 	}
 
 	//refresco el tiempo de invincibilidad
