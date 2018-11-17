@@ -36,6 +36,9 @@ public:
 	//acciones
 	void moverIzquierda(int x);
 	void moverDerecha(int x);
+	void moverArriba(int y);
+	void moverAbajo(int y);
+
 	bool quiereDisparar();
 	int disparoXVel();
 	int disparoYVel();

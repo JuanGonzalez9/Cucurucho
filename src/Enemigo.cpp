@@ -193,13 +193,13 @@ void Enemigo::moverDerecha(int x){
 }
 
 void Enemigo::moverArriba(int y){
-	coordenadaY-=Y;
+	coordenadaY-=y;
 	posY-=y;
 	rectDestino.y-=y;
 }
 
 void Enemigo::moverAbajo(int y){
-	coordenadaY+=Y;
+	coordenadaY+=y;
 	posY+=y;
 	rectDestino.y +=y;
 }

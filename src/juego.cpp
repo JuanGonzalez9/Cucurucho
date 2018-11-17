@@ -82,7 +82,7 @@ juego::juego (ventana &v, int cantidadJugadores):
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
-	nuevoEnemigo = new Enemigo(800,220,1,2640,1,2);
+	nuevoEnemigo = new Enemigo(800,220,1,2640,1,3);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 	///////////////////////////////////////////////////////////
@@ -379,6 +379,9 @@ void juego::manejar_eventos ()
 		}
 		for(int i = 0; i < vectorItems.size(); i++){
 			vectorItems[i]->empujarAtras(d3, nivel);
+		}
+		for(int i = 0; i < balasEnemigas.size(); i++){
+			balasEnemigas[i]->empujarAtras(d3, nivel);
 		}
 		/////////////////////////////////////////////////////
 		coordenada +=d3;
@@ -873,6 +876,9 @@ void juego::actualizar ()
 		for(int i = 0; i < vectorItems.size(); i++){
 			vectorItems[i]->empujarAtras(maxVel, nivel);
 		}
+		for(int i = 0; i < balasEnemigas.size(); i++){
+			balasEnemigas[i]->empujarAtras(maxVel, nivel);
+		}
 		////////////////////////////////////////////////
 		coordenada -=maxVel;
 
@@ -948,6 +954,7 @@ void juego::actualizar ()
 	//veo COLISIONES
 
 	//NOTA MARTIN ///////////////////////////////////
+	int i=0;
 	int pickup=0;
 
 	if(boby.enJuego()&&(boby.getInvincibilityFrames() == 0)){
@@ -968,6 +975,14 @@ void juego::actualizar ()
 			}
 		}
 
+		//veo si toca las balas de los enemigos
+		i=0;
+		while (i<balasEnemigas.size()){
+			if (collision(boby.getRectaDestino(),balasEnemigas[i]->getRectaDestino())){
+				balasEnemigas.erase(balasEnemigas.begin() + i);
+				boby.perderVida();
+			}else i++;
+		}
 	}
 	if(boby2.enJuego()&&(boby2.getInvincibilityFrames() == 0)){
 
@@ -987,6 +1002,14 @@ void juego::actualizar ()
 			}
 		}
 
+		//veo si toca las balas de los enemigos
+		i=0;
+		while (i<balasEnemigas.size()){
+			if (collision(boby2.getRectaDestino(),balasEnemigas[i]->getRectaDestino())){
+				balasEnemigas.erase(balasEnemigas.begin() + i);
+				boby2.perderVida();
+			}else i++;
+		}
 	}
 	if(boby3.enJuego()&&(boby3.getInvincibilityFrames() == 0)){
 
@@ -1006,6 +1029,14 @@ void juego::actualizar ()
 			}
 		}
 
+		//veo si toca las balas de los enemigos
+		i=0;
+		while (i<balasEnemigas.size()){
+			if (collision(boby3.getRectaDestino(),balasEnemigas[i]->getRectaDestino())){
+				balasEnemigas.erase(balasEnemigas.begin() + i);
+				boby3.perderVida();
+			}else i++;
+		}
 	}
 	if(boby4.enJuego()&&(boby4.getInvincibilityFrames() == 0)){
 
@@ -1025,6 +1056,14 @@ void juego::actualizar ()
 			}
 		}
 
+		//veo si toca las balas de los enemigos
+		i=0;
+		while (i<balasEnemigas.size()){
+			if (collision(boby4.getRectaDestino(),balasEnemigas[i]->getRectaDestino())){
+				balasEnemigas.erase(balasEnemigas.begin() + i);
+				boby4.perderVida();
+			}else i++;
+		}
 	}
 	////////////////////////////////////////////////////
 
@@ -1067,7 +1106,7 @@ void juego::actualizar ()
 	}
 	//veo si las balas le pegan al enemigo
 	//NOTA MARTIN /////////////////////////////////////////
-	int i=0;
+	i=0;
 
 	int dropItem=0;
 	int coordXItem=0;
@@ -1107,14 +1146,22 @@ void juego::actualizar ()
 	//actualizo el enemigo
 
 	//NOTA MARTIN /////////////////////////////////////////
+	Bullet* nuevaBala;
 	int maxCoor=this->maximaCoordenadaJugadores();
 	int maxPos=this->maximaPosicionJugadores();
 
 	for(i = 0; i < vectorEnemigos.size(); i++){
-	if(!vectorEnemigos[i]->esActivo())
-		vectorEnemigos[i]->activar(nivel, maxCoor, maxPos);
-	if(vectorEnemigos[i]->esActivo())
-		vectorEnemigos[i]->actualizar(nivel, coordenada);
+		if(!vectorEnemigos[i]->esActivo())
+			vectorEnemigos[i]->activar(nivel, maxCoor, maxPos);
+		if(vectorEnemigos[i]->esActivo())
+			vectorEnemigos[i]->actualizar(nivel, coordenada);
+		if(vectorEnemigos[i]->quiereDisparar()){
+			//nuevaBala = new Bullet(vectorEnemigos[i]->posicionXParaItem(),vectorEnemigos[i]->posicionYParaItem(),vectorEnemigos[i]->disparoXVel(),vectorEnemigos[i]->disparoYVel(),2,50);
+			nuevaBala = new Bullet(400,300,-3,0,2,100);
+			nuevaBala->obtenerTextura("//configuracion//items//bala2//sprite", renderer);
+			vectorEnemigos[i]->disparo();
+			balasEnemigas.push_back(nuevaBala);
+		}
 	}
 	
 	//borro los que se pasaron del borde o estan derrotados
@@ -1137,6 +1184,20 @@ void juego::actualizar ()
 	while (i<vectorItems.size()){
 		if ((vectorItems[i]->pasaBorde(nivel))||(nivel>(vectorItems[i]->obtenerNivelActivo()))||(vectorItems[i]->derrotado()))
 			vectorItems.erase(vectorItems.begin() + i);
+		else i++;
+	}
+
+	//Actualizo balas enemigas
+
+	for(int i = 0; i < balasEnemigas.size(); i++){
+		balasEnemigas[i]->move();
+	}
+
+	//borro las balas que exceden su rango para que no sigan hasta el infinito
+	i=0;
+	while (i<balasEnemigas.size()){
+		if (balasEnemigas[i]->getDuracion() ==0)
+			balasEnemigas.erase(balasEnemigas.begin() + i);
 		else i++;
 	}
 	/////////////////////////////////////////////////////
@@ -1350,6 +1411,12 @@ void juego::dibujar ()
 			*/
 		vectorItems[i]->dibujar(renderer);
 	}
+
+	//dibujo balas
+	for(int i = 0; i < balasEnemigas.size(); i++){
+		balasEnemigas[i]->dibujar(renderer);
+	}
+
 	//////////////////////////////////////////////////////////////
 
 
@@ -1535,6 +1602,11 @@ juego::~juego ()
 	size= vectorItems.size();
 	for(unsigned i = 0;i < size;i++){
 		vectorItems[i]->~Item();
+	}
+
+	size= balasEnemigas.size();
+	for(unsigned i = 0;i < size;i++){
+		balasEnemigas[i]->~Bullet();
 	}
 	////////////////////////////////////////////
 
