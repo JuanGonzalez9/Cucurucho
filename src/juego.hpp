@@ -7,6 +7,7 @@
 #include "EntidadDibujable.h"
 #include "Personaje.h"
 #include "Enemigo.h"
+#include "SubclasesEnemigos.h"
 #include "Bullet.h"
 #include "Item.hpp"
 #include <vector>

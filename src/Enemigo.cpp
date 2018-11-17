@@ -1,15 +1,11 @@
 #include "Enemigo.h"
 
-Enemigo::Enemigo(int x,int y,int life, int coordenada, int nivel, int tipo){
+Enemigo::Enemigo(int x,int y,int life, int coordenada, int nivel){
 	//x e y definen en que posicion de la pantalla se crea el enemigo
 	//life define con cuantas vidas arranca
 	//nivel define en que nivel aparece
 	//coordenada indica (para nivel 2) la coordenada Y en la que quiero que aparezca
 	//y para nivel 1 y 3 la coordenada X en la que quiero que aparezca
-	
-	//tipo indica el comportamiento del enemigo, luego se va a reemplazar por polimorfismo como dios manda
-	//tipo 1 = no hace nada
-	//tipo 2 = se mueve de lado a lado
 
 	//Coordenada activa es la minima coordenada por la que tiene que pasar el jugador para que el enemigo aparezca
 	//sirve para corregir errores como la reconexión de un jugador por adelante de la mitad de la pantalla
@@ -36,8 +32,7 @@ Enemigo::Enemigo(int x,int y,int life, int coordenada, int nivel, int tipo){
 
 	//marcapasos se usa para hacer ciclos a la hora de moverse
 	marcapasos=0;
-
-	tipoEnemigo=tipo;
+	shootTimer=0;
 }
 
 Enemigo::Enemigo() {
@@ -54,7 +49,7 @@ Enemigo::Enemigo() {
 	nivelActivo=1;
 	coordenadaActiva=0;
 	marcapasos=0;
-	tipoEnemigo=1;
+	shootTimer=0;
 }
 
 Enemigo::Enemigo(int x,int y,int life) {
@@ -95,11 +90,11 @@ int Enemigo::coordenadaYParaItem(){
 }
 
 int Enemigo::posicionXParaItem(){
-	return coordenadaX+(rectDestino.w/2);
+	return rectDestino.x+(rectDestino.w/2);
 }
 
 int Enemigo::posicionYParaItem(){
-	return coordenadaY+(rectDestino.h/2);
+	return rectDestino.y+(rectDestino.h/2);
 }
 
 bool Enemigo::pasaBorde(int nivel){
@@ -210,6 +205,7 @@ void Enemigo::hazLoTuyo(){
 	//se sobreescribe para cada subclase
 
 	//un ejemplo(mueve lado a lado)
+	/*
 	if(tipoEnemigo==2){
 		if(marcapasos>=60){
 			moverDerecha(3);
@@ -223,8 +219,8 @@ void Enemigo::hazLoTuyo(){
 	//ejemplo (dispara)
 	if((tipoEnemigo==3)&&(shootTimer==0)){
 		quieroDisparar=true;
-	}	
-			
+	}*/	
+	moverIzquierda(3);			
 }
 
 Enemigo::~Enemigo() {

@@ -15,7 +15,6 @@ Item::Item(int x,int y, int coorX, int coorY, int arma, int nivel) {
 		coordenadaActiva=coorY;
 	else
 		coordenadaActiva=coorX;
-	tipoEnemigo=1;
 
 	//recentro el item:
 	posX-=(rectDestino.w/2);

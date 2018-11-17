@@ -5,7 +5,7 @@
 class Enemigo : public EntidadDibujable{
 public:
 	//constructor para juego
-	Enemigo(int x,int y,int life, int coordenada, int nivel, int tipo);
+	Enemigo(int x,int y,int life, int coordenada, int nivel);
 	//constructor viejo para jefes
 	Enemigo(int x,int y,int vidas);
 	//default para los que heredan
@@ -31,7 +31,7 @@ public:
 	void empujarAtras(int i, int nivel);
 	void activar(int nivel, int coordenada, int pos);
 	void actualizar(int nivel, int coordenada);
-	void hazLoTuyo();
+	virtual void hazLoTuyo();
 
 	//acciones
 	void moverIzquierda(int x);
@@ -40,9 +40,14 @@ public:
 	void moverAbajo(int y);
 
 	bool quiereDisparar();
-	int disparoXVel();
-	int disparoYVel();
-	void disparo();
+	/*
+	virtual int disparoXVel() = 0;
+	virtual int disparoYVel() = 0;
+	virtual void disparo() = 0;
+	*/
+	virtual int disparoXVel();
+	virtual int disparoYVel();
+	virtual void disparo();
 
 protected:
 	int coordenadaX;
@@ -56,7 +61,6 @@ protected:
 	int coordenadaActiva;
 
 	int marcapasos;
-	int tipoEnemigo;
 	int shootTimer;
 	bool quieroDisparar;	
 };

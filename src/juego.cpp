@@ -70,19 +70,19 @@ juego::juego (ventana &v, int cantidadJugadores):
 	//cargo vector de enemigos
 	//NOTA MARTIN /////////////////////////////////////////////////////
 	Enemigo* nuevoEnemigo;
-	nuevoEnemigo = new Enemigo(750,-340,1,2700,2,2);
+	nuevoEnemigo = new Marcianito(750,-340,1,2700,2);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
-	nuevoEnemigo = new Enemigo(800,220,1,1920,1,1);
+	nuevoEnemigo = new Ovni(800,120,1,1920,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
-	nuevoEnemigo = new Enemigo(800,220,1,1400,1,2);
+	nuevoEnemigo = new Marcianito(800,220,1,1400,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
-	nuevoEnemigo = new Enemigo(800,220,1,2640,1,3);
+	nuevoEnemigo = new Marcianito(800,220,1,2640,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 	///////////////////////////////////////////////////////////
@@ -1072,12 +1072,6 @@ void juego::actualizar ()
 	if(boby.getPosY()>600){
 		boby.perderVida();
 		boby.resetearPosicion(plataformas, nivel);	
-		
-		Item* nuevoItem;
-		nuevoItem = new Item(400,400,500,500,3,nivel);
-		nuevoItem->obtenerTextura("//configuracion//items//arma//sprite", renderer);
-		vectorItems.push_back(nuevoItem);
-
 	}
 	if(boby2.getPosY()>600){
 		boby2.perderVida();
@@ -1122,7 +1116,7 @@ void juego::actualizar ()
 
 			if (vectorEnemigos[i]->derrotado()){
 				//pruebo suerte!
-				dropItem= rand() % 10 + 1;
+				dropItem= rand() % 4 + 1;
 				if(dropItem<=4){
 					//siiii! suelta un item!
 					coordXItem= vectorEnemigos[i]->coordenadaXParaItem();
@@ -1131,8 +1125,8 @@ void juego::actualizar ()
 					posYItem= vectorEnemigos[i]->posicionYParaItem();
 
 					Item* nuevoItem;
-					//nuevoItem = new Item(posXItem,posYItem,coordXItem,coordYItem,dropItem,nivel);
-					nuevoItem = new Item(400,200,400,400,dropItem,nivel);
+					nuevoItem = new Item(posXItem,posYItem,coordXItem,coordYItem,dropItem,nivel);
+					//nuevoItem = new Item(400,200,400,400,dropItem,nivel);
 					nuevoItem->obtenerTextura("//configuracion//items//arma//sprite", renderer);
 					vectorItems.push_back(nuevoItem);
 				}
@@ -1156,8 +1150,7 @@ void juego::actualizar ()
 		if(vectorEnemigos[i]->esActivo())
 			vectorEnemigos[i]->actualizar(nivel, coordenada);
 		if(vectorEnemigos[i]->quiereDisparar()){
-			//nuevaBala = new Bullet(vectorEnemigos[i]->posicionXParaItem(),vectorEnemigos[i]->posicionYParaItem(),vectorEnemigos[i]->disparoXVel(),vectorEnemigos[i]->disparoYVel(),2,50);
-			nuevaBala = new Bullet(400,300,vectorEnemigos[i]->disparoXVel(),vectorEnemigos[i]->disparoYVel(),2,100);
+			nuevaBala = new Bullet(vectorEnemigos[i]->posicionXParaItem(),vectorEnemigos[i]->posicionYParaItem(),vectorEnemigos[i]->disparoXVel(),vectorEnemigos[i]->disparoYVel(),2,100);
 			nuevaBala->obtenerTextura("//configuracion//items//bala2//sprite", renderer);
 			vectorEnemigos[i]->disparo();
 			balasEnemigas.push_back(nuevaBala);
