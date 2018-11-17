@@ -3,7 +3,6 @@
 
 #include "temporizador.hpp"
 #include "plataformas.hpp"
-#include "Scrolleables.hpp"
 #include "EntidadDibujable.h"
 #include "Personaje.h"
 #include "Enemigo.h"

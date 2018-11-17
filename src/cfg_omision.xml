@@ -50,6 +50,9 @@ R"(<?xml version="1.0"?>
   <marcianito>
       <sprite>imagenes/enemigo.png</sprite>
     </marcianito>
+  <ovni>
+      <sprite>imagenes/ovni.png</sprite>
+    </ovni>
   </personajes>
   <items>
     <bala>

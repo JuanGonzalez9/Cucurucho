@@ -69,13 +69,19 @@ juego::juego (ventana &v, int cantidadJugadores):
 
 	//cargo vector de enemigos
 	//NOTA MARTIN /////////////////////////////////////////////////////
+	//para hacer un enemigo nuevo:
+	//nuevoenemigo = new [subclase](x,y,vidas,coordenada, nivel)
+	//x e y son las posiciones de pantalla donde quiero que aparezca
+	//coordenada dice en que coordenada del nivel aparecen, nivel en que nivel aparecen
+	//luego asigno textura correspondiente
+
 	Enemigo* nuevoEnemigo;
 	nuevoEnemigo = new Marcianito(750,-340,1,2700,2);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
-	nuevoEnemigo = new Ovni(800,120,1,1920,1);
-	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
+	nuevoEnemigo = new Ovni(800,80,1,1920,1);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
 	nuevoEnemigo = new Marcianito(800,220,1,1400,1);
@@ -84,6 +90,10 @@ juego::juego (ventana &v, int cantidadJugadores):
 
 	nuevoEnemigo = new Marcianito(800,220,1,2640,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
+	vectorEnemigos.push_back(nuevoEnemigo);
+
+	nuevoEnemigo = new Ovni(800,50,1,1800,2);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 	///////////////////////////////////////////////////////////
 

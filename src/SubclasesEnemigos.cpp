@@ -6,9 +6,8 @@
 Ovni::Ovni(int x,int y, int coorX, int coordenada, int nivel) {
 	Enemigo();
 
-	// despues cambio el sprite
-	rectOrigen = {0,0,40,80};
-	rectDestino = {x,y,100,50};
+	rectOrigen = {0,0,60,40};
+	rectDestino = {x,y,100,80};
 	posX=x;
 	posY=y;
 	
