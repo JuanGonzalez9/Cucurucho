@@ -128,6 +128,23 @@ bool Enemigo::esActivo(){
 	return activo;
 }
 
+void Enemigo::disparo(){
+	shootTimer=120;
+	quieroDisparar=false;
+}
+
+int Enemigo::disparoXVel(){
+	return -8;
+}
+
+int Enemigo::disparoYVel(){
+	return 0;
+}
+
+bool Enemigo::quiereDisparar(){
+	return(quieroDisparar);
+}
+
 void Enemigo::activar(int nivel, int coordenada, int pos){
 	int desfasaje=0;
 	if((vidas>0)&&(nivel==nivelActivo)&&(!this->pasaBorde(nivel))){
@@ -155,9 +172,11 @@ void Enemigo::activar(int nivel, int coordenada, int pos){
 }
 
 void Enemigo::actualizar(int nivel, int coordenada){
-	if(activo)
+	if(activo){
+		if(shootTimer>0)
+			shootTimer--;
 		this->hazLoTuyo();
-	//if(activo&&(posY+rectDestino.h>0)&&(posX<800)){
+	}
 
 }
 
@@ -173,6 +192,17 @@ void Enemigo::moverDerecha(int x){
 	rectDestino.x +=x;
 }
 
+void Enemigo::moverArriba(int y){
+	coordenadaY-=Y;
+	posY-=y;
+	rectDestino.y-=y;
+}
+
+void Enemigo::moverAbajo(int y){
+	coordenadaY+=Y;
+	posY+=y;
+	rectDestino.y +=y;
+}
 
 void Enemigo::hazLoTuyo(){
 	//aca va todo el comportamiento del enemigo cuando esta activo
@@ -190,6 +220,10 @@ void Enemigo::hazLoTuyo(){
 		if(marcapasos==120)
 			marcapasos=0;
 	}
+	//ejemplo (dispara)
+	if((tipoEnemigo==3)&&(shootTimer==0)){
+		quieroDisparar=true;
+	}	
 			
 }
 

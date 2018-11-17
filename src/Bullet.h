@@ -21,6 +21,7 @@ public:
 	void move();
 	int getDuracion();
 	void dibujar(SDL_Renderer* renderer);
+	void empujarAtras(int i, int nivel);
 
 };
 

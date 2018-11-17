@@ -36,6 +36,10 @@ public:
 	//acciones
 	void moverIzquierda(int x);
 	void moverDerecha(int x);
+	bool quiereDisparar();
+	int disparoXVel();
+	int disparoYVel();
+	void disparo();
 
 protected:
 	int coordenadaX;
@@ -50,6 +54,8 @@ protected:
 
 	int marcapasos;
 	int tipoEnemigo;
+	int shootTimer;
+	bool quieroDisparar;	
 };
 
 #endif /* ENEMIGO_H_ */

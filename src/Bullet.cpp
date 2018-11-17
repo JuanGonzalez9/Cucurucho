@@ -45,6 +45,14 @@ void Bullet::move()
 	duracion--;
 }
 
+void Bullet::empujarAtras(int i, int nivel){
+	if (nivel ==2){
+		rectDestino.y=rectDestino.y-i;
+	}else{
+		rectDestino.x=rectDestino.x-i;
+	}
+}
+
 void Bullet::dibujar(SDL_Renderer* renderer){
 	SDL_RenderCopy(renderer, textura, & rectOrigen , &rectDestino);
 }
