@@ -1130,6 +1130,9 @@ void juego::actualizar ()
 
 			if (vectorEnemigos[i]->derrotado()){
 				//pruebo suerte!
+				//POSTA: va de 2 a 10
+				//dropItem= rand() % 10 + 2;
+				//DEBUG: va de 1 a 4
 				dropItem= rand() % 4 + 1;
 				if(dropItem<=4){
 					//siiii! suelta un item!
@@ -1141,7 +1144,10 @@ void juego::actualizar ()
 					Item* nuevoItem;
 					nuevoItem = new Item(posXItem,posYItem,coordXItem,coordYItem,dropItem,nivel);
 					//nuevoItem = new Item(400,200,400,400,dropItem,nivel);
-					nuevoItem->obtenerTextura("//configuracion//items//arma//sprite", renderer);
+					if(dropItem==1) nuevoItem->obtenerTextura("//configuracion//items//vidaitem//sprite", renderer);
+					if(dropItem==2) nuevoItem->obtenerTextura("//configuracion//items//ametralladora//sprite", renderer);
+					if(dropItem==3) nuevoItem->obtenerTextura("//configuracion//items//escopeta//sprite", renderer);
+					if(dropItem==4) nuevoItem->obtenerTextura("//configuracion//items//bazooka//sprite", renderer);
 					vectorItems.push_back(nuevoItem);
 				}
 				vectorEnemigos.erase(vectorEnemigos.begin() + i);

@@ -70,6 +70,18 @@ R"(<?xml version="1.0"?>
     <arma>
       <sprite>imagenes/arma.png</sprite>
     </arma>
+    <ametralladora>
+      <sprite>imagenes/itemametralladora.png</sprite>
+    </ametralladora>
+    <escopeta>
+      <sprite>imagenes/itemescopeta.png</sprite>
+    </escopeta>
+    <bazooka>
+      <sprite>imagenes/itembazooka.png</sprite>
+    </bazooka>
+    <vidaitem>
+      <sprite>imagenes/itemvida.png</sprite>
+    </vidaitem>
   </items>
   <plataformas>
     <piedra>

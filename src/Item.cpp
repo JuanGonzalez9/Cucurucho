@@ -5,8 +5,8 @@ Item::Item(int x,int y, int coorX, int coorY, int arma, int nivel) {
 
 	Enemigo();
 
-	rectOrigen = {0,0,60,60};
-	rectDestino = {x,y,60,60};
+	rectOrigen = {0,0,40,40};
+	rectDestino = {x,y,40,40};
 
 	coordenadaX=coorX;
 	coordenadaY=coorY;
