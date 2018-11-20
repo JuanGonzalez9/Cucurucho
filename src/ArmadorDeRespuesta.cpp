@@ -1,10 +1,3 @@
-/*
- * ArmadorDeRespuesta.cpp
- *
- *  Created on: Oct 20, 2018
- *      Author: juan
- */
-
 #include "ArmadorDeRespuesta.h"
 
 ArmadorDeRespuesta::ArmadorDeRespuesta() {
@@ -19,6 +12,12 @@ ArmadorDeRespuesta::ArmadorDeRespuesta() {
 	strBalas = aux;
 	resetBalas = aux;
 	balasActuales = 0;
+
+	int longitudEnemigos = MENSAJE_ENEMIGOS;
+	string aux2(longitudEnemigos,'0');
+	mensajeEnemigo = aux2;
+	resetEnemigos = aux2;
+
 }
 
 // --------------- setter getter
@@ -91,8 +90,15 @@ void ArmadorDeRespuesta::setCantidadDeBalas(int balas){
 	balasActuales = 0;
 }
 
-void ArmadorDeRespuesta::setEnemigo(bool hay){
+void ArmadorDeRespuesta::setEnemigoFinal(bool hay){
 	this->hayEnemigo = hay;
+}
+
+void ArmadorDeRespuesta::setMensajeEnemigos(string msjEnemigo){
+	if( (msjEnemigo.size() / MENSAJE_ENEMIGOS) > MAX_ENEMIGOS_EN_ESCENA){
+		cout<<"error, la cantidad maxima de enemigos en escena es "<<MAX_ENEMIGOS_EN_ESCENA<<endl;
+	}
+	this->mensajeEnemigo.replace(0,msjEnemigo.size(),msjEnemigo);
 }
 
 
@@ -208,8 +214,10 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* da
 	respuesta += strBalas;
 
 	respuesta += to_string(hayEnemigo);
+	respuesta += mensajeEnemigo;
 
 	strBalas = resetBalas;
+	mensajeEnemigo = resetEnemigos;
 
 	return respuesta;
 

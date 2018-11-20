@@ -49,6 +49,9 @@ public:
 	virtual int disparoYVel();
 	virtual void disparo();
 
+	virtual string serializar();
+	bool estoyEnEscena(int x,int y,int w,int h);
+
 protected:
 	int coordenadaX;
 	int coordenadaY;

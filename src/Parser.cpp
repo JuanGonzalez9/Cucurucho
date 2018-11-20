@@ -1,10 +1,3 @@
-/*
- * Parser.cpp
- *
- *  Created on: Oct 22, 2018
- *      Author: juan
- */
-
 #include "Parser.h"
 
 Parser::Parser() {
@@ -43,7 +36,32 @@ void Parser::parsear(string msj,int jugadores){
 	cantBalas = stoi(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores,2));
 	parsearBalas(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores + 2,TAMANIO_POS_BALAS * cantBalas));
 
-	hayEnemigo = (msj[13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS] == '1');	
+	hayEnemigo = (msj[13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS] == '1');
+	parsearEnemigos(msj);	
+}
+
+void Parser::parsearEnemigos(string msj){
+	
+	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO;
+	int tamanioMsjEnemigo = 1 + RESPUESTA_POSY * 2;
+	unsigned contador = 0;
+	vEnemigos.clear();
+
+	while(contador < MAX_ENEMIGOS_EN_ESCENA && msj[i] != '0'){
+		DatosEnemigo* datosE = new DatosEnemigo();
+		datosE->setPosX(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + 1,RESPUESTA_POSY)));
+		datosE->setPosY(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + 5,RESPUESTA_POSY)));
+
+		if(msj[i] == '1'){
+			datosE->setTipoEnemigo(Constantes::marcianito);
+		}
+		if(msj[i] == '2'){
+			datosE->setTipoEnemigo(Constantes::ovni);
+		}
+		
+		vEnemigos.push_back(datosE);	
+		i += tamanioMsjEnemigo;
+	}
 }
 
 DatosPersonaje* Parser::dameAlBobyNumero(int numeroDePersonaje){
@@ -186,6 +204,10 @@ Constantes::DireccionDisparo Parser::getDireccionDisparo(int numeroDePersonaje){
 
 bool Parser::estaElEnemigo(){
 	return hayEnemigo;
+}
+
+vector<DatosEnemigo*> Parser::getEnemigos(){
+	return vEnemigos;
 }
 
 vector< pair<int,int> > Parser::getBalas(){

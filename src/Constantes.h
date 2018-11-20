@@ -18,13 +18,16 @@
 #define RESPUESTA_ESTADOS 7
 
 #define MENSAJE_CANT_BALAS 2  //dos bytes el mensaje '99'
-#define MAX_BALAS 12
+#define MAX_BALAS 24
 #define TAMANIO_POS_BALAS (RESPUESTA_POSX + RESPUESTA_POSY + 1) //posX ahora puede ser valor negativo,por eso se suma 1
 #define RESPUESTA_PERSONAJE (RESPUESTA_POSX + RESPUESTA_POSY + RESPUESTA_ESTADOS)
 #define RESPUESTA_ENEMIGO 1
 #define TAMANIO_MENSAJE_TECLAS 9
 
-#define TAMANIO_RESPUESTA_SERVIDOR RESPUESTA_NIVEL + RESPUESTA_FONDO * 3 + MENSAJE_CANT_BALAS + MAX_BALAS * TAMANIO_POS_BALAS + RESPUESTA_ENEMIGO
+#define MAX_ENEMIGOS_EN_ESCENA 5
+#define MENSAJE_ENEMIGOS (1 + RESPUESTA_POSY * 2 * MAX_ENEMIGOS_EN_ESCENA)
+
+#define TAMANIO_RESPUESTA_SERVIDOR RESPUESTA_NIVEL + RESPUESTA_FONDO * 3 + MENSAJE_CANT_BALAS + MAX_BALAS * TAMANIO_POS_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS
 
 #define INTERVALO_RECONEXION (2*60)
 
@@ -58,6 +61,19 @@ public:
 		Arriba,
 		Centro,
 		Abajo
+	};
+
+	enum TipoItem{
+		ametralladora,
+		escopeta,
+		bazooka,
+		vida
+	};
+
+	enum TipoEnemigo{
+		sinEnemigo,
+		marcianito,
+		ovni
 	};
 
 };

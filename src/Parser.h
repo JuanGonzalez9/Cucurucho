@@ -6,6 +6,7 @@
 #include <vector>
 #include "Bullet.h"
 #include "DatosPersonaje.h"
+#include "DatosEnemigo.h"
 
 using namespace std;
 
@@ -28,6 +29,8 @@ public:
 	Constantes::Estado getEstado(int numeroDePersonaje);
 	Constantes::DireccionDisparo getDireccionDisparo(int numeroDePersonaje);
 	bool estaElEnemigo();
+	
+	vector<DatosEnemigo*> getEnemigos();
 
 	vector< pair<int,int> > getBalas();
 
@@ -54,6 +57,9 @@ private:
 	void resetearBalas();
 	void parsearPersonaje(string msj,int i,int numeroDePersonaje);
 	DatosPersonaje* dameAlBobyNumero(int numeroDePersonaje);
+
+	vector<DatosEnemigo*> vEnemigos;
+	void parsearEnemigos(string msj);
 
 };
 

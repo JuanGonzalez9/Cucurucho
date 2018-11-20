@@ -1,10 +1,3 @@
-/*
- * ArmadorDeRespuesta.h
- *
- *  Created on: Oct 20, 2018
- *      Author: juan
- */
-
 #ifndef ARMADORDERESPUESTA_H_
 #define ARMADORDERESPUESTA_H_
 #include <unistd.h>
@@ -36,10 +29,13 @@ public:
 	void setGrisado(bool grisado);
 	void setEstado(Constantes::Estado estado);
 	void setDireccionDisparo(Constantes::DireccionDisparo dir);
-	void setEnemigo(bool hay);
+	void setEnemigoFinal(bool hay);
+
+	void setMensajeEnemigos(string msjEnemigo);
 	
 	void setCantidadDeBalas(int cant);
 	void sumarBalas(vector<Bullet*> nuevasBalas);
+	string pasarAStringDeTamanio(int tamanio,int valor);
 	//.......metodos...........................
 	/*string dameLaRespuesta();*/
 	string dameLaRespuestaPara(int jugadores, DatosPersonaje* pj1, DatosPersonaje* pj2, DatosPersonaje* pj3, DatosPersonaje* pj4);
@@ -49,15 +45,13 @@ public:
 
 private:
 	string strBalas;
-
-
 	string resetBalas;
-
-
+	
+	string mensajeEnemigo;
+	string resetEnemigos;
 
 	string fondoToString(int f);
 	string posicionToString(int p);
-	string pasarAStringDeTamanio(int tamanio,int valor);
 	int nivel;
 	int fondo1;
 	int fondo2;

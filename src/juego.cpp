@@ -384,13 +384,13 @@ void juego::manejar_eventos ()
 		}
 		//empujo enemigos para atras
 		//NOTA MARTIN  //////////////////////////////////////
-		for(int i = 0; i < vectorEnemigos.size(); i++){
+		for(unsigned i = 0; i < vectorEnemigos.size(); i++){
 			vectorEnemigos[i]->empujarAtras(d3, nivel);
 		}
-		for(int i = 0; i < vectorItems.size(); i++){
+		for(unsigned i = 0; i < vectorItems.size(); i++){
 			vectorItems[i]->empujarAtras(d3, nivel);
 		}
-		for(int i = 0; i < balasEnemigas.size(); i++){
+		for(unsigned i = 0; i < balasEnemigas.size(); i++){
 			balasEnemigas[i]->empujarAtras(d3, nivel);
 		}
 		/////////////////////////////////////////////////////
@@ -879,14 +879,14 @@ void juego::actualizar ()
 		}
 		//empujo enemigos para abajo
 		//NOTA MARTIN //////////////////////////////////
-		for(int i = 0; i < vectorEnemigos.size(); i++){
+		for(unsigned i = 0; i < vectorEnemigos.size(); i++){
 			vectorEnemigos[i]->empujarAtras(maxVel, nivel);
 		}
 
-		for(int i = 0; i < vectorItems.size(); i++){
+		for(unsigned i = 0; i < vectorItems.size(); i++){
 			vectorItems[i]->empujarAtras(maxVel, nivel);
 		}
-		for(int i = 0; i < balasEnemigas.size(); i++){
+		for(unsigned i = 0; i < balasEnemigas.size(); i++){
 			balasEnemigas[i]->empujarAtras(maxVel, nivel);
 		}
 		////////////////////////////////////////////////
@@ -964,7 +964,7 @@ void juego::actualizar ()
 	//veo COLISIONES
 
 	//NOTA MARTIN ///////////////////////////////////
-	int i=0;
+	unsigned i=0;
 	int pickup=0;
 
 	if(boby.enJuego()&&(boby.getInvincibilityFrames() == 0)){
@@ -1269,7 +1269,7 @@ int juego::maximaPosicionJugadores(){
 	return max;
 }
 
-void juego::setDatosEnemigo(){
+void juego::setDatosEnemigoFinal(){
 	bool hayEnemigo = false;
 	bool cerca = (boby.estaCercaDelFinalDelNivel1() || boby2.estaCercaDelFinalDelNivel1() || boby3.estaCercaDelFinalDelNivel1() || boby4.estaCercaDelFinalDelNivel1());
 
@@ -1296,7 +1296,21 @@ void juego::setDatosEnemigo(){
 			
 	}
 
-	armador->setEnemigo(hayEnemigo);
+	armador->setEnemigoFinal(hayEnemigo);
+}
+
+bool juego::tengoQueEnviarEnemigo(int i){
+	return (!vectorEnemigos[i]->derrotado() && vectorEnemigos[i]->esActivo() && vectorEnemigos[i]->estoyEnEscena(rect_origen_fondo3.x,rect_origen_fondo3.y,rect_origen_fondo3.w,rect_origen_fondo3.h));
+}
+
+void juego::setDatosEnemigos(){
+	string mensajeEnemigos = "";
+	for(unsigned i = 0; i < vectorEnemigos.size(); i++){
+		if(tengoQueEnviarEnemigo(i))
+			mensajeEnemigos += vectorEnemigos[i]->serializar();
+	}
+
+	armador->setMensajeEnemigos(mensajeEnemigos);
 }
 
 string juego::armarRespuesta(){
@@ -1373,7 +1387,8 @@ string juego::armarRespuesta(){
 		armador->sumarBalas(boby4.getBalas());
 	}
 
-	setDatosEnemigo();
+	//este es el enemigo final
+	setDatosEnemigoFinal();
 
 	return armador->dameLaRespuestaPara(num_jugadores, &datosBoby, &datosBoby2, &datosBoby3, &datosBoby4);
 	
@@ -1411,19 +1426,19 @@ void juego::dibujar ()
 
 	//dibujar enemigos
 	//NOTA MARTIN ////////////////////////////////////////////////
-	for(int i = 0; i < vectorEnemigos.size(); i++){
+	for(unsigned i = 0; i < vectorEnemigos.size(); i++){
 		if(!vectorEnemigos[i]->derrotado()&&vectorEnemigos[i]->esActivo())
 			vectorEnemigos[i]->dibujar(renderer);
 	}
 
 	//dibujo items
-	for(int i = 0; i < vectorItems.size(); i++){
+	for(unsigned i = 0; i < vectorItems.size(); i++){
 		if(vectorItems[i]->puedoDibujar())
 			vectorItems[i]->dibujar(renderer);
 	}
 
 	//dibujo balas
-	for(int i = 0; i < balasEnemigas.size(); i++){
+	for(unsigned i = 0; i < balasEnemigas.size(); i++){
 		balasEnemigas[i]->dibujar(renderer);
 	}
 
@@ -1604,7 +1619,7 @@ juego::~juego ()
 	}
 
 	//NOTA MARTIN //////////////////////////////
-	int size= vectorEnemigos.size();
+	unsigned size= vectorEnemigos.size();
 	for(unsigned i = 0;i < size;i++){
 		vectorEnemigos[i]->~Enemigo();
 	}

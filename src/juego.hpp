@@ -34,6 +34,9 @@ public:
 	int getCantidadDeBalas();
 	void manejar_eventos ();
 	void actualizar ();
+	void setDatosEnemigos();
+	void setDatosItems();
+	void setDatosBalasEnemigas();
 	string armarRespuesta();
 	void grisarJugador(int numeroDeJugador);
 	void desgrisarJugador(int numeroDeJugador);
@@ -60,7 +63,7 @@ protected:
 	int maximaPosicionJugadores();
 
 	ArmadorDeRespuesta* armador;
-	void setDatosEnemigo();
+	void setDatosEnemigoFinal();
 	void actualizarNivel1();
 	void actualizarNivel2();
 	void actualizarNivel3();
@@ -79,6 +82,8 @@ protected:
 	vector<Bullet*> balasEnemigas;
 	vector<Enemigo*> vectorEnemigos;
 	vector<Item*> vectorItems;
+	
+	bool tengoQueEnviarEnemigo(int i);
 
 	bool apretandoDerecha(const Uint8* state);
 	bool apretandoIzquierda(const Uint8* state);

@@ -223,6 +223,21 @@ void Enemigo::hazLoTuyo(){
 	moverIzquierda(3);			
 }
 
+string Enemigo::serializar(){
+	return "soy tu padre";
+}
+
+bool Enemigo::estoyEnEscena(int x,int y,int w,int h){
+	bool estoy = true;
+	int unPoquito = 20;
+	if(coordenadaX < x - unPoquito) return false;
+	if(coordenadaX > x + w + unPoquito) return false;
+	if(coordenadaY < y - unPoquito) return false;
+	if(coordenadaY > y + h + unPoquito) return false;
+
+	return estoy;
+}
+
 Enemigo::~Enemigo() {
 	// TODO Auto-generated destructor stub
 }

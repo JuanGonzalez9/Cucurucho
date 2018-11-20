@@ -1,6 +1,8 @@
 #ifndef SUBCLASESENEMIGOS_H_
 #define SUBCLASESENEMIGOS_H_
 #include "Enemigo.h"
+#include "Utils.h"
+#include "Constantes.h"
 
 //TUTORIAL PARA HACER ENEMIGOS NUEVOS
 //La posicion desde donde se aparece y coordenada se decide en el constructor en juego.cpp
@@ -20,6 +22,7 @@ public:
 	void disparo();
 	int disparoYVel();
 	int disparoXVel();
+	string serializar();
 
 protected:
 
@@ -36,6 +39,7 @@ public:
 	void disparo();
 	int disparoYVel();
 	int disparoXVel();
+	string serializar();
 
 protected:
 

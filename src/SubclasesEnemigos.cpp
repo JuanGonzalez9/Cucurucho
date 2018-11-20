@@ -48,6 +48,14 @@ int Ovni::disparoYVel(){
 	return 5;
 }
 
+string Ovni::serializar(){
+	string serial = to_string(Constantes::ovni);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+
+	return serial;
+}
+
 Ovni::~Ovni() {
 	// TODO Auto-generated destructor stub
 }
@@ -111,6 +119,14 @@ int Marcianito::disparoXVel(){
 
 int Marcianito::disparoYVel(){
 	return 0;
+}
+
+string Marcianito::serializar(){
+	string serial = to_string(Constantes::marcianito);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+
+	return serial;
 }
 
 Marcianito::~Marcianito() {

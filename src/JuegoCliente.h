@@ -32,8 +32,12 @@ private:
 	void actualizarEstadoDeMiPersonaje(int numPersonaje);
 	void dibujarBalas(vector< pair<int,int> > balas);
 	Personaje* dameAlBobyNumero(int numeroDeBoby);
-	void dibujarEnemigo();
+	void dibujarEnemigoFinal();
+	void dibujarEnemigos();
 	void dibujarJugadores();
+
+	vector<DatosEnemigo*> vDatosEnemigo;
+	vector<Enemigo*> vEnemigos;
 };
 
 #endif /* JUEGOCLIENTE_H_ */

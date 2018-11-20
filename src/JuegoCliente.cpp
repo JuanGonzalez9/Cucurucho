@@ -21,6 +21,15 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	cantJugadores = cantidadJugadores;
 	bala_rectOrigen = {0,0,32,32};
 	bala_rectDestino = {0,0,8,8};
+
+	Enemigo* nuevoEnemigo;
+	nuevoEnemigo = new Marcianito(750,-340,1,2700,2);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
+	vEnemigos.push_back(nuevoEnemigo);
+
+	nuevoEnemigo = new Ovni(800,80,1,1920,1);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
+	vEnemigos.push_back(nuevoEnemigo);
 }
 
 void JuegoCliente::setMensajeDelServidor(string msj){
@@ -111,7 +120,7 @@ void JuegoCliente::manejarEventos (){
 	} }
 }
 
-void JuegoCliente::dibujarEnemigo(){
+void JuegoCliente::dibujarEnemigoFinal(){
 	switch(nivel){
 		case (1):
 			enemigoNivel1->dibujar(renderer);
@@ -124,6 +133,31 @@ void JuegoCliente::dibujarEnemigo(){
 			break;
 		default:
 			break;
+	}
+}
+
+void JuegoCliente::dibujarEnemigos(){
+	vDatosEnemigo.clear();
+	vDatosEnemigo = p.getEnemigos();
+
+	for(unsigned i = 0; i < vDatosEnemigo.size();i++){
+		Constantes::TipoEnemigo tipo = vDatosEnemigo[i]->getTipoEnemigo();
+		int x = vDatosEnemigo[i]->getPosX();
+		int y = vDatosEnemigo[i]->getPosY();
+		//cout<<"(x,y) "<<x<<" , "<<y<<endl;
+		switch(tipo){
+			case (Constantes::marcianito):
+				vEnemigos[0]->setPos(x,y);
+				vEnemigos[0]->dibujar(renderer);
+				break;
+			case (Constantes::ovni):
+				vEnemigos[1]->setPos(x,y);
+				vEnemigos[1]->dibujar(renderer);
+				break;
+			default:
+				cout<<"Y aca que paso? No conozco ese tipo de enemigos"<<endl;
+				break;
+		}
 	}
 }
 
@@ -164,7 +198,9 @@ void JuegoCliente::dibujar(){
 	vector< pair<int,int> > balas = p.getBalas();
 	dibujarBalas(balas);
 
-	if(p.estaElEnemigo()) dibujarEnemigo();
+	if(p.estaElEnemigo()) dibujarEnemigoFinal();
+
+	dibujarEnemigos();
 }
 
 JuegoCliente::~JuegoCliente() {

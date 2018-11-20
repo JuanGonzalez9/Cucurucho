@@ -51,6 +51,11 @@ void EntidadDibujable::setRectOrigenY(int y){
 	rectOrigen.y = y;
 }
 
+void EntidadDibujable::setPos(int x,int y){
+	rectDestino.x = x;
+	rectDestino.y = y;
+}
+
 SDL_Texture* EntidadDibujable::getTextura(){
 	return textura;
 }

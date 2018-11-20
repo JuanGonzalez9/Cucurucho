@@ -29,6 +29,7 @@ public:
 	void setRectOrigenY(int y);
 	void setRectOrigen(int x,int y,int w,int h);
 	void setRectDestino(int x,int y,int w,int h);
+	void setPos(int x,int y);
 
 
 	// METODOS
