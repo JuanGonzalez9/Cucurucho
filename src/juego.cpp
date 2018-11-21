@@ -1313,6 +1313,16 @@ void juego::setDatosEnemigos(){
 	armador->setMensajeEnemigos(mensajeEnemigos);
 }
 
+void juego::setDatosItems(){
+	string mensajeItems = "";
+	for(unsigned i = 0; i < vectorItems.size(); i++){
+		if(vectorItems[i]->puedoDibujar())
+			mensajeItems += vectorItems[i]->serializar();
+	}
+
+	armador->setMensajeItems(mensajeItems);
+}
+
 string juego::armarRespuesta(){
 
 	//esto armo siempre

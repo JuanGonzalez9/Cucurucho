@@ -1,6 +1,8 @@
 #ifndef ITEM_H_
 #define ITEM_H_
 #include "Enemigo.h"
+#include "Utils.h"
+#include "Constantes.h"
 
 class Item : public Enemigo{
 
@@ -14,6 +16,7 @@ public:
 	//Metodos
 	void actualizarItem();
 	bool puedoDibujar();
+	string serializar();
 
 	//acciones
 

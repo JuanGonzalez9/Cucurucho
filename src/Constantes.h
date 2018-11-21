@@ -27,7 +27,10 @@
 #define MAX_ENEMIGOS_EN_ESCENA 5
 #define MENSAJE_ENEMIGOS (1 + RESPUESTA_POSY * 2 * MAX_ENEMIGOS_EN_ESCENA)
 
-#define TAMANIO_RESPUESTA_SERVIDOR RESPUESTA_NIVEL + RESPUESTA_FONDO * 3 + MENSAJE_CANT_BALAS + MAX_BALAS * TAMANIO_POS_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS
+#define MAX_ITEMS_EN_ESCENA 5
+#define MENSAJE_ITEMS (1 + RESPUESTA_POSY * 2 * MAX_ITEMS_EN_ESCENA)
+
+#define TAMANIO_RESPUESTA_SERVIDOR RESPUESTA_NIVEL + RESPUESTA_FONDO * 3 + MENSAJE_CANT_BALAS + MAX_BALAS * TAMANIO_POS_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS
 
 #define INTERVALO_RECONEXION (2*60)
 
@@ -63,17 +66,18 @@ public:
 		Abajo
 	};
 
-	enum TipoItem{
-		ametralladora,
-		escopeta,
-		bazooka,
-		vida
-	};
-
 	enum TipoEnemigo{
 		sinEnemigo,
 		marcianito,
 		ovni
+	};
+
+	enum TipoItem{
+		sinItem,
+		vidaExtra,
+		ametralladora,
+		escopeta,
+		bazooka
 	};
 
 };

@@ -66,6 +66,13 @@ bool Item::puedoDibujar(){
 	return dibujo;
 }
 
+string Item::serializar(){
+	string serial = to_string(contenido);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	return serial;
+}
+
 int Item::darContenido(){
 	return contenido;
 }

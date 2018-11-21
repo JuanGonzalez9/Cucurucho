@@ -37,7 +37,8 @@ void Parser::parsear(string msj,int jugadores){
 	parsearBalas(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores + 2,TAMANIO_POS_BALAS * cantBalas));
 
 	hayEnemigo = (msj[13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS] == '1');
-	parsearEnemigos(msj);	
+	parsearEnemigos(msj);
+	parsearItems(msj);
 }
 
 void Parser::parsearEnemigos(string msj){
@@ -61,6 +62,41 @@ void Parser::parsearEnemigos(string msj){
 		
 		vEnemigos.push_back(datosE);	
 		i += tamanioMsjEnemigo;
+	}
+}
+
+void Parser::parsearItems(string msj){
+	
+	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS;
+	int tamanioMsjItem = 1 + RESPUESTA_POSY * 2;
+	unsigned contador = 0;
+	vItems.clear();
+
+	while(contador < MAX_ITEMS_EN_ESCENA && msj[i] != '0'){
+		DatosItem* datosI = new DatosItem();
+		datosI->setPosX(dameElInt(msj.substr(i + contador * tamanioMsjItem + 1,RESPUESTA_POSY)));
+		datosI->setPosY(dameElInt(msj.substr(i + contador * tamanioMsjItem + 5,RESPUESTA_POSY)));
+
+		switch(msj[i]){
+			case ('1'):
+				datosI->setTipoItem(Constantes::vidaExtra);
+				break;
+			case ('2'):
+				datosI->setTipoItem(Constantes::ametralladora);
+				break;
+			case ('3'):
+				datosI->setTipoItem(Constantes::escopeta);
+				break;
+			case ('4'):
+				datosI->setTipoItem(Constantes::bazooka);
+				break;
+			default:
+				cout<<"No conozco ese tipo de Item"<<endl;
+				break;
+		}		
+		
+		vItems.push_back(datosI);	
+		i += tamanioMsjItem;
 	}
 }
 
@@ -208,6 +244,10 @@ bool Parser::estaElEnemigo(){
 
 vector<DatosEnemigo*> Parser::getEnemigos(){
 	return vEnemigos;
+}
+
+vector<DatosItem*> Parser::getItems(){
+	return vItems;
 }
 
 vector< pair<int,int> > Parser::getBalas(){

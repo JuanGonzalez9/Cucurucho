@@ -32,6 +32,7 @@ public:
 	void setEnemigoFinal(bool hay);
 
 	void setMensajeEnemigos(string msjEnemigo);
+	void setMensajeItems(string msjItems);
 	
 	void setCantidadDeBalas(int cant);
 	void sumarBalas(vector<Bullet*> nuevasBalas);
@@ -49,6 +50,8 @@ private:
 	
 	string mensajeEnemigo;
 	string resetEnemigos;
+	string mensajeItems;
+	string resetItems;
 
 	string fondoToString(int f);
 	string posicionToString(int p);

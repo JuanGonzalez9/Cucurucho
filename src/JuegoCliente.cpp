@@ -1,10 +1,3 @@
-/*
- * JuegoCliente.cpp
- *
- *  Created on: Oct 23, 2018
- *      Author: juan
- */
-
 #include "JuegoCliente.h"
 
 extern "C"
@@ -30,6 +23,22 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	nuevoEnemigo = new Ovni(800,80,1,1920,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vEnemigos.push_back(nuevoEnemigo);
+
+	Item* nuevoItem = new Item(0,0,1,1920,1,1);
+	nuevoItem->obtenerTextura("//configuracion//items//vidaitem//sprite", renderer);
+	vItems.push_back(nuevoItem);
+
+	nuevoItem = new Item(0,0,1,1920,2,1);
+	nuevoItem->obtenerTextura("//configuracion//items//ametralladora//sprite", renderer);
+	vItems.push_back(nuevoItem);
+
+	nuevoItem = new Item(0,0,1,1920,3,1);
+	nuevoItem->obtenerTextura("//configuracion//items//escopeta//sprite", renderer);
+	vItems.push_back(nuevoItem);
+
+	nuevoItem = new Item(0,0,1,1920,4,1);
+	nuevoItem->obtenerTextura("//configuracion//items//bazooka//sprite", renderer);
+	vItems.push_back(nuevoItem);
 }
 
 void JuegoCliente::setMensajeDelServidor(string msj){
@@ -161,6 +170,38 @@ void JuegoCliente::dibujarEnemigos(){
 	}
 }
 
+void JuegoCliente::dibujarItems(){
+	vDatosItem.clear();
+	vDatosItem = p.getItems();
+
+	for(unsigned i = 0; i < vDatosItem.size();i++){
+		Constantes::TipoItem tipo = vDatosItem[i]->getTipoItem();
+		int x = vDatosItem[i]->getPosX();
+		int y = vDatosItem[i]->getPosY();
+		switch(tipo){
+			case (Constantes::vidaExtra):
+				vItems[0]->setPos(x,y);
+				vItems[0]->dibujar(renderer);
+				break;
+			case (Constantes::ametralladora):
+				vItems[1]->setPos(x,y);
+				vItems[1]->dibujar(renderer);
+				break;
+			case (Constantes::escopeta):
+				vItems[2]->setPos(x,y);
+				vItems[2]->dibujar(renderer);
+				break;
+			case (Constantes::bazooka):
+				vItems[3]->setPos(x,y);
+				vItems[3]->dibujar(renderer);
+				break;
+			default:
+				cout<<"No conozco ese tipo de item"<<endl;
+				break;
+		}
+	}	
+}
+
 void JuegoCliente::dibujarJugadores(){
 	Personaje* unBoby;
 	for(int i = 0; i < num_jugadores; i++){
@@ -193,6 +234,8 @@ void JuegoCliente::dibujar(){
 	SDL_SetRenderTarget (renderer, nullptr);
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
 
+	dibujarEnemigos();
+	dibujarItems();
 	dibujarJugadores();
 
 	vector< pair<int,int> > balas = p.getBalas();
@@ -200,7 +243,6 @@ void JuegoCliente::dibujar(){
 
 	if(p.estaElEnemigo()) dibujarEnemigoFinal();
 
-	dibujarEnemigos();
 }
 
 JuegoCliente::~JuegoCliente() {

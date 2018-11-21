@@ -35,9 +35,13 @@ private:
 	void dibujarEnemigoFinal();
 	void dibujarEnemigos();
 	void dibujarJugadores();
+	void dibujarItems();
 
 	vector<DatosEnemigo*> vDatosEnemigo;
 	vector<Enemigo*> vEnemigos;
+
+	vector<DatosItem*> vDatosItem;
+	vector<Item*> vItems;
 };
 
 #endif /* JUEGOCLIENTE_H_ */

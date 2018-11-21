@@ -7,6 +7,7 @@
 #include "Bullet.h"
 #include "DatosPersonaje.h"
 #include "DatosEnemigo.h"
+#include "DatosItem.h"
 
 using namespace std;
 
@@ -31,6 +32,7 @@ public:
 	bool estaElEnemigo();
 	
 	vector<DatosEnemigo*> getEnemigos();
+	vector<DatosItem*> getItems();
 
 	vector< pair<int,int> > getBalas();
 
@@ -60,6 +62,9 @@ private:
 
 	vector<DatosEnemigo*> vEnemigos;
 	void parsearEnemigos(string msj);
+
+	vector<DatosItem*> vItems;
+	void parsearItems(string msj);
 
 };
 
