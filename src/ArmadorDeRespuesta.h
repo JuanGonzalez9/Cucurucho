@@ -33,9 +33,11 @@ public:
 
 	void setMensajeEnemigos(string msjEnemigo);
 	void setMensajeItems(string msjItems);
+	void setMensajeBalasEnemigas(string msjBalas);
 	
 	void setCantidadDeBalas(int cant);
 	void sumarBalas(vector<Bullet*> nuevasBalas);
+
 	string pasarAStringDeTamanio(int tamanio,int valor);
 	//.......metodos...........................
 	/*string dameLaRespuesta();*/
@@ -47,6 +49,9 @@ public:
 private:
 	string strBalas;
 	string resetBalas;
+
+	string strBalasEnemigas;
+	string resetBalasEnemigas;
 	
 	string mensajeEnemigo;
 	string resetEnemigos;

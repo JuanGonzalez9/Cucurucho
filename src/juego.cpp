@@ -1169,7 +1169,8 @@ void juego::actualizar ()
 			vectorEnemigos[i]->activar(nivel, maxCoor, maxPos);
 		if(vectorEnemigos[i]->esActivo())
 			vectorEnemigos[i]->actualizar(nivel, coordenada);
-		if(vectorEnemigos[i]->quiereDisparar()){
+		//le agrego el tengoQueEnviarEnemigo para q no disparen los que estan afuera de la pantalla
+		if(vectorEnemigos[i]->quiereDisparar() && tengoQueEnviarEnemigo(i)){
 			nuevaBala = new Bullet(vectorEnemigos[i]->posicionXParaItem(),vectorEnemigos[i]->posicionYParaItem(),vectorEnemigos[i]->disparoXVel(),vectorEnemigos[i]->disparoYVel(),2,100);
 			nuevaBala->obtenerTextura("//configuracion//items//bala2//sprite", renderer);
 			vectorEnemigos[i]->disparo();
@@ -1321,6 +1322,15 @@ void juego::setDatosItems(){
 	}
 
 	armador->setMensajeItems(mensajeItems);
+}
+
+void juego::setDatosBalasEnemigas(){
+	string mensajeBalasEnemigas = "";
+	for(unsigned i = 0; i < balasEnemigas.size(); i++){
+		mensajeBalasEnemigas += balasEnemigas[i]->serializar();
+	}
+
+	armador->setMensajeBalasEnemigas(mensajeBalasEnemigas);
 }
 
 string juego::armarRespuesta(){

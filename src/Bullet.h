@@ -2,6 +2,7 @@
 #include <iostream>
 #include "EntidadDibujable.h"
 #include "Personaje.h"
+#include "Utils.h"
 
 #ifndef BULLET_H
 #define BULLET_H
@@ -22,6 +23,7 @@ public:
 	int getDuracion();
 	void dibujar(SDL_Renderer* renderer);
 	void empujarAtras(int i, int nivel);
+	string serializar();
 
 };
 

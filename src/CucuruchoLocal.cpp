@@ -454,7 +454,7 @@ void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_venta
 		j.actualizar ();
 		j.setDatosEnemigos();
 		j.setDatosItems();
-		//j.setDatosBalasEnemigas();
+		j.setDatosBalasEnemigas();
 		a.mundo = j.armarRespuesta();
 
 		inicializar (a, tamanio_respuesta);
@@ -489,7 +489,7 @@ void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_venta
 			// Creo la respuesta para el cliente con la información para que dibuje la pantalla.
 			j.setDatosEnemigos();
 			j.setDatosItems();
-			//j.setDatosBalasEnemigas();
+			j.setDatosBalasEnemigas();
 			string mundo = j.armarRespuesta();
 
 			// Almaceno la respuesta en memoria.

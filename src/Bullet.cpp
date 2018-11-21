@@ -53,6 +53,14 @@ void Bullet::empujarAtras(int i, int nivel){
 	}
 }
 
+string Bullet::serializar(){
+	// 1 es bala normal
+	string serial = to_string(1);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	return serial;
+}
+
 void Bullet::dibujar(SDL_Renderer* renderer){
 	SDL_RenderCopy(renderer, textura, & rectOrigen , &rectDestino);
 }

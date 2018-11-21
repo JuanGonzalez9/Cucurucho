@@ -39,6 +39,10 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	nuevoItem = new Item(0,0,1,1920,4,1);
 	nuevoItem->obtenerTextura("//configuracion//items//bazooka//sprite", renderer);
 	vItems.push_back(nuevoItem);
+
+	Bullet* nuevaBala = new Bullet(0,0,0,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala2//sprite", renderer);
+	vBalaEnemiga.push_back(nuevaBala);
 }
 
 void JuegoCliente::setMensajeDelServidor(string msj){
@@ -202,6 +206,27 @@ void JuegoCliente::dibujarItems(){
 	}	
 }
 
+void JuegoCliente::dibujarBalasEnemigas(){
+	vDatosBalaEnemiga.clear();
+	vDatosBalaEnemiga = p.getBalasEnemigas();
+
+	for(unsigned i = 0; i < vDatosBalaEnemiga.size();i++){
+		Constantes::TipoArma tipo = vDatosBalaEnemiga[i]->getTipoArma();
+		int x = vDatosBalaEnemiga[i]->getPosX();
+		int y = vDatosBalaEnemiga[i]->getPosY();
+		switch(tipo){
+			case (Constantes::normal):
+				vBalaEnemiga[0]->setPos(x,y);
+				vBalaEnemiga[0]->dibujar(renderer);
+				break;
+			default:
+				cout<<"No conozco ese tipo de arma"<<endl;
+				break;
+		}
+	}
+}
+
+
 void JuegoCliente::dibujarJugadores(){
 	Personaje* unBoby;
 	for(int i = 0; i < num_jugadores; i++){
@@ -218,7 +243,6 @@ void JuegoCliente::dibujarJugadores(){
 	actualizarPosicionDeMiPersonaje(numeroDeJugador + 1);
 	actualizarEstadoDeMiPersonaje(numeroDeJugador + 1);
 	unBoby->dibujar(renderer);
-	
 }
 
 void JuegoCliente::dibujar(){
@@ -237,6 +261,7 @@ void JuegoCliente::dibujar(){
 	dibujarEnemigos();
 	dibujarItems();
 	dibujarJugadores();
+	dibujarBalasEnemigas();
 
 	vector< pair<int,int> > balas = p.getBalas();
 	dibujarBalas(balas);

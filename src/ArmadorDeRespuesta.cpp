@@ -23,6 +23,11 @@ ArmadorDeRespuesta::ArmadorDeRespuesta() {
 	mensajeItems = aux3;
 	resetItems = aux3;
 
+	int longitudStringBalasEnemigas = MENSAJE_BALAS_ENEMIGAS;
+	string aux4(longitudStringBalasEnemigas,'0');
+	strBalasEnemigas = aux4;
+	resetBalasEnemigas = aux4;
+
 }
 
 // --------------- setter getter
@@ -111,6 +116,13 @@ void ArmadorDeRespuesta::setMensajeItems(string msjItems){
 		cout<<"error, la cantidad maxima de items es "<<MAX_ITEMS_EN_ESCENA<<endl;
 	}
 	this->mensajeItems.replace(0,msjItems.size(),msjItems);
+}
+
+void ArmadorDeRespuesta::setMensajeBalasEnemigas(string msjBalas){
+	if( (msjBalas.size() / MENSAJE_BALAS_ENEMIGAS) > MAX_BALAS_ENEMIGAS){
+		cout<<"error , se supero la cantidad maxima de balas enemigas"<<endl;	
+	}
+	this->strBalasEnemigas.replace(0,msjBalas.size(),msjBalas);
 }
 
 
@@ -228,8 +240,10 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* da
 	respuesta += to_string(hayEnemigo);
 	respuesta += mensajeEnemigo;
 	respuesta += mensajeItems;
+	respuesta += strBalasEnemigas;
 
 	strBalas = resetBalas;
+	strBalasEnemigas = resetBalasEnemigas;
 	mensajeEnemigo = resetEnemigos;
 	mensajeItems = resetItems;	
 

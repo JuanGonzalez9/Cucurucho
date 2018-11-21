@@ -8,6 +8,7 @@
 #include "DatosPersonaje.h"
 #include "DatosEnemigo.h"
 #include "DatosItem.h"
+#include "DatosBalaEnemiga.h"
 
 using namespace std;
 
@@ -33,6 +34,7 @@ public:
 	
 	vector<DatosEnemigo*> getEnemigos();
 	vector<DatosItem*> getItems();
+	vector<DatosBalaEnemiga*> getBalasEnemigas();
 
 	vector< pair<int,int> > getBalas();
 
@@ -65,6 +67,9 @@ private:
 
 	vector<DatosItem*> vItems;
 	void parsearItems(string msj);
+
+	vector<DatosBalaEnemiga*> vBalasEnemigas;
+	void parsearBalasEnemigas(string msj);
 
 };
 

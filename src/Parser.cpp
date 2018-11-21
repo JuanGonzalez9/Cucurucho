@@ -39,6 +39,7 @@ void Parser::parsear(string msj,int jugadores){
 	hayEnemigo = (msj[13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS] == '1');
 	parsearEnemigos(msj);
 	parsearItems(msj);
+	parsearBalasEnemigas(msj);
 }
 
 void Parser::parsearEnemigos(string msj){
@@ -97,6 +98,33 @@ void Parser::parsearItems(string msj){
 		
 		vItems.push_back(datosI);	
 		i += tamanioMsjItem;
+	}
+}
+
+void Parser::parsearBalasEnemigas(string msj){
+	
+	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS;
+
+	int tamanioMsj = 1 + RESPUESTA_POSY * 2;
+	unsigned contador = 0;
+	vBalasEnemigas.clear();
+
+	while(contador < MAX_BALAS_ENEMIGAS && msj[i] != '0'){
+		DatosBalaEnemiga* datos = new DatosBalaEnemiga();
+		datos->setPosX(dameElInt(msj.substr(i + contador * tamanioMsj + 1,RESPUESTA_POSY)));
+		datos->setPosY(dameElInt(msj.substr(i + contador * tamanioMsj + 5,RESPUESTA_POSY)));
+
+		switch(msj[i]){
+			case ('1'):
+				datos->setTipoArma(Constantes::normal);
+				break;
+			default:
+				cout<<"No conozco ese tipo de arma"<<endl;
+				break;
+		}		
+		
+		vBalasEnemigas.push_back(datos);	
+		i += tamanioMsj;
 	}
 }
 
@@ -248,6 +276,10 @@ vector<DatosEnemigo*> Parser::getEnemigos(){
 
 vector<DatosItem*> Parser::getItems(){
 	return vItems;
+}
+
+vector<DatosBalaEnemiga*> Parser::getBalasEnemigas(){
+	return vBalasEnemigas;
 }
 
 vector< pair<int,int> > Parser::getBalas(){
