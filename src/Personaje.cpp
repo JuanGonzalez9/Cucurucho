@@ -41,6 +41,7 @@ Personaje::Personaje() {
 	//vidas = maxVidas
 	hitPoints = 3;
 	invincibilityFrames = 0;
+	puntaje = 0;
 
 	loginfo("Se construyo personaje");
 }
@@ -141,8 +142,13 @@ void Personaje::agregarGris(const char* path,SDL_Renderer* renderer){
 	tex2 = cfg.obtener_textura_grisada (path, renderer);
 }
 
+int Personaje::obtenerPuntaje(){
+	return puntaje;
+}
 
-
+void Personaje::subirPuntaje(int score){
+	puntaje = puntaje + score;
+}
 
 
 //-------Metodos----------
@@ -303,6 +309,7 @@ void Personaje::verSiBalasPegan(Enemigo* malo){
 		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
 			malo->perderVida();
 			bullets.erase(bullets.begin() + i);
+			puntaje = puntaje +50;
 		}else i++;
 	}
 }

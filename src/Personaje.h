@@ -74,6 +74,8 @@ public:
 	bool esActivo();
 	bool esGrisado();
 	bool enJuego();
+	int obtenerPuntaje();
+	void subirPuntaje(int score);
 	void agregarGris(const char* path,SDL_Renderer* renderer);
 
 	//----METODOS
@@ -146,6 +148,8 @@ private:
 	// manejo de vida
 	int hitPoints;
 	int invincibilityFrames;
+
+	int puntaje;
 
 	Personaje::Arma arma;
 	Personaje::Estado estado;
