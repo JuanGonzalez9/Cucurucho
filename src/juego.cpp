@@ -1025,7 +1025,7 @@ void juego::actualizar ()
 	//veo COLISIONES
 
 	//NOTA MARTIN ///////////////////////////////////
-	unsigned i=0;
+	int i=0;
 	int pickup=0;
 
 	if(boby.enJuego()&&(boby.getInvincibilityFrames() == 0)){
@@ -1034,15 +1034,6 @@ void juego::actualizar ()
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby.cambiarArma(pickup);
 			}
 		}
 
@@ -1055,21 +1046,23 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
+	if(boby.enJuego()){
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby.cambiarArma(pickup);
+			}
+		}
+	}
+
 	if(boby2.enJuego()&&(boby2.getInvincibilityFrames() == 0)){
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby2.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby2.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby2.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby2.cambiarArma(pickup);
 			}
 		}
 
@@ -1082,21 +1075,24 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
+
+	if(boby2.enJuego()){
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby2.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby2.cambiarArma(pickup);
+			}
+		}
+	}
+
 	if(boby3.enJuego()&&(boby3.getInvincibilityFrames() == 0)){
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby3.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby3.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby3.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby3.cambiarArma(pickup);
 			}
 		}
 
@@ -1109,21 +1105,23 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
+	if(boby3.enJuego()){
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby3.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby3.cambiarArma(pickup);
+			}
+		}
+	}
+
 	if(boby4.enJuego()&&(boby4.getInvincibilityFrames() == 0)){
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby4.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby4.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby4.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby4.cambiarArma(pickup);
 			}
 		}
 
@@ -1134,6 +1132,16 @@ void juego::actualizar ()
 				balasEnemigas.erase(balasEnemigas.begin() + i);
 				boby4.perderVida();
 			}else i++;
+		}
+	}
+	if(boby4.enJuego()){
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby4.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby4.cambiarArma(pickup);
+			}
 		}
 	}
 	////////////////////////////////////////////////////
