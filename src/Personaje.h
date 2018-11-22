@@ -70,6 +70,7 @@ public:
 	int obtenerCoordenadaY();
 	int obtenerVelocidadY();
 	int obtenerVelocidadX();
+	int obtenerVidas();
 	bool esActivo();
 	bool esGrisado();
 	bool enJuego();

@@ -91,6 +91,21 @@ R"(<?xml version="1.0"?>
     <vidaitem>
       <sprite>imagenes/itemvida.png</sprite>
     </vidaitem>
+    <vida1>
+      <sprite>imagenes/vida1.png</sprite>
+    </vida1>
+    <vida2>
+      <sprite>imagenes/vida2.png</sprite>
+    </vida2>
+    <vida3>
+      <sprite>imagenes/vida3.png</sprite>
+    </vida3>
+    <vida4>
+      <sprite>imagenes/vida4.png</sprite>
+    </vida4>
+    <gameoverhud>
+      <sprite>imagenes/gameover.png</sprite>
+    </gameoverhud>
   </items>
   <plataformas>
     <piedra>

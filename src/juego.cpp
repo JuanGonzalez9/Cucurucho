@@ -61,9 +61,9 @@ juego::juego (ventana &v, int cantidadJugadores):
 	boby4.setRectOrigen(0,0,480,480);
 
 	boby.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
-	boby2.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
-	boby3.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
-	boby4.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
+	boby2.agregarGris("//configuracion//personajes//heroe2//sprite", renderer);
+	boby3.agregarGris("//configuracion//personajes//heroe3//sprite", renderer);
+	boby4.agregarGris("//configuracion//personajes//heroe4//sprite", renderer);
 
 	//todo lo que dice NOTA MARTIN tiene que ver con los vectores de enemigos, items y balas
 
@@ -96,6 +96,67 @@ juego::juego (ventana &v, int cantidadJugadores):
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 	///////////////////////////////////////////////////////////
+
+	//CARGO LOS ICONOS DE VIDAS///////////////////////////
+	vida11.setRectOrigen(0,0,40,40);
+	vida11.setRectDestino(5,5,40,40);
+	vida11.obtenerTextura("//configuracion//items//vida1//sprite", renderer);
+	vida12.setRectOrigen(0,0,40,40);
+	vida12.setRectDestino(45,5,40,40);
+	vida12.obtenerTextura("//configuracion//items//vida1//sprite", renderer);
+	vida13.setRectOrigen(0,0,40,40);
+	vida13.setRectDestino(85,5,40,40);
+	vida13.obtenerTextura("//configuracion//items//vida1//sprite", renderer);
+
+	vida21.setRectOrigen(0,0,40,40);
+	vida21.setRectDestino(755,5,40,40);
+	vida21.obtenerTextura("//configuracion//items//vida2//sprite", renderer);
+	vida22.setRectOrigen(0,0,40,40);
+	vida22.setRectDestino(715,5,40,40);
+	vida22.obtenerTextura("//configuracion//items//vida2//sprite", renderer);
+	vida23.setRectOrigen(0,0,40,40);
+	vida23.setRectDestino(675,5,40,40);
+	vida23.obtenerTextura("//configuracion//items//vida2//sprite", renderer);
+
+	vida31.setRectOrigen(0,0,40,40);
+	vida31.setRectDestino(5,555,40,40);
+	vida31.obtenerTextura("//configuracion//items//vida3//sprite", renderer);
+	vida32.setRectOrigen(0,0,40,40);
+	vida32.setRectDestino(45,555,40,40);
+	vida32.obtenerTextura("//configuracion//items//vida3//sprite", renderer);
+	vida33.setRectOrigen(0,0,40,40);
+	vida33.setRectDestino(85,555,40,40);
+	vida33.obtenerTextura("//configuracion//items//vida3//sprite", renderer);
+
+	vida41.setRectOrigen(0,0,40,40);
+	vida41.setRectDestino(755,555,40,40);
+	vida41.obtenerTextura("//configuracion//items//vida4//sprite", renderer);
+	vida42.setRectOrigen(0,0,40,40);
+	vida42.setRectDestino(715,555,40,40);
+	vida42.obtenerTextura("//configuracion//items//vida4//sprite", renderer);
+	vida43.setRectOrigen(0,0,40,40);
+	vida43.setRectDestino(675,555,40,40);
+	vida43.obtenerTextura("//configuracion//items//vida4//sprite", renderer);
+
+	gameover1.setRectOrigen(0,0,120,40);
+	gameover1.setRectDestino(5,5,120,40);
+	gameover1.obtenerTextura("//configuracion//items//gameoverhud//sprite", renderer);
+
+	gameover2.setRectOrigen(0,0,120,40);
+	gameover2.setRectDestino(675,5,120,40);
+	gameover2.obtenerTextura("//configuracion//items//gameoverhud//sprite", renderer);
+
+	gameover3.setRectOrigen(0,0,120,40);
+	gameover3.setRectDestino(5,555,120,40);
+	gameover3.obtenerTextura("//configuracion//items//gameoverhud//sprite", renderer);
+
+	gameover4.setRectOrigen(0,0,120,40);
+	gameover4.setRectDestino(675,555,120,40);
+	gameover4.obtenerTextura("//configuracion//items//gameoverhud//sprite", renderer);
+	/////////////////////////////////////////////////
+
+
+
 
 	//jefes default
 
@@ -1496,6 +1557,65 @@ void juego::dibujar ()
 	boby2.dibujarBalas(renderer);
 	boby3.dibujarBalas(renderer);
 	boby4.dibujarBalas(renderer);
+
+
+ 	//////////dibujo vidas///////////////////////////////
+	int nrovidas;
+
+	nrovidas=boby.obtenerVidas();
+	if(nrovidas>0){
+		vida11.dibujar(renderer);
+		if(nrovidas>1)
+			vida12.dibujar(renderer);
+		if(nrovidas>2)
+			vida13.dibujar(renderer);
+	} else{
+		gameover1.dibujar(renderer);
+	}
+
+	if(num_jugadores>=2){
+		nrovidas=boby2.obtenerVidas();
+			if(nrovidas>0){
+				vida21.dibujar(renderer);
+			if(nrovidas>1)
+				vida22.dibujar(renderer);
+			if(nrovidas>2)
+				vida23.dibujar(renderer);
+		} else{
+			gameover2.dibujar(renderer);
+		}
+	}
+
+	if(num_jugadores>=3){
+		nrovidas=boby3.obtenerVidas();
+			if(nrovidas>0){
+				vida31.dibujar(renderer);
+			if(nrovidas>1)
+				vida32.dibujar(renderer);
+			if(nrovidas>2)
+				vida33.dibujar(renderer);
+		} else{
+			gameover3.dibujar(renderer);
+		}
+	}
+
+
+
+	if(num_jugadores>=4){
+		nrovidas=boby4.obtenerVidas();
+			if(nrovidas>0){
+				vida41.dibujar(renderer);
+			if(nrovidas>1)
+				vida42.dibujar(renderer);
+			if(nrovidas>2)
+				vida43.dibujar(renderer);
+		} else{
+			gameover4.dibujar(renderer);
+		}
+	}
+
+	/////////////////////////////////////////
+
 
 	loginfo("Se termina de dibujar juego");
 	

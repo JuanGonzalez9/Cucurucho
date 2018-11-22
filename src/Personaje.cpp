@@ -659,12 +659,16 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 // Manejo de vidas
 void Personaje::perderVida(){
 	if (!godmode && (invincibilityFrames == 0)) {
-		this->cambiarArma(1);
+		this->cambiarArma(0);
 		hitPoints--;
 		printf("perdi vida");
 		invincibilityFrames = 90;
 	}
 	//invincibilityFrames = IFramesMAX
+}
+
+int Personaje::obtenerVidas(){
+	return hitPoints;
 }
 
 bool Personaje::muerto(){
