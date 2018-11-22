@@ -55,7 +55,10 @@ imagenes=	personaje.png \
 		fondo2lv3.png\
 		monstruolevel2.bmp \
 		monstruolevel3.bmp \
-		puente2.png
+		puente2.png \
+		bala_fuego.bmp \
+		bala_fuego_2.bmp \
+		bala_misil.bmp
 		
 imagenes_o=	imagen-personaje.o \
 		imagen-personaje2.o \
@@ -108,7 +111,10 @@ imagenes_o=	imagen-personaje.o \
 		imagen-fondo2lv3.o\
 		imagen-monstruolevel2.o \
 		imagen-monstruolevel3.o \
-		imagen-puente2.o
+		imagen-puente2.o \
+		imagen-bala_fuego.o \
+		imagen-bala_fuego_2.o \
+		imagen-bala_misil.o
 		
 contra_LDFLAGS= $(imagenes_o) -rdynamic -pthread
 nodist_contra_SOURCES = $(imagenes_o)

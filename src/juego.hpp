@@ -43,6 +43,9 @@ public:
 	void dibujar ();
 	void presentar ();
 	bool jugando ();
+	void agregarBalaEnemigo(Bullet* nuevaBala);
+	SDL_Renderer* dameElRender();
+
 protected:
 	bool termino, cambioNivel;
 	int us, cuadros, d1, d2, d3, nivel, cascada, num_jugadores, coordenada;

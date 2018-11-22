@@ -3,6 +3,7 @@
 #include "Enemigo.h"
 #include "Utils.h"
 #include "Constantes.h"
+class juego;
 
 //TUTORIAL PARA HACER ENEMIGOS NUEVOS
 //La posicion desde donde se aparece y coordenada se decide en el constructor en juego.cpp
@@ -44,5 +45,63 @@ public:
 protected:
 
 };
+
+class MonstruoFinal : public Enemigo{
+public:
+	MonstruoFinal(juego* j, int x,int y, int coorX, int coordenada, int nivel);
+	virtual ~MonstruoFinal();
+
+	void explotar();
+	void dispararBalasFuego(int coordenadaX,int coordenadaY);
+	void dispararBalasFuego2(int coordenadaX,int coordenadaY);
+	void dispararMisiles(int coordenadaX,int coordenadaY);
+	void tenerInmunidad();
+	void tenerInvisibilidad();
+
+
+protected:
+	juego* j;
+	typedef enum {comenzo,disparando_fuego,disparando_fuego2,disparando_misiles,inmunidad,invisibilidad,explosion}Estado;
+	int contador_marcos;
+	Estado estado;
+
+};
+
+class MonstruoFinalNivel1 : public MonstruoFinal{
+public:
+	MonstruoFinalNivel1(juego* j,int x, int y, int life);
+	virtual ~MonstruoFinalNivel1();
+
+	void hazLoTuyo();	
+
+protected:
+
+};
+
+class MonstruoFinalNivel2 : public MonstruoFinal{
+public:
+	MonstruoFinalNivel2(juego* j,int x, int y, int life);
+	virtual ~MonstruoFinalNivel2();
+
+	void hazLoTuyo();	
+
+protected:
+
+};
+
+class MonstruoFinalNivel3 : public MonstruoFinal{
+public:
+	MonstruoFinalNivel3(juego* j,int x, int y, int life);
+	virtual ~MonstruoFinalNivel3();
+
+	void hazLoTuyo();	
+
+protected:
+
+};
+
+
+
+
 
 #endif /* ENEMIGO_H_ */

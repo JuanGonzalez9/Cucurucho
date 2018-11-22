@@ -24,6 +24,8 @@ public:
 	int posicionXParaItem();
 	int posicionYParaItem();
 
+	int invisible;
+
 	//Metodos
 
 	//activacion
@@ -65,7 +67,10 @@ protected:
 
 	int marcapasos;
 	int shootTimer;
-	bool quieroDisparar;	
+	bool quieroDisparar;
+
+	int inmune;
+
 };
 
 #endif /* ENEMIGO_H_ */

@@ -99,7 +99,7 @@ juego::juego (ventana &v, int cantidadJugadores):
 
 	//jefes default
 
-	enemigoNivel1 = new Enemigo(600,150,5);
+	enemigoNivel1 = new MonstruoFinalNivel1(this,600,150,5);
 	enemigoNivel1->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 
 	enemigoNivel2 = new Enemigo(260,80,5);
@@ -1623,6 +1623,16 @@ int juego::getCantidadDeBalas(){
 	cantidad += boby4.getCantidadDeBalas();
 
 	return cantidad;
+}
+
+void juego::agregarBalaEnemigo(Bullet* nuevaBala){
+
+
+	balasEnemigas.push_back(nuevaBala);
+}
+
+SDL_Renderer* juego::dameElRender(){
+	return renderer;
 }
 
 juego::~juego ()

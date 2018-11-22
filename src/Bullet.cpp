@@ -62,6 +62,7 @@ string Bullet::serializar(){
 }
 
 void Bullet::dibujar(SDL_Renderer* renderer){
+
 	SDL_RenderCopy(renderer, textura, & rectOrigen , &rectDestino);
 }
 

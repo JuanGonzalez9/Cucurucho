@@ -63,6 +63,11 @@ Enemigo::Enemigo(int x,int y,int life) {
 }
 
 void Enemigo::perderVida(){
+
+	if(inmune > 0){
+		return;
+	}
+
 	vidas--;
 	if (this->derrotado()){
 		activo=false;
@@ -168,10 +173,21 @@ void Enemigo::activar(int nivel, int coordenada, int pos){
 
 void Enemigo::actualizar(int nivel, int coordenada){
 	if(activo){
+
+		if(inmune > 0){
+		inmune--;
+		}
+
+		if(invisible > 0){
+		invisible--;
+		}
+
 		if(shootTimer>0)
 			shootTimer--;
 		this->hazLoTuyo();
+
 	}
+
 
 }
 
