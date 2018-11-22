@@ -16,6 +16,7 @@
 #include "mensaje_conexion.hpp"
 #include "conector.hpp"
 #include "ventana.hpp"
+#include "score.hpp"
 
 extern "C"
 {
@@ -58,11 +59,11 @@ typedef struct
 	std::thread hilo;
 	std::condition_variable condicion_presento;
 	std::mutex mutex_presento;
-	bool presento;
+	bool presento, finalizo;
 } datos_sincronizacion;
 
 // Comunicación desde el cliente hacia el servidor
-void comunicar_servidor (datos_comunicacion *dc, datos_sincronizacion *ds, JuegoCliente *juego)
+void comunicar_servidor (datos_comunicacion *dc, datos_sincronizacion *ds, JuegoCliente *juego, score *puntuacion)
 {
 	char respuestaServidor[dc->tamanio_respuesta + 1];
 	while (dc->escuchador.enAccion() && juego->jugando()) {
@@ -84,17 +85,30 @@ void comunicar_servidor (datos_comunicacion *dc, datos_sincronizacion *ds, Juego
 		respuestaServidor[dc->tamanio_respuesta] = 0;
 		//std::cout << "recibido\n";
 		//std::cout << "recibido: " << respuestaServidor << "\n";
-
-		string respuestaSinParsear(respuestaServidor);
-		juego->setMensajeDelServidor(respuestaSinParsear);
-
-		juego->manejarEventos();
-		juego->dibujar();
-		juego->presentar();
+		
+		static char prev_nivel = '1';
+		if (respuestaServidor[0] == 's') {
+			puntuacion->manejar_eventos();
+			puntuacion->actualizar();
+			puntuacion->dibujar();
+			puntuacion->presentar();
+		} else if (respuestaServidor[0] != 'f') {
+			string respuestaSinParsear(respuestaServidor);
+			juego->setMensajeDelServidor(respuestaSinParsear);
+			juego->manejarEventos();
+			juego->dibujar();
+			juego->presentar();
+		}
 
 		std::unique_lock<std::mutex> lock_presento(ds->mutex_presento);
 		ds->presento = true;
-		ds->condicion_presento.notify_all ();
+		if (respuestaServidor[0] == 'f') {
+			ds->finalizo = true;
+			ds->condicion_presento.notify_all ();
+			break;
+		} else {
+			ds->condicion_presento.notify_all ();
+		}
 	}
 	std::cout << "sale de comunicar_servidor\n";
 }
@@ -124,6 +138,9 @@ void comunicar_cliente (autenticados *a, int i, int tamanio_respuesta)
 		//std::cout << "envia" << i << ": " << mundo << "\n";
 		r = a->usuarios[i].conector->enviar(a->usuarios[i].conector->getAcceptedSocket(),mundo.c_str(),tamanio_respuesta);
 		if (r != tamanio_respuesta) {
+			break;
+		}
+		if (mundo[0] == 'f') {
 			break;
 		}
 		//std::cout << "enviados\n";
@@ -221,17 +238,19 @@ bool obtener_dir_puerto (char *arg, std::string &dir, unsigned short &puerto)
 	return true;
 }
 
-void inicializar (datos_comunicacion &dc, datos_sincronizacion &ds, int fd, int tamanio_respuesta, JuegoCliente &juego)
+void inicializar (datos_comunicacion &dc, datos_sincronizacion &ds, int fd, int tamanio_respuesta, JuegoCliente &juego, score &puntuacion)
 {
 	dc.conector = new Socket (fd);
 	dc.tamanio_respuesta = tamanio_respuesta;
 	dc.recien_conectado = true;
 	ds.presento = false;
+	ds.finalizo = false;
 	ds.hilo = std::thread {
 		comunicar_servidor,
 		&dc,
 		&ds,
-		&juego
+		&juego,
+		&puntuacion
 	};
 }
 
@@ -309,11 +328,12 @@ void correr_cliente (std::string dir, unsigned short puerto)
 		titulo << vl.cred.usuario << "(" << vl.cred.orden << ") - Contra";
 		v.titulo (titulo.str().c_str());
 
+		score puntuacion (v, vl.cred.jugadores);
 		JuegoCliente juego(v, vl.cred.jugadores, vl.cred.orden);
 
 		datos_comunicacion dc;
 		datos_sincronizacion ds;
-		inicializar (dc, ds, vl.cred.fd, tamanio_respuesta, juego);
+		inicializar (dc, ds, vl.cred.fd, tamanio_respuesta, juego, puntuacion);
 
 		std::mutex mutex_mundo;
 		while (dc.escuchador.enAccion() && juego.jugando()){
@@ -339,13 +359,20 @@ void correr_cliente (std::string dir, unsigned short puerto)
 					break;
 				}
 				// Solo ahora se que fue reaceptado.
-				inicializar (dc, ds, vl.cred.fd, tamanio_respuesta, juego);
+				inicializar (dc, ds, vl.cred.fd, tamanio_respuesta, juego, puntuacion);
 			} else {
 				ds.presento = false;
 				dc.recien_conectado = false;
 			}
+			if (ds.finalizo) {
+				std::cout << "Finalizacion detectada en cliente\n";
+				break;
+			}
 		}
 		finalizar (dc, ds);
+		if (ds.finalizo) {
+			puntuacion.correr ();
+		}
 	}
 }
 
@@ -460,7 +487,8 @@ void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_venta
 		inicializar (a, tamanio_respuesta);
 
 		std::cout << "Iniciando ciclo\n";
-	 	while (!a.salir && j.jugando ()) {                         
+		int mostrando_score = 0;
+	 	while (!a.salir && (j.jugando () || mostrando_score)) {
 	 		if (!mostrar_ventana) {
 				cfg.esperar_vblank ();
 			}
@@ -468,36 +496,46 @@ void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_venta
 			// Griso y desgriso clientes.
 			verificar_clientes (a, j, tamanio_respuesta); 
 
-			// Leo de la memoria el estado de las teclas de todos los jugadores.
-			// Esta informacion se recibe del usuario en comunicar_cliente que corre en a.usuarios[i].hilo.
-			char teclas[a.cantidad][TAMANIO_MENSAJE_TECLAS + 1];
-			for (int i = 0; i < a.cantidad; i++) {
-				std::lock_guard<std::mutex> lock_tmp(a.usuarios[i].mutex_teclas);
-				memcpy (teclas[i], a.usuarios[i].teclas, TAMANIO_MENSAJE_TECLAS+1);
+			if (mostrando_score) {
+				mostrando_score--;
+			} else {
+				// Leo de la memoria el estado de las teclas de todos los jugadores.
+				// Esta informacion se recibe del usuario en comunicar_cliente que corre en a.usuarios[i].hilo.
+				char teclas[a.cantidad][TAMANIO_MENSAJE_TECLAS + 1];
+				for (int i = 0; i < a.cantidad; i++) {
+					std::lock_guard<std::mutex> lock_tmp(a.usuarios[i].mutex_teclas);
+					memcpy (teclas[i], a.usuarios[i].teclas, TAMANIO_MENSAJE_TECLAS+1);
+				}
+
+				// Guardo el estado de las teclas.
+				for (int i = 0; i < a.cantidad; i++) {
+					teclas[i][TAMANIO_MENSAJE_TECLAS] = 0;
+					j.setAcciones (teclas[i], i+1);
+				}
+
+				// Actualizo el mundo.
+				j.manejar_eventos ();
+				j.actualizar ();
+				
+				// Creo la respuesta para el cliente con la información para que dibuje la pantalla.
+				j.setDatosEnemigos();
+				j.setDatosItems();
+				j.setDatosBalasEnemigas();
+				string mundo = j.armarRespuesta();
+				static char prev_nivel = '1';
+				if (mundo[0] != prev_nivel || !j.jugando()) {
+					std::cout << "Nivel: " << mundo[0] << "\n";
+					prev_nivel = mundo[0];
+					mostrando_score = TIEMPO_SCORE;
+					mundo[0] = j.jugando() ? 's' : 'f';
+				}
+
+				// Almaceno la respuesta en memoria.
+				// Esta informacion se envia al usuario en comunicar_cliente que corre en a.usuarios[i].hilo.
+				std::unique_lock<std::mutex> lock_mundo(a.mutex_mundo);
+				a.mundo = mundo;
+				lock_mundo.unlock ();
 			}
-
-			// Guardo el estado de las teclas.
-			for (int i = 0; i < a.cantidad; i++) {
-				teclas[i][TAMANIO_MENSAJE_TECLAS] = 0;
-				j.setAcciones (teclas[i], i+1);
-			}
-
-			// Actualizo el mundo.
-			j.manejar_eventos ();
-			j.actualizar ();
-			
-			// Creo la respuesta para el cliente con la información para que dibuje la pantalla.
-			j.setDatosEnemigos();
-			j.setDatosItems();
-			j.setDatosBalasEnemigas();
-			string mundo = j.armarRespuesta();
-
-			// Almaceno la respuesta en memoria.
-			// Esta informacion se envia al usuario en comunicar_cliente que corre en a.usuarios[i].hilo.
-			std::unique_lock<std::mutex> lock_mundo(a.mutex_mundo);
-			a.mundo = mundo;
-			lock_mundo.unlock ();
-
 			if (mostrar_ventana) {
 				j.dibujar();
 				j.presentar();

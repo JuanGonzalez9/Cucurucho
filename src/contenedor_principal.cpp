@@ -64,9 +64,14 @@ void contenedor_principal::correr()
 		//std::cout << "3\n";
 		dibujar();
 		//std::cout << "4\n";
-		v.presentar();
+		presentar();
 		//std::cout << "5\n";
 	}
+}
+
+void contenedor_principal::presentar()
+{
+	v.presentar();
 }
 
 void contenedor_principal::manejar_eventos()
