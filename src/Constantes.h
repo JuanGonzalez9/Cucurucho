@@ -42,6 +42,8 @@
 
 #define MAX_PUERTOS_SERVIDOR		100
 
+#define TIEMPO_SCORE			5*60
+
 class Constantes{
 public:
 	enum BitAccion{
