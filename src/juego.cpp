@@ -273,9 +273,6 @@ int juego::obtenerPuntaje(int jugador, bool resetear)
 	if (resetear) {
 		p->resetearPuntaje();
 	}
-	if (puntos == 0 && p->muerto()) {
-		return -1;
-	}
 	return puntos;
 }
 

@@ -82,6 +82,11 @@ void puntaje::desserializar (std::stringstream &ss)
 puntajes::puntajes(int jugadores):
 	jugadores(jugadores)
 {
+	for (int i = 0; i < jugadores; i++) {
+		for (int j = 0; j < 3; j++) {
+			pts[i].n[j] = -1;
+		}
+	}
 }
 
 puntajes::~puntajes ()
@@ -170,9 +175,9 @@ void score::desserializar (std::stringstream &ss)
 		}
 		c[i+1].texto (
 			pts[i].jugador.c_str(),
-			pts[i].n[0] > 0 ? std::to_string(pts[i].n[0]).c_str() : "-",
-			pts[i].n[1] > 0 ? std::to_string(pts[i].n[1]).c_str() : "-",
-			pts[i].n[2] > 0 ? std::to_string(pts[i].n[2]).c_str() : "-",
+			pts[i].n[0] >= 0 ? std::to_string(pts[i].n[0]).c_str() : "-",
+			pts[i].n[1] >= 0 ? std::to_string(pts[i].n[1]).c_str() : "-",
+			pts[i].n[2] >= 0 ? std::to_string(pts[i].n[2]).c_str() : "-",
 			std::to_string(total).c_str());
 	}
 }
