@@ -38,6 +38,8 @@ public:
 	void setCantidadDeBalas(int cant);
 	void sumarBalas(vector<Bullet*> nuevasBalas);
 
+	void setMensajeVidas(string vidas);
+
 	string pasarAStringDeTamanio(int tamanio,int valor);
 	//.......metodos...........................
 	/*string dameLaRespuesta();*/
@@ -52,6 +54,8 @@ private:
 
 	string strBalasEnemigas;
 	string resetBalasEnemigas;
+
+	string vidas;
 	
 	string mensajeEnemigo;
 	string resetEnemigos;

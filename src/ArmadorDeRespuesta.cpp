@@ -125,6 +125,10 @@ void ArmadorDeRespuesta::setMensajeBalasEnemigas(string msjBalas){
 	this->strBalasEnemigas.replace(0,msjBalas.size(),msjBalas);
 }
 
+void ArmadorDeRespuesta::setMensajeVidas(string msjVidas){
+	this->vidas = msjVidas;
+}
+
 
 //------------ METODOS ------------
 string ArmadorDeRespuesta::fondoToString(int f){
@@ -241,6 +245,8 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* da
 	respuesta += mensajeEnemigo;
 	respuesta += mensajeItems;
 	respuesta += strBalasEnemigas;
+
+	respuesta += vidas;
 
 	strBalas = resetBalas;
 	strBalasEnemigas = resetBalasEnemigas;

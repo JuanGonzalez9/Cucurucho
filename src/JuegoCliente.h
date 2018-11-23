@@ -38,6 +38,7 @@ private:
 	void dibujarJugadores();
 	void dibujarItems();
 	void dibujarBalasEnemigas();
+	void dibujameLasVidas();
 
 	vector<DatosEnemigo*> vDatosEnemigo;
 	vector<Enemigo*> vEnemigos;

@@ -116,6 +116,7 @@ public:
 	bool muerto();
 	void refreshIFrames();
 	void godmodeSwitch();
+	void setVidas(int vidas);
 
 	//OTROS
 	void subirCoordenadaXEn(int cantidad);

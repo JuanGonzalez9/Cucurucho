@@ -250,6 +250,16 @@ void JuegoCliente::dibujarJugadores(){
 	unBoby->dibujar(renderer);
 }
 
+void JuegoCliente::dibujameLasVidas(){
+
+	boby.setVidas(p.getVidaPersonaje(1));
+	boby2.setVidas(p.getVidaPersonaje(2));
+	boby3.setVidas(p.getVidaPersonaje(3));
+	boby4.setVidas(p.getVidaPersonaje(4));
+
+	dibujarVidas();
+}
+
 void JuegoCliente::dibujar(){
 	SDL_SetTextureBlendMode (textura_objetivo, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderTarget (renderer, textura_objetivo);
@@ -270,6 +280,8 @@ void JuegoCliente::dibujar(){
 
 	vector< pair<int,int> > balas = p.getBalas();
 	dibujarBalas(balas);
+
+	dibujameLasVidas();
 
 	if(p.estaElEnemigo()) dibujarEnemigoFinal();
 

@@ -1485,7 +1485,6 @@ string juego::armarRespuesta(){
 		datosBoby2.setEstado( (Constantes::Estado) boby2.getEstado());
 		datosBoby2.setDireccionDisparo( (Constantes::DireccionDisparo) boby2.getDireccionDisparo());
 
-
 		armador->sumarBalas(boby2.getBalas());
 	}
 
@@ -1499,7 +1498,6 @@ string juego::armarRespuesta(){
 		datosBoby3.setGrisado(boby3.esGrisado());
 		datosBoby3.setEstado( (Constantes::Estado) boby3.getEstado());
 		datosBoby3.setDireccionDisparo( (Constantes::DireccionDisparo) boby3.getDireccionDisparo());
-
 
 		armador->sumarBalas(boby3.getBalas());
 	}
@@ -1520,10 +1518,76 @@ string juego::armarRespuesta(){
 
 	//este es el enemigo final
 	setDatosEnemigoFinal();
+	
+	string vidas = "";
+	vidas += to_string(boby.obtenerVidas());
+	vidas += to_string(boby2.obtenerVidas());
+	vidas += to_string(boby3.obtenerVidas());
+	vidas += to_string(boby4.obtenerVidas());
+	armador->setMensajeVidas(vidas);
 
 	return armador->dameLaRespuestaPara(num_jugadores, &datosBoby, &datosBoby2, &datosBoby3, &datosBoby4);
 	
 
+}
+
+void juego::dibujarVidas(){
+	//////////dibujo vidas///////////////////////////////
+	int nrovidas;
+
+	nrovidas=boby.obtenerVidas();
+	if(nrovidas>0){
+		vida11.dibujar(renderer);
+		if(nrovidas>1)
+			vida12.dibujar(renderer);
+		if(nrovidas>2)
+			vida13.dibujar(renderer);
+	} else{
+		gameover1.dibujar(renderer);
+	}
+
+	if(num_jugadores>=2){
+		nrovidas=boby2.obtenerVidas();
+			if(nrovidas>0){
+				vida21.dibujar(renderer);
+			if(nrovidas>1)
+				vida22.dibujar(renderer);
+			if(nrovidas>2)
+				vida23.dibujar(renderer);
+		} else{
+			gameover2.dibujar(renderer);
+		}
+	}
+
+	if(num_jugadores>=3){
+		nrovidas=boby3.obtenerVidas();
+			if(nrovidas>0){
+				vida31.dibujar(renderer);
+			if(nrovidas>1)
+				vida32.dibujar(renderer);
+			if(nrovidas>2)
+				vida33.dibujar(renderer);
+		} else{
+			gameover3.dibujar(renderer);
+		}
+	}
+
+
+
+	if(num_jugadores>=4){
+		nrovidas=boby4.obtenerVidas();
+			if(nrovidas>0){
+				vida41.dibujar(renderer);
+			if(nrovidas>1)
+				vida42.dibujar(renderer);
+			if(nrovidas>2)
+				vida43.dibujar(renderer);
+		} else{
+			gameover4.dibujar(renderer);
+		}
+	}
+
+	/////////////////////////////////////////
 }
 
 void juego::dibujar ()
@@ -1608,64 +1672,8 @@ void juego::dibujar ()
 	boby3.dibujarBalas(renderer);
 	boby4.dibujarBalas(renderer);
 
-
- 	//////////dibujo vidas///////////////////////////////
-	int nrovidas;
-
-	nrovidas=boby.obtenerVidas();
-	if(nrovidas>0){
-		vida11.dibujar(renderer);
-		if(nrovidas>1)
-			vida12.dibujar(renderer);
-		if(nrovidas>2)
-			vida13.dibujar(renderer);
-	} else{
-		gameover1.dibujar(renderer);
-	}
-
-	if(num_jugadores>=2){
-		nrovidas=boby2.obtenerVidas();
-			if(nrovidas>0){
-				vida21.dibujar(renderer);
-			if(nrovidas>1)
-				vida22.dibujar(renderer);
-			if(nrovidas>2)
-				vida23.dibujar(renderer);
-		} else{
-			gameover2.dibujar(renderer);
-		}
-	}
-
-	if(num_jugadores>=3){
-		nrovidas=boby3.obtenerVidas();
-			if(nrovidas>0){
-				vida31.dibujar(renderer);
-			if(nrovidas>1)
-				vida32.dibujar(renderer);
-			if(nrovidas>2)
-				vida33.dibujar(renderer);
-		} else{
-			gameover3.dibujar(renderer);
-		}
-	}
-
-
-
-	if(num_jugadores>=4){
-		nrovidas=boby4.obtenerVidas();
-			if(nrovidas>0){
-				vida41.dibujar(renderer);
-			if(nrovidas>1)
-				vida42.dibujar(renderer);
-			if(nrovidas>2)
-				vida43.dibujar(renderer);
-		} else{
-			gameover4.dibujar(renderer);
-		}
-	}
-
-	/////////////////////////////////////////
-
+	//Lo paso a este metodo para reusarlo desde juegoCliente
+	dibujarVidas();
 
 	loginfo("Se termina de dibujar juego");
 	

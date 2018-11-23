@@ -37,6 +37,7 @@ public:
 	vector<DatosBalaEnemiga*> getBalasEnemigas();
 
 	vector< pair<int,int> > getBalas();
+	int getVidaPersonaje(int pj);
 
 	//..........METODO........
 	void parsear(string msj,int jugadores);
@@ -70,6 +71,9 @@ private:
 
 	vector<DatosBalaEnemiga*> vBalasEnemigas;
 	void parsearBalasEnemigas(string msj);
+
+	vector<int> vidas;
+	void parsearVidas(string msj);
 
 };
 

@@ -486,7 +486,7 @@ void Personaje::dejarDeDisparar(){
 void Personaje::cambiarArma(int nroArma){
 	if (nroArma ==0)
 		arma = Pistola;
-	if (nroArma ==1)
+	if (nroArma ==1 && hitPoints < 3)
 		//arma = Pistola;
 		hitPoints++;
 	if (nroArma ==2)
@@ -670,7 +670,7 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 
 // Manejo de vidas
 void Personaje::perderVida(){
-	if (!godmode && (invincibilityFrames == 0)) {
+	if (!godmode && (invincibilityFrames == 0) && hitPoints > 0) {
 		this->cambiarArma(0);
 		hitPoints--;
 		printf("perdi vida");
@@ -704,6 +704,10 @@ void Personaje::godmodeSwitch(){
 		invincibilityFrames = 90;
 	} else if (invincibilityFrames <= 44)
 		godmode = false;
+}
+
+void Personaje::setVidas(int vidas){
+	this->hitPoints = vidas; 
 }
 
 

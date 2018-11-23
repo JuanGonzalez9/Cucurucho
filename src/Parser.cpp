@@ -40,6 +40,7 @@ void Parser::parsear(string msj,int jugadores){
 	parsearEnemigos(msj);
 	parsearItems(msj);
 	parsearBalasEnemigas(msj);
+	parsearVidas(msj);
 }
 
 void Parser::parsearEnemigos(string msj){
@@ -126,6 +127,18 @@ void Parser::parsearBalasEnemigas(string msj){
 		vBalasEnemigas.push_back(datos);	
 		i += tamanioMsj;
 	}
+}
+
+void Parser::parsearVidas(string msj){
+
+	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS + MENSAJE_BALAS_ENEMIGAS;
+
+	vidas.clear();
+	vidas.push_back(msj[i] - '0');
+	vidas.push_back(msj[i+1] - '0');
+	vidas.push_back(msj[i+2] - '0');
+	vidas.push_back(msj[i+3] - '0');
+	
 }
 
 DatosPersonaje* Parser::dameAlBobyNumero(int numeroDePersonaje){
@@ -284,6 +297,10 @@ vector<DatosBalaEnemiga*> Parser::getBalasEnemigas(){
 
 vector< pair<int,int> > Parser::getBalas(){
 	return balas;
+}
+
+int Parser::getVidaPersonaje(int pj){
+	return vidas[pj-1];
 }
 
 Parser::~Parser() {

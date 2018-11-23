@@ -95,6 +95,8 @@ protected:
 	EntidadDibujable vida11, vida12, vida13, vida21, vida22, vida23, vida31, vida32, vida33;
 	EntidadDibujable vida41, vida42, vida43, gameover1, gameover2, gameover3, gameover4;
 
+	void dibujarVidas();
+
 	bool tengoQueEnviarEnemigo(int i);
 
 	bool apretandoDerecha(const Uint8* state);
