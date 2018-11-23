@@ -76,6 +76,7 @@ public:
 	bool enJuego();
 	int obtenerPuntaje();
 	void subirPuntaje(int score);
+	void resetearPuntaje();
 	void agregarGris(const char* path,SDL_Renderer* renderer);
 
 	//----METODOS

@@ -8,8 +8,9 @@ static const int periodo=1000000/60; // TODO averiguar
 static const int ancho=800;
 static const int alto=800;
 
-juego::juego (ventana &v, int cantidadJugadores):
+juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	contenedor_principal (v),
+	pts (pts),
 	termino (false),
 	cambioNivel(false),
 	us (periodo),
@@ -247,6 +248,40 @@ juego::juego (ventana &v, int cantidadJugadores):
 		boby4.setCoordenadaY(200);
 	}
 	
+}
+
+int juego::obtenerPuntaje(int jugador, bool resetear)
+{
+	Personaje *p;
+	switch (jugador) {
+		case 0:
+			p = &boby;
+			break;
+		case 1:
+			p = &boby2;
+			break;
+		case 2:
+			p = &boby3;
+			break;
+		case 3:
+			p = &boby4;
+			break;
+		default:
+			return -1;
+	};
+	int puntos = p->obtenerPuntaje();
+	if (resetear) {
+		p->resetearPuntaje();
+	}
+	if (puntos == 0 && p->muerto()) {
+		return -1;
+	}
+	return puntos;
+}
+
+void juego::serializar_puntaje (std::stringstream &ss)
+{
+	pts.serializar (ss);
 }
 
 bool juego::jugando ()
@@ -743,6 +778,9 @@ void juego::manejar_eventos ()
 }
 
 void juego::actualizarNivel1(){
+	for (int i = 0; i < num_jugadores; i++) {
+		pts.puntos (i, nivel-1, obtenerPuntaje(i, true));
+	}
 	
 	cambioNivel=false;
 	nivel=2;
@@ -782,6 +820,10 @@ void juego::actualizarNivel1(){
 }
 
 void juego::actualizarNivel2(){
+	for (int i = 0; i < num_jugadores; i++) {
+		pts.puntos (i, nivel-1, obtenerPuntaje(i, true));
+	}
+
 	cambioNivel=false;
 	nivel=3;
 	coordenada=800;
@@ -823,6 +865,9 @@ void juego::actualizarNivel2(){
 }
 
 void juego::actualizarNivel3(){
+	for (int i = 0; i < num_jugadores; i++) {
+		pts.puntos (i, nivel-1, obtenerPuntaje(i, true));
+	}
 	termino = true;
 }
 

@@ -2,6 +2,7 @@
 #define JUEGO_HPP
 
 #include "temporizador.hpp"
+#include "score.hpp"
 #include "plataformas.hpp"
 #include "EntidadDibujable.h"
 #include "Personaje.h"
@@ -28,7 +29,7 @@ extern "C"
 class juego: public contenedor_principal
 {
 public:
-	juego (ventana &v, int cantidadJugadores);
+	juego (ventana &v, int cantidadJugadores, puntajes &pts);
 	~juego ();
 	void setAcciones(char* msj, int numeroCliente);
 	int getCantidadDeBalas();
@@ -46,7 +47,11 @@ public:
 	void agregarBalaEnemigo(Bullet* nuevaBala);
 	SDL_Renderer* dameElRender();
 
+	int obtenerPuntaje(int jugador, bool resetear = false);
+	void serializar_puntaje (std::stringstream &ss);
+
 protected:
+	puntajes &pts;
 	bool termino, cambioNivel;
 	int us, cuadros, d1, d2, d3, nivel, cascada, num_jugadores, coordenada;
 	int mundo_w, mundo_h;

@@ -29,7 +29,8 @@ void contenedor::dibujar (int cx, int cy, int cw, int ch, SDL_Renderer *renderer
 {
 	std::list<elemento*>::const_iterator i;
 	for (i = controles.begin (); i != controles.end (); ++i) {
-		((elemento*)*i)->c->dibujar (cx, cy, cw, ch, renderer);
+		//((elemento*)*i)->c->dibujar (cx, cy, cw, ch, renderer);
+		((elemento*)*i)->c->dibujar (cx+this->x, cy+this->y, this->w, this->h, renderer);
 	}
 }
 

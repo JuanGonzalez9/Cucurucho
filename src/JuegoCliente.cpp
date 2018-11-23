@@ -6,8 +6,8 @@ extern "C"
 	#include <SDL2/SDL_keycode.h>
 }
 
-JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador):
-	juego (v, cantidadJugadores)
+JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador, puntajes &pts):
+	juego (v, cantidadJugadores, pts)
 {
 	this->numeroDeJugador = numeroDeJugador;
 	nivel = 1;
@@ -43,6 +43,11 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	Bullet* nuevaBala = new Bullet(0,0,0,0,2,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala2//sprite", renderer);
 	vBalaEnemiga.push_back(nuevaBala);
+}
+
+int JuegoCliente::jugador() const
+{
+	return numeroDeJugador;
 }
 
 void JuegoCliente::setMensajeDelServidor(string msj){

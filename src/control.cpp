@@ -7,6 +7,8 @@ extern "C"
 {
 }
 
+const int alpha = 200;
+
 control::control (int x, int y):
 	anclado_x (normal),
 	anclado_y (normal),

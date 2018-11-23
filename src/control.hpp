@@ -13,7 +13,7 @@ extern "C"
 
 class contenedor;
 
-const int alpha = 200;
+extern const int alpha;
 
 class control
 {

@@ -150,6 +150,9 @@ void Personaje::subirPuntaje(int score){
 	puntaje = puntaje + score;
 }
 
+void Personaje::resetearPuntaje(){
+	puntaje = 0;
+}
 
 //-------Metodos----------
 
@@ -309,7 +312,9 @@ void Personaje::verSiBalasPegan(Enemigo* malo){
 		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
 			malo->perderVida();
 			bullets.erase(bullets.begin() + i);
-			puntaje = puntaje +50;
+			if (malo->derrotado()) {
+				puntaje = puntaje + 50;
+			}
 		}else i++;
 	}
 }

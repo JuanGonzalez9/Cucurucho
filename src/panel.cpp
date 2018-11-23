@@ -50,7 +50,7 @@ void panel::dibujar(int cx, int cy, int cw, int ch, SDL_Renderer *renderer)
 	SDL_Rect r = {xx, yy, w, h};
 	SDL_RenderFillRect (renderer, &r);
 	restaurar_blend (renderer);
-	contenedor::dibujar (xx, yy, w, h, renderer);
+	contenedor::dibujar (cx, cy, cw, ch, renderer);
 }
 
 void panel::redimensionar (int w, int h)

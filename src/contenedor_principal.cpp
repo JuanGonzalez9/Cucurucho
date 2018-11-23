@@ -9,6 +9,8 @@ contenedor_principal::contenedor_principal (ventana &v):
 	corriendo (false),
 	control_resaltado (nullptr)
 {
+	w = MUNDO_ANCHO;
+	h = MUNDO_ALTO;
 }
 
 contenedor_principal::~contenedor_principal ()
@@ -124,7 +126,8 @@ bool contenedor_principal::manejar_evento (SDL_Event e)
 
 void contenedor_principal::dibujar()
 {
-	contenedor::dibujar (x, y, MUNDO_ANCHO, MUNDO_ALTO, v.renderer ());
+	//contenedor::dibujar (x, y, MUNDO_ANCHO, MUNDO_ALTO, v.renderer ());
+	contenedor::dibujar (x, y, w, h, v.renderer ());
 }
 
 void contenedor_principal::resaltar (int x, int y)

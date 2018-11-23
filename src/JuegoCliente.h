@@ -12,10 +12,11 @@ using namespace std;
 
 class JuegoCliente : public juego {
 public:
-	JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador);
+	JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador, puntajes &pts);
 	void setMensajeDelServidor(string msj);
 	void dibujar();
 	void manejarEventos();
+	int jugador() const;
 	virtual ~JuegoCliente();
 private:
 	Parser p;
