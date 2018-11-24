@@ -11,6 +11,7 @@ contenedor_principal::contenedor_principal (ventana &v):
 {
 	w = MUNDO_ANCHO;
 	h = MUNDO_ALTO;
+	miMusica = new Musica();
 }
 
 contenedor_principal::~contenedor_principal ()
@@ -58,6 +59,7 @@ void contenedor_principal::correr()
 {
 	v.mostrar ();
 	corriendo = true;
+	miMusica->tocarMusica(Musica::mEsperandoJugadores);
 	while (corriendo) {
 		//std::cout << "1\n";
 		manejar_eventos();
@@ -69,6 +71,7 @@ void contenedor_principal::correr()
 		presentar();
 		//std::cout << "5\n";
 	}
+	miMusica->pararMusica();
 }
 
 void contenedor_principal::presentar()

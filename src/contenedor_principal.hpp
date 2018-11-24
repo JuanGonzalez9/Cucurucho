@@ -8,6 +8,7 @@
 #include <condition_variable>
 #include "ventana.hpp"
 #include "contenedor.hpp"
+#include "Musica.h"
 
 extern "C"
 {
@@ -44,6 +45,7 @@ protected:
 	std::function<void()> funcion_sinc;
 	std::condition_variable condicion_sinc;
 	volatile bool ejecutada_sinc;
+	Musica* miMusica;
 };
 
 #endif

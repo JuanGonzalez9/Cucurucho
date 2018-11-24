@@ -18,6 +18,7 @@
 #include "ventana.hpp"
 #include "score.hpp"
 
+
 extern "C"
 {
 	#include <signal.h>
