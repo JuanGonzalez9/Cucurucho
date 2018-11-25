@@ -131,16 +131,13 @@ void JuegoCliente::ajustarTamanioBala(int tipoDeBala){
 }
 
 void JuegoCliente::dibujarBalas(vector< pair< int,pair<int,int> > > balas){
-	for(unsigned i = 0; i < balas.size();i++){
-		int tipoDeBala = balas[i].first;
-		ajustarTamanioBala(tipoDeBala);
-		bala_rectDestino.x = balas[i].second.first;
-		bala_rectDestino.y = balas[i].second.second;
-		vector<int> cantBalas = p.getCantBalas();
-		for(unsigned i = 0; i < cantBalas.size();i++){
-			int balasDeEsteJugador = cantBalas[i];
+	int balasDibujadas = 0;
+	vector<int> cantBalas = p.getCantBalas();
+	for(unsigned i = 0; i < cantBalas.size();i++){
+		int balasDeEsteJugador = cantBalas[i];
+		if(p.getVidaPersonaje(i+1) > 0){
 			SDL_Texture* texturaActual;
-			
+	
 			switch(i){
 				case (0):
 					texturaActual = textura_bala;
@@ -157,9 +154,15 @@ void JuegoCliente::dibujarBalas(vector< pair< int,pair<int,int> > > balas){
 			}
 
 			for(int j = 0; j < balasDeEsteJugador;j++){
+				int tipoDeBala = balas[balasDibujadas].first;
+				ajustarTamanioBala(tipoDeBala);
+				bala_rectDestino.x = balas[balasDibujadas].second.first;
+				bala_rectDestino.y = balas[balasDibujadas].second.second;
 				SDL_RenderCopy(renderer, texturaActual, & bala_rectOrigen , & bala_rectDestino);
+				balasDibujadas++;
 			}
 		}
+		else balasDibujadas += balasDeEsteJugador;
 	}
 }
 
