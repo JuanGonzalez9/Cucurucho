@@ -272,7 +272,7 @@ void JuegoCliente::dibujarJugadores(){
 	Personaje* unBoby;
 	for(int i = 0; i < num_jugadores; i++){
 		unBoby = dameAlBobyNumero(i + 1);
-		if(i != numeroDeJugador && unBoby->esActivo()){
+		if(i != numeroDeJugador && unBoby->esActivo() && p.getVidaPersonaje(i + 1) > 0){
 			actualizarPosicionDeMiPersonaje(i+1);
 			actualizarEstadoDeMiPersonaje(i+1);
 			if((unBoby->getInvincibilityFrames()/2) %2 ==0)
@@ -281,9 +281,11 @@ void JuegoCliente::dibujarJugadores(){
 	}
 	
 	unBoby = dameAlBobyNumero(numeroDeJugador + 1);
-	actualizarPosicionDeMiPersonaje(numeroDeJugador + 1);
-	actualizarEstadoDeMiPersonaje(numeroDeJugador + 1);
-	unBoby->dibujar(renderer);
+	if(p.getVidaPersonaje(numeroDeJugador + 1) > 0){
+		actualizarPosicionDeMiPersonaje(numeroDeJugador + 1);
+		actualizarEstadoDeMiPersonaje(numeroDeJugador + 1);
+		unBoby->dibujar(renderer);
+	}
 }
 
 void JuegoCliente::dibujameLasVidas(){
