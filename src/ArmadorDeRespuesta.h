@@ -35,8 +35,8 @@ public:
 	void setMensajeItems(string msjItems);
 	void setMensajeBalasEnemigas(string msjBalas);
 	
-	void setCantidadDeBalas(int cant);
-	void sumarBalas(vector<Bullet*> nuevasBalas);
+	void setCantidadDeBalas(int cant,int jugador);
+	void sumarBalas(vector<Bullet*> nuevasBalas,int arma);
 
 	void setMensajeVidas(string vidas);
 
@@ -76,7 +76,7 @@ private:
 	bool mirandoALaDerecha;
 	bool activo;
 	bool grisado;
-	int cantidadDeBalas;
+	vector<int> cantBalasJugadores;
 	int balasActuales;
 	
 	Constantes::Estado estado;

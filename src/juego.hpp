@@ -32,7 +32,7 @@ public:
 	juego (ventana &v, int cantidadJugadores, puntajes &pts);
 	~juego ();
 	void setAcciones(char* msj, int numeroCliente);
-	int getCantidadDeBalas();
+	void setCantidadDeBalas();
 	void manejar_eventos ();
 	void actualizar ();
 	void setDatosEnemigos();

@@ -31,7 +31,7 @@ private:
 	void actualizarFondos();
 	void actualizarPosicionDeMiPersonaje(int numPersonaje);
 	void actualizarEstadoDeMiPersonaje(int numPersonaje);
-	void dibujarBalas(vector< pair<int,int> > balas);
+	void dibujarBalas(vector< pair<int, pair<int,int> > > balas);
 	Personaje* dameAlBobyNumero(int numeroDeBoby);
 	void dibujarEnemigoFinal();
 	void dibujarEnemigos();

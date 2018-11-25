@@ -6,7 +6,8 @@ Parser::Parser() {
 	posFondo1 = 0;
 	posFondo2 = 0;
 	posFondo3 = 0;
-	cantBalas = 0;
+	cantBalas.resize(4);
+	balasTotales = 0;
 	hayEnemigo = false;
 }
 
@@ -33,10 +34,16 @@ void Parser::parsear(string msj,int jugadores){
 		parsearPersonaje(msj,55,4);		
 	}
 
-	cantBalas = stoi(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores,2));
-	parsearBalas(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores + 2,TAMANIO_POS_BALAS * cantBalas));
+	//falta cambiar de 1 cantidad a 4
+	for(unsigned i = 0; i < cantBalas.size(); i++){
+		cantBalas[i] = stoi(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * i,MENSAJE_CANT_BALAS));
+		balasTotales += cantBalas[i];
+	}
+	//cantBalas = stoi(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores,2));
 
-	hayEnemigo = (msj[13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS] == '1');
+	parsearBalas(msj.substr(13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4,TAMANIO_POS_BALAS * balasTotales));
+
+	hayEnemigo = (msj[13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4 + TAMANIO_POS_BALAS * MAX_BALAS] == '1');
 	parsearEnemigos(msj);
 	parsearItems(msj);
 	parsearBalasEnemigas(msj);
@@ -45,7 +52,7 @@ void Parser::parsear(string msj,int jugadores){
 
 void Parser::parsearEnemigos(string msj){
 	
-	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO;
+	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO;
 	int tamanioMsjEnemigo = 1 + RESPUESTA_POSY * 2;
 	unsigned contador = 0;
 	vEnemigos.clear();
@@ -69,7 +76,7 @@ void Parser::parsearEnemigos(string msj){
 
 void Parser::parsearItems(string msj){
 	
-	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS;
+	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS;
 	int tamanioMsjItem = 1 + RESPUESTA_POSY * 2;
 	unsigned contador = 0;
 	vItems.clear();
@@ -104,7 +111,7 @@ void Parser::parsearItems(string msj){
 
 void Parser::parsearBalasEnemigas(string msj){
 	
-	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS;
+	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS;
 
 	int tamanioMsj = 1 + RESPUESTA_POSY * 2;
 	unsigned contador = 0;
@@ -131,7 +138,7 @@ void Parser::parsearBalasEnemigas(string msj){
 
 void Parser::parsearVidas(string msj){
 
-	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + 2 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS + MENSAJE_BALAS_ENEMIGAS;
+	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS + MENSAJE_BALAS_ENEMIGAS;
 
 	vidas.clear();
 	vidas.push_back(msj[i] - '0');
@@ -204,18 +211,21 @@ int Parser::dameElInt(string sub){
 
 void Parser::parsearBalas(string sub){
 	int x,y;
-	for(int i = 0; i < cantBalas; i++){
-		x = dameElInt(sub.substr(TAMANIO_POS_BALAS * i,4));
-		y = dameElInt(sub.substr(TAMANIO_POS_BALAS * i + 4,4));
-		pair<int,int> nuevaBala;
-		nuevaBala.first = x;
-		nuevaBala.second = y;
+	for(int i = 0; i < balasTotales; i++){
+		int tipo = stoi(sub.substr(TAMANIO_POS_BALAS * i,TIPO_BALA));
+		x = dameElInt(sub.substr(TAMANIO_POS_BALAS * i + TIPO_BALA,4));
+		y = dameElInt(sub.substr(TAMANIO_POS_BALAS * i + TIPO_BALA + 4,4));
+		pair< int,pair<int,int> > nuevaBala;
+		nuevaBala.first = tipo;
+		nuevaBala.second.first = x;
+		nuevaBala.second.second = y;
 		balas.push_back(nuevaBala);
 	}
 }
 
 void Parser::resetearBalas(){
 	balas.clear();
+	balasTotales = 0;
 }
 
 int Parser::getNivel(){
@@ -295,7 +305,11 @@ vector<DatosBalaEnemiga*> Parser::getBalasEnemigas(){
 	return vBalasEnemigas;
 }
 
-vector< pair<int,int> > Parser::getBalas(){
+vector<int> Parser::getCantBalas(){
+	return cantBalas;
+}
+
+vector< pair< int,pair<int,int> > > Parser::getBalas(){
 	return balas;
 }
 

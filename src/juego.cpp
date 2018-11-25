@@ -1469,8 +1469,8 @@ string juego::armarRespuesta(){
 		datosBoby.setEstado( (Constantes::Estado) boby.getEstado());
 		datosBoby.setDireccionDisparo( (Constantes::DireccionDisparo) boby.getDireccionDisparo());
 
-		armador->setCantidadDeBalas(getCantidadDeBalas());
-		armador->sumarBalas(boby.getBalas());
+		setCantidadDeBalas();
+		armador->sumarBalas(boby.getBalas(),boby.getArma());
 
 	}
 
@@ -1485,7 +1485,7 @@ string juego::armarRespuesta(){
 		datosBoby2.setEstado( (Constantes::Estado) boby2.getEstado());
 		datosBoby2.setDireccionDisparo( (Constantes::DireccionDisparo) boby2.getDireccionDisparo());
 
-		armador->sumarBalas(boby2.getBalas());
+		armador->sumarBalas(boby2.getBalas(),boby2.getArma());
 	}
 
 	if (num_jugadores >= 3){
@@ -1499,7 +1499,7 @@ string juego::armarRespuesta(){
 		datosBoby3.setEstado( (Constantes::Estado) boby3.getEstado());
 		datosBoby3.setDireccionDisparo( (Constantes::DireccionDisparo) boby3.getDireccionDisparo());
 
-		armador->sumarBalas(boby3.getBalas());
+		armador->sumarBalas(boby3.getBalas(),boby3.getArma());
 	}
 
 	if (num_jugadores == 4){
@@ -1513,7 +1513,7 @@ string juego::armarRespuesta(){
 		datosBoby4.setEstado( (Constantes::Estado) boby4.getEstado());
 		datosBoby4.setDireccionDisparo( (Constantes::DireccionDisparo) boby4.getDireccionDisparo());
 
-		armador->sumarBalas(boby4.getBalas());
+		armador->sumarBalas(boby4.getBalas(),boby4.getArma());
 	}
 
 	//este es el enemigo final
@@ -1793,14 +1793,11 @@ void juego::setAcciones(char* msj, int numeroCliente){
 	}
 }
 
-int juego::getCantidadDeBalas(){
-	int cantidad = 0;
-	cantidad += boby.getCantidadDeBalas();
-	cantidad += boby2.getCantidadDeBalas();
-	cantidad += boby3.getCantidadDeBalas();
-	cantidad += boby4.getCantidadDeBalas();
-
-	return cantidad;
+void juego::setCantidadDeBalas(){
+	armador->setCantidadDeBalas(boby.getCantidadDeBalas(),1);
+	armador->setCantidadDeBalas(boby2.getCantidadDeBalas(),2);
+	armador->setCantidadDeBalas(boby3.getCantidadDeBalas(),3);
+	armador->setCantidadDeBalas(boby4.getCantidadDeBalas(),4);
 }
 
 void juego::agregarBalaEnemigo(Bullet* nuevaBala){

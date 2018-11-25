@@ -119,11 +119,35 @@ void JuegoCliente::actualizarEstadoDeMiPersonaje(int numeroP){
 	unBoby->setEstadosEnumerados(p.getEstado(numeroP),p.getDireccionDisparo(numeroP));
 }
 
-void JuegoCliente::dibujarBalas(vector< pair<int,int> > balas){
+void JuegoCliente::dibujarBalas(vector< pair< int,pair<int,int> > > balas){
 	for(unsigned i = 0; i < balas.size();i++){
-		bala_rectDestino.x = balas[i].first;
-		bala_rectDestino.y = balas[i].second;
-		SDL_RenderCopy(renderer, textura_bala, & bala_rectOrigen , & bala_rectDestino);
+		int tipoDeBala = balas[i].first;
+		bala_rectDestino.x = balas[i].second.first;
+		bala_rectDestino.y = balas[i].second.second;
+		vector<int> cantBalas = p.getCantBalas();
+		for(unsigned i = 0; i < cantBalas.size();i++){
+			int balasDeEsteJugador = cantBalas[i];
+			SDL_Texture* texturaActual;
+			
+			switch(i){
+				case (0):
+					texturaActual = textura_bala;
+					break;
+				case (1):
+					texturaActual = textura_bala2;
+					break;
+				case (2):
+					texturaActual = textura_bala3;
+					break;
+				case (3):
+					texturaActual = textura_bala4;
+					break;
+			}
+
+			for(int j = 0; j < balasDeEsteJugador;j++){
+				SDL_RenderCopy(renderer, texturaActual, & bala_rectOrigen , & bala_rectDestino);
+			}
+		}
 	}
 }
 
@@ -278,7 +302,7 @@ void JuegoCliente::dibujar(){
 	dibujarJugadores();
 	dibujarBalasEnemigas();
 
-	vector< pair<int,int> > balas = p.getBalas();
+	vector< pair<int,pair<int,int>> > balas = p.getBalas();
 	dibujarBalas(balas);
 
 	dibujameLasVidas();

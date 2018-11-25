@@ -450,6 +450,10 @@ void Personaje::disparar(int dirX, int dirY,SDL_Texture *text){
 	if (arma == Bazooka) shootTimer=20;
 }
 
+int Personaje::getArma(){
+	return (int) arma;
+}
+
 
 void Personaje::pelarElChumbo(){
 	disparando = true;

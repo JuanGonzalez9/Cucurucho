@@ -109,6 +109,7 @@ public:
 	void dibujarBalas(SDL_Renderer* renderer);
 	bool puedeDisparar();
 	void refreshBullets();
+	int getArma();
 
 	//MANEJO DE VIDAS
 	int getInvincibilityFrames();
