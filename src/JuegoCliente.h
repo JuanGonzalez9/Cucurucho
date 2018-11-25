@@ -40,6 +40,8 @@ private:
 	void dibujarBalasEnemigas();
 	void dibujameLasVidas();
 
+	void ajustarTamanioBala(int tipoDeBala);
+
 	vector<DatosEnemigo*> vDatosEnemigo;
 	vector<Enemigo*> vEnemigos;
 

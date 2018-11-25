@@ -119,9 +119,21 @@ void JuegoCliente::actualizarEstadoDeMiPersonaje(int numeroP){
 	unBoby->setEstadosEnumerados(p.getEstado(numeroP),p.getDireccionDisparo(numeroP));
 }
 
+void JuegoCliente::ajustarTamanioBala(int tipoDeBala){
+	if(tipoDeBala == 3){
+		bala_rectDestino.h = 32;
+		bala_rectDestino.w = 32;
+	}
+	else{
+		bala_rectDestino.h = 8;
+		bala_rectDestino.w = 8;
+	}
+}
+
 void JuegoCliente::dibujarBalas(vector< pair< int,pair<int,int> > > balas){
 	for(unsigned i = 0; i < balas.size();i++){
 		int tipoDeBala = balas[i].first;
+		ajustarTamanioBala(tipoDeBala);
 		bala_rectDestino.x = balas[i].second.first;
 		bala_rectDestino.y = balas[i].second.second;
 		vector<int> cantBalas = p.getCantBalas();
