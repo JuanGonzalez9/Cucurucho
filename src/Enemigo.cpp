@@ -248,6 +248,7 @@ bool Enemigo::estoyEnEscena(int x,int y,int w,int h){
 	if(coordenadaX >= x + w) return false;
 	if(coordenadaY + rectDestino.h <= y) return false;
 	if(coordenadaY >= y + h) return false;
+	return true;
 }
 
 Enemigo::~Enemigo() {
