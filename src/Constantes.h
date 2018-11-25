@@ -18,7 +18,7 @@
 #define RESPUESTA_ESTADOS 7
 
 #define MENSAJE_CANT_BALAS 2  //dos bytes el mensaje '99'
-#define MAX_BALAS 24
+#define MAX_BALAS 60
 #define TAMANIO_POS_BALAS (RESPUESTA_POSX + RESPUESTA_POSY + 1) //posX ahora puede ser valor negativo,por eso se suma 1
 #define RESPUESTA_PERSONAJE (RESPUESTA_POSX + RESPUESTA_POSY + RESPUESTA_ESTADOS)
 #define RESPUESTA_ENEMIGO 1

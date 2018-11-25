@@ -50,9 +50,12 @@ int Ovni::disparoYVel(){
 }
 
 string Ovni::serializar(){
-	string serial = to_string(Constantes::ovni);
-	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
-	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	string serial = "";
+	if(rectDestino.x > -300 && rectDestino.x < 10000 && rectDestino.y > -300 && rectDestino.y < 10000){
+		serial = to_string(Constantes::ovni);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	}
 
 	return serial;
 }
@@ -122,9 +125,12 @@ int Marcianito::disparoYVel(){
 }
 
 string Marcianito::serializar(){
-	string serial = to_string(Constantes::marcianito);
-	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
-	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	string serial = "";
+	if(rectDestino.x > -300 && rectDestino.x < 10000 && rectDestino.y > -300 && rectDestino.y < 10000){
+		serial = to_string(Constantes::marcianito);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	}
 
 	return serial;
 }

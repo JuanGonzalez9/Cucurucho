@@ -67,9 +67,12 @@ bool Item::puedoDibujar(){
 }
 
 string Item::serializar(){
-	string serial = to_string(contenido);
-	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
-	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	string serial = "";
+	if(rectDestino.x > -200){
+		serial = to_string(contenido);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	}
 	return serial;
 }
 
