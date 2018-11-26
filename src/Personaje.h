@@ -70,9 +70,13 @@ public:
 	int obtenerCoordenadaY();
 	int obtenerVelocidadY();
 	int obtenerVelocidadX();
+	int obtenerVidas();
 	bool esActivo();
 	bool esGrisado();
 	bool enJuego();
+	int obtenerPuntaje();
+	void subirPuntaje(int score);
+	void resetearPuntaje();
 	void agregarGris(const char* path,SDL_Renderer* renderer);
 
 	//----METODOS
@@ -105,6 +109,7 @@ public:
 	void dibujarBalas(SDL_Renderer* renderer);
 	bool puedeDisparar();
 	void refreshBullets();
+	int getArma();
 
 	//MANEJO DE VIDAS
 	int getInvincibilityFrames();
@@ -112,6 +117,7 @@ public:
 	bool muerto();
 	void refreshIFrames();
 	void godmodeSwitch();
+	void setVidas(int vidas);
 
 	//OTROS
 	void subirCoordenadaXEn(int cantidad);
@@ -145,6 +151,8 @@ private:
 	// manejo de vida
 	int hitPoints;
 	int invincibilityFrames;
+
+	int puntaje;
 
 	Personaje::Arma arma;
 	Personaje::Estado estado;

@@ -41,6 +41,7 @@ Personaje::Personaje() {
 	//vidas = maxVidas
 	hitPoints = 3;
 	invincibilityFrames = 0;
+	puntaje = 0;
 
 	loginfo("Se construyo personaje");
 }
@@ -141,9 +142,17 @@ void Personaje::agregarGris(const char* path,SDL_Renderer* renderer){
 	tex2 = cfg.obtener_textura_grisada (path, renderer);
 }
 
+int Personaje::obtenerPuntaje(){
+	return puntaje;
+}
 
+void Personaje::subirPuntaje(int score){
+	puntaje = puntaje + score;
+}
 
-
+void Personaje::resetearPuntaje(){
+	puntaje = 0;
+}
 
 //-------Metodos----------
 
@@ -303,6 +312,9 @@ void Personaje::verSiBalasPegan(Enemigo* malo){
 		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
 			malo->perderVida();
 			bullets.erase(bullets.begin() + i);
+			if (malo->derrotado()) {
+				puntaje = puntaje + 50;
+			}
 		}else i++;
 	}
 }
@@ -438,6 +450,10 @@ void Personaje::disparar(int dirX, int dirY,SDL_Texture *text){
 	if (arma == Bazooka) shootTimer=20;
 }
 
+int Personaje::getArma(){
+	return (int) arma;
+}
+
 
 void Personaje::pelarElChumbo(){
 	disparando = true;
@@ -474,7 +490,7 @@ void Personaje::dejarDeDisparar(){
 void Personaje::cambiarArma(int nroArma){
 	if (nroArma ==0)
 		arma = Pistola;
-	if (nroArma ==1)
+	if (nroArma ==1 && hitPoints < 3)
 		//arma = Pistola;
 		hitPoints++;
 	if (nroArma ==2)
@@ -658,13 +674,17 @@ void Personaje::dibujar(SDL_Renderer* renderer){
 
 // Manejo de vidas
 void Personaje::perderVida(){
-	if (!godmode && (invincibilityFrames == 0)) {
-		this->cambiarArma(1);
+	if (!godmode && (invincibilityFrames == 0) && hitPoints > 0) {
+		this->cambiarArma(0);
 		hitPoints--;
 		printf("perdi vida");
 		invincibilityFrames = 90;
 	}
 	//invincibilityFrames = IFramesMAX
+}
+
+int Personaje::obtenerVidas(){
+	return hitPoints;
 }
 
 bool Personaje::muerto(){
@@ -688,6 +708,10 @@ void Personaje::godmodeSwitch(){
 		invincibilityFrames = 90;
 	} else if (invincibilityFrames <= 44)
 		godmode = false;
+}
+
+void Personaje::setVidas(int vidas){
+	this->hitPoints = vidas; 
 }
 
 

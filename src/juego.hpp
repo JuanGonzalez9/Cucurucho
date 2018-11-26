@@ -2,6 +2,7 @@
 #define JUEGO_HPP
 
 #include "temporizador.hpp"
+#include "score.hpp"
 #include "plataformas.hpp"
 #include "EntidadDibujable.h"
 #include "Personaje.h"
@@ -28,10 +29,10 @@ extern "C"
 class juego: public contenedor_principal
 {
 public:
-	juego (ventana &v, int cantidadJugadores);
+	juego (ventana &v, int cantidadJugadores, puntajes &pts);
 	~juego ();
 	void setAcciones(char* msj, int numeroCliente);
-	int getCantidadDeBalas();
+	void setCantidadDeBalas();
 	void manejar_eventos ();
 	void actualizar ();
 	void setDatosEnemigos();
@@ -47,7 +48,11 @@ public:
 	SDL_Renderer* dameElRender();
 	SDL_Rect rect_origen_fondo3;
 
+	int obtenerPuntaje(int jugador, bool resetear = false);
+	void serializar_puntaje (std::stringstream &ss);
+
 protected:
+	puntajes &pts;
 	bool termino, cambioNivel;
 	int us, cuadros, d1, d2, d3, nivel, cascada, num_jugadores, coordenada;
 	int mundo_w, mundo_h;
@@ -86,6 +91,12 @@ protected:
 	vector<Enemigo*> vectorEnemigos;
 	vector<Item*> vectorItems;
 	
+	//iconos de vidas
+	EntidadDibujable vida11, vida12, vida13, vida21, vida22, vida23, vida31, vida32, vida33;
+	EntidadDibujable vida41, vida42, vida43, gameover1, gameover2, gameover3, gameover4;
+
+	void dibujarVidas();
+
 	bool tengoQueEnviarEnemigo(int i);
 
 	bool apretandoDerecha(const Uint8* state);

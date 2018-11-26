@@ -36,7 +36,9 @@ public:
 	vector<DatosItem*> getItems();
 	vector<DatosBalaEnemiga*> getBalasEnemigas();
 
-	vector< pair<int,int> > getBalas();
+	vector< pair< int,pair<int,int> > > getBalas();
+	vector<int> getCantBalas();
+	int getVidaPersonaje(int pj);
 
 	//..........METODO........
 	void parsear(string msj,int jugadores);
@@ -51,8 +53,9 @@ private:
 
 	DatosPersonaje datosBoby,datosBoby2,datosBoby3,datosBoby4;
 	
-	int cantBalas;
-	vector< pair<int,int> > balas;
+	int balasTotales;
+	vector<int> cantBalas;
+	vector< pair< int,pair<int,int> > > balas;
 	bool hayEnemigo;
 
 	int parsearPosY(string substr);
@@ -70,6 +73,9 @@ private:
 
 	vector<DatosBalaEnemiga*> vBalasEnemigas;
 	void parsearBalasEnemigas(string msj);
+
+	vector<int> vidas;
+	void parsearVidas(string msj);
 
 };
 

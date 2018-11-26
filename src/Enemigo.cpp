@@ -253,14 +253,11 @@ string Enemigo::serializar(){
 }
 
 bool Enemigo::estoyEnEscena(int x,int y,int w,int h){
-	bool estoy = true;
-	int unPoquito = 20;
-	if(coordenadaX < x - unPoquito) return false;
-	if(coordenadaX > x + w + unPoquito) return false;
-	if(coordenadaY < y - unPoquito) return false;
-	if(coordenadaY > y + h + unPoquito) return false;
-
-	return estoy;
+	if(coordenadaX + rectDestino.w <= x) return false;
+	if(coordenadaX >= x + w) return false;
+	if(coordenadaY + rectDestino.h <= y) return false;
+	if(coordenadaY >= y + h) return false;
+	return true;
 }
 
 Enemigo::~Enemigo() {

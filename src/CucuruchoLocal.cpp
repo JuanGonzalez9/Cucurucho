@@ -86,13 +86,20 @@ void comunicar_servidor (datos_comunicacion *dc, datos_sincronizacion *ds, Juego
 		//std::cout << "recibido\n";
 		//std::cout << "recibido: " << respuestaServidor << "\n";
 		
-		static char prev_nivel = '1';
-		if (respuestaServidor[0] == 's') {
+		if (respuestaServidor[0] == 's' || respuestaServidor[0] == 'S') {
+			if (respuestaServidor[0] == 's') {
+				std::stringstream ss(respuestaServidor+1);
+				puntuacion->desserializar(ss);
+				respuestaServidor[0] = 'S';
+			}
 			puntuacion->manejar_eventos();
 			puntuacion->actualizar();
 			puntuacion->dibujar();
 			puntuacion->presentar();
-		} else if (respuestaServidor[0] != 'f') {
+		} else if (respuestaServidor[0] == 'f') {
+			std::stringstream ss(respuestaServidor+1);
+			puntuacion->desserializar(ss);
+		} else {
 			string respuestaSinParsear(respuestaServidor);
 			juego->setMensajeDelServidor(respuestaSinParsear);
 			juego->manejarEventos();
@@ -328,8 +335,8 @@ void correr_cliente (std::string dir, unsigned short puerto)
 		titulo << vl.cred.usuario << "(" << vl.cred.orden << ") - Contra";
 		v.titulo (titulo.str().c_str());
 
-		score puntuacion (v, vl.cred.jugadores);
-		JuegoCliente juego(v, vl.cred.jugadores, vl.cred.orden);
+		score puntuacion (v, vl.cred.orden, vl.cred.jugadores);
+		JuegoCliente juego(v, vl.cred.jugadores, vl.cred.orden, puntuacion);
 
 		datos_comunicacion dc;
 		datos_sincronizacion ds;
@@ -371,6 +378,7 @@ void correr_cliente (std::string dir, unsigned short puerto)
 		}
 		finalizar (dc, ds);
 		if (ds.finalizo) {
+			puntuacion.agregar_boton_aceptar ();
 			puntuacion.correr ();
 		}
 	}
@@ -461,6 +469,16 @@ void verificar_clientes (autenticados &a, juego &j, int tamanio_respuesta)
 
 void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_ventana)
 {
+	/*
+	ventana v(std::string ("Servidor - Contra"), MUNDO_ANCHO, MUNDO_ALTO);
+	score s(v, 4);
+	std::stringstream ss("Barbara 400 500 1100;Dalma 50 180 -1;Juan 940 -1 -1;Martin 520 20 510;");
+	//s.agregar_boton_aceptar ();
+	s.desserializar (ss);
+	s.correr();
+	return;
+	*/
+
 	autenticados a;
 	a.salir = false;
 	signal (SIGINT, al_interrumpir);
@@ -474,7 +492,11 @@ void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_venta
 		if (mostrar_ventana) {
 			v.mostrar ();
 		}
-		juego j(v, cantidadJugadores);
+		puntajes pts (cantidadJugadores);
+		for (int i = 0; i < a.cantidad; i++) {
+			pts.nombre (i, a.usuarios[i].nombre);
+		}
+		juego j(v, cantidadJugadores, pts);
 
 	 	std::cout << "Crea un mundo inicial\n";
 		j.manejar_eventos ();
@@ -527,7 +549,10 @@ void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_venta
 					std::cout << "Nivel: " << mundo[0] << "\n";
 					prev_nivel = mundo[0];
 					mostrando_score = TIEMPO_SCORE;
-					mundo[0] = j.jugando() ? 's' : 'f';
+					std::stringstream ss;
+					ss << (j.jugando() ? 's' : 'f');
+					j.serializar_puntaje (ss);
+					mundo = ss.str();
 				}
 
 				// Almaceno la respuesta en memoria.

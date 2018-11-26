@@ -8,8 +8,9 @@ static const int periodo=1000000/60; // TODO averiguar
 static const int ancho=800;
 static const int alto=800;
 
-juego::juego (ventana &v, int cantidadJugadores):
+juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	contenedor_principal (v),
+	pts (pts),
 	termino (false),
 	cambioNivel(false),
 	us (periodo),
@@ -61,9 +62,9 @@ juego::juego (ventana &v, int cantidadJugadores):
 	boby4.setRectOrigen(0,0,480,480);
 
 	boby.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
-	boby2.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
-	boby3.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
-	boby4.agregarGris("//configuracion//personajes//heroe//sprite", renderer);
+	boby2.agregarGris("//configuracion//personajes//heroe2//sprite", renderer);
+	boby3.agregarGris("//configuracion//personajes//heroe3//sprite", renderer);
+	boby4.agregarGris("//configuracion//personajes//heroe4//sprite", renderer);
 
 	//todo lo que dice NOTA MARTIN tiene que ver con los vectores de enemigos, items y balas
 
@@ -96,6 +97,67 @@ juego::juego (ventana &v, int cantidadJugadores):
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 	///////////////////////////////////////////////////////////
+
+	//CARGO LOS ICONOS DE VIDAS///////////////////////////
+	vida11.setRectOrigen(0,0,40,40);
+	vida11.setRectDestino(5,5,40,40);
+	vida11.obtenerTextura("//configuracion//items//vida1//sprite", renderer);
+	vida12.setRectOrigen(0,0,40,40);
+	vida12.setRectDestino(45,5,40,40);
+	vida12.obtenerTextura("//configuracion//items//vida1//sprite", renderer);
+	vida13.setRectOrigen(0,0,40,40);
+	vida13.setRectDestino(85,5,40,40);
+	vida13.obtenerTextura("//configuracion//items//vida1//sprite", renderer);
+
+	vida21.setRectOrigen(0,0,40,40);
+	vida21.setRectDestino(755,5,40,40);
+	vida21.obtenerTextura("//configuracion//items//vida2//sprite", renderer);
+	vida22.setRectOrigen(0,0,40,40);
+	vida22.setRectDestino(715,5,40,40);
+	vida22.obtenerTextura("//configuracion//items//vida2//sprite", renderer);
+	vida23.setRectOrigen(0,0,40,40);
+	vida23.setRectDestino(675,5,40,40);
+	vida23.obtenerTextura("//configuracion//items//vida2//sprite", renderer);
+
+	vida31.setRectOrigen(0,0,40,40);
+	vida31.setRectDestino(5,555,40,40);
+	vida31.obtenerTextura("//configuracion//items//vida3//sprite", renderer);
+	vida32.setRectOrigen(0,0,40,40);
+	vida32.setRectDestino(45,555,40,40);
+	vida32.obtenerTextura("//configuracion//items//vida3//sprite", renderer);
+	vida33.setRectOrigen(0,0,40,40);
+	vida33.setRectDestino(85,555,40,40);
+	vida33.obtenerTextura("//configuracion//items//vida3//sprite", renderer);
+
+	vida41.setRectOrigen(0,0,40,40);
+	vida41.setRectDestino(755,555,40,40);
+	vida41.obtenerTextura("//configuracion//items//vida4//sprite", renderer);
+	vida42.setRectOrigen(0,0,40,40);
+	vida42.setRectDestino(715,555,40,40);
+	vida42.obtenerTextura("//configuracion//items//vida4//sprite", renderer);
+	vida43.setRectOrigen(0,0,40,40);
+	vida43.setRectDestino(675,555,40,40);
+	vida43.obtenerTextura("//configuracion//items//vida4//sprite", renderer);
+
+	gameover1.setRectOrigen(0,0,120,40);
+	gameover1.setRectDestino(5,5,120,40);
+	gameover1.obtenerTextura("//configuracion//items//gameoverhud//sprite", renderer);
+
+	gameover2.setRectOrigen(0,0,120,40);
+	gameover2.setRectDestino(675,5,120,40);
+	gameover2.obtenerTextura("//configuracion//items//gameoverhud//sprite", renderer);
+
+	gameover3.setRectOrigen(0,0,120,40);
+	gameover3.setRectDestino(5,555,120,40);
+	gameover3.obtenerTextura("//configuracion//items//gameoverhud//sprite", renderer);
+
+	gameover4.setRectOrigen(0,0,120,40);
+	gameover4.setRectDestino(675,555,120,40);
+	gameover4.obtenerTextura("//configuracion//items//gameoverhud//sprite", renderer);
+	/////////////////////////////////////////////////
+
+
+
 
 	//jefes default
 
@@ -188,6 +250,37 @@ juego::juego (ventana &v, int cantidadJugadores):
 		boby4.setCoordenadaY(200);
 	}
 	
+}
+
+int juego::obtenerPuntaje(int jugador, bool resetear)
+{
+	Personaje *p;
+	switch (jugador) {
+		case 0:
+			p = &boby;
+			break;
+		case 1:
+			p = &boby2;
+			break;
+		case 2:
+			p = &boby3;
+			break;
+		case 3:
+			p = &boby4;
+			break;
+		default:
+			return -1;
+	};
+	int puntos = p->obtenerPuntaje();
+	if (resetear) {
+		p->resetearPuntaje();
+	}
+	return puntos;
+}
+
+void juego::serializar_puntaje (std::stringstream &ss)
+{
+	pts.serializar (ss);
 }
 
 bool juego::jugando ()
@@ -693,6 +786,9 @@ void juego::manejar_eventos ()
 }
 
 void juego::actualizarNivel1(){
+	for (int i = 0; i < num_jugadores; i++) {
+		pts.puntos (i, nivel-1, obtenerPuntaje(i, true));
+	}
 	
 	cambioNivel=false;
 	nivel=2;
@@ -732,6 +828,10 @@ void juego::actualizarNivel1(){
 }
 
 void juego::actualizarNivel2(){
+	for (int i = 0; i < num_jugadores; i++) {
+		pts.puntos (i, nivel-1, obtenerPuntaje(i, true));
+	}
+
 	cambioNivel=false;
 	nivel=3;
 	coordenada=800;
@@ -773,6 +873,9 @@ void juego::actualizarNivel2(){
 }
 
 void juego::actualizarNivel3(){
+	for (int i = 0; i < num_jugadores; i++) {
+		pts.puntos (i, nivel-1, obtenerPuntaje(i, true));
+	}
 	termino = true;
 }
 
@@ -980,7 +1083,7 @@ void juego::actualizar ()
 	//veo COLISIONES
 
 	//NOTA MARTIN ///////////////////////////////////
-	unsigned i=0;
+	int i=0;
 	int pickup=0;
 
 	if(boby.enJuego()&&(boby.getInvincibilityFrames() == 0)){
@@ -989,15 +1092,6 @@ void juego::actualizar ()
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby.cambiarArma(pickup);
 			}
 		}
 
@@ -1010,21 +1104,23 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
+	if(boby.enJuego()){
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby.cambiarArma(pickup);
+			}
+		}
+	}
+
 	if(boby2.enJuego()&&(boby2.getInvincibilityFrames() == 0)){
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby2.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby2.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby2.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby2.cambiarArma(pickup);
 			}
 		}
 
@@ -1037,21 +1133,24 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
+
+	if(boby2.enJuego()){
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby2.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby2.cambiarArma(pickup);
+			}
+		}
+	}
+
 	if(boby3.enJuego()&&(boby3.getInvincibilityFrames() == 0)){
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby3.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby3.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby3.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby3.cambiarArma(pickup);
 			}
 		}
 
@@ -1064,21 +1163,23 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
+	if(boby3.enJuego()){
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby3.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby3.cambiarArma(pickup);
+			}
+		}
+	}
+
 	if(boby4.enJuego()&&(boby4.getInvincibilityFrames() == 0)){
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby4.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby4.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby4.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby4.cambiarArma(pickup);
 			}
 		}
 
@@ -1089,6 +1190,16 @@ void juego::actualizar ()
 				balasEnemigas.erase(balasEnemigas.begin() + i);
 				boby4.perderVida();
 			}else i++;
+		}
+	}
+	if(boby4.enJuego()){
+		//veo si toca algun item
+		for(int i = 0; i < vectorItems.size(); i++){
+			if(!vectorItems[i]->derrotado() && collision(boby4.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+				vectorItems[i]->perderVida();
+				pickup= vectorItems[i]->darContenido();
+				boby4.cambiarArma(pickup);
+			}
 		}
 	}
 	////////////////////////////////////////////////////
@@ -1375,8 +1486,8 @@ string juego::armarRespuesta(){
 		datosBoby.setEstado( (Constantes::Estado) boby.getEstado());
 		datosBoby.setDireccionDisparo( (Constantes::DireccionDisparo) boby.getDireccionDisparo());
 
-		armador->setCantidadDeBalas(getCantidadDeBalas());
-		armador->sumarBalas(boby.getBalas());
+		setCantidadDeBalas();
+		armador->sumarBalas(boby.getBalas(),boby.getArma());
 
 	}
 
@@ -1391,8 +1502,7 @@ string juego::armarRespuesta(){
 		datosBoby2.setEstado( (Constantes::Estado) boby2.getEstado());
 		datosBoby2.setDireccionDisparo( (Constantes::DireccionDisparo) boby2.getDireccionDisparo());
 
-
-		armador->sumarBalas(boby2.getBalas());
+		armador->sumarBalas(boby2.getBalas(),boby2.getArma());
 	}
 
 	if (num_jugadores >= 3){
@@ -1406,8 +1516,7 @@ string juego::armarRespuesta(){
 		datosBoby3.setEstado( (Constantes::Estado) boby3.getEstado());
 		datosBoby3.setDireccionDisparo( (Constantes::DireccionDisparo) boby3.getDireccionDisparo());
 
-
-		armador->sumarBalas(boby3.getBalas());
+		armador->sumarBalas(boby3.getBalas(),boby3.getArma());
 	}
 
 	if (num_jugadores == 4){
@@ -1421,15 +1530,81 @@ string juego::armarRespuesta(){
 		datosBoby4.setEstado( (Constantes::Estado) boby4.getEstado());
 		datosBoby4.setDireccionDisparo( (Constantes::DireccionDisparo) boby4.getDireccionDisparo());
 
-		armador->sumarBalas(boby4.getBalas());
+		armador->sumarBalas(boby4.getBalas(),boby4.getArma());
 	}
 
 	//este es el enemigo final
 	setDatosEnemigoFinal();
+	
+	string vidas = "";
+	vidas += to_string(boby.obtenerVidas());
+	vidas += to_string(boby2.obtenerVidas());
+	vidas += to_string(boby3.obtenerVidas());
+	vidas += to_string(boby4.obtenerVidas());
+	armador->setMensajeVidas(vidas);
 
 	return armador->dameLaRespuestaPara(num_jugadores, &datosBoby, &datosBoby2, &datosBoby3, &datosBoby4);
 	
 
+}
+
+void juego::dibujarVidas(){
+	//////////dibujo vidas///////////////////////////////
+	int nrovidas;
+
+	nrovidas=boby.obtenerVidas();
+	if(nrovidas>0){
+		vida11.dibujar(renderer);
+		if(nrovidas>1)
+			vida12.dibujar(renderer);
+		if(nrovidas>2)
+			vida13.dibujar(renderer);
+	} else{
+		gameover1.dibujar(renderer);
+	}
+
+	if(num_jugadores>=2){
+		nrovidas=boby2.obtenerVidas();
+			if(nrovidas>0){
+				vida21.dibujar(renderer);
+			if(nrovidas>1)
+				vida22.dibujar(renderer);
+			if(nrovidas>2)
+				vida23.dibujar(renderer);
+		} else{
+			gameover2.dibujar(renderer);
+		}
+	}
+
+	if(num_jugadores>=3){
+		nrovidas=boby3.obtenerVidas();
+			if(nrovidas>0){
+				vida31.dibujar(renderer);
+			if(nrovidas>1)
+				vida32.dibujar(renderer);
+			if(nrovidas>2)
+				vida33.dibujar(renderer);
+		} else{
+			gameover3.dibujar(renderer);
+		}
+	}
+
+
+
+	if(num_jugadores>=4){
+		nrovidas=boby4.obtenerVidas();
+			if(nrovidas>0){
+				vida41.dibujar(renderer);
+			if(nrovidas>1)
+				vida42.dibujar(renderer);
+			if(nrovidas>2)
+				vida43.dibujar(renderer);
+		} else{
+			gameover4.dibujar(renderer);
+		}
+	}
+
+	/////////////////////////////////////////
 }
 
 void juego::dibujar ()
@@ -1515,6 +1690,9 @@ void juego::dibujar ()
 	boby2.dibujarBalas(renderer);
 	boby3.dibujarBalas(renderer);
 	boby4.dibujarBalas(renderer);
+
+	//Lo paso a este metodo para reusarlo desde juegoCliente
+	dibujarVidas();
 
 	loginfo("Se termina de dibujar juego");
 	
@@ -1634,14 +1812,11 @@ void juego::setAcciones(char* msj, int numeroCliente){
 	}
 }
 
-int juego::getCantidadDeBalas(){
-	int cantidad = 0;
-	cantidad += boby.getCantidadDeBalas();
-	cantidad += boby2.getCantidadDeBalas();
-	cantidad += boby3.getCantidadDeBalas();
-	cantidad += boby4.getCantidadDeBalas();
-
-	return cantidad;
+void juego::setCantidadDeBalas(){
+	armador->setCantidadDeBalas(boby.getCantidadDeBalas(),1);
+	armador->setCantidadDeBalas(boby2.getCantidadDeBalas(),2);
+	armador->setCantidadDeBalas(boby3.getCantidadDeBalas(),3);
+	armador->setCantidadDeBalas(boby4.getCantidadDeBalas(),4);
 }
 
 void juego::agregarBalaEnemigo(Bullet* nuevaBala){

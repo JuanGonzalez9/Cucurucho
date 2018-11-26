@@ -6,8 +6,8 @@ extern "C"
 	#include <SDL2/SDL_keycode.h>
 }
 
-JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador):
-	juego (v, cantidadJugadores)
+JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador, puntajes &pts):
+	juego (v, cantidadJugadores, pts)
 {
 	this->numeroDeJugador = numeroDeJugador;
 	nivel = 1;
@@ -55,6 +55,11 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	Bullet* nuevaBala = new Bullet(0,0,0,0,2,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala2//sprite", renderer);
 	vBalaEnemiga.push_back(nuevaBala);
+}
+
+int JuegoCliente::jugador() const
+{
+	return numeroDeJugador;
 }
 
 void JuegoCliente::setMensajeDelServidor(string msj){
@@ -126,11 +131,50 @@ void JuegoCliente::actualizarEstadoDeMiPersonaje(int numeroP){
 	unBoby->setEstadosEnumerados(p.getEstado(numeroP),p.getDireccionDisparo(numeroP));
 }
 
-void JuegoCliente::dibujarBalas(vector< pair<int,int> > balas){
-	for(unsigned i = 0; i < balas.size();i++){
-		bala_rectDestino.x = balas[i].first;
-		bala_rectDestino.y = balas[i].second;
-		SDL_RenderCopy(renderer, textura_bala, & bala_rectOrigen , & bala_rectDestino);
+void JuegoCliente::ajustarTamanioBala(int tipoDeBala){
+	if(tipoDeBala == 3){
+		bala_rectDestino.h = 32;
+		bala_rectDestino.w = 32;
+	}
+	else{
+		bala_rectDestino.h = 8;
+		bala_rectDestino.w = 8;
+	}
+}
+
+void JuegoCliente::dibujarBalas(vector< pair< int,pair<int,int> > > balas){
+	int balasDibujadas = 0;
+	vector<int> cantBalas = p.getCantBalas();
+	for(unsigned i = 0; i < cantBalas.size();i++){
+		int balasDeEsteJugador = cantBalas[i];
+		if(p.getVidaPersonaje(i+1) > 0){
+			SDL_Texture* texturaActual;
+	
+			switch(i){
+				case (0):
+					texturaActual = textura_bala;
+					break;
+				case (1):
+					texturaActual = textura_bala2;
+					break;
+				case (2):
+					texturaActual = textura_bala3;
+					break;
+				case (3):
+					texturaActual = textura_bala4;
+					break;
+			}
+
+			for(int j = 0; j < balasDeEsteJugador;j++){
+				int tipoDeBala = balas[balasDibujadas].first;
+				ajustarTamanioBala(tipoDeBala);
+				bala_rectDestino.x = balas[balasDibujadas].second.first;
+				bala_rectDestino.y = balas[balasDibujadas].second.second;
+				SDL_RenderCopy(renderer, texturaActual, & bala_rectOrigen , & bala_rectDestino);
+				balasDibujadas++;
+			}
+		}
+		else balasDibujadas += balasDeEsteJugador;
 	}
 }
 
@@ -245,7 +289,7 @@ void JuegoCliente::dibujarJugadores(){
 	Personaje* unBoby;
 	for(int i = 0; i < num_jugadores; i++){
 		unBoby = dameAlBobyNumero(i + 1);
-		if(i != numeroDeJugador && unBoby->esActivo()){
+		if(i != numeroDeJugador && unBoby->esActivo() && p.getVidaPersonaje(i + 1) > 0){
 			actualizarPosicionDeMiPersonaje(i+1);
 			actualizarEstadoDeMiPersonaje(i+1);
 			if((unBoby->getInvincibilityFrames()/2) %2 ==0)
@@ -254,9 +298,21 @@ void JuegoCliente::dibujarJugadores(){
 	}
 	
 	unBoby = dameAlBobyNumero(numeroDeJugador + 1);
-	actualizarPosicionDeMiPersonaje(numeroDeJugador + 1);
-	actualizarEstadoDeMiPersonaje(numeroDeJugador + 1);
-	unBoby->dibujar(renderer);
+	if(p.getVidaPersonaje(numeroDeJugador + 1) > 0){
+		actualizarPosicionDeMiPersonaje(numeroDeJugador + 1);
+		actualizarEstadoDeMiPersonaje(numeroDeJugador + 1);
+		unBoby->dibujar(renderer);
+	}
+}
+
+void JuegoCliente::dibujameLasVidas(){
+
+	boby.setVidas(p.getVidaPersonaje(1));
+	boby2.setVidas(p.getVidaPersonaje(2));
+	boby3.setVidas(p.getVidaPersonaje(3));
+	boby4.setVidas(p.getVidaPersonaje(4));
+
+	dibujarVidas();
 }
 
 void JuegoCliente::dibujar(){
@@ -277,8 +333,10 @@ void JuegoCliente::dibujar(){
 	dibujarJugadores();
 	dibujarBalasEnemigas();
 
-	vector< pair<int,int> > balas = p.getBalas();
+	vector< pair<int,pair<int,int>> > balas = p.getBalas();
 	dibujarBalas(balas);
+
+	dibujameLasVidas();
 
 	if(p.estaElEnemigo()) dibujarEnemigoFinal();
 

@@ -6,6 +6,7 @@ ArmadorDeRespuesta::ArmadorDeRespuesta() {
 	fondo2 = 0;
 	fondo3 = 0;
 	hayEnemigo = false;
+	cantBalasJugadores.resize(4);
 
 	int longitudStringBalas = MAX_BALAS * TAMANIO_POS_BALAS;
 	string aux(longitudStringBalas,'0');
@@ -95,8 +96,8 @@ void ArmadorDeRespuesta::setDireccionDisparo(Constantes::DireccionDisparo dir){
 	this->dirDisparo = dir;
 }
 
-void ArmadorDeRespuesta::setCantidadDeBalas(int balas){
-	this->cantidadDeBalas = balas;
+void ArmadorDeRespuesta::setCantidadDeBalas(int balas,int jugador){
+	cantBalasJugadores[jugador - 1] = balas;
 	balasActuales = 0;
 }
 
@@ -123,6 +124,10 @@ void ArmadorDeRespuesta::setMensajeBalasEnemigas(string msjBalas){
 		cout<<"error , se supero la cantidad maxima de balas enemigas"<<endl;	
 	}
 	this->strBalasEnemigas.replace(0,msjBalas.size(),msjBalas);
+}
+
+void ArmadorDeRespuesta::setMensajeVidas(string msjVidas){
+	this->vidas = msjVidas;
 }
 
 
@@ -161,14 +166,17 @@ string ArmadorDeRespuesta::pasarAStringDeTamanio(int tamanio,int valor){
 	return respuesta;
 }
 
-void ArmadorDeRespuesta::sumarBalas(vector<Bullet*> nuevasBalas){
+void ArmadorDeRespuesta::sumarBalas(vector<Bullet*> nuevasBalas,int arma){
 	for(unsigned i = 0; i < nuevasBalas.size();i++){
-		string nuevoX = pasarAStringDeTamanio(RESPUESTA_POSX + 1,nuevasBalas[i]->getRectaDestino().x);
 		
-		strBalas.replace(TAMANIO_POS_BALAS * balasActuales,RESPUESTA_POSX + 1,nuevoX);
+		string tipoBala = to_string(arma);
+		strBalas.replace(TAMANIO_POS_BALAS * balasActuales,TIPO_BALA,tipoBala);		
+		
+		string nuevoX = pasarAStringDeTamanio(RESPUESTA_POSX + 1,nuevasBalas[i]->getRectaDestino().x);
+		strBalas.replace(TAMANIO_POS_BALAS * balasActuales + TIPO_BALA,RESPUESTA_POSX + 1,nuevoX);
 
 		string nuevoY = pasarAStringDeTamanio(RESPUESTA_POSY,nuevasBalas[i]->getRectaDestino().y);
-		strBalas.replace(TAMANIO_POS_BALAS * balasActuales + RESPUESTA_POSX + 1,RESPUESTA_POSY,nuevoY);
+		strBalas.replace(TAMANIO_POS_BALAS * balasActuales + RESPUESTA_POSX + 1 + TIPO_BALA,RESPUESTA_POSY,nuevoY);
 
 		balasActuales++;
 	}
@@ -186,8 +194,9 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* da
 	respuesta += pasarAStringDeTamanio(RESPUESTA_FONDO,fondo3);
 
 	//Dependiendo los jugadores se codifica de alguna manera
-
-	respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby->getPosX());
+	
+	if(datosBoby->getPosX() < 0) respuesta += "000";
+	else respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby->getPosX());
 	respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby->getPosY());
 	respuesta += to_string(datosBoby->estaSaltando());
 	respuesta += to_string(datosBoby->estaDisparando());
@@ -198,7 +207,8 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* da
 	respuesta += to_string(datosBoby->getDireccionDisparo());
 
 	if(jugadores >= 2){
-		respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby2->getPosX());
+		if(datosBoby2->getPosX() < 0) respuesta += "000";
+		else respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby2->getPosX());
 		respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby2->getPosY());
 		respuesta += to_string(datosBoby2->estaSaltando());
 		respuesta += to_string(datosBoby2->estaDisparando());
@@ -211,7 +221,8 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* da
 	}
 
 	if(jugadores >= 3){
-		respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby3->getPosX());
+		if(datosBoby3->getPosX() < 0) respuesta += "000";
+		else respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby3->getPosX());
 		respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby3->getPosY());
 		respuesta += to_string(datosBoby3->estaSaltando());
 		respuesta += to_string(datosBoby3->estaDisparando());
@@ -223,7 +234,8 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* da
 	}
 
 	if(jugadores == 4){
-		respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby4->getPosX());
+		if(datosBoby4->getPosX() < 0) respuesta += "000";
+		else respuesta += pasarAStringDeTamanio(RESPUESTA_POSX,datosBoby4->getPosX());
 		respuesta += pasarAStringDeTamanio(RESPUESTA_POSY,datosBoby4->getPosY());
 		respuesta += to_string(datosBoby4->estaSaltando());
 		respuesta += to_string(datosBoby4->estaDisparando());
@@ -234,13 +246,18 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* da
 		respuesta += to_string(datosBoby4->getDireccionDisparo());
 	}
 
-	respuesta += pasarAStringDeTamanio(MENSAJE_CANT_BALAS,cantidadDeBalas);
+	//respuesta += pasarAStringDeTamanio(MENSAJE_CANT_BALAS,cantidadDeBalas);
+	for(unsigned i = 0;i < cantBalasJugadores.size();i++){
+		respuesta += pasarAStringDeTamanio(MENSAJE_CANT_BALAS,cantBalasJugadores[i]);
+	}
 	respuesta += strBalas;
 
 	respuesta += to_string(hayEnemigo);
 	respuesta += mensajeEnemigo;
 	respuesta += mensajeItems;
 	respuesta += strBalasEnemigas;
+
+	respuesta += vidas;
 
 	strBalas = resetBalas;
 	strBalasEnemigas = resetBalasEnemigas;
