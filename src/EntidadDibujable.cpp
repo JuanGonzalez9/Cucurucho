@@ -93,6 +93,10 @@ bool EntidadDibujable::collision(SDL_Rect rect1,SDL_Rect rect2){
 	return true;
 }
 
+void EntidadDibujable::actualizarRectOrigenOriginal(){
+	SDL_QueryTexture (textura, nullptr, nullptr, &rectOrigen.w, &rectOrigen.h);
+}
+
 // ---------------DESTRUCTOR -------------------------------------
 EntidadDibujable::~EntidadDibujable() {
 	if(textura != NULL) SDL_DestroyTexture(textura);

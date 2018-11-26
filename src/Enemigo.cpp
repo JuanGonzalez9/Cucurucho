@@ -33,6 +33,7 @@ Enemigo::Enemigo(int x,int y,int life, int coordenada, int nivel){
 	//marcapasos se usa para hacer ciclos a la hora de moverse
 	marcapasos=0;
 	shootTimer=0;
+	visible = true;
 }
 
 Enemigo::Enemigo() {
@@ -50,6 +51,7 @@ Enemigo::Enemigo() {
 	coordenadaActiva=0;
 	marcapasos=0;
 	shootTimer=0;
+	visible = true;
 }
 
 Enemigo::Enemigo(int x,int y,int life) {
@@ -60,6 +62,7 @@ Enemigo::Enemigo(int x,int y,int life) {
 	rectDestino = {x,y,252,240};
 	posX=x;
 	posY=y;
+	visible = true;
 }
 
 void Enemigo::perderVida(){
@@ -181,9 +184,15 @@ void Enemigo::actualizar(int nivel, int coordenada){
 		if(invisible > 0){
 		invisible--;
 		}
+		else{
+			visible = true;
+		}
+
 
 		if(shootTimer>0)
 			shootTimer--;
+
+		
 		this->hazLoTuyo();
 
 	}

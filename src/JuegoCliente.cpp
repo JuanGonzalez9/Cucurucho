@@ -24,6 +24,18 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vEnemigos.push_back(nuevoEnemigo);
 
+	/*nuevoEnemigo = new MonstruoFinalNivel1(this,800,80,5);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
+	vEnemigos.push_back(nuevoEnemigo);
+
+	nuevoEnemigo = new MonstruoFinalNivel2(this,800,80,7);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//enemigo2//sprite", renderer);
+	vEnemigos.push_back(nuevoEnemigo);
+
+	nuevoEnemigo = new MonstruoFinalNivel3(this,800,80,10);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//enemigo3//sprite", renderer);
+	vEnemigos.push_back(nuevoEnemigo);*/
+
 	Item* nuevoItem = new Item(0,0,1,1920,1,1);
 	nuevoItem->obtenerTextura("//configuracion//items//vidaitem//sprite", renderer);
 	vItems.push_back(nuevoItem);
@@ -158,6 +170,8 @@ void JuegoCliente::dibujarEnemigos(){
 		int x = vDatosEnemigo[i]->getPosX();
 		int y = vDatosEnemigo[i]->getPosY();
 		//cout<<"(x,y) "<<x<<" , "<<y<<endl;
+		//vEnemigos[tipo-1]->setPos(x,y);
+		//vEnemigos[tipo-1]->dibujar(renderer);
 		switch(tipo){
 			case (Constantes::marcianito):
 				vEnemigos[0]->setPos(x,y);

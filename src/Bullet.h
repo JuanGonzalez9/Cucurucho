@@ -24,6 +24,7 @@ public:
 	void dibujar(SDL_Renderer* renderer);
 	void empujarAtras(int i, int nivel);
 	string serializar();
+	
 
 };
 

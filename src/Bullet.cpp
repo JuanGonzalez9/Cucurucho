@@ -1,8 +1,8 @@
 #include "Bullet.h"
 
-Bullet::Bullet(int x,int y,int xVel,int yVel,int tamanio,int last)
+Bullet::Bullet(int x,int y,int xVel,int yVel,int tamanio,int last):EntidadDibujable()
 {
-	EntidadDibujable();
+	
 	rectOrigen.x=0;
 	rectOrigen.y=0;
 	rectOrigen.w=32;
@@ -17,8 +17,8 @@ Bullet::Bullet(int x,int y,int xVel,int yVel,int tamanio,int last)
 	//duracion=bulletRange;
 }
 
-Bullet::Bullet(int x,int y){
-	Bullet(x,y,0,0,1,60);
+Bullet::Bullet(int x,int y):Bullet(x,y,0,0,1,60){
+	
 }
 
 
@@ -65,6 +65,8 @@ void Bullet::dibujar(SDL_Renderer* renderer){
 
 	SDL_RenderCopy(renderer, textura, & rectOrigen , &rectDestino);
 }
+
+
 
 Bullet::~Bullet(){
 

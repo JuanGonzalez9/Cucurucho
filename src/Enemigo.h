@@ -53,6 +53,7 @@ public:
 
 	virtual string serializar();
 	bool estoyEnEscena(int x,int y,int w,int h);
+	bool visible;
 
 protected:
 	int coordenadaX;
@@ -68,6 +69,7 @@ protected:
 	int marcapasos;
 	int shootTimer;
 	bool quieroDisparar;
+
 
 	int inmune;
 

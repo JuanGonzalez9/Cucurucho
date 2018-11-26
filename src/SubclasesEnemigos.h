@@ -52,11 +52,12 @@ public:
 	virtual ~MonstruoFinal();
 
 	void explotar();
-	void dispararBalasFuego(int coordenadaX,int coordenadaY);
-	void dispararBalasFuego2(int coordenadaX,int coordenadaY);
-	void dispararMisiles(int coordenadaX,int coordenadaY);
+	void dispararBalasFuego(int coordenadaX,int coordenadaY, int level);
+	void dispararBalasFuego2(int coordenadaX,int coordenadaY, int level);
+	void dispararMisiles(int coordenadaX,int coordenadaY, int level);
 	void tenerInmunidad();
 	void tenerInvisibilidad();
+	
 
 
 protected:
@@ -70,8 +71,9 @@ protected:
 class MonstruoFinalNivel1 : public MonstruoFinal{
 public:
 	MonstruoFinalNivel1(juego* j,int x, int y, int life);
+	virtual string serializar();
 	virtual ~MonstruoFinalNivel1();
-
+	void posicionar();
 	void hazLoTuyo();	
 
 protected:
@@ -81,6 +83,7 @@ protected:
 class MonstruoFinalNivel2 : public MonstruoFinal{
 public:
 	MonstruoFinalNivel2(juego* j,int x, int y, int life);
+	virtual string serializar();
 	virtual ~MonstruoFinalNivel2();
 
 	void hazLoTuyo();	
@@ -92,6 +95,7 @@ protected:
 class MonstruoFinalNivel3 : public MonstruoFinal{
 public:
 	MonstruoFinalNivel3(juego* j,int x, int y, int life);
+	virtual string serializar();
 	virtual ~MonstruoFinalNivel3();
 
 	void hazLoTuyo();	

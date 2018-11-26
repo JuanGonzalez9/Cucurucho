@@ -71,7 +71,7 @@ R"(<?xml version="1.0"?>
 	<sprite>imagenes/bala_fuego.bmp</sprite>
     </bala_fuego>
 	<bala_fuego2>
-	<sprite>imagenes/bala_fuego2.bmp</sprite>
+	<sprite>imagenes/bala_fuego_2.bmp</sprite>
     </bala_fuego2>
 	<bala_misil>
 	<sprite>imagenes/bala_misil.bmp</sprite>

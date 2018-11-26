@@ -40,6 +40,7 @@ public:
 	void avanzarOrigenY(int velocidad);
 	bool collision(SDL_Rect rect1,SDL_Rect rect2);
 	void retrocederOrigen(int velocidad);
+	void actualizarRectOrigenOriginal();
 
 protected:
 

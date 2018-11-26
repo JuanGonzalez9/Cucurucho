@@ -99,8 +99,10 @@ juego::juego (ventana &v, int cantidadJugadores):
 
 	//jefes default
 
-	enemigoNivel1 = new MonstruoFinalNivel1(this,600,150,5);
+	enemigoNivel1 = new MonstruoFinalNivel1(this,8000-252,150,5);
 	enemigoNivel1->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
+	//((MonstruoFinalNivel1*) enemigoNivel1)->posicionar();
+	vectorEnemigos.push_back(enemigoNivel1);
 
 	enemigoNivel2 = new Enemigo(260,80,5);
 	enemigoNivel2->obtenerTextura("//configuracion//personajes//enemigo2//sprite", renderer);
@@ -329,15 +331,24 @@ void juego::manejar_eventos ()
 	if((!bobyPuede)&&(!boby2Puede)&&(!boby3Puede)&&(!boby4Puede))
 		scrolleando=false;
 
+	if (rect_origen_fondo3.x >= mundo_w-ancho) {
+		scrolleando=false;
+
+	}
 	//Ahora ya tengo la condicion.
 	if(scrolleando){
 		//scrollea el fondo horizontalmente.
 		fondo1.avanzarOrigen(d1);
 		fondo2.avanzarOrigen(d2);			
 		rect_origen_fondo3.x += d3;
+
 		if (rect_origen_fondo3.x > mundo_w-ancho) {
-			rect_origen_fondo3.x = mundo_h-ancho;
+			rect_origen_fondo3.x = mundo_w-ancho;
+
 		}
+
+		
+		
 		//si un jugador tiene su tecla derecha apretada, hace que se mueve en su lugar hacia adelante
 		//el resto retrocede respecto la pantalla (se mantiene su animacion) 
 		if (cliente->quiereAccion(Constantes::derecha)){
@@ -941,9 +952,14 @@ void juego::actualizar ()
 		
 	}
 
-	if((nivel==1)&& (((!boby.esGrisado() && boby.llegoAlFinalDelNivel1()) || (!boby2.esGrisado() && boby2.llegoAlFinalDelNivel1()) || (!boby3.esGrisado() && boby3.llegoAlFinalDelNivel1()) || (!boby4.esGrisado() && boby4.llegoAlFinalDelNivel1())) || cambioNivel== true)) actualizarNivel1();
+	/*if((nivel==1)&& (((!boby.esGrisado() && boby.llegoAlFinalDelNivel1()) || (!boby2.esGrisado() && boby2.llegoAlFinalDelNivel1()) || (!boby3.esGrisado() && boby3.llegoAlFinalDelNivel1()) || (!boby4.esGrisado() && boby4.llegoAlFinalDelNivel1())) || cambioNivel== true)) actualizarNivel1();
 	if((nivel==2)&& (((!boby.esGrisado() && boby.llegoAlFinalDelNivel2()) || (!boby2.esGrisado() && boby2.llegoAlFinalDelNivel2()) || (!boby3.esGrisado() && boby3.llegoAlFinalDelNivel2()) || (!boby4.esGrisado() && boby4.llegoAlFinalDelNivel2())) || cambioNivel== true)) actualizarNivel2();
 	if((nivel ==3) && ((!boby.esGrisado() && boby.llegoAlFinalDelNivel3()) || (!boby2.esGrisado() && boby2.llegoAlFinalDelNivel3()) || (!boby3.esGrisado() && boby3.llegoAlFinalDelNivel3()) || (!boby4.esGrisado() && boby4.llegoAlFinalDelNivel3()))) actualizarNivel3();
+	*/
+
+	if((nivel == 1) && cambioNivel)actualizarNivel1();
+	if((nivel == 2) && cambioNivel)actualizarNivel2();
+	if((nivel == 3) && cambioNivel)actualizarNivel3();
 
 	//actualiza el shootTimer del jugador (para que no tire 500 tiros por segundo)
 	//tambien el movimiento de las balas y borro las que exceden su rango
@@ -1167,6 +1183,7 @@ void juego::actualizar ()
 	for(i = 0; i < vectorEnemigos.size(); i++){
 		if(!vectorEnemigos[i]->esActivo())
 			vectorEnemigos[i]->activar(nivel, maxCoor, maxPos);
+			
 		if(vectorEnemigos[i]->esActivo())
 			vectorEnemigos[i]->actualizar(nivel, coordenada);
 		//le agrego el tengoQueEnviarEnemigo para q no disparen los que estan afuera de la pantalla
@@ -1448,7 +1465,9 @@ void juego::dibujar ()
 	//NOTA MARTIN ////////////////////////////////////////////////
 	for(unsigned i = 0; i < vectorEnemigos.size(); i++){
 		if(!vectorEnemigos[i]->derrotado()&&vectorEnemigos[i]->esActivo())
-			vectorEnemigos[i]->dibujar(renderer);
+			if(vectorEnemigos[i]->visible){
+				vectorEnemigos[i]->dibujar(renderer);
+			}
 	}
 
 	//dibujo items

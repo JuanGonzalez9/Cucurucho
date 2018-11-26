@@ -48,7 +48,7 @@ void Parser::parsearEnemigos(string msj){
 	int tamanioMsjEnemigo = 1 + RESPUESTA_POSY * 2;
 	unsigned contador = 0;
 	vEnemigos.clear();
-
+	
 	while(contador < MAX_ENEMIGOS_EN_ESCENA && msj[i] != '0'){
 		DatosEnemigo* datosE = new DatosEnemigo();
 		datosE->setPosX(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + 1,RESPUESTA_POSY)));
@@ -60,7 +60,7 @@ void Parser::parsearEnemigos(string msj){
 		if(msj[i] == '2'){
 			datosE->setTipoEnemigo(Constantes::ovni);
 		}
-		
+		//datosE->setTipoEnemigo((Constantes::TipoEnemigo)(msj[i]-'0'));
 		vEnemigos.push_back(datosE);	
 		i += tamanioMsjEnemigo;
 	}
@@ -111,6 +111,9 @@ void Parser::parsearBalasEnemigas(string msj){
 
 	while(contador < MAX_BALAS_ENEMIGAS && msj[i] != '0'){
 		DatosBalaEnemiga* datos = new DatosBalaEnemiga();
+
+		cout<<msj.substr(i + contador * tamanioMsj + 5,RESPUESTA_POSY)<<endl;
+		cout<<msj.substr(i + contador * tamanioMsj + 1,RESPUESTA_POSY)<<endl;
 		datos->setPosX(dameElInt(msj.substr(i + contador * tamanioMsj + 1,RESPUESTA_POSY)));
 		datos->setPosY(dameElInt(msj.substr(i + contador * tamanioMsj + 5,RESPUESTA_POSY)));
 

@@ -143,81 +143,173 @@ MonstruoFinal::MonstruoFinal(juego* j,int x, int y, int life, int coordenada,int
 	contador_marcos(0),
 	estado(comenzo){
 	
+	inmune=0;
 	quieroDisparar=false;
 	rectOrigen = {0,0,250,158};
 	rectDestino = {x,y,252,240};
 }
 
 
-void MonstruoFinal::dispararBalasFuego(int coordenadaX,int coordenadaY){
+void MonstruoFinal::dispararBalasFuego(int coordenadaX,int coordenadaY,int level){
+	
+	int vel_x;
+	int vel_y;
+	Bullet * nuevaBala;
+
+	if (level == 2){
+		vel_x=3;
+		vel_y=-5;
+	}
+	else{
+		vel_x=-1;
+		vel_y=0;
+	}
+
+	for(int i = 0; i<6 ; i++){
+		vel_x+=(-i);
+		vel_y++;		
+		nuevaBala = new Bullet(coordenadaX,coordenadaY,vel_x,vel_y,2,100);
+		nuevaBala->obtenerTextura("//configuracion//items//bala_fuego//sprite", j->dameElRender());
+		nuevaBala->actualizarRectOrigenOriginal();
+		j->agregarBalaEnemigo(nuevaBala);
+	}
+
+	/*
 	Bullet * nuevaBala;
 	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
 	j->agregarBalaEnemigo(nuevaBala);
 	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,5,2,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
 	j->agregarBalaEnemigo(nuevaBala);
 	nuevaBala = new Bullet(coordenadaX,coordenadaY,-3,0,2,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
 	j->agregarBalaEnemigo(nuevaBala);
 	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,-3,2,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
 	j->agregarBalaEnemigo(nuevaBala);
 	nuevaBala = new Bullet(coordenadaX,coordenadaY,0,-3,2,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego//sprite", j->dameElRender());
-	j->agregarBalaEnemigo(nuevaBala);
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);*/
 	
 	
 
 }
 
-void MonstruoFinal::dispararBalasFuego2(int coordenadaX,int coordenadaY){
+void MonstruoFinal::dispararBalasFuego2(int coordenadaX,int coordenadaY, int level){
+	return;
+	
+	int vel_x;
+	int vel_y;
 	Bullet * nuevaBala;
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+
+	if (level == 2){
+		vel_x=3;
+		vel_y=-5;
+	}
+	else{
+		vel_x=-1;
+		vel_y=0;
+	}
+
+	for(int i = 0; i<6 ; i++){
+		vel_x+=(-i);
+		vel_y++;		
+		nuevaBala = new Bullet(coordenadaX,coordenadaY,vel_x,vel_y,2,100);
+		nuevaBala->obtenerTextura("//configuracion//items//bala_fuego_2//sprite", j->dameElRender());
+		nuevaBala->actualizarRectOrigenOriginal();
+		j->agregarBalaEnemigo(nuevaBala);
+	}
+
+
+	/*Bullet * nuevaBala;
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,4,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego2//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
 	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,1,4,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego2//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
 	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,2,4,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego2//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
 	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,3,4,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego2//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
 	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,4,4,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego2//sprite", j->dameElRender());
-	j->agregarBalaEnemigo(nuevaBala);
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);*/
 
 }
 
-void MonstruoFinal::dispararMisiles(int coordenadaX,int coordenadaY){
-
+void MonstruoFinal::dispararMisiles(int coordenadaX,int coordenadaY, int level){
+	return;
+	int vel_x;
+	int vel_y;
 	Bullet * nuevaBala;
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
-	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
-	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
-	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
-	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
-	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
-	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
-	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
-	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
-	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
-	j->agregarBalaEnemigo(nuevaBala);
 
+	if (level == 2){
+		vel_x=3;
+		vel_y=-5;
+	}
+	else{
+		vel_x=-5;
+		vel_y=0;
+	}
+
+	for(int i = 0; i<6 ; i++){
+		vel_x+=(-i);		
+		nuevaBala = new Bullet(coordenadaX,coordenadaY,vel_x,vel_y,2,100);
+		if(level==2){
+			nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+			//Aca poner sprite rotado.
+		}
+		else{
+			nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+		}
+	}
+
+	/*Bullet * nuevaBala;
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);*/
+
+	
 }
 
 void MonstruoFinal::tenerInmunidad(){
-	inmune = 60; //1seg de inmunidad
+	inmune = 40; //1seg de inmunidad
 }
 
 void MonstruoFinal::tenerInvisibilidad(){
-	invisible = 90; // en juego evitar que se dibuje
+	invisible = 40; // en juego evitar que se dibuje
+	visible = false;
 }
 
 void MonstruoFinal::explotar(){
@@ -229,54 +321,137 @@ void MonstruoFinal::explotar(){
 
 */}
 
+
 //void MonstruoFinal::hazLoTuyo(){
 //	
 //}
 
 MonstruoFinal::~MonstruoFinal(){}
 
-void MonstruoFinalNivel1::hazLoTuyo(){
+void MonstruoFinalNivel1::posicionar(){
+	actualizarRectOrigenOriginal();
 
-	contador_marcos++;
-	if(estado==comenzo){
-		estado=disparando_fuego;
-		dispararBalasFuego(1000,0);
-	}
-	if(estado==disparando_fuego && contador_marcos>500){
-		estado=disparando_fuego2;
-		dispararBalasFuego2(1000,0);
-	}
-	if(estado==disparando_fuego2 && contador_marcos>1500){
-		estado=inmunidad;
-		tenerInmunidad();
-	}
-	if(estado==inmunidad && inmune <= 0 ){
-		contador_marcos=0;
-		estado=comenzo;
+	rectDestino = {800-(rectOrigen.w+50),posY,rectOrigen.w+50,rectOrigen.h+50};
+	posX=rectDestino.x;
+
+	coordenadaY=posY;
+	coordenadaX=8000-rectOrigen.w;
+	coordenadaActiva=coordenadaX-800;
+	
+}
+
+void MonstruoFinalNivel1::hazLoTuyo(){
+	if(estoyEnEscena(j->rect_origen_fondo3.x,j->rect_origen_fondo3.y,j->rect_origen_fondo3.w,j->rect_origen_fondo3.h)){
+
+		contador_marcos++;
+		if(estado==comenzo){
+			estado=disparando_fuego;
+			dispararBalasFuego(800-130,150,1);
+			printf("Cambiando de estado a disparar balas fuego\n");
+		}
+		if(estado==disparando_fuego && contador_marcos>200){
+			estado=disparando_fuego2;
+			dispararBalasFuego2(800-130,150,1);
+			printf("Cambiando de estado a disparar balas fuego2\n");
+		}
+		if(estado==disparando_fuego2 && contador_marcos>300){
+			estado=inmunidad;
+			tenerInmunidad();
+			tenerInvisibilidad();
+			printf("Cambiando de estado a inmune\n");
+		}
+		if(estado==inmunidad && inmune <= 0 ){
+			contador_marcos=0;
+			estado=comenzo;
+			printf("Cambiando de estado a nuevo ciclo\n");
+		}
 	}
 
 
 } 
 
 void MonstruoFinalNivel2::hazLoTuyo(){
-	
+	contador_marcos++;
+	if(estado==comenzo){
+		estado=disparando_fuego;
+		dispararBalasFuego(500,300,2);
+		
+	}
+	if(estado==disparando_fuego && contador_marcos>200){
+		estado=disparando_fuego2;
+		dispararBalasFuego2(500,300,2);
+		
+	}
+	if(estado==disparando_fuego2 && contador_marcos>300){
+		estado=disparando_misiles;
+		dispararMisiles(500,300,2);
+		
+	}
+	if(estado==disparando_misiles && contador_marcos>400){
+		contador_marcos=0;
+		estado=comenzo;
+		
+	}
 }
 
 void MonstruoFinalNivel3::hazLoTuyo(){
-	
+	contador_marcos++;
+	if(estado==comenzo){
+		estado=inmunidad;
+		dispararBalasFuego(500,300,3);
+		dispararBalasFuego2(500,300,3);
+	}
+	if(estado==inmunidad && inmune <= 0 ){
+		estado=disparando_misiles;
+		dispararMisiles(500,300,3);
+	}
+	if(estado==disparando_misiles && contador_marcos>300){
+		estado=disparando_fuego;
+		dispararBalasFuego(500,300,3);
+		
+	}
+	if(estado==disparando_fuego && contador_marcos>400){
+		contador_marcos=0;
+		estado=comenzo;
+	}
 }
 
 
 MonstruoFinalNivel1::MonstruoFinalNivel1(juego* j,int x, int y, int life):
-MonstruoFinal( j,x,  y, life, 1000, 1 ){ }
+MonstruoFinal( j,x,  y, life, 7300, 1 ){}
 
 MonstruoFinalNivel2::MonstruoFinalNivel2(juego* j,int x, int y, int life):
-MonstruoFinal(j, x, y, life, 3000, 2){}
+MonstruoFinal(j, x, y, life, 300, 2){}
 
 MonstruoFinalNivel3::MonstruoFinalNivel3(juego* j,int x, int y, int life):
-MonstruoFinal( j, x,  y,  life , 1000 , 3){}
+MonstruoFinal( j, x,  y,  life , 7000 , 3){}
 
 MonstruoFinalNivel1::~MonstruoFinalNivel1(){}
 MonstruoFinalNivel2::~MonstruoFinalNivel2(){}
 MonstruoFinalNivel3::~MonstruoFinalNivel3(){}
 
+string MonstruoFinalNivel1::serializar(){
+
+
+	string serial = to_string(Constantes::marcianito);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	//rectDestino.x < 1 ? 1 : rectDestino.x
+	return serial;
+}
+
+string MonstruoFinalNivel2::serializar(){
+	string serial = to_string(Constantes::marcianito);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+
+	return serial;
+}
+
+string MonstruoFinalNivel3::serializar(){
+	string serial = to_string(Constantes::marcianito);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+
+	return serial;
+}
