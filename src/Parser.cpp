@@ -119,7 +119,6 @@ void Parser::parsearBalasEnemigas(string msj){
 		datos->setPosX(dameElInt(msj.substr(i + contador * tamanioMsj + 1,RESPUESTA_POSY)));
 		datos->setPosY(dameElInt(msj.substr(i + contador * tamanioMsj + 5,RESPUESTA_POSY)));
 		datos->setTipoArma((Constantes::TipoArma) (msj[i] - '0'));
-		cout<<msj[i]<<endl;
 
 		/*switch(msj[i]){
 			case ('1'):

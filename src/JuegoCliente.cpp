@@ -95,7 +95,6 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 int JuegoCliente::establecerPuntaje(int puntaje)
 {
 	etiqueta_puntos.texto (std::to_string(puntaje).c_str());
->>>>>>> 8ba7eea37bd293524cc76ff00e6fd8c7e3f1e2b9
 }
 
 int JuegoCliente::jugador() const
@@ -369,14 +368,9 @@ void JuegoCliente::dibujar(){
 
 	dibujameLasVidas();
 
-<<<<<<< HEAD
 	//if(p.estaElEnemigo()) dibujarEnemigoFinal();
-
-=======
-	if(p.estaElEnemigo()) dibujarEnemigoFinal();
 	
 	contenedor_principal::dibujar ();
->>>>>>> 8ba7eea37bd293524cc76ff00e6fd8c7e3f1e2b9
 }
 
 JuegoCliente::~JuegoCliente() {
