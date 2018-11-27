@@ -1148,16 +1148,6 @@ void juego::actualizar ()
 				boby.perderVida();
 			}
 		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby.cambiarArma(pickup);
-			}
-		}
-
 		//veo si toca las balas de los enemigos
 		i=0;
 		while (i<balasEnemigas.size()){
@@ -1167,17 +1157,19 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
-	/*
+
+	//veo si toca algun item
 	if(boby.enJuego()){
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+		i=0;
+		while (i<vectorItems.size()){
+			if (!vectorItems[i]->derrotado() && collision(boby.getRectaDestino(),vectorItems[i]->getRectaDestino())){
 				vectorItems[i]->perderVida();
 				pickup= vectorItems[i]->darContenido();
 				boby.cambiarArma(pickup);
-			}
+				vectorItems.erase(vectorItems.begin() + i);
+			}else i++;
 		}
-	}*/
+	}
 
 	if(boby2.enJuego()&&(boby2.getInvincibilityFrames() == 0)){
 
@@ -1188,14 +1180,6 @@ void juego::actualizar ()
 			}
 		}
 
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby2.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby2.cambiarArma(pickup);
-			}
-		}
 
 		//veo si toca las balas de los enemigos
 		i=0;
@@ -1206,33 +1190,25 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
-	/*
+	//veo si toca algun item
 	if(boby2.enJuego()){
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby2.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+		i=0;
+		while (i<vectorItems.size()){
+			if (!vectorItems[i]->derrotado() && collision(boby2.getRectaDestino(),vectorItems[i]->getRectaDestino())){
 				vectorItems[i]->perderVida();
 				pickup= vectorItems[i]->darContenido();
 				boby2.cambiarArma(pickup);
-			}
+				vectorItems.erase(vectorItems.begin() + i);
+			}else i++;
 		}
 	}
-	*/
+
 	if(boby3.enJuego()&&(boby3.getInvincibilityFrames() == 0)){
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby3.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby3.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby3.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby3.cambiarArma(pickup);
 			}
 		}
 
@@ -1245,33 +1221,25 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
-	/*
+	//veo si toca algun item
 	if(boby3.enJuego()){
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby3.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+		i=0;
+		while (i<vectorItems.size()){
+			if (!vectorItems[i]->derrotado() && collision(boby3.getRectaDestino(),vectorItems[i]->getRectaDestino())){
 				vectorItems[i]->perderVida();
 				pickup= vectorItems[i]->darContenido();
 				boby3.cambiarArma(pickup);
-			}
+				vectorItems.erase(vectorItems.begin() + i);
+			}else i++;
 		}
 	}
-	*/
+
 	if(boby4.enJuego()&&(boby4.getInvincibilityFrames() == 0)){
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby4.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby4.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby4.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby4.cambiarArma(pickup);
 			}
 		}
 
@@ -1284,18 +1252,18 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
-	/*
+	//veo si toca algun item
 	if(boby4.enJuego()){
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby4.getRectaDestino(),vectorItems[i]->getRectaDestino())){
+		i=0;
+		while (i<vectorItems.size()){
+			if (!vectorItems[i]->derrotado() && collision(boby4.getRectaDestino(),vectorItems[i]->getRectaDestino())){
 				vectorItems[i]->perderVida();
 				pickup= vectorItems[i]->darContenido();
 				boby4.cambiarArma(pickup);
-			}
+				vectorItems.erase(vectorItems.begin() + i);
+			}else i++;
 		}
 	}
-	*/
 	////////////////////////////////////////////////////
 
 

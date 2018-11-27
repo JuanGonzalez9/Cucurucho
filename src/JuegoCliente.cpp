@@ -85,16 +85,20 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	
 	SDL_Color color = {55, 149, 242, 255};
 	SDL_Color color_borde = {255, 255, 255, 255};
-	etiqueta_puntos.anclado_x = control::opuesto;
+	etiqueta_puntos.anclado_x = control::medio;
 	etiqueta_puntos.texto ("00000");
 	etiqueta_puntos.color (color);
 	etiqueta_puntos.borde (2, color_borde);
 	agregar (&etiqueta_puntos, false);
 }
 
-int JuegoCliente::establecerPuntaje(int puntaje)
+void JuegoCliente::establecerPuntaje(int puntaje)
 {
-	etiqueta_puntos.texto (std::to_string(puntaje).c_str());
+	std::string s = std::to_string(puntaje);
+	if (s.length() < 5) {
+		s.insert(0, 5-s.length(), '0');
+	}
+	etiqueta_puntos.texto (s.c_str());
 }
 
 int JuegoCliente::jugador() const
