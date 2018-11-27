@@ -21,6 +21,7 @@ public:
 	std::string texto () const;
 	void metricas (SDL_Renderer *renderer, int &ancho, int &alto);
 	void color (const SDL_Color &color);
+	void borde (int ancho, SDL_Color color);
 protected:
 	std::string s;
 	fuente f;

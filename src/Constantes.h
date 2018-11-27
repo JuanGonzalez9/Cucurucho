@@ -96,7 +96,10 @@ public:
 
 	enum TipoArma{
 		sinBala,
-		normal
+		normal,
+		balaFuego,
+		balaFuego2,
+		balaMisil
 	};
 
 	enum TipoBala{

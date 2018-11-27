@@ -14,6 +14,7 @@ Bullet::Bullet(int x,int y,int xVel,int yVel,int tamanio,int last):EntidadDibuja
 	xvel=xVel;
 	yvel=yVel;
 	duracion=last;
+	tipo = Constantes::normal;
 	//duracion=bulletRange;
 }
 
@@ -53,11 +54,18 @@ void Bullet::empujarAtras(int i, int nivel){
 	}
 }
 
+void Bullet::setTipoBala(Constantes::TipoArma t){
+	this->tipo = t;
+}
+
 string Bullet::serializar(){
 	// 1 es bala normal
-	string serial = to_string(1);
-	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
-	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	string serial = "";
+	if(rectDestino.x > -300 && rectDestino.x < 10000 && rectDestino.y > -300 && rectDestino.y < 10000){
+		serial = to_string(tipo);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	}
 	return serial;
 }
 

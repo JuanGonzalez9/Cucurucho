@@ -4,6 +4,11 @@ R"(<?xml version="1.0"?>
     <level>ERROR</level>
   </debug>
   <cantidad_jugadores>1</cantidad_jugadores>
+  <cantidad_enemigos>
+  	<nivel_1>41</nivel_1>
+  	<nivel_2>42</nivel_2>
+  	<nivel_3>43</nivel_3>
+  </cantidad_enemigos>
   <dialogo>
     <logo_c>imagenes/logo_c.png</logo_c>
     <logo_ontra>imagenes/logo_ontra.png</logo_ontra>

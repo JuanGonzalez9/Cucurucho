@@ -411,6 +411,7 @@ void MonstruoFinal::dispararBalasFuego(int coordenadaX,int coordenadaY,int level
 		vel_y++;		
 		nuevaBala = new Bullet(coordenadaX,coordenadaY,vel_x,vel_y,2,100);
 		nuevaBala->obtenerTextura("//configuracion//items//bala_fuego//sprite", j->dameElRender());
+		nuevaBala->setTipoBala(Constantes::balaFuego);
 		nuevaBala->actualizarRectOrigenOriginal();
 		j->agregarBalaEnemigo(nuevaBala);
 	}
@@ -439,6 +440,7 @@ void MonstruoFinal::dispararBalasFuego2(int coordenadaX,int coordenadaY, int lev
 		vel_y--;		
 		nuevaBala = new Bullet(coordenadaX,coordenadaY,vel_x,vel_y,2,100);
 		nuevaBala->obtenerTextura("//configuracion//items//bala_fuego_2//sprite", j->dameElRender());
+		nuevaBala->setTipoBala(Constantes::balaFuego2);
 		nuevaBala->actualizarRectOrigenOriginal();
 		j->agregarBalaEnemigo(nuevaBala);
 	}
@@ -471,11 +473,13 @@ void MonstruoFinal::dispararMisiles(int coordenadaX,int coordenadaY, int level){
 			vel_x--;
 			nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
 			nuevaBala->actualizarRectOrigenOriginal();
+			nuevaBala->setTipoBala(Constantes::balaMisil);
 			j->agregarBalaEnemigo(nuevaBala);
 			//Aca poner sprite rotado.
 		}
 		else{
 			nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+			nuevaBala->setTipoBala(Constantes::balaMisil);
 			nuevaBala->actualizarRectOrigenOriginal();
 			j->agregarBalaEnemigo(nuevaBala);
 		}

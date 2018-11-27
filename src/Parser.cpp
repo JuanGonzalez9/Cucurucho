@@ -62,7 +62,7 @@ void Parser::parsearEnemigos(string msj){
 		datosE->setPosX(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + 1,RESPUESTA_POSY)));
 		datosE->setPosY(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + 5,RESPUESTA_POSY)));
 
-		datosE->setTipoEnemigo((Constantes::TipoEnemigo)(msj[i]-'0'));
+		datosE->setTipoEnemigo((Constantes::TipoEnemigo)(msj[i] - '0'));
 		vEnemigos.push_back(datosE);	
 		i += tamanioMsjEnemigo;
 	}
@@ -114,19 +114,20 @@ void Parser::parsearBalasEnemigas(string msj){
 	while(contador < MAX_BALAS_ENEMIGAS && msj[i] != '0'){
 		DatosBalaEnemiga* datos = new DatosBalaEnemiga();
 
-		cout<<msj.substr(i + contador * tamanioMsj + 5,RESPUESTA_POSY)<<endl;
-		cout<<msj.substr(i + contador * tamanioMsj + 1,RESPUESTA_POSY)<<endl;
+		//cout<<msj.substr(i + contador * tamanioMsj + 5,RESPUESTA_POSY)<<endl;
+		//cout<<msj.substr(i + contador * tamanioMsj + 1,RESPUESTA_POSY)<<endl;
 		datos->setPosX(dameElInt(msj.substr(i + contador * tamanioMsj + 1,RESPUESTA_POSY)));
 		datos->setPosY(dameElInt(msj.substr(i + contador * tamanioMsj + 5,RESPUESTA_POSY)));
+		datos->setTipoArma((Constantes::TipoArma) (msj[i] - '0'));
 
-		switch(msj[i]){
+		/*switch(msj[i]){
 			case ('1'):
 				datos->setTipoArma(Constantes::normal);
 				break;
 			default:
 				cout<<"No conozco ese tipo de arma"<<endl;
 				break;
-		}		
+		}*/		
 		
 		vBalasEnemigas.push_back(datos);	
 		i += tamanioMsj;
