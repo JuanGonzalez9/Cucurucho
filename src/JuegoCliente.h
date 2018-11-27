@@ -18,7 +18,7 @@ public:
 	void dibujar();
 	void manejarEventos();
 	int jugador() const;
-	int establecerPuntaje(int puntaje);
+	void establecerPuntaje(int puntaje);
 	virtual ~JuegoCliente();
 private:
 	Parser p;
