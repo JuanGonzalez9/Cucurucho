@@ -85,7 +85,7 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	
 	SDL_Color color = {55, 149, 242, 255};
 	SDL_Color color_borde = {255, 255, 255, 255};
-	etiqueta_puntos.anclado_x = control::opuesto;
+	etiqueta_puntos.anclado_x = control::medio;
 	etiqueta_puntos.texto ("00000");
 	etiqueta_puntos.color (color);
 	etiqueta_puntos.borde (2, color_borde);
