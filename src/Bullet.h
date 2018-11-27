@@ -3,6 +3,7 @@
 #include "EntidadDibujable.h"
 #include "Personaje.h"
 #include "Utils.h"
+#include "Constantes.h"
 
 #ifndef BULLET_H
 #define BULLET_H
@@ -11,6 +12,7 @@ class Bullet : public EntidadDibujable{
 
 private:
 	int xvel, yvel, duracion;
+	Constantes::TipoArma tipo;
 
 public:
 
@@ -24,6 +26,7 @@ public:
 	void dibujar(SDL_Renderer* renderer);
 	void empujarAtras(int i, int nivel);
 	string serializar();
+	void setTipoBala(Constantes::TipoArma t);
 	
 
 };

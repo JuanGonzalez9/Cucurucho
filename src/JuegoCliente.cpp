@@ -62,8 +62,24 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	nuevoItem->obtenerTextura("//configuracion//items//bazooka//sprite", renderer);
 	vItems.push_back(nuevoItem);
 
+	//Texturas Bala
 	Bullet* nuevaBala = new Bullet(0,0,0,0,2,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala2//sprite", renderer);
+	vBalaEnemiga.push_back(nuevaBala);
+
+	nuevaBala = new Bullet(0,0,0,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego//sprite", renderer);
+	nuevaBala->actualizarRectOrigenOriginal();
+	vBalaEnemiga.push_back(nuevaBala);
+
+	nuevaBala = new Bullet(0,0,0,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_fuego_2//sprite", renderer);
+	nuevaBala->actualizarRectOrigenOriginal();
+	vBalaEnemiga.push_back(nuevaBala);
+
+	nuevaBala = new Bullet(0,0,0,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", renderer);
+	nuevaBala->actualizarRectOrigenOriginal();
 	vBalaEnemiga.push_back(nuevaBala);
 }
 
@@ -269,7 +285,10 @@ void JuegoCliente::dibujarBalasEnemigas(){
 		Constantes::TipoArma tipo = vDatosBalaEnemiga[i]->getTipoArma();
 		int x = vDatosBalaEnemiga[i]->getPosX();
 		int y = vDatosBalaEnemiga[i]->getPosY();
-		switch(tipo){
+		//cout<<"(x,y) = "<<x<<" "<<y<<" tipo = "<<tipo<<endl;
+		vBalaEnemiga[tipo - 1]->setPos(x,y);
+		vBalaEnemiga[tipo - 1]->dibujar(renderer);
+		/*switch(tipo){
 			case (Constantes::normal):
 				vBalaEnemiga[0]->setPos(x,y);
 				vBalaEnemiga[0]->dibujar(renderer);
@@ -277,7 +296,7 @@ void JuegoCliente::dibujarBalasEnemigas(){
 			default:
 				cout<<"No conozco ese tipo de arma"<<endl;
 				break;
-		}
+		}*/
 	}
 }
 
@@ -335,7 +354,7 @@ void JuegoCliente::dibujar(){
 
 	dibujameLasVidas();
 
-	if(p.estaElEnemigo()) dibujarEnemigoFinal();
+	//if(p.estaElEnemigo()) dibujarEnemigoFinal();
 
 }
 
