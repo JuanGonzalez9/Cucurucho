@@ -77,33 +77,23 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	//luego asigno textura correspondiente
 
 	Enemigo* nuevoEnemigo;
-	nuevoEnemigo = new Marcianito(750,-80,1,2700,2);
-	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
+	nuevoEnemigo = new Marcianito(750,-340,1,2700,2);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
 	nuevoEnemigo = new Ovni(800,80,1,1920,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
-	nuevoEnemigo = new Marcianito(800,240,1,1400,1);
-	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
+	nuevoEnemigo = new Marcianito(800,220,1,1400,1);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
-	nuevoEnemigo = new Marcianito(640,240,1,640,1);
-	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
+	nuevoEnemigo = new Marcianito(800,220,1,2640,1);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
-	//FALTA PARSER PARA QUE NO ROMPA
-	nuevoEnemigo = new Turret(800,400,1,2000,1);
-	nuevoEnemigo->obtenerTextura("//configuracion//personajes//turret//sprite", renderer);
-	vectorEnemigos.push_back(nuevoEnemigo);
-
-	//FALTA PARSER PARA QUE NO ROMPA
-	nuevoEnemigo = new Paracaidas(600,-86,1,2000,1);
-	nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
-	vectorEnemigos.push_back(nuevoEnemigo);
-
-	nuevoEnemigo = new Ovni(800,50,1,2200,2);
+	nuevoEnemigo = new Ovni(800,50,1,1800,2);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 	///////////////////////////////////////////////////////////
@@ -632,11 +622,11 @@ void juego::manejar_eventos ()
 		}		
 	}
 
-	/*if(cliente->quiereAccion(Constantes::nivel3)){
+	if(cliente->quiereAccion(Constantes::nivel3)){
 		if(nivel == 2){
 			cambioNivel=true;
 		}
-	}*/
+	}
 
 	//DISPAROS
 	if(!boby.esGrisado()&&boby.esActivo()&&cliente->quiereAccion(Constantes::disparo)){
@@ -772,21 +762,20 @@ void juego::manejar_eventos ()
 		
 	}
 
-	if(alguienQuiereGodMode()){
+	if(apretandoGodMode(state)){
 
-		/*if(boby.esGOD()){
+		if(boby.esGOD()){
 			boby.desactivarGodMode();
-			boby2.desactivarGodMode();
 			printf("DESACTIVANDO GOD MODE\n");
 			SDL_Delay(50);
 			
 		}
-		else{*/
+		else{
 			printf("ACTIVANDO GOD MODE\n");
-			godModeParaTodos();
+			boby.activarGodMode();
 			SDL_Delay(50);
 
-		//}
+		}
 		
 	}
 
@@ -813,6 +802,12 @@ void juego::manejar_eventos ()
 
 			case (SDL_QUIT):
 				termino = true;
+				break;
+
+			case(SDL_KEYUP):
+				if (e.key.keysym.sym == SDLK_F4){
+					boby.activarGodMode();
+				}
 				break;
 
 			default:
@@ -1128,17 +1123,8 @@ void juego::actualizar ()
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
-			if(vectorEnemigos[i]->esActivo() && !vectorEnemigos[i]->derrotado() && collision(boby.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
+			if(!vectorEnemigos[i]->derrotado() && collision(boby.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby.cambiarArma(pickup);
 			}
 		}
 
@@ -1151,7 +1137,6 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
-	/*
 	if(boby.enJuego()){
 		//veo si toca algun item
 		for(int i = 0; i < vectorItems.size(); i++){
@@ -1161,7 +1146,7 @@ void juego::actualizar ()
 				boby.cambiarArma(pickup);
 			}
 		}
-	}*/
+	}
 
 	if(boby2.enJuego()&&(boby2.getInvincibilityFrames() == 0)){
 
@@ -1169,15 +1154,6 @@ void juego::actualizar ()
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby2.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby2.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby2.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby2.cambiarArma(pickup);
 			}
 		}
 
@@ -1190,7 +1166,7 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
-	/*
+
 	if(boby2.enJuego()){
 		//veo si toca algun item
 		for(int i = 0; i < vectorItems.size(); i++){
@@ -1201,22 +1177,13 @@ void juego::actualizar ()
 			}
 		}
 	}
-	*/
+
 	if(boby3.enJuego()&&(boby3.getInvincibilityFrames() == 0)){
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby3.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby3.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby3.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby3.cambiarArma(pickup);
 			}
 		}
 
@@ -1229,7 +1196,6 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
-	/*
 	if(boby3.enJuego()){
 		//veo si toca algun item
 		for(int i = 0; i < vectorItems.size(); i++){
@@ -1240,22 +1206,13 @@ void juego::actualizar ()
 			}
 		}
 	}
-	*/
+
 	if(boby4.enJuego()&&(boby4.getInvincibilityFrames() == 0)){
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
 			if(!vectorEnemigos[i]->derrotado() && collision(boby4.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby4.perderVida();
-			}
-		}
-
-		//veo si toca algun item
-		for(int i = 0; i < vectorItems.size(); i++){
-			if(!vectorItems[i]->derrotado() && collision(boby4.getRectaDestino(),vectorItems[i]->getRectaDestino())){
-				vectorItems[i]->perderVida();
-				pickup= vectorItems[i]->darContenido();
-				boby4.cambiarArma(pickup);
 			}
 		}
 
@@ -1268,7 +1225,6 @@ void juego::actualizar ()
 			}else i++;
 		}
 	}
-	/*
 	if(boby4.enJuego()){
 		//veo si toca algun item
 		for(int i = 0; i < vectorItems.size(); i++){
@@ -1279,7 +1235,6 @@ void juego::actualizar ()
 			}
 		}
 	}
-	*/
 	////////////////////////////////////////////////////
 
 
@@ -1338,7 +1293,7 @@ void juego::actualizar ()
 				//POSTA: va de 2 a 10
 				//dropItem= rand() % 10 + 2;
 				//DEBUG: va de 1 a 4
-				dropItem= rand() % 4 + 2;
+				dropItem= rand() % 4 + 1;
 				if(dropItem<=4){
 					//siiii! suelta un item!
 					coordXItem= vectorEnemigos[i]->coordenadaXParaItem();
@@ -1877,18 +1832,6 @@ bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
 	if(rect1.x + rect1.w <= rect2.x)
 		return false;
 	return true;
-}
-
-//Si alguno de los clientes aprieta la tecla W
-bool juego::alguienQuiereGodMode(){
-	return (cliente->quiereAccion(Constantes::nivel3) || cliente2->quiereAccion(Constantes::nivel3) || cliente3->quiereAccion(Constantes::nivel3) || cliente4->quiereAccion(Constantes::nivel3));
-}
-
-void juego::godModeParaTodos(){
-	boby.activarGodMode();
-	boby2.activarGodMode();
-	boby3.activarGodMode();
-	boby4.activarGodMode();
 }
 
 void juego::setAcciones(char* msj, int numeroCliente){

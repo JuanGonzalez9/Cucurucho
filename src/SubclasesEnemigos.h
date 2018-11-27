@@ -115,7 +115,7 @@ public:
 	void hazLoTuyo();	
 
 protected:
-
+	int marco = 0;
 };
 
 class MonstruoFinalNivel2 : public MonstruoFinal{
