@@ -148,29 +148,46 @@ bool Enemigo::quiereDisparar(){
 	return(quieroDisparar);
 }
 
+
 void Enemigo::activar(int nivel, int coordenada, int pos){
 	int desfasaje=0;
+	
 	if((vidas>0)&&(nivel==nivelActivo)&&(!this->pasaBorde(nivel))){
-		if((nivel==2)&&(coordenada<=coordenadaActiva)){
-			activo=true;
-			//arreglo el desfasaje, que ocurre si uno de los jugadores
-			//se pasa de mambo y reconecta pasando la mitad de la pantalla
-			//para nivel 2 hay que correr la recta de destino y posicion para arriba segun:
-			//(coordenadaActiva - coordenadaMaxima)-(300-posicionMaxima)
-			desfasaje= coordenadaActiva - coordenada - 300 + pos;
-			rectDestino.y+=desfasaje;
-			posY+=desfasaje;
-		}else{
-			if((nivel!=2)&&(coordenada>=coordenadaActiva)){
-				//desfasaje para nivel 1 o 3 es:
-				//(coordact-coordmax)+(posmax-400)
+
+		if(nivel!=2){
+			//para ver si tengo que activar, hago coordenada-pos (el resultado es la coordenada al borde izquierdo de la pantalla)
+			//y le sumo la posX donde quiero que aparezca el enemigo. Esto lo llamo desfasaje.
+			//Si este valor supera la coordenada activa, el enemigo se activa.
+			desfasaje= coordenada-pos+rectDestino.x;
+
+			//la condicion seria if (desfasaje>=coordenadaActiva), activo.
+			//en otras palabras, if (desfasaje-coordenadaActiva>=0), activo.
+
+			desfasaje= desfasaje-coordenadaActiva;
+
+			if(desfasaje>=0){
 				activo=true;
-				//desfasaje= coordenadaActiva - coordenada +pos - 400;
-				//desfasaje= coordenadaActiva - coordenada +pos;
-				rectDestino.x+=desfasaje;
-				posX+=desfasaje;
+				//Pero para que hice esta resta innecesaria?
+				//Bueno, supongamos que tengo un enemigo con X=200, coordenadaActiva=2000.
+				//si boby esta en una coordenada y posicion tal que coordenada-pos+rectDestino.x da 1997, entonces no debo activar.
+				//PERO. Que pasa si en el proximo frame boby avanza 5 px, de tal manera que coordenada-pos+rectDestino.x=2002?
+				//El enemigo se activa, eso está bien...
+				//Pero si le digo que aparezca en la posicionX =200... va a aparecer corrido
+				//Le tengo que restar esa diferencia a la posicion.
+				rectDestino.x -=desfasaje;
+				posX -=desfasaje;
 			}
-		}
+		}else{
+			//idem pero con las coordenadasY
+			desfasaje= coordenada-pos+rectDestino.y -coordenadaActiva;
+
+			if(desfasaje<=0){
+				activo=true;
+				rectDestino.y+=desfasaje;
+				posY+=desfasaje;
+			}
+
+		}	
 	}
 }
 

@@ -31,7 +31,7 @@ public:
 	//activacion
 	bool pasaBorde(int nivel);
 	void empujarAtras(int i, int nivel);
-	void activar(int nivel, int coordenada, int pos);
+	virtual void activar(int nivel, int coordenada, int pos);
 	void actualizar(int nivel, int coordenada);
 	virtual void hazLoTuyo();
 
