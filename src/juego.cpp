@@ -77,7 +77,7 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	//luego asigno textura correspondiente
 
 	Enemigo* nuevoEnemigo;
-	nuevoEnemigo = new Marcianito(750,-340,1,2700,2);
+	nuevoEnemigo = new Marcianito(750,-80,1,2700,2);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
@@ -85,11 +85,11 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
-	nuevoEnemigo = new Marcianito(800,220,1,1400,1);
+	nuevoEnemigo = new Marcianito(800,240,1,1400,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
-	nuevoEnemigo = new Marcianito(800,220,1,2640,1);
+	nuevoEnemigo = new Marcianito(800,240,1,2640,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
