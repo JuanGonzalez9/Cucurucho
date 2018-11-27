@@ -55,7 +55,6 @@ string EscuchadorDeAcciones::obtenerAcciones(){
 
 	if(apretandoNivel3(state)){
 		acciones.set(Constantes::nivel3);
-		jugando = false;
 	}
 
 	return acciones.to_string();

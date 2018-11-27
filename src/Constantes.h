@@ -81,7 +81,9 @@ public:
 		ovni,
 		MonstruoNivel1,
 		MonstruoNivel2,
-		MonstruoNivel3
+		MonstruoNivel3,
+		turret,
+		paracaidas
 	};
 
 	enum TipoItem{

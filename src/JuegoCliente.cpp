@@ -15,16 +15,17 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	bala_rectOrigen = {0,0,32,32};
 	bala_rectDestino = {0,0,8,8};
 
+	//Texturas Enemigos
 	Enemigo* nuevoEnemigo;
 	nuevoEnemigo = new Marcianito(750,-340,1,2700,2);
-	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
 	vEnemigos.push_back(nuevoEnemigo);
 
 	nuevoEnemigo = new Ovni(800,80,1,1920,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vEnemigos.push_back(nuevoEnemigo);
 
-	/*nuevoEnemigo = new MonstruoFinalNivel1(this,800,80,5);
+	nuevoEnemigo = new MonstruoFinalNivel1(this,800,80,5);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 	vEnemigos.push_back(nuevoEnemigo);
 
@@ -34,8 +35,17 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 
 	nuevoEnemigo = new MonstruoFinalNivel3(this,800,80,10);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//enemigo3//sprite", renderer);
-	vEnemigos.push_back(nuevoEnemigo);*/
+	vEnemigos.push_back(nuevoEnemigo);
 
+	nuevoEnemigo = new Turret(0,0,1,2000,1);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//turret//sprite", renderer);
+	vEnemigos.push_back(nuevoEnemigo);
+
+	nuevoEnemigo = new Paracaidas(600,-86,1,2000,1);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
+	vEnemigos.push_back(nuevoEnemigo);
+
+	//Texturas Items
 	Item* nuevoItem = new Item(0,0,1,1920,1,1);
 	nuevoItem->obtenerTextura("//configuracion//items//vidaitem//sprite", renderer);
 	vItems.push_back(nuevoItem);
@@ -214,21 +224,8 @@ void JuegoCliente::dibujarEnemigos(){
 		int x = vDatosEnemigo[i]->getPosX();
 		int y = vDatosEnemigo[i]->getPosY();
 		//cout<<"(x,y) "<<x<<" , "<<y<<endl;
-		//vEnemigos[tipo-1]->setPos(x,y);
-		//vEnemigos[tipo-1]->dibujar(renderer);
-		switch(tipo){
-			case (Constantes::marcianito):
-				vEnemigos[0]->setPos(x,y);
-				vEnemigos[0]->dibujar(renderer);
-				break;
-			case (Constantes::ovni):
-				vEnemigos[1]->setPos(x,y);
-				vEnemigos[1]->dibujar(renderer);
-				break;
-			default:
-				cout<<"Y aca que paso? No conozco ese tipo de enemigos"<<endl;
-				break;
-		}
+		vEnemigos[tipo-1]->setPos(x,y);
+		vEnemigos[tipo-1]->dibujar(renderer);
 	}
 }
 

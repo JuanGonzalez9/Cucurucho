@@ -56,6 +56,7 @@ public:
 	void disparo();
 	int disparoYVel();
 	int disparoXVel();
+	string serializar();
 
 protected:
 	int apunteX;
@@ -73,6 +74,7 @@ public:
 	void disparo();
 	int disparoYVel();
 	int disparoXVel();
+	string serializar();
 
 protected:
 
@@ -107,7 +109,7 @@ protected:
 class MonstruoFinalNivel1 : public MonstruoFinal{
 public:
 	MonstruoFinalNivel1(juego* j,int x, int y, int life);
-	virtual string serializar();
+	string serializar();
 	virtual ~MonstruoFinalNivel1();
 	void posicionar();
 	void hazLoTuyo();	
@@ -119,7 +121,7 @@ protected:
 class MonstruoFinalNivel2 : public MonstruoFinal{
 public:
 	MonstruoFinalNivel2(juego* j,int x, int y, int life);
-	virtual string serializar();
+	string serializar();
 	virtual ~MonstruoFinalNivel2();
 
 	void hazLoTuyo();	
@@ -131,7 +133,7 @@ protected:
 class MonstruoFinalNivel3 : public MonstruoFinal{
 public:
 	MonstruoFinalNivel3(juego* j,int x, int y, int life);
-	virtual string serializar();
+	string serializar();
 	virtual ~MonstruoFinalNivel3();
 
 	void hazLoTuyo();	

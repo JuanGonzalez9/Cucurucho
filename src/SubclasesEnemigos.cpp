@@ -275,6 +275,17 @@ int Turret::disparoYVel(){
 	return apunteY;
 }
 
+string Turret::serializar(){
+	string serial = "";
+	if(rectDestino.x > -300 && rectDestino.x < 10000 && rectDestino.y > -300 && rectDestino.y < 10000){
+		serial = to_string(Constantes::turret);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	}
+
+	return serial;
+}
+
 Turret::~Turret() {
 	// TODO Auto-generated destructor stub
 }
@@ -324,6 +335,17 @@ int Paracaidas::disparoXVel(){
 
 int Paracaidas::disparoYVel(){
 	return 2;
+}
+
+string Paracaidas::serializar(){
+	string serial = "";
+	if(rectDestino.x > -300 && rectDestino.x < 10000 && rectDestino.y > -300 && rectDestino.y < 10000){
+		serial = to_string(Constantes::paracaidas);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
+		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	}
+
+	return serial;
 }
 
 Paracaidas::~Paracaidas() {
@@ -637,7 +659,7 @@ MonstruoFinalNivel3::~MonstruoFinalNivel3(){}
 string MonstruoFinalNivel1::serializar(){
 
 
-	string serial = to_string(Constantes::marcianito);
+	string serial = to_string(Constantes::MonstruoNivel1);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 	//rectDestino.x < 1 ? 1 : rectDestino.x
@@ -645,7 +667,7 @@ string MonstruoFinalNivel1::serializar(){
 }
 
 string MonstruoFinalNivel2::serializar(){
-	string serial = to_string(Constantes::marcianito);
+	string serial = to_string(Constantes::MonstruoNivel2);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 
@@ -653,7 +675,7 @@ string MonstruoFinalNivel2::serializar(){
 }
 
 string MonstruoFinalNivel3::serializar(){
-	string serial = to_string(Constantes::marcianito);
+	string serial = to_string(Constantes::MonstruoNivel3);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 

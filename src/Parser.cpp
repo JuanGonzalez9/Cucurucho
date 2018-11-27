@@ -62,13 +62,7 @@ void Parser::parsearEnemigos(string msj){
 		datosE->setPosX(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + 1,RESPUESTA_POSY)));
 		datosE->setPosY(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + 5,RESPUESTA_POSY)));
 
-		if(msj[i] == '1'){
-			datosE->setTipoEnemigo(Constantes::marcianito);
-		}
-		if(msj[i] == '2'){
-			datosE->setTipoEnemigo(Constantes::ovni);
-		}
-		//datosE->setTipoEnemigo((Constantes::TipoEnemigo)(msj[i]-'0'));
+		datosE->setTipoEnemigo((Constantes::TipoEnemigo)(msj[i]-'0'));
 		vEnemigos.push_back(datosE);	
 		i += tamanioMsjEnemigo;
 	}

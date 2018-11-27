@@ -94,14 +94,14 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	vectorEnemigos.push_back(nuevoEnemigo);
 
 	//FALTA PARSER PARA QUE NO ROMPA
-	//nuevoEnemigo = new Turret(800,400,1,2000,1);
-	//nuevoEnemigo->obtenerTextura("//configuracion//personajes//turret//sprite", renderer);
-	//vectorEnemigos.push_back(nuevoEnemigo);
+	nuevoEnemigo = new Turret(800,400,1,2000,1);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//turret//sprite", renderer);
+	vectorEnemigos.push_back(nuevoEnemigo);
 
 	//FALTA PARSER PARA QUE NO ROMPA
-	//nuevoEnemigo = new Paracaidas(600,-86,1,2000,1);
-	//nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
-	//vectorEnemigos.push_back(nuevoEnemigo);
+	nuevoEnemigo = new Paracaidas(600,-86,1,2000,1);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
+	vectorEnemigos.push_back(nuevoEnemigo);
 
 	nuevoEnemigo = new Ovni(800,50,1,2200,2);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
