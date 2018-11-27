@@ -93,6 +93,10 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
+	//nuevoEnemigo = new Turret(800,400,1,2000,1);
+	//nuevoEnemigo->obtenerTextura("//configuracion//personajes//turret//sprite", renderer);
+	//vectorEnemigos.push_back(nuevoEnemigo);
+
 	nuevoEnemigo = new Ovni(800,50,1,1800,2);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);

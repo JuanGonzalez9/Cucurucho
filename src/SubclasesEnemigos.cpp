@@ -154,6 +154,138 @@ Marcianito::~Marcianito() {
 	// TODO Auto-generated destructor stub
 }
 
+//////////////////////////////////////TURRET////////////////////////////////////////
+//estacionario, apunta y dispara en doce direcciones
+
+Turret::Turret(int x,int y, int coorX, int coordenada, int nivel){
+	Enemigo();
+
+	rectOrigen = {0,0,34,34};
+	rectDestino = {x,y,80,80};
+	posX=x;
+	posY=y;
+	
+	if(nivel==2){
+		coordenadaX=x;
+		coordenadaY=coordenada;
+		coordenadaActiva=coordenada-y+300;
+	}else{
+		coordenadaY=y;
+		coordenadaX=coordenada;
+		coordenadaActiva=coordenada-x+400;
+	}
+
+	nivelActivo=nivel;
+	activo=false;
+	marcapasos=0;
+	apunteX=0;
+	apunteY=-5;
+}
+
+void Turret::hazLoTuyo(){
+
+	//el turret rota 
+	//esta animado y dispara hacia donde mira
+
+	
+	//ciclo de apunte: marcapasos indica las fases (0 apunta arriba, 3 apunta derecha, etc)
+	if (shootTimer==0){
+		//en medio de cada ciclo de disparo, roto el turret
+		switch(marcapasos){
+		case 0:
+			rectOrigen.x=0;
+			apunteX=0;
+			apunteY=-5;
+			break;
+		case 1:
+			rectOrigen.x+=34;
+			apunteX=2;
+			apunteY=-4;
+			break;
+		case 2:
+			rectOrigen.x+=34;
+			apunteX=4;
+			apunteY=-2;
+			break;
+		case 3:
+			rectOrigen.x+=34;
+			apunteX=5;
+			apunteY=0;
+			break;
+		case 4:
+			rectOrigen.x+=34;
+			apunteX=4;
+			apunteY=2;
+			break;
+		case 5:
+			rectOrigen.x+=34;
+			apunteX=2;
+			apunteY=4;
+			break;
+		case 6:
+			rectOrigen.x+=34;
+			apunteX=0;
+			apunteY=5;
+			break;
+		case 7:
+			rectOrigen.x+=34;
+			apunteX=-2;
+			apunteY=4;
+			break;
+		case 8:
+			rectOrigen.x+=34;
+			apunteX=-4;
+			apunteY=2;
+			break;
+		case 9:
+			rectOrigen.x+=34;
+			apunteX=-5;
+			apunteY=0;
+			break;
+		case 10:
+			rectOrigen.x+=34;
+			apunteX=-4;
+			apunteY=-2;
+			break;
+		case 11:
+			rectOrigen.x+=34;
+			apunteX=-2;
+			apunteY=-4;
+			break;
+		default:
+			break;	
+		}
+	}
+	
+	if(shootTimer==0){
+		quieroDisparar=true;
+		//cada vez que dispara cambia de fase
+		//la imagen y direccion de bala no cambia hasta la mitad de la rotacion
+		marcapasos++;
+		if(marcapasos==12)
+			marcapasos=0;
+	}	
+
+}
+
+void Turret::disparo(){
+	shootTimer=20;
+	quieroDisparar=false;
+}
+
+int Turret::disparoXVel(){
+	return apunteX;
+}
+
+int Turret::disparoYVel(){
+	return apunteY;
+}
+
+Turret::~Turret() {
+	// TODO Auto-generated destructor stub
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
 
 
 

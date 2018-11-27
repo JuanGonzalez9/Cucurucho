@@ -46,6 +46,27 @@ protected:
 
 };
 
+class Turret : public Enemigo{
+
+public: 
+	Turret(int x,int y, int coorX, int coordenada, int nivel);
+	~Turret();
+
+	void hazLoTuyo();
+	void disparo();
+	int disparoYVel();
+	int disparoXVel();
+
+protected:
+	int apunteX;
+	int apunteY;
+
+};
+
+
+
+
+
 class MonstruoFinal : public Enemigo{
 public:
 	MonstruoFinal(juego* j, int x,int y, int coorX, int coordenada, int nivel);
