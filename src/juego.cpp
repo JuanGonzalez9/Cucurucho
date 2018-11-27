@@ -272,6 +272,17 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	
 }
 
+int juego::obtenerCantidadDeEnemigos(int nivel)
+{
+	int r = 0;
+	if (nivel >= 1 && nivel <=3) {
+		std::string s("//configuracion//cantidad_enemigos//nivel_");
+		s += std::to_string(nivel);
+		std::cout << cfg.obtener_i (s.c_str(), [](int n, bool omision) {return n > 0 && n < 1000;}) << "\n";
+	}
+	return r;
+}
+
 int juego::obtenerPuntaje(int jugador, bool resetear)
 {
 	Personaje *p;
