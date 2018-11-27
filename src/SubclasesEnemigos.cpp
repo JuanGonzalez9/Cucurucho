@@ -334,7 +334,13 @@ int Paracaidas::disparoXVel(){
 }
 
 int Paracaidas::disparoYVel(){
-	return 2;
+	//cambia la punteria mientras baja
+	int dir=0;
+	if(rectDestino.y>400)
+		dir=-4;
+	if(rectDestino.y<200)
+		dir=4;
+	return dir;
 }
 
 string Paracaidas::serializar(){
