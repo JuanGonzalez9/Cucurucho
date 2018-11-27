@@ -118,6 +118,9 @@ public:
 	void refreshIFrames();
 	void godmodeSwitch();
 	void setVidas(int vidas);
+	void activarGodMode();
+	void desactivarGodMode();
+	bool esGOD();
 
 	//OTROS
 	void subirCoordenadaXEn(int cantidad);

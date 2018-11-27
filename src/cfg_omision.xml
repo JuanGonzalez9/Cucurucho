@@ -70,9 +70,9 @@ R"(<?xml version="1.0"?>
     <bala_fuego>
 	<sprite>imagenes/bala_fuego.bmp</sprite>
     </bala_fuego>
-	<bala_fuego2>
+	<bala_fuego_2>
 	<sprite>imagenes/bala_fuego_2.bmp</sprite>
-    </bala_fuego2>
+    </bala_fuego_2>
 	<bala_misil>
 	<sprite>imagenes/bala_misil.bmp</sprite>
     </bala_misil>
@@ -398,7 +398,7 @@ R"(<?xml version="1.0"?>
       <plataforma>
         <tipo>piedraxl</tipo>
         <xi>7520</xi>
-        <xf>7840</xf>
+        <xf>7600</xf>
         <y>280</y>
       </plataforma>
       <plataforma>
@@ -411,24 +411,24 @@ R"(<?xml version="1.0"?>
         <tipo>piedral</tipo>
         <xi>7840</xi>
         <xf>7920</xf>
-        <y>360</y>
+        <y>380</y>
       </plataforma>
       <plataforma>
         <tipo>piedram</tipo>
         <xi>7600</xi>
         <xf>7840</xf>
-        <y>400</y>
+        <y>380</y>
       </plataforma>
       <plataforma>
         <tipo>piedram</tipo>
         <xi>7920</xi>
         <xf>8000</xf>
-        <y>440</y>
+        <y>380</y>
       </plataforma>
       <plataforma>
         <tipo>piedras</tipo>
         <xi>7520</xi>
-        <xf>8000</xf>
+        <xf>7600</xf>
         <y>520</y>
       </plataforma>
 

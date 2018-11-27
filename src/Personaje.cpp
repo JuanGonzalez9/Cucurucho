@@ -714,6 +714,17 @@ void Personaje::setVidas(int vidas){
 	this->hitPoints = vidas; 
 }
 
+void Personaje::activarGodMode(){
+	godmode=true;
+}
+
+void Personaje::desactivarGodMode(){
+	godmode=false;
+}
+
+bool Personaje::esGOD(){
+	return godmode;
+}
 
 //--------Destructor-------
 

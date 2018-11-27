@@ -166,12 +166,22 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	//((MonstruoFinalNivel1*) enemigoNivel1)->posicionar();
 	vectorEnemigos.push_back(enemigoNivel1);
 
-	enemigoNivel2 = new Enemigo(260,80,5);
+	enemigoNivel2 = new MonstruoFinalNivel2(this,230,80,7);
+	enemigoNivel2->obtenerTextura("//configuracion//personajes//enemigo2//sprite", renderer);
+	vectorEnemigos.push_back(enemigoNivel2);
+
+
+	enemigoNivel3 = new MonstruoFinalNivel3(this,8000-280,150,10);
+	enemigoNivel3->obtenerTextura("//configuracion//personajes//enemigo3//sprite", renderer);
+	vectorEnemigos.push_back(enemigoNivel3);
+
+
+	/*enemigoNivel2 = new Enemigo(260,80,5);
 	enemigoNivel2->obtenerTextura("//configuracion//personajes//enemigo2//sprite", renderer);
 
 	enemigoNivel3 = new Enemigo(550,150,5);
 
-	enemigoNivel3->obtenerTextura("//configuracion//personajes//enemigo3//sprite", renderer);
+	enemigoNivel3->obtenerTextura("//configuracion//personajes//enemigo3//sprite", renderer);*/
 
 	loginfo("Se crearon los enemigos");
 
@@ -749,6 +759,23 @@ void juego::manejar_eventos ()
 	}
 	if(apretandoDesGrisP2(state)){
 		boby2.desgrisar(plataformas,nivel);
+		
+	}
+
+	if(apretandoGodMode(state)){
+
+		if(boby.esGOD()){
+			boby.desactivarGodMode();
+			printf("DESACTIVANDO GOD MODE\n");
+			SDL_Delay(50);
+			
+		}
+		else{
+			printf("ACTIVANDO GOD MODE\n");
+			boby.activarGodMode();
+			SDL_Delay(50);
+
+		}
 		
 	}
 
@@ -1658,7 +1685,7 @@ void juego::dibujar ()
 
 	//////////////////////////////////////////////////////////////
 
-
+	/*
 	if(nivel == 2 && boby.estaCercaDelFinalDelNivel2()){
 		if(!enemigoNivel2->derrotado())
 			enemigoNivel2->dibujar(renderer);
@@ -1673,7 +1700,7 @@ void juego::dibujar ()
 		else{
 			delete(enemigoNivel3);
 		}
-	}
+	}*/
 
 	// Copio a los jugadores (LO HAGO EN ORDEN INVERSO ASI SI SE SUPERPONEN APARECEN P1 arriba del 2, etc.)
 	if((num_jugadores>=4)&&((boby4.getInvincibilityFrames()/2) %2 == 0))
@@ -1713,6 +1740,10 @@ void juego::presentar ()
 	}
 	loginfo("Se termina de presentar juego");
 	
+}
+
+bool juego::apretandoGodMode(const Uint8* state){
+	return state[SDL_SCANCODE_F4];
 }
 
 bool juego::apretandoDerecha(const Uint8* state){

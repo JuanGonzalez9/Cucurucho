@@ -115,6 +115,7 @@ protected:
 	bool apretandoplayer2salto(const Uint8* state);
 	bool apretandoGrisP2(const Uint8* state);
 	bool apretandoDesGrisP2(const Uint8* state);
+	bool apretandoGodMode(const Uint8* state);
 
 
 };
