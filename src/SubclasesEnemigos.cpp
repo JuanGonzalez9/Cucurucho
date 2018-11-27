@@ -15,12 +15,11 @@ Ovni::Ovni(int x,int y, int coorX, int coordenada, int nivel):Enemigo() {
 	if(nivel==2){
 		coordenadaX=x;
 		coordenadaY=coordenada;
-		coordenadaActiva=coordenada-y+300;
 	}else{
 		coordenadaY=y;
 		coordenadaX=coordenada;
-		coordenadaActiva=coordenada-x+400;
 	}
+	coordenadaActiva = coordenada;
 
 	nivelActivo=nivel;
 	activo=false;
@@ -77,12 +76,11 @@ Marcianito::Marcianito(int x,int y, int coorX, int coordenada, int nivel):Enemig
 	if(nivel==2){
 		coordenadaX=x;
 		coordenadaY=coordenada;
-		coordenadaActiva=coordenada-y+300;
 	}else{
 		coordenadaY=y;
 		coordenadaX=coordenada;
-		coordenadaActiva=coordenada-x+400;
 	}
+	coordenadaActiva = coordenada;
 
 	nivelActivo=nivel;
 	activo=false;
@@ -165,12 +163,11 @@ Turret::Turret(int x,int y, int coorX, int coordenada, int nivel){
 	if(nivel==2){
 		coordenadaX=x;
 		coordenadaY=coordenada;
-		coordenadaActiva=coordenada-y+300;
 	}else{
 		coordenadaY=y;
 		coordenadaX=coordenada;
-		coordenadaActiva=coordenada-x+400;
 	}
+	coordenadaActiva = coordenada;
 
 	nivelActivo=nivel;
 	activo=false;
@@ -296,12 +293,11 @@ Paracaidas::Paracaidas(int x,int y, int coorX, int coordenada, int nivel) {
 	if(nivel==2){
 		coordenadaX=x;
 		coordenadaY=coordenada;
-		coordenadaActiva=coordenada-y+300;
 	}else{
 		coordenadaY=y;
 		coordenadaX=coordenada;
-		coordenadaActiva=coordenada-x+400;
 	}
+	coordenadaActiva = coordenada;
 
 	nivelActivo=nivel;
 	activo=false;
@@ -353,6 +349,25 @@ MonstruoFinal::MonstruoFinal(juego* j,int x, int y, int life, int coordenada,int
 	rectDestino = {x,y,252,240};
 }
 
+
+void MonstruoFinal::activar(int nivel, int coordenada, int pos){
+	//uso la implementacion vieja para que no se pise con lo de barbara
+	int desfasaje=0;
+	if((vidas>0)&&(nivel==nivelActivo)&&(!this->pasaBorde(nivel))){
+		if((nivel==2)&&(coordenada<=coordenadaActiva)){
+			activo=true;
+			desfasaje= coordenadaActiva - coordenada - 300 + pos;
+			rectDestino.y+=desfasaje;
+			posY+=desfasaje;
+		}else{
+			if((nivel!=2)&&(coordenada>=coordenadaActiva)){
+				activo=true;
+				rectDestino.x+=desfasaje;
+				posX+=desfasaje;
+			}
+		}
+	}
+}
 
 void MonstruoFinal::dispararBalasFuego(int coordenadaX,int coordenadaY,int level){
 	

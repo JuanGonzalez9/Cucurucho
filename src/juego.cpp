@@ -89,7 +89,7 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
-	nuevoEnemigo = new Marcianito(800,240,1,2640,1);
+	nuevoEnemigo = new Marcianito(640,240,1,640,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
@@ -103,7 +103,7 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	//nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
 	//vectorEnemigos.push_back(nuevoEnemigo);
 
-	nuevoEnemigo = new Ovni(800,50,1,1800,2);
+	nuevoEnemigo = new Ovni(800,50,1,2200,2);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 	///////////////////////////////////////////////////////////

@@ -86,6 +86,7 @@ public:
 	MonstruoFinal(juego* j, int x,int y, int coorX, int coordenada, int nivel);
 	virtual ~MonstruoFinal();
 
+	void activar(int nivel, int coordenada, int pos);
 	void explotar();
 	void dispararBalasFuego(int coordenadaX,int coordenadaY, int level);
 	void dispararBalasFuego2(int coordenadaX,int coordenadaY, int level);
