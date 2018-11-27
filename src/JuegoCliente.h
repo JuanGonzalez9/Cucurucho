@@ -4,6 +4,7 @@
 #include "Parser.h"
 #include "juego.hpp"
 #include "contenedor.hpp"
+#include "etiqueta.hpp"
 #include "Sprite.h"
 #include <string>
 #include <iostream>
@@ -17,6 +18,7 @@ public:
 	void dibujar();
 	void manejarEventos();
 	int jugador() const;
+	int establecerPuntaje(int puntaje);
 	virtual ~JuegoCliente();
 private:
 	Parser p;
@@ -24,6 +26,7 @@ private:
 	int nivel;
 	int cantJugadores;
 	int numeroDeJugador;
+	etiqueta etiqueta_puntos;
 
 	SDL_Rect bala_rectOrigen;
 	SDL_Rect bala_rectDestino;
