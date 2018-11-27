@@ -9,6 +9,11 @@ Parser::Parser() {
 	cantBalas.resize(4);
 	balasTotales = 0;
 	hayEnemigo = false;
+	
+	vidas.resize(4);
+	vidas = {3,3,3,3};
+	iframes.resize(4);
+	iframes = {0,0,0,0};
 }
 
 void Parser::parsear(string msj,int jugadores){
@@ -137,6 +142,10 @@ void Parser::parsearBalasEnemigas(string msj){
 void Parser::parsearVidas(string msj){
 
 	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS + MENSAJE_BALAS_ENEMIGAS;
+
+	for(int j = 0; j < iframes.size(); j++){
+		if(vidas[j] > (msj[i+j] - '0')) iframes[j] = 90;
+	}
 
 	vidas.clear();
 	vidas.push_back(msj[i] - '0');
@@ -312,7 +321,17 @@ vector< pair< int,pair<int,int> > > Parser::getBalas(){
 }
 
 int Parser::getVidaPersonaje(int pj){
-	return vidas[pj-1];
+	return vidas[pj - 1];
+}
+
+int Parser::getIframes(int pj){
+	return iframes[pj - 1];
+}
+
+void Parser::refreshIframes(){
+	for(int i = 0; i < iframes.size();i++){
+		if(iframes[i] > 0) iframes[i]--;
+	}
 }
 
 Parser::~Parser() {

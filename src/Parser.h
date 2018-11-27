@@ -39,6 +39,8 @@ public:
 	vector< pair< int,pair<int,int> > > getBalas();
 	vector<int> getCantBalas();
 	int getVidaPersonaje(int pj);
+	int getIframes(int pj);
+	void refreshIframes();
 
 	//..........METODO........
 	void parsear(string msj,int jugadores);
@@ -76,6 +78,8 @@ private:
 
 	vector<int> vidas;
 	void parsearVidas(string msj);
+
+	vector<int> iframes;
 
 };
 

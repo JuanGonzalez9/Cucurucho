@@ -316,13 +316,14 @@ void JuegoCliente::dibujarBalasEnemigas(){
 
 
 void JuegoCliente::dibujarJugadores(){
+	p.refreshIframes();
 	Personaje* unBoby;
 	for(int i = 0; i < num_jugadores; i++){
 		unBoby = dameAlBobyNumero(i + 1);
 		if(i != numeroDeJugador && unBoby->esActivo() && p.getVidaPersonaje(i + 1) > 0){
 			actualizarPosicionDeMiPersonaje(i+1);
 			actualizarEstadoDeMiPersonaje(i+1);
-			if((unBoby->getInvincibilityFrames()/2) %2 ==0)
+			if((p.getIframes(i+1)/2) %2 ==0)
 				unBoby->dibujar(renderer);
 		}
 	}
@@ -331,7 +332,8 @@ void JuegoCliente::dibujarJugadores(){
 	if(p.getVidaPersonaje(numeroDeJugador + 1) > 0){
 		actualizarPosicionDeMiPersonaje(numeroDeJugador + 1);
 		actualizarEstadoDeMiPersonaje(numeroDeJugador + 1);
-		unBoby->dibujar(renderer);
+		if((p.getIframes(numeroDeJugador+1)/2) %2 == 0)		
+			unBoby->dibujar(renderer);
 	}
 }
 
