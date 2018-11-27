@@ -484,16 +484,39 @@ void MonstruoFinal::dispararMisiles(int coordenadaX,int coordenadaY, int level){
 			j->agregarBalaEnemigo(nuevaBala);
 		}
 	}
+	/*
 	
+	Bullet * nuevaBala;
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);
+	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
+	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
+	nuevaBala->actualizarRectOrigenOriginal();
+	j->agregarBalaEnemigo(nuevaBala);
+	*/
 	
 }
 
 void MonstruoFinal::tenerInmunidad(){
-	inmune = 10; //1seg de inmunidad
+	inmune = 40; //1seg de inmunidad
 }
 
 void MonstruoFinal::tenerInvisibilidad(){
-	invisible = 10; // en juego evitar que se dibuje
+	invisible = 40; // en juego evitar que se dibuje
 	visible = false;
 }
 
@@ -547,7 +570,6 @@ void MonstruoFinalNivel1::hazLoTuyo(){
 			estado=disparando_fuego2;
 			dispararMisiles(xx,160,1);
 			dispararBalasFuego2(xx,160,1);
-
 			
 		}
 		if(estado==disparando_fuego2 && contador_marcos>300){
@@ -563,14 +585,7 @@ void MonstruoFinalNivel1::hazLoTuyo(){
 		}
 	}
 
-	if (contador_marcos % 15 == 0) {
-        marco++;
-        rectOrigen.x = marco*(160);
-        if (marco > 2) {
-        	rectOrigen.x = 0;
-            marco = 0;
-        }
-    }
+
 } 
 
 void MonstruoFinalNivel2::hazLoTuyo(){
@@ -633,10 +648,7 @@ void MonstruoFinalNivel3::hazLoTuyo(){
 
 
 MonstruoFinalNivel1::MonstruoFinalNivel1(juego* j,int x, int y, int life):
-MonstruoFinal( j,x,  y, life, 7300, 1 ){
-	rectOrigen = {0,0,160,180};
-	rectDestino = {x,y,252,240};
-}
+MonstruoFinal( j,x,  y, life, 7300, 1 ){}
 
 MonstruoFinalNivel2::MonstruoFinalNivel2(juego* j,int x, int y, int life):
 MonstruoFinal(j, x, y, life, 115, 2){}

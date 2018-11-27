@@ -44,7 +44,7 @@ R"(<?xml version="1.0"?>
 	    <sprite>imagenes/personaje4.png</sprite>
     </heroe4>
     <enemigo1>
-	    <sprite>imagenes/tortugaBOSS.bmp</sprite>
+	    <sprite>imagenes/boss.png</sprite>
     </enemigo1>
 	<enemigo2>
 	    <sprite>imagenes/monstruolevel2.bmp</sprite>
