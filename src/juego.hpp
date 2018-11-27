@@ -116,6 +116,8 @@ protected:
 	bool apretandoGrisP2(const Uint8* state);
 	bool apretandoDesGrisP2(const Uint8* state);
 	bool apretandoGodMode(const Uint8* state);
+	bool alguienQuiereGodMode();
+	void godModeParaTodos();
 
 
 };

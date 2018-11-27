@@ -632,11 +632,11 @@ void juego::manejar_eventos ()
 		}		
 	}
 
-	if(cliente->quiereAccion(Constantes::nivel3)){
+	/*if(cliente->quiereAccion(Constantes::nivel3)){
 		if(nivel == 2){
 			cambioNivel=true;
 		}
-	}
+	}*/
 
 	//DISPAROS
 	if(!boby.esGrisado()&&boby.esActivo()&&cliente->quiereAccion(Constantes::disparo)){
@@ -772,20 +772,21 @@ void juego::manejar_eventos ()
 		
 	}
 
-	if(apretandoGodMode(state)){
+	if(alguienQuiereGodMode()){
 
-		if(boby.esGOD()){
+		/*if(boby.esGOD()){
 			boby.desactivarGodMode();
+			boby2.desactivarGodMode();
 			printf("DESACTIVANDO GOD MODE\n");
 			SDL_Delay(50);
 			
 		}
-		else{
+		else{*/
 			printf("ACTIVANDO GOD MODE\n");
-			boby.activarGodMode();
+			godModeParaTodos();
 			SDL_Delay(50);
 
-		}
+		//}
 		
 	}
 
@@ -1876,6 +1877,18 @@ bool juego::collision(SDL_Rect rect1,SDL_Rect rect2){
 	if(rect1.x + rect1.w <= rect2.x)
 		return false;
 	return true;
+}
+
+//Si alguno de los clientes aprieta la tecla W
+bool juego::alguienQuiereGodMode(){
+	return (cliente->quiereAccion(Constantes::nivel3) || cliente2->quiereAccion(Constantes::nivel3) || cliente3->quiereAccion(Constantes::nivel3) || cliente4->quiereAccion(Constantes::nivel3));
+}
+
+void juego::godModeParaTodos(){
+	boby.activarGodMode();
+	boby2.activarGodMode();
+	boby3.activarGodMode();
+	boby4.activarGodMode();
 }
 
 void juego::setAcciones(char* msj, int numeroCliente){
