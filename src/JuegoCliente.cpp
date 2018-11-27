@@ -7,7 +7,8 @@ extern "C"
 }
 
 JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador, puntajes &pts):
-	juego (v, cantidadJugadores, pts)
+	juego (v, cantidadJugadores, pts),
+	etiqueta_puntos (5, 2, 41)
 {
 	this->numeroDeJugador = numeroDeJugador;
 	nivel = 1;
@@ -65,6 +66,19 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	Bullet* nuevaBala = new Bullet(0,0,0,0,2,100);
 	nuevaBala->obtenerTextura("//configuracion//items//bala2//sprite", renderer);
 	vBalaEnemiga.push_back(nuevaBala);
+	
+	SDL_Color color = {55, 149, 242, 255};
+	SDL_Color color_borde = {255, 255, 255, 255};
+	etiqueta_puntos.anclado_x = control::opuesto;
+	etiqueta_puntos.texto ("00000");
+	etiqueta_puntos.color (color);
+	etiqueta_puntos.borde (2, color_borde);
+	agregar (&etiqueta_puntos, false);
+}
+
+int JuegoCliente::establecerPuntaje(int puntaje)
+{
+	etiqueta_puntos.texto (std::to_string(puntaje).c_str());
 }
 
 int JuegoCliente::jugador() const
@@ -336,7 +350,8 @@ void JuegoCliente::dibujar(){
 	dibujameLasVidas();
 
 	if(p.estaElEnemigo()) dibujarEnemigoFinal();
-
+	
+	contenedor_principal::dibujar ();
 }
 
 JuegoCliente::~JuegoCliente() {

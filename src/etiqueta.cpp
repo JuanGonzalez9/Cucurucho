@@ -22,6 +22,11 @@ etiqueta::~etiqueta ()
 {
 }
 
+void etiqueta::borde (int ancho, SDL_Color color)
+{
+	f.borde(ancho, color);
+}
+
 void etiqueta::texto (const char *t)
 {
 	if (t) {
