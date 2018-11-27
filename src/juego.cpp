@@ -75,12 +75,8 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	//x e y son las posiciones de pantalla donde quiero que aparezca
 	//coordenada dice en que coordenada del nivel aparecen, nivel en que nivel aparecen
 	//luego asigno textura correspondiente
-
+	/*
 	Enemigo* nuevoEnemigo;
-	nuevoEnemigo = new Marcianito(750,-80,1,2700,2);
-	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
-	vectorEnemigos.push_back(nuevoEnemigo);
-
 	nuevoEnemigo = new Ovni(800,80,1,1920,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
@@ -106,6 +102,15 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	nuevoEnemigo = new Ovni(800,50,1,2200,2);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
+
+	nuevoEnemigo = new Marcianito(750,-80,1,2700,2);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
+	vectorEnemigos.push_back(nuevoEnemigo);
+	*/
+
+	this->cargarEnemigosNivel1(8);
+	this->cargarEnemigosNivel2(8);
+	this->cargarEnemigosNivel3(8);
 	///////////////////////////////////////////////////////////
 
 	//CARGO LOS ICONOS DE VIDAS///////////////////////////
@@ -1485,6 +1490,117 @@ int juego::maximaPosicionJugadores(){
 			max=boby4.getPosY();
 	}
 	return max;
+}
+
+void juego::cargarEnemigosNivel1(int cantEnemigos){
+	Enemigo* nuevoEnemigo;
+	int coor=0;
+	for (int i = 0; i < cantEnemigos; i++) {
+		//cargo una coordenada aleatoria entre 800 (borde derecho de primera pantalla) y 6000 (antes del jefe)
+		coor= rand() % 7000 + 800;
+		//decido cual enemigo cargo, esto es aleatorio de 1 a 4
+		//saco el resto de dividir la coordenada por 4 para ahorrarme hacer otro rand ;)
+		switch(coor%4){
+			case (0):
+				//marciano
+				nuevoEnemigo = new Marcianito(800,240,1,coor,1);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+			case (1):
+				//ovni
+				nuevoEnemigo = new Ovni(800,80,1,coor,1);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+			case (2):
+				//turret
+				nuevoEnemigo = new Turret(800,400,1,coor,1);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//turret//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+			case (3):
+				//paracaidas
+				nuevoEnemigo = new Paracaidas(600,-100,1,coor,1);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+		}
+	}
+}
+
+void juego::cargarEnemigosNivel2(int cantEnemigos){
+	Enemigo* nuevoEnemigo;
+	int coor=0;
+	for (int i = 0; i < cantEnemigos; i++) {
+		//cargo una coordenada aleatoria entre 3000 (borde superior de primera pantalla) y 600 (antes del jefe)
+		coor= rand() % 3000 + 600;
+		//decido cual enemigo cargo, esto es aleatorio de 1 a 4
+		//saco el resto de dividir la coordenada por 4 para ahorrarme hacer otro rand ;)
+		switch(coor%4){
+			case (0):
+				//marciano
+				nuevoEnemigo = new Marcianito(200,-100,1,coor,2);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+			case (1):
+				//ovni
+				nuevoEnemigo = new Ovni(800,100,1,coor,2);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+			case (2):
+				//turret
+				nuevoEnemigo = new Turret(300,-80,1,coor,2);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//turret//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+			case (3):
+				//paracaidas
+				nuevoEnemigo = new Paracaidas(600,-100,1,coor,2);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+		}
+	}
+}
+
+void juego::cargarEnemigosNivel3(int cantEnemigos){
+	Enemigo* nuevoEnemigo;
+	int coor=0;
+	for (int i = 0; i < cantEnemigos; i++) {
+		//cargo una coordenada aleatoria entre 800 (borde derecho de primera pantalla) y 6000 (antes del jefe)
+		coor= rand() % 7000 + 800;
+		//decido cual enemigo cargo, esto es aleatorio de 1 a 4
+		//saco el resto de dividir la coordenada por 4 para ahorrarme hacer otro rand ;)
+		switch(coor%4){
+			case (0):
+				//marciano
+				nuevoEnemigo = new Marcianito(800,240,1,coor,3);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+			case (1):
+				//ovni
+				nuevoEnemigo = new Ovni(800,80,1,coor,3);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//ovni//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+			case (2):
+				//turret
+				nuevoEnemigo = new Turret(800,400,1,coor,3);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//turret//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+			case (3):
+				//paracaidas
+				nuevoEnemigo = new Paracaidas(600,-100,1,coor,3);
+				nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
+				vectorEnemigos.push_back(nuevoEnemigo);
+				break;
+		}
+	}
 }
 
 void juego::setDatosEnemigoFinal(){
