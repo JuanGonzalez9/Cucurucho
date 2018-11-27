@@ -53,6 +53,15 @@ R"(<?xml version="1.0"?>
   <ovni>
       <sprite>imagenes/ovni.png</sprite>
     </ovni>
+  <marciano>
+      <sprite>imagenes/marcianitocaminando.png</sprite>
+    </marciano>
+  <turret>
+      <sprite>imagenes/turret.png</sprite>
+    </turret>
+  <parachute>
+      <sprite>imagenes/parachute.png</sprite>
+    </parachute>
   </personajes>
   <items>
     <bala>

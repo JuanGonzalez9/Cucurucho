@@ -72,8 +72,8 @@ Ovni::~Ovni() {
 
 Marcianito::Marcianito(int x,int y, int coorX, int coordenada, int nivel):Enemigo(){
 
-	rectOrigen = {0,0,40,80};
-	rectDestino = {x,y,50,100};
+	rectOrigen = {0,0,40,50};
+	rectDestino = {x,y,50,65};
 	posX=x;
 	posY=y;
 	
@@ -97,13 +97,13 @@ void Marcianito::hazLoTuyo(){
 	//el marcianito se mueve de lado a lado.
 	//por ahora dispara adelante pero despues lo cambio para que se de vuelta
 
-	if(marcapasos>=60){
+	if(marcapasos>=40){
 		moverDerecha(3);
 	} else{
 		moverIzquierda(3);
 	}
 	marcapasos++;
-	if(marcapasos==120)
+	if(marcapasos==80)
 		marcapasos=0;
 
 	if(shootTimer==0)

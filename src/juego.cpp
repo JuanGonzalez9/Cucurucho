@@ -78,7 +78,7 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 
 	Enemigo* nuevoEnemigo;
 	nuevoEnemigo = new Marcianito(750,-340,1,2700,2);
-	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
 	nuevoEnemigo = new Ovni(800,80,1,1920,1);
@@ -86,11 +86,11 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	vectorEnemigos.push_back(nuevoEnemigo);
 
 	nuevoEnemigo = new Marcianito(800,220,1,1400,1);
-	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
 	nuevoEnemigo = new Marcianito(800,220,1,2640,1);
-	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marcianito//sprite", renderer);
+	nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
 	vectorEnemigos.push_back(nuevoEnemigo);
 
 	nuevoEnemigo = new Ovni(800,50,1,1800,2);
@@ -1117,7 +1117,7 @@ void juego::actualizar ()
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
-			if(!vectorEnemigos[i]->derrotado() && collision(boby.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
+			if(vectorEnemigos[i]->esActivo() && !vectorEnemigos[i]->derrotado() && collision(boby.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby.perderVida();
 			}
 		}
