@@ -63,8 +63,22 @@ protected:
 
 };
 
+class Paracaidas : public Enemigo{
 
+public: 
+	Paracaidas(int x,int y, int coorX, int coordenada, int nivel);
+	~Paracaidas();
 
+	void hazLoTuyo();
+	void disparo();
+	int disparoYVel();
+	int disparoXVel();
+
+protected:
+
+};
+
+//////////////JEFES/////////////////////////
 
 
 class MonstruoFinal : public Enemigo{

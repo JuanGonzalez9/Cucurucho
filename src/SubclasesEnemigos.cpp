@@ -64,9 +64,6 @@ Ovni::~Ovni() {
 	// TODO Auto-generated destructor stub
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////
-
 /////////////////////////////////////MARCIANITO////////////////////////////////////////////
 //se mueve de izquierda a derecha. dispara a la derecha
 
@@ -285,8 +282,62 @@ Turret::~Turret() {
 	// TODO Auto-generated destructor stub
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////PARACAIDAS//////////////////////////////////////
+//aparece desde la derecha por arriba de la pantalla y dispara para abajo
 
+Paracaidas::Paracaidas(int x,int y, int coorX, int coordenada, int nivel) {
+	Enemigo();
+
+	rectOrigen = {0,0,56,86};
+	rectDestino = {x,y,56,86};
+	posX=x;
+	posY=y;
+	
+	if(nivel==2){
+		coordenadaX=x;
+		coordenadaY=coordenada;
+		coordenadaActiva=coordenada-y+300;
+	}else{
+		coordenadaY=y;
+		coordenadaX=coordenada;
+		coordenadaActiva=coordenada-x+400;
+	}
+
+	nivelActivo=nivel;
+	activo=false;
+	marcapasos=0;
+}
+
+
+void Paracaidas::hazLoTuyo(){
+	//cae lentamente disparando a la izquierda en un angulo hacia abajo
+
+	moverAbajo(2);
+	if(shootTimer==0)
+		quieroDisparar=true;			
+}
+
+void Paracaidas::disparo(){
+	shootTimer=60;
+	quieroDisparar=false;
+}
+
+int Paracaidas::disparoXVel(){
+	return -6;
+}
+
+int Paracaidas::disparoYVel(){
+	return 2;
+}
+
+Paracaidas::~Paracaidas() {
+	// TODO Auto-generated destructor stub
+}
+
+
+
+
+///////////////////////////////////////////JEFES////////////////////////////////////////////
 
 
 ////// Monstruos Finales Nivel 1,2y3
