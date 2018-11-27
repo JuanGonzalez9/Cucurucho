@@ -1693,6 +1693,7 @@ string juego::armarRespuesta(){
 
 		setCantidadDeBalas();
 		armador->sumarBalas(boby.getBalas(),boby.getArma());
+		armador->setPuntaje(0,obtenerPuntaje(0,false));
 
 	}
 
@@ -1708,6 +1709,7 @@ string juego::armarRespuesta(){
 		datosBoby2.setDireccionDisparo( (Constantes::DireccionDisparo) boby2.getDireccionDisparo());
 
 		armador->sumarBalas(boby2.getBalas(),boby2.getArma());
+		armador->setPuntaje(1,obtenerPuntaje(1,false));
 	}
 
 	if (num_jugadores >= 3){
@@ -1722,6 +1724,7 @@ string juego::armarRespuesta(){
 		datosBoby3.setDireccionDisparo( (Constantes::DireccionDisparo) boby3.getDireccionDisparo());
 
 		armador->sumarBalas(boby3.getBalas(),boby3.getArma());
+		armador->setPuntaje(2,obtenerPuntaje(2,false));
 	}
 
 	if (num_jugadores == 4){
@@ -1736,6 +1739,7 @@ string juego::armarRespuesta(){
 		datosBoby4.setDireccionDisparo( (Constantes::DireccionDisparo) boby4.getDireccionDisparo());
 
 		armador->sumarBalas(boby4.getBalas(),boby4.getArma());
+		armador->setPuntaje(3,obtenerPuntaje(3,false));
 	}
 
 	//este es el enemigo final

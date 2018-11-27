@@ -39,6 +39,7 @@ public:
 	void sumarBalas(vector<Bullet*> nuevasBalas,int arma);
 
 	void setMensajeVidas(string vidas);
+	void setPuntaje(int pj,int puntos);
 
 	string pasarAStringDeTamanio(int tamanio,int valor);
 	//.......metodos...........................
@@ -61,6 +62,9 @@ private:
 	string resetEnemigos;
 	string mensajeItems;
 	string resetItems;
+
+	vector<string> puntaje;
+	string resetPuntaje;
 
 	string fondoToString(int f);
 	string posicionToString(int p);

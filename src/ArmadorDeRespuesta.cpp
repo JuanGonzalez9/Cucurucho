@@ -29,6 +29,13 @@ ArmadorDeRespuesta::ArmadorDeRespuesta() {
 	strBalasEnemigas = aux4;
 	resetBalasEnemigas = aux4;
 
+	int longitudPuntaje = MENSAJE_PUNTAJE;
+	string aux5(longitudPuntaje,'0');
+	puntaje.resize(4);
+	for(int i = 0; i < puntaje.size();i++){
+		puntaje[i] = aux5;
+	}
+
 }
 
 // --------------- setter getter
@@ -128,6 +135,10 @@ void ArmadorDeRespuesta::setMensajeBalasEnemigas(string msjBalas){
 
 void ArmadorDeRespuesta::setMensajeVidas(string msjVidas){
 	this->vidas = msjVidas;
+}
+
+void ArmadorDeRespuesta::setPuntaje(int pj,int puntos){
+	puntaje[pj] = pasarAStringDeTamanio(MENSAJE_PUNTAJE,puntos);
 }
 
 
@@ -258,6 +269,10 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* da
 	respuesta += strBalasEnemigas;
 
 	respuesta += vidas;
+
+	for(unsigned i = 0; i < puntaje.size(); i++){
+		respuesta += puntaje[i];
+	}
 
 	strBalas = resetBalas;
 	strBalasEnemigas = resetBalasEnemigas;

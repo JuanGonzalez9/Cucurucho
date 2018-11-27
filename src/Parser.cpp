@@ -16,7 +16,7 @@ Parser::Parser() {
 	iframes = {0,0,0,0};
 }
 
-void Parser::parsear(string msj,int jugadores){
+void Parser::parsear(string msj,int jugadores,int numeroDeJugador){
 	cantJugadores = jugadores;
 	resetearBalas();
 
@@ -53,6 +53,7 @@ void Parser::parsear(string msj,int jugadores){
 	parsearItems(msj);
 	parsearBalasEnemigas(msj);
 	parsearVidas(msj);
+	parsearPuntaje(msj,numeroDeJugador);
 }
 
 void Parser::parsearEnemigos(string msj){
@@ -153,6 +154,12 @@ void Parser::parsearVidas(string msj){
 	vidas.push_back(msj[i+2] - '0');
 	vidas.push_back(msj[i+3] - '0');
 	
+}
+
+void Parser::parsearPuntaje(string msj,int pj){
+	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS + MENSAJE_BALAS_ENEMIGAS + MENSAJE_VIDAS;
+
+	this->puntaje = dameElInt(msj.substr(i + pj * MENSAJE_PUNTAJE,MENSAJE_PUNTAJE));
 }
 
 DatosPersonaje* Parser::dameAlBobyNumero(int numeroDePersonaje){
@@ -332,6 +339,10 @@ void Parser::refreshIframes(){
 	for(int i = 0; i < iframes.size();i++){
 		if(iframes[i] > 0) iframes[i]--;
 	}
+}
+
+int Parser::getPuntaje(){
+	return puntaje;
 }
 
 Parser::~Parser() {

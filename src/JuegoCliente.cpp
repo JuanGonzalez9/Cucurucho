@@ -103,7 +103,7 @@ int JuegoCliente::jugador() const
 }
 
 void JuegoCliente::setMensajeDelServidor(string msj){
-	p.parsear(msj,cantJugadores);
+	p.parsear(msj,cantJugadores,numeroDeJugador);
 	if(nivel == 1 && p.getNivel() == 3){
 		actualizarNivel2();
 		nivel = 3;
@@ -372,6 +372,7 @@ void JuegoCliente::dibujar(){
 
 	//if(p.estaElEnemigo()) dibujarEnemigoFinal();
 	
+	establecerPuntaje(p.getPuntaje());
 	contenedor_principal::dibujar ();
 }
 

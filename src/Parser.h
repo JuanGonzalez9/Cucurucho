@@ -40,10 +40,11 @@ public:
 	vector<int> getCantBalas();
 	int getVidaPersonaje(int pj);
 	int getIframes(int pj);
-	void refreshIframes();
+	int getPuntaje();
 
 	//..........METODO........
-	void parsear(string msj,int jugadores);
+	void parsear(string msj,int jugadores,int numeroDeJugador);
+	void refreshIframes();
 
 	virtual ~Parser();
 private:
@@ -80,6 +81,8 @@ private:
 	void parsearVidas(string msj);
 
 	vector<int> iframes;
+	int puntaje;
+	void parsearPuntaje(string msj,int pj);
 
 };
 
