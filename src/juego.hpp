@@ -77,6 +77,10 @@ protected:
 	void actualizarNivel2();
 	void actualizarNivel3();
 
+	void cargarEnemigosNivel1(int cantEnemigos);
+	void cargarEnemigosNivel2(int cantEnemigos);
+	void cargarEnemigosNivel3(int cantEnemigos);
+
 	//balas
 	bool collision(SDL_Rect rect1,SDL_Rect rect2);
 	int direccionDeBala;
