@@ -113,9 +113,13 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	vectorEnemigos.push_back(nuevoEnemigo);
 	*/
 
-	this->cargarEnemigosNivel1(this->obtenerCantidadDeEnemigos(1));
-	this->cargarEnemigosNivel2(this->obtenerCantidadDeEnemigos(2));
-	this->cargarEnemigosNivel3(this->obtenerCantidadDeEnemigos(3));
+	this->cargarEnemigosNivel1(12);
+	this->cargarEnemigosNivel2(13);
+	this->cargarEnemigosNivel3(14);
+
+	//this->cargarEnemigosNivel1(this->obtenerCantidadDeEnemigos(1));
+	//this->cargarEnemigosNivel2(this->obtenerCantidadDeEnemigos(2));
+	//this->cargarEnemigosNivel3(this->obtenerCantidadDeEnemigos(3));
 	///////////////////////////////////////////////////////////
 
 	//CARGO LOS ICONOS DE VIDAS///////////////////////////
@@ -1082,8 +1086,8 @@ void juego::actualizar ()
 		}
 		////////////////////////////////////////////////
 
-		if((nivel==2)&&(cartelLv2.getRectDestY()>=600)){
-			cartelLv2.increaseRectDestY(maxVel);
+		if((nivel==2)&&(cartelLv2.getRectDestY()<=600)){
+			cartelLv2.increaseRectDestY(-maxVel);
 		}
 
 		coordenada -=maxVel;
@@ -1846,7 +1850,7 @@ void juego::dibujar ()
 		cartelLv1.dibujar(renderer);
 	}
 
-	if((nivel==2)&&(cartelLv2.getRectDestY()>=600)){
+	if((nivel==2)&&(cartelLv2.getRectDestY()<=600)){
 		cartelLv2.dibujar(renderer);
 	}
 
