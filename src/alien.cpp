@@ -22,10 +22,24 @@ alien::alien(juego* j, int x,int y, int vidas, int coordenada, int nivel):
 	rectDestino = {x, y, rectOrigen.w, rectOrigen.h};
 	activo = true;
 	quieroDisparar = false;
+	xi = x - 50;
+	xf = x + 50;
+	#if 0
+	plataforma p = {plataforma::piedras, 0, 100, 550};
+	std::string s("//configuracion//escenarios//nivel");
+	s += j->obtener_nivel();
+	cfg.obtener_plataformas(s.c_str(), plataformas, p);
+	#endif
 }
 
 alien::~alien()
 {
+}
+
+void alien::limitar(int xi, int xf)
+{
+	this->xi = xi;
+	this->xf = xf;
 }
 
 void alien::cambiar_estado(estado e)
@@ -39,12 +53,14 @@ void alien::cambiar_estado(estado e)
 			rectOrigen.y = 0;
 			rectOrigen.h = 80;
 			rectDestino.h = rectOrigen.h;
+	std::cout << "reptando\n";
 			break;
 		case caminando:
 			rectOrigen.x = 1;
 			rectOrigen.y = 0;
 			rectOrigen.h = 80;
 			rectDestino.h = rectOrigen.h;
+	std::cout << "caminando\n";
 			break;
 		case saltando:
 			velocidad = v0;
@@ -56,12 +72,14 @@ void alien::cambiar_estado(estado e)
 			rectDestino.h = rectOrigen.h;
 			rectDestino.y += 20;
 			altura = rectDestino.y;
+			std::cout << "altura2:" << altura << "\n";
 			break;
 		case cayendo:
 			rectOrigen.x = 1;
 			rectOrigen.y = 0;
 			rectOrigen.h = 80;
 			rectDestino.h = rectOrigen.h;
+	std::cout << "cayendo\n";
 			break;
 	};
 }
@@ -112,9 +130,9 @@ void alien::actualizar_caminando()
 		}
 	}
 	contador++;
-	if (sentido > 0 && rectDestino.x >= 400) {
+	if (sentido > 0 && rectDestino.x >= xf) {
 		cambiar_estado(saltando);
-	} else if (sentido < 0 && rectDestino.x <= 200) {
+	} else if (sentido < 0 && rectDestino.x <= xi) {
 		cambiar_estado(saltando);
 	}
 }
@@ -147,9 +165,9 @@ void alien::actualizar_reptando()
 		}
 	}
 	contador++;
-	if (sentido > 0 && rectDestino.x >= 600) {
+	if (sentido > 0 && rectDestino.x >= xf) {
 		cambiar_estado(saltando);
-	} else if (sentido < 0 && rectDestino.x <= 200) {
+	} else if (sentido < 0 && rectDestino.x <= xi) {
 		cambiar_estado(saltando);
 	}
 }
@@ -161,20 +179,26 @@ void alien::actualizar_saltando()
 			marco--;
 			rectOrigen.y = 140*marco;
 			if (marco == 3) {
+				std::cout << "rectDestino.y0:" << rectDestino.y << "\n";
 				rectDestino.y -= 30;
 				rectDestino.x += 6*sentido;
 				contador = 0;
+				std::cout << "rectDestino.y1:" << rectDestino.y << "\n";
 			} else if (marco == 2) {
 				rectDestino.y -= 26;
 				rectDestino.x += 8*sentido;
 				contador = 0;
+				std::cout << "rectDestino.y2:" << rectDestino.y << "\n";
 			} else if (marco == 1) {
 				rectDestino.y -= 25;
 				rectDestino.x -= 9*sentido;
 				contador = 0;
+				std::cout << "rectDestino.y3:" << rectDestino.y << "\n";
 			} else if (marco == 0) {
 				altura = rectDestino.y;
 				contador = 0;
+				std::cout << "altura:" << altura << "\n";
+				std::cout << "sentido:" << sentido << "\n";
 			}
 		}
 	}
@@ -182,6 +206,7 @@ void alien::actualizar_saltando()
 	if (marco == 0) {
 		altura += velocidad;
 		rectDestino.y = roundf (altura);
+		std::cout << "rectDestino.y antes:" << rectDestino.y << "\n";
 		velocidad += aceleracion;
 		if (velocidad >= 0.0) {
 			cambiar_estado(cayendo);
@@ -200,6 +225,7 @@ void alien::actualizar_cayendo()
 		sentido = invertir_x ? -1 : 1;
 		cambiar_estado(invertir_x ? reptando : caminando);
 	}
+	std::cout << "actualizar_cayendo\n";
 }
 
 void alien::hazLoTuyo()
@@ -209,7 +235,8 @@ void alien::hazLoTuyo()
 
 std::string alien::serializar(){
 	std::string serial = "";
-	serial = to_string(Constantes::marcianito);
+	serial = to_string(Constantes::alien);
+	serial += Utils::pasarAStringDeTamanio(MARCAPASOS,e);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 	return serial;

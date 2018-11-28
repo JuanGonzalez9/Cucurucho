@@ -67,9 +67,12 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	boby3.agregarGris("//configuracion//personajes//heroe3//sprite", renderer);
 	boby4.agregarGris("//configuracion//personajes//heroe4//sprite", renderer);
 
+/*
 	Enemigo* nuevoEnemigo;
-	nuevoEnemigo = new alien(this, 100, 245, 1, 0, 1);
+	nuevoEnemigo = new alien(this, 400, 245, 1, 0, 1);
+	((alien*)nuevoEnemigo)->limitar(300, 500);
 	vectorEnemigos.push_back(nuevoEnemigo);
+*/
 
 	//todo lo que dice NOTA MARTIN tiene que ver con los vectores de enemigos, items y balas
 
@@ -1538,6 +1541,16 @@ int juego::maximaPosicionJugadores(){
 			max=boby4.getPosY();
 	}
 	return max;
+}
+
+int juego::obtener_nivel()
+{
+	return nivel;
+}
+
+int juego::obtener_posicion_camara()
+{
+	return rect_origen_fondo3.x;
 }
 
 void juego::cargarEnemigosNivel1(int cantEnemigos){

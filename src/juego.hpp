@@ -52,6 +52,8 @@ public:
 	void serializar_puntaje (std::stringstream &ss);
 	int obtenerCantidadDeEnemigos(int nivel);
 	void terminar();
+	int obtener_nivel();
+	int obtener_posicion_camara();
 
 protected:
 	puntajes &pts;
