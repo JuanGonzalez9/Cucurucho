@@ -47,13 +47,13 @@ R"(<?xml version="1.0"?>
 	    <sprite>imagenes/alien.png</sprite>
     </alien>
     <enemigo1>
-	    <sprite>imagenes/boss.png</sprite>
+	    <sprite>imagenes/tortugaBOSS.bmp</sprite>
     </enemigo1>
 	<enemigo2>
-	    <sprite>imagenes/monstruolevel2.bmp</sprite>
+	    <sprite>imagenes/Level2Colgado.bmp</sprite>
     </enemigo2>
 	<enemigo3>
-	    <sprite>imagenes/monstruolevel3.bmp</sprite>
+	    <sprite>imagenes/mfinal3.bmp</sprite>
     </enemigo3>
   <marcianito>
       <sprite>imagenes/enemigo.png</sprite>

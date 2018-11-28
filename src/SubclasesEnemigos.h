@@ -121,7 +121,7 @@ public:
 	void setMarcaPasos(int valor);	
 
 protected:
-
+	int marco = 0;
 };
 
 class MonstruoFinalNivel2 : public MonstruoFinal{
@@ -134,7 +134,7 @@ public:
 	void setMarcaPasos(int valor);	
 
 protected:
-
+	int marco = 0;
 };
 
 class MonstruoFinalNivel3 : public MonstruoFinal{
@@ -147,7 +147,7 @@ public:
 	void setMarcaPasos(int valor);	
 
 protected:
-
+	int marco = 0;
 };
 
 

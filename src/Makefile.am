@@ -59,7 +59,10 @@ imagenes=	personaje.png \
 		alien.png \
 		bala_fuego.bmp \
 		bala_fuego_2.bmp \
-		bala_misil.bmp
+		bala_misil.bmp \
+		tortugaBOSS.bmp \
+		Level2Colgado.bmp \
+		mfinal3.bmp 
 		
 imagenes_o=	imagen-personaje.o \
 		imagen-personaje2.o \
@@ -116,7 +119,10 @@ imagenes_o=	imagen-personaje.o \
 		imagen-alien.o \
 		imagen-bala_fuego.o \
 		imagen-bala_fuego_2.o \
-		imagen-bala_misil.o
+		imagen-bala_misil.o \
+		imagen-tortugaBOSS.o \
+		imagen-Level2Colgado.o \
+		imagen-mfinal3.o
 		
 contra_LDFLAGS= $(imagenes_o) -rdynamic -pthread
 nodist_contra_SOURCES = $(imagenes_o)
