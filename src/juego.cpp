@@ -113,13 +113,9 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	vectorEnemigos.push_back(nuevoEnemigo);
 	*/
 
-	this->cargarEnemigosNivel1(12);
-	this->cargarEnemigosNivel2(13);
-	this->cargarEnemigosNivel3(14);
-
-	//this->cargarEnemigosNivel1(this->obtenerCantidadDeEnemigos(1));
-	//this->cargarEnemigosNivel2(this->obtenerCantidadDeEnemigos(2));
-	//this->cargarEnemigosNivel3(this->obtenerCantidadDeEnemigos(3));
+	this->cargarEnemigosNivel1(this->obtenerCantidadDeEnemigos(1));
+	this->cargarEnemigosNivel2(this->obtenerCantidadDeEnemigos(2));
+	this->cargarEnemigosNivel3(this->obtenerCantidadDeEnemigos(3));
 	///////////////////////////////////////////////////////////
 
 	//CARGO LOS ICONOS DE VIDAS///////////////////////////
@@ -302,7 +298,7 @@ int juego::obtenerCantidadDeEnemigos(int nivel)
 	if (nivel >= 1 && nivel <=3) {
 		std::string s("//configuracion//cantidad_enemigos//nivel_");
 		s += std::to_string(nivel);
-		std::cout << cfg.obtener_i (s.c_str(), [](int n, bool omision) {return n > 0 && n < 1000;}) << "\n";
+		r = cfg.obtener_i (s.c_str(), [](int n, bool omision) {return n > 0 && n < 1000;});
 	}
 	return r;
 }
