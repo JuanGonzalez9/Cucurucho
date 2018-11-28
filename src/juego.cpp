@@ -1207,7 +1207,7 @@ void juego::actualizar ()
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
-			if(!vectorEnemigos[i]->derrotado() && collision(boby2.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
+			if(vectorEnemigos[i]->esActivo() && !vectorEnemigos[i]->derrotado() && collision(boby2.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby2.perderVida();
 			}
 		}
@@ -1239,7 +1239,7 @@ void juego::actualizar ()
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
-			if(!vectorEnemigos[i]->derrotado() && collision(boby3.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
+			if(vectorEnemigos[i]->esActivo() && !vectorEnemigos[i]->derrotado() && collision(boby3.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby3.perderVida();
 			}
 		}
@@ -1270,7 +1270,7 @@ void juego::actualizar ()
 
 		//veo si toca algun enemigo
 		for(int i = 0; i < vectorEnemigos.size(); i++){
-			if(!vectorEnemigos[i]->derrotado() && collision(boby4.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
+			if(vectorEnemigos[i]->esActivo() && !vectorEnemigos[i]->derrotado() && collision(boby4.getRectaDestino(),vectorEnemigos[i]->getRectaDestino())){
 				boby4.perderVida();
 			}
 		}
