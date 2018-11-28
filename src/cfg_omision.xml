@@ -43,6 +43,9 @@ R"(<?xml version="1.0"?>
     <heroe4>
 	    <sprite>imagenes/personaje4.png</sprite>
     </heroe4>
+    <alien>
+	    <sprite>imagenes/alien.png</sprite>
+    </alien>
     <enemigo1>
 	    <sprite>imagenes/boss.png</sprite>
     </enemigo1>

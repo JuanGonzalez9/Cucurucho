@@ -9,7 +9,10 @@
 #include "iocontra.hpp"
 
 // ----------------- CONSTRUCTOR -----------------------------
-EntidadDibujable::EntidadDibujable() {
+EntidadDibujable::EntidadDibujable():
+	invertir_x(false),
+	invertir_y(false)
+{
 
 	textura = NULL;
 
@@ -62,7 +65,16 @@ SDL_Texture* EntidadDibujable::getTextura(){
 
 //-------------------------METODOS--------------------------------------------
 void EntidadDibujable::dibujar(SDL_Renderer* ren){
-	SDL_RenderCopy(ren, textura, &rectOrigen , &rectDestino);
+	SDL_RendererFlip f = SDL_FLIP_NONE;
+	if (invertir_x && invertir_y) {
+		f = (SDL_RendererFlip) (SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
+	} else if (invertir_x) {
+		f = SDL_FLIP_HORIZONTAL;
+	} else if (invertir_y) {
+		f = SDL_FLIP_VERTICAL;
+	}
+	SDL_RenderCopyEx(ren,textura, &rectOrigen, &rectDestino, 0.0, nullptr, f);
+	//SDL_RenderCopy(ren, textura, &rectOrigen , &rectDestino);
 }
 
 void EntidadDibujable::dibujarFondo(SDL_Renderer* ren){
