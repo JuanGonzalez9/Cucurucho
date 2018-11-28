@@ -91,6 +91,7 @@ Marcianito::Marcianito(int x,int y, int coorX, int coordenada, int nivel):Enemig
 	activo=false;
 	marcapasos=0;
 	shootTimer=30;
+	inmune = 0;
 }
 
 void Marcianito::hazLoTuyo(){

@@ -73,7 +73,6 @@ protected:
 	int shootTimer;
 	bool quieroDisparar;
 
-
 	int inmune;
 
 };

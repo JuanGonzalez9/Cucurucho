@@ -34,6 +34,7 @@ Enemigo::Enemigo(int x,int y,int life, int coordenada, int nivel){
 	marcapasos=0;
 	shootTimer=0;
 	visible = true;
+	inmune = 0;
 }
 
 Enemigo::Enemigo() {
@@ -52,6 +53,7 @@ Enemigo::Enemigo() {
 	marcapasos=0;
 	shootTimer=0;
 	visible = true;
+	inmune = 0;
 }
 
 Enemigo::Enemigo(int x,int y,int life) {
@@ -63,6 +65,7 @@ Enemigo::Enemigo(int x,int y,int life) {
 	posX=x;
 	posY=y;
 	visible = true;
+	inmune = 0;
 }
 
 void Enemigo::perderVida(){
