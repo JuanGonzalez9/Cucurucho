@@ -1562,7 +1562,7 @@ void juego::cargarEnemigosNivel1(int cantEnemigos){
 		coor= rand() % 7000 + 800;
 		//decido cual enemigo cargo, esto es aleatorio de 1 a 4
 		//saco el resto de dividir la coordenada por 4 para ahorrarme hacer otro rand ;)
-		switch(coor%4){
+		switch(coor%3 + 1){
 			case (0):
 				//marciano
 				nuevoEnemigo = new Marcianito(800,240,1,coor,1);
@@ -1599,7 +1599,7 @@ void juego::cargarEnemigosNivel2(int cantEnemigos){
 		coor= rand() % 3000 + 600;
 		//decido cual enemigo cargo, esto es aleatorio de 1 a 4
 		//saco el resto de dividir la coordenada por 4 para ahorrarme hacer otro rand ;)
-		switch(coor%4){
+		switch(coor%3 +1){
 			case (0):
 				//marciano
 				nuevoEnemigo = new Marcianito(rand() % 720 + 120,-100,1,coor,2);
@@ -1636,7 +1636,7 @@ void juego::cargarEnemigosNivel3(int cantEnemigos){
 		coor= rand() % 7000 + 800;
 		//decido cual enemigo cargo, esto es aleatorio de 1 a 4
 		//saco el resto de dividir la coordenada por 4 para ahorrarme hacer otro rand ;)
-		switch(coor%4){
+		switch(coor%3 +1){
 			case (0):
 				//marciano
 				nuevoEnemigo = new Marcianito(800,240,1,coor,3);
