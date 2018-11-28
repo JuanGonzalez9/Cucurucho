@@ -868,7 +868,7 @@ void juego::manejar_eventos ()
 		switch(e.type){
 
 			case (SDL_QUIT):
-				termino = true;
+				terminar();
 				break;
 
 			default:
@@ -986,10 +986,7 @@ void juego::actualizarNivel2(){
 }
 
 void juego::actualizarNivel3(){
-	for (int i = 0; i < num_jugadores; i++) {
-		pts.puntos (i, nivel-1, obtenerPuntaje(i, true));
-	}
-	termino = true;
+	terminar();
 }
 
 void juego::grisarJugador(int numeroDeJugador){
@@ -1472,19 +1469,19 @@ void juego::actualizar ()
 	switch(num_jugadores){
 		case (1):
 			if(boby.muerto())
-				termino = true;
+				terminar();
 			break;
 		case (2):
 			if(boby.muerto() && boby2.muerto())
-				termino = true;
+				terminar();
 			break;
 		case (3):
 			if(boby.muerto() && boby2.muerto() && boby3.muerto())
-				termino = true;
+				terminar();
 			break;
 		case (4):
 			if(boby.muerto() && boby2.muerto() && boby3.muerto() && boby4.muerto())
-				termino = true;
+				terminar();
 			break;
 	}
 	/////////////////////////////////////////////////////
@@ -1867,6 +1864,14 @@ void juego::dibujarVidas(){
 	/////////////////////////////////////////
 }
 
+void juego::terminar()
+{
+	for (int i = 0; i < num_jugadores; i++){
+		pts.puntos (i, nivel-1, obtenerPuntaje(i, true));
+	}
+	termino=true;
+}
+
 void juego::dibujar ()
 {
 	loginfo("Se comienza a dibujar juego");
@@ -1904,10 +1909,7 @@ void juego::dibujar ()
 	if(nivel == 3){
 		if(enemigoNivel3->derrotado()){
 			//delete(enemigoNivel2);
-			for (int i = 0; i < num_jugadores; i++){
-				pts.puntos (i, nivel-1, obtenerPuntaje(i, true));
-			}
-			termino=true;
+			terminar();
 		}
 	}
 
