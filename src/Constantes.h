@@ -83,7 +83,8 @@ public:
 		MonstruoNivel2,
 		MonstruoNivel3,
 		turret,
-		paracaidas
+		paracaidas,
+		alien
 	};
 
 	enum TipoItem{

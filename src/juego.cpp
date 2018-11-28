@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include "juego.hpp"
+#include "alien.hpp"
 #include "DatosPersonaje.h"
 
 
@@ -65,6 +66,10 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	boby2.agregarGris("//configuracion//personajes//heroe2//sprite", renderer);
 	boby3.agregarGris("//configuracion//personajes//heroe3//sprite", renderer);
 	boby4.agregarGris("//configuracion//personajes//heroe4//sprite", renderer);
+
+	Enemigo* nuevoEnemigo;
+	nuevoEnemigo = new alien(this, 100, 245, 1, 0, 1);
+	vectorEnemigos.push_back(nuevoEnemigo);
 
 	//todo lo que dice NOTA MARTIN tiene que ver con los vectores de enemigos, items y balas
 

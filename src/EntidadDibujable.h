@@ -43,7 +43,7 @@ public:
 	void actualizarRectOrigenOriginal();
 
 protected:
-
+	bool invertir_x, invertir_y;
 	SDL_Texture* textura;
 	SDL_Rect rectOrigen;
 	SDL_Rect rectDestino;
