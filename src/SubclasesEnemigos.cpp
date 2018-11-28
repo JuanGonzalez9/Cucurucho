@@ -721,15 +721,54 @@ void MonstruoFinalNivel3::hazLoTuyo(){
 }
 
 void MonstruoFinalNivel1::setMarcaPasos(int valor){
-	
+	switch(valor){
+		case (0):
+			rectOrigen.x = 0;
+			break;
+		case (1):
+			rectOrigen.x = valor*(160);
+			break;
+		case (2):
+			rectOrigen.x = valor *(160);
+			break;
+		default:
+			break;	
+	}
 }
 
 void MonstruoFinalNivel2::setMarcaPasos(int valor){
-	
+	switch(valor){
+		case (0):
+			rectOrigen.y = 4;
+            		rectOrigen.h = 110;
+			break;
+		case (1):
+			rectOrigen.y = valor*(114);
+        		rectOrigen.h = 114;
+			break;
+		case (2):
+			rectOrigen.y = valor*(114);
+        		rectOrigen.h = 114;
+			break;
+		default:
+			break;	
+	}
 }
 
 void MonstruoFinalNivel3::setMarcaPasos(int valor){
-	
+	switch(valor){
+		case (0):
+			rectOrigen.y = 0;
+			break;
+		case (1):
+			rectOrigen.y = valor * (190);
+			break;
+		case (2):
+			rectOrigen.y = valor * (190);
+			break;
+		default:
+			break;	
+	}	
 }
 
 
@@ -760,6 +799,7 @@ string MonstruoFinalNivel1::serializar(){
 
 
 	string serial = to_string(Constantes::MonstruoNivel1);
+	serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marco);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 	//rectDestino.x < 1 ? 1 : rectDestino.x
@@ -768,6 +808,7 @@ string MonstruoFinalNivel1::serializar(){
 
 string MonstruoFinalNivel2::serializar(){
 	string serial = to_string(Constantes::MonstruoNivel2);
+	serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marco);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,0);
 
@@ -776,6 +817,7 @@ string MonstruoFinalNivel2::serializar(){
 
 string MonstruoFinalNivel3::serializar(){
 	string serial = to_string(Constantes::MonstruoNivel3);
+	serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marco);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 

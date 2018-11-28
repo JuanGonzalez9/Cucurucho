@@ -283,9 +283,9 @@ void JuegoCliente::dibujarEnemigos(){
 		int y = vDatosEnemigo[i]->getPosY();
 		int marcaPasos = vDatosEnemigo[i]->getMarcaPasos();
 		//cout<<"(x,y) "<<x<<" , "<<y<<endl;
-		if(tipo == Constantes::turret || tipo == Constantes::marcianito){
+		//if(tipo == Constantes::turret || tipo == Constantes::marcianito){
 			vEnemigos[tipo-1]->setMarcaPasos(marcaPasos);
-		}
+		//}
 		vEnemigos[tipo-1]->setPos(x,y);
 		vEnemigos[tipo-1]->dibujar(renderer);
 	}
