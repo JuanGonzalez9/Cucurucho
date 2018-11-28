@@ -1468,6 +1468,25 @@ void juego::actualizar ()
 			balasEnemigas.erase(balasEnemigas.begin() + i);
 		else i++;
 	}
+
+	switch(num_jugadores){
+		case (1):
+			if(boby.muerto())
+				termino = true;
+			break;
+		case (2):
+			if(boby.muerto() && boby2.muerto())
+				termino = true;
+			break;
+		case (3):
+			if(boby.muerto() && boby2.muerto() && boby3.muerto())
+				termino = true;
+			break;
+		case (4):
+			if(boby.muerto() && boby2.muerto() && boby3.muerto() && boby4.muerto())
+				termino = true;
+			break;
+	}
 	/////////////////////////////////////////////////////
 
 	loginfo("Se termina de actualizar juego");
@@ -1526,7 +1545,7 @@ int juego::maximaPosicionJugadores(){
 
 void juego::cargarEnemigosNivel1(int cantEnemigos){
 	Enemigo* nuevoEnemigo;
-	int coor=0;
+	int coor=800;
 	for (int i = 0; i < cantEnemigos; i++) {
 		//cargo una coordenada aleatoria entre 800 (borde derecho de primera pantalla) y 6000 (antes del jefe)
 		coor= rand() % 7000 + 800;
@@ -1547,13 +1566,13 @@ void juego::cargarEnemigosNivel1(int cantEnemigos){
 				break;
 			case (2):
 				//turret
-				nuevoEnemigo = new Turret(800,400,1,coor,1);
+				nuevoEnemigo = new Turret(800,rand() % 500 + 350,1,coor,1);
 				nuevoEnemigo->obtenerTextura("//configuracion//personajes//turret//sprite", renderer);
 				vectorEnemigos.push_back(nuevoEnemigo);
 				break;
 			case (3):
 				//paracaidas
-				nuevoEnemigo = new Paracaidas(600,-100,1,coor,1);
+				nuevoEnemigo = new Paracaidas(rand() % 750 + 550,-100,1,coor,1);
 				nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
 				vectorEnemigos.push_back(nuevoEnemigo);
 				break;
@@ -1572,7 +1591,7 @@ void juego::cargarEnemigosNivel2(int cantEnemigos){
 		switch(coor%4){
 			case (0):
 				//marciano
-				nuevoEnemigo = new Marcianito(200,-100,1,coor,2);
+				nuevoEnemigo = new Marcianito(rand() % 720 + 120,-100,1,coor,2);
 				nuevoEnemigo->obtenerTextura("//configuracion//personajes//marciano//sprite", renderer);
 				vectorEnemigos.push_back(nuevoEnemigo);
 				break;
@@ -1584,13 +1603,13 @@ void juego::cargarEnemigosNivel2(int cantEnemigos){
 				break;
 			case (2):
 				//turret
-				nuevoEnemigo = new Turret(300,-80,1,coor,2);
+				nuevoEnemigo = new Turret(rand() % 720 + 0,-80,1,coor,2);
 				nuevoEnemigo->obtenerTextura("//configuracion//personajes//turret//sprite", renderer);
 				vectorEnemigos.push_back(nuevoEnemigo);
 				break;
 			case (3):
 				//paracaidas
-				nuevoEnemigo = new Paracaidas(600,-100,1,coor,2);
+				nuevoEnemigo = new Paracaidas(rand() % 750 + 550,-100,1,coor,2);
 				nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
 				vectorEnemigos.push_back(nuevoEnemigo);
 				break;
@@ -1600,7 +1619,7 @@ void juego::cargarEnemigosNivel2(int cantEnemigos){
 
 void juego::cargarEnemigosNivel3(int cantEnemigos){
 	Enemigo* nuevoEnemigo;
-	int coor=0;
+	int coor=800;
 	for (int i = 0; i < cantEnemigos; i++) {
 		//cargo una coordenada aleatoria entre 800 (borde derecho de primera pantalla) y 6000 (antes del jefe)
 		coor= rand() % 7000 + 800;
@@ -1621,13 +1640,13 @@ void juego::cargarEnemigosNivel3(int cantEnemigos){
 				break;
 			case (2):
 				//turret
-				nuevoEnemigo = new Turret(800,400,1,coor,3);
+				nuevoEnemigo = new Turret(800,rand() % 500 + 350,1,coor,3);
 				nuevoEnemigo->obtenerTextura("//configuracion//personajes//turret//sprite", renderer);
 				vectorEnemigos.push_back(nuevoEnemigo);
 				break;
 			case (3):
 				//paracaidas
-				nuevoEnemigo = new Paracaidas(600,-100,1,coor,3);
+				nuevoEnemigo = new Paracaidas(rand() % 750 + 550,-100,1,coor,3);
 				nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
 				vectorEnemigos.push_back(nuevoEnemigo);
 				break;
