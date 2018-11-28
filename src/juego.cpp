@@ -1034,6 +1034,27 @@ void juego::desgrisarJugador(int numeroDeJugador){
 
 void juego::actualizar ()
 {
+
+	if(nivel == 1){
+		if(enemigoNivel1->derrotado()){
+			//delete(enemigoNivel1);
+			cambioNivel=true; 
+		}
+	}
+	if(nivel == 2){
+		if(enemigoNivel2->derrotado()){
+			//delete(enemigoNivel2);
+			cambioNivel=true; 
+		}
+	}
+
+	if(nivel == 3){
+		if(enemigoNivel3->derrotado()){
+			//delete(enemigoNivel2);
+			terminar();
+		}
+	}
+	
 	loginfo("Se comienza actualizar juego");
 
 ////////////////////////////SCROLL VERTICAL/////////////////////////////////
@@ -1907,25 +1928,7 @@ void juego::dibujar ()
 	// Copio el resultado
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
 
-	if(nivel == 1){
-		if(enemigoNivel1->derrotado()){
-			//delete(enemigoNivel1);
-			cambioNivel=true; 
-		}
-	}
-	if(nivel == 2){
-		if(enemigoNivel2->derrotado()){
-			//delete(enemigoNivel2);
-			cambioNivel=true; 
-		}
-	}
-
-	if(nivel == 3){
-		if(enemigoNivel3->derrotado()){
-			//delete(enemigoNivel2);
-			terminar();
-		}
-	}
+	
 
 	//dibujo carteles
 	if((nivel==1)&&(cartelLv1.getRectDestX()>=-210)){
