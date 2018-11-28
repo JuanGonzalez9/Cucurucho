@@ -258,6 +258,11 @@ void JuegoCliente::dibujarEnemigos(){
 		int x = vDatosEnemigo[i]->getPosX();
 		int y = vDatosEnemigo[i]->getPosY();
 		//cout<<"(x,y) "<<x<<" , "<<y<<endl;
+		if(tipo == Constantes::turret || tipo == Constantes::marcianito){
+			if(vEnemigos[tipo - 1]->quiereDisparar()) vEnemigos[tipo - 1]->disparo();
+			vEnemigos[tipo - 1]->bajarShootTimer();
+			vEnemigos[tipo - 1]->hazLoTuyo();
+		}
 		vEnemigos[tipo-1]->setPos(x,y);
 		vEnemigos[tipo-1]->dibujar(renderer);
 	}

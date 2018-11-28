@@ -136,6 +136,12 @@ void Enemigo::disparo(){
 	quieroDisparar=false;
 }
 
+void Enemigo::bajarShootTimer(){
+	if(shootTimer > 0){
+		shootTimer--;
+	}
+}
+
 int Enemigo::disparoXVel(){
 	return -3;
 }

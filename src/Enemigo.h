@@ -50,6 +50,8 @@ public:
 	virtual int disparoXVel();
 	virtual int disparoYVel();
 	virtual void disparo();
+	
+	void bajarShootTimer();
 
 	virtual string serializar();
 	bool estoyEnEscena(int x,int y,int w,int h);

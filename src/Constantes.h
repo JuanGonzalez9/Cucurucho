@@ -101,7 +101,8 @@ public:
 		normal,
 		balaFuego,
 		balaFuego2,
-		balaMisil
+		balaMisil,
+		balaTurret
 	};
 
 	enum TipoBala{
