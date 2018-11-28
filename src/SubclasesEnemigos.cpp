@@ -52,11 +52,16 @@ string Ovni::serializar(){
 	string serial = "";
 	if(rectDestino.x > -300 && rectDestino.x < 10000 && rectDestino.y > -300 && rectDestino.y < 10000){
 		serial = to_string(Constantes::ovni);
+		serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marcapasos);
 		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 	}
 
 	return serial;
+}
+
+void Ovni::setMarcaPasos(int valor){
+	//no hace nada
 }
 
 Ovni::~Ovni() {
@@ -138,11 +143,27 @@ string Marcianito::serializar(){
 	string serial = "";
 	if(rectDestino.x > -300 && rectDestino.x < 10000 && rectDestino.y > -300 && rectDestino.y < 10000){
 		serial = to_string(Constantes::marcianito);
+		serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marcapasos);
 		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 	}
 
 	return serial;
+}
+
+void Marcianito::setMarcaPasos(int valor){
+	marcapasos = valor;
+
+	//es la misma animacion de HazLoTuyo
+	if(marcapasos%10==0){
+		if(rectOrigen.x==120)
+			rectOrigen.x=0;
+		else rectOrigen.x+=40;
+	}
+	if(marcapasos==40)
+		rectOrigen.y=50;
+	if(marcapasos==0)
+		rectOrigen.y=0;
 }
 
 Marcianito::~Marcianito() {
@@ -279,11 +300,20 @@ string Turret::serializar(){
 	string serial = "";
 	if(rectDestino.x > -300 && rectDestino.x < 10000 && rectDestino.y > -300 && rectDestino.y < 10000){
 		serial = to_string(Constantes::turret);
+		serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marcapasos);
 		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 	}
 
 	return serial;
+}
+
+void Turret::setMarcaPasos(int valor){
+	if(valor - 1 < 0) marcapasos = 11;
+	else marcapasos = valor - 1;
+	
+	cout<<marcapasos<<endl;
+	rectOrigen.x = marcapasos * 34;
 }
 
 Turret::~Turret() {
@@ -347,11 +377,16 @@ string Paracaidas::serializar(){
 	string serial = "";
 	if(rectDestino.x > -300 && rectDestino.x < 10000 && rectDestino.y > -300 && rectDestino.y < 10000){
 		serial = to_string(Constantes::paracaidas);
+		serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marcapasos);
 		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 		serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 	}
 
 	return serial;
+}
+
+void Paracaidas::setMarcaPasos(int valor){
+	//no hace nada
 }
 
 Paracaidas::~Paracaidas() {
@@ -540,6 +575,10 @@ void MonstruoFinal::explotar(){
 //	
 //}
 
+void MonstruoFinal::setMarcaPasos(int valor){
+	//no hace nada
+}
+
 MonstruoFinal::~MonstruoFinal(){}
 
 void MonstruoFinalNivel1::posicionar(){
@@ -670,6 +709,7 @@ string MonstruoFinalNivel1::serializar(){
 
 
 	string serial = to_string(Constantes::MonstruoNivel1);
+	serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marcapasos);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 	//rectDestino.x < 1 ? 1 : rectDestino.x
@@ -678,6 +718,7 @@ string MonstruoFinalNivel1::serializar(){
 
 string MonstruoFinalNivel2::serializar(){
 	string serial = to_string(Constantes::MonstruoNivel2);
+	serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marcapasos);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 
@@ -686,8 +727,21 @@ string MonstruoFinalNivel2::serializar(){
 
 string MonstruoFinalNivel3::serializar(){
 	string serial = to_string(Constantes::MonstruoNivel3);
+	serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marcapasos);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 
 	return serial;
+}
+
+void MonstruoFinalNivel1::setMarcaPasos(int valor){
+	//no hace nada
+}
+
+void MonstruoFinalNivel2::setMarcaPasos(int valor){
+	//no hace nada
+}
+
+void MonstruoFinalNivel3::setMarcaPasos(int valor){
+	//no hace nada
 }

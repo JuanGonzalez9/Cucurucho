@@ -59,16 +59,17 @@ void Parser::parsear(string msj,int jugadores,int numeroDeJugador){
 void Parser::parsearEnemigos(string msj){
 	
 	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO;
-	int tamanioMsjEnemigo = 1 + RESPUESTA_POSY * 2;
+	int tamanioMsjEnemigo = 1 + MARCAPASOS + RESPUESTA_POSY * 2;
 	unsigned contador = 0;
 	vEnemigos.clear();
 	
 	while(contador < MAX_ENEMIGOS_EN_ESCENA && msj[i] != '0'){
 		DatosEnemigo* datosE = new DatosEnemigo();
-		datosE->setPosX(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + 1,RESPUESTA_POSY)));
-		datosE->setPosY(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + 5,RESPUESTA_POSY)));
-
 		datosE->setTipoEnemigo((Constantes::TipoEnemigo)(msj[i] - '0'));
+		datosE->setMarcapasos(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + 1,MARCAPASOS)));
+
+		datosE->setPosX(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + MARCAPASOS + 1,RESPUESTA_POSY)));
+		datosE->setPosY(dameElInt(msj.substr(i + contador * tamanioMsjEnemigo + MARCAPASOS + 5,RESPUESTA_POSY)));
 		vEnemigos.push_back(datosE);	
 		i += tamanioMsjEnemigo;
 	}

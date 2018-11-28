@@ -24,6 +24,7 @@ public:
 	int disparoYVel();
 	int disparoXVel();
 	string serializar();
+	void setMarcaPasos(int valor);
 
 protected:
 
@@ -41,6 +42,7 @@ public:
 	int disparoYVel();
 	int disparoXVel();
 	string serializar();
+	void setMarcaPasos(int valor);
 
 protected:
 
@@ -57,6 +59,7 @@ public:
 	int disparoYVel();
 	int disparoXVel();
 	string serializar();
+	void setMarcaPasos(int valor);
 
 protected:
 	int apunteX;
@@ -75,6 +78,7 @@ public:
 	int disparoYVel();
 	int disparoXVel();
 	string serializar();
+	void setMarcaPasos(int valor);
 
 protected:
 
@@ -95,6 +99,7 @@ public:
 	void dispararMisiles(int coordenadaX,int coordenadaY, int level);
 	void tenerInmunidad();
 	void tenerInvisibilidad();
+	void setMarcaPasos(int valor);
 	
 
 
@@ -112,7 +117,8 @@ public:
 	string serializar();
 	virtual ~MonstruoFinalNivel1();
 	void posicionar();
-	void hazLoTuyo();	
+	void hazLoTuyo();
+	void setMarcaPasos(int valor);	
 
 protected:
 
@@ -124,7 +130,8 @@ public:
 	string serializar();
 	virtual ~MonstruoFinalNivel2();
 
-	void hazLoTuyo();	
+	void hazLoTuyo();
+	void setMarcaPasos(int valor);	
 
 protected:
 
@@ -136,7 +143,8 @@ public:
 	string serializar();
 	virtual ~MonstruoFinalNivel3();
 
-	void hazLoTuyo();	
+	void hazLoTuyo();
+	void setMarcaPasos(int valor);	
 
 protected:
 

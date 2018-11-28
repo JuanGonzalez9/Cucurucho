@@ -17,6 +17,7 @@ public:
 	void actualizarItem();
 	bool puedoDibujar();
 	string serializar();
+	void setMarcaPasos(int valor);
 
 	//acciones
 

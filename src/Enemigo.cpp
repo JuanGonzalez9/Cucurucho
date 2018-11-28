@@ -275,6 +275,10 @@ string Enemigo::serializar(){
 	return "soy tu padre";
 }
 
+void Enemigo::setMarcaPasos(int valor){
+	//SE REDEFINE EN LAS CLASES HIJAS
+}
+
 bool Enemigo::estoyEnEscena(int x,int y,int w,int h){
 	int unCacho = 300;
 	if(coordenadaX + rectDestino.w <= x) return false;

@@ -4,6 +4,7 @@ DatosEnemigo::DatosEnemigo() {
 	posX = 0;
 	posY = 0;
 	tipo = Constantes::sinEnemigo;
+	marcaPasos = 0;
 }
 
 //...........................set......................
@@ -18,6 +19,10 @@ void DatosEnemigo::setPosY(int y){
 
 void DatosEnemigo::setTipoEnemigo(Constantes::TipoEnemigo tipoDeEnemigo){
 	this->tipo = tipoDeEnemigo;
+}
+
+void DatosEnemigo::setMarcapasos(int valor){
+	this->marcaPasos = valor;
 }
 
 /*void DatosPersonaje::setSaltando(bool saltando){
@@ -60,6 +65,10 @@ int DatosEnemigo::getPosY(){
 
 Constantes::TipoEnemigo DatosEnemigo::getTipoEnemigo(){
 	return tipo;
+}
+
+int DatosEnemigo::getMarcaPasos(){
+	return marcaPasos;
 }
 
 /*bool DatosPersonaje::estaSaltando(){

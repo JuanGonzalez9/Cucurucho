@@ -76,6 +76,10 @@ string Item::serializar(){
 	return serial;
 }
 
+void Item::setMarcaPasos(int valor){
+	//NO HAGO NADA
+}
+
 int Item::darContenido(){
 	return contenido;
 }

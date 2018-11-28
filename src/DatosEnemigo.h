@@ -13,6 +13,7 @@ public:
 	void setPosX(int x);
 	void setPosY(int y);
 	void setTipoEnemigo(Constantes::TipoEnemigo tipo);
+	void setMarcapasos(int valor);
 	/*void setSaltando(bool saltando);
 	void setDisparando(bool disparando);
 	void setMirandoALaDerecha(bool mirando);
@@ -25,6 +26,7 @@ public:
 	int getPosX();
 	int getPosY();
 	Constantes::TipoEnemigo getTipoEnemigo();
+	int getMarcaPasos();
 	/*bool estaSaltando();
 	bool estaDisparando();
 	bool estaMirandoALaDerecha();
@@ -37,6 +39,7 @@ public:
 private:
 	int posX;
 	int posY;
+	int marcaPasos;
 	
 	Constantes::TipoEnemigo tipo;
 };

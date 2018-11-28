@@ -54,6 +54,7 @@ public:
 	void bajarShootTimer();
 
 	virtual string serializar();
+	virtual void setMarcaPasos(int valor);
 	bool estoyEnEscena(int x,int y,int w,int h);
 	bool visible;
 
