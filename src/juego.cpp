@@ -289,7 +289,8 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 		boby4.setCoordenadaX(0+350);
 		boby4.setCoordenadaY(200);
 	}
-	
+
+	sePuedePedirGodMode = 0;	
 }
 
 int juego::obtenerCantidadDeEnemigos(int nivel)
@@ -823,22 +824,25 @@ void juego::manejar_eventos ()
 		
 	}
 
+	if(sePuedePedirGodMode > 0) sePuedePedirGodMode--;
+
 	if(alguienQuiereGodMode()){
 
-		/*if(boby.esGOD()){
-			boby.desactivarGodMode();
-			boby2.desactivarGodMode();
-			printf("DESACTIVANDO GOD MODE\n");
-			SDL_Delay(50);
+		if(sePuedePedirGodMode == 0){
+			if(algunoEstaEnGodMode()){
+				godModeDesactivadoParaTodos();
+				printf("DESACTIVANDO GOD MODE\n");
+				sePuedePedirGodMode = 100;
 			
-		}
-		else{*/
-			printf("ACTIVANDO GOD MODE\n");
-			godModeParaTodos();
-			armador->agregarChunk(Constantes::modoInmortal);
-			SDL_Delay(50);
+			}
+			else{
+				printf("ACTIVANDO GOD MODE\n");
+				godModeParaTodos();
+				armador->agregarChunk(Constantes::modoInmortal);
+				sePuedePedirGodMode = 100;
 
-		//}
+			}
+		}
 		
 	}
 
@@ -2056,6 +2060,10 @@ bool juego::alguienQuiereGodMode(){
 	return (cliente->quiereAccion(Constantes::nivel3) || cliente2->quiereAccion(Constantes::nivel3) || cliente3->quiereAccion(Constantes::nivel3) || cliente4->quiereAccion(Constantes::nivel3));
 }
 
+bool juego::algunoEstaEnGodMode(){
+	return (boby.esGOD() || boby2.esGOD() || boby3.esGOD() || boby4.esGOD());
+}
+
 void juego::godModeParaTodos(){
 	boby.activarGodMode();
 	boby2.activarGodMode();
@@ -2063,6 +2071,12 @@ void juego::godModeParaTodos(){
 	boby4.activarGodMode();
 }
 
+void juego::godModeDesactivadoParaTodos(){
+	boby.desactivarGodMode();
+	boby2.desactivarGodMode();
+	boby3.desactivarGodMode();
+	boby4.desactivarGodMode();
+}
 void juego::setAcciones(char* msj, int numeroCliente){
 	if(numeroCliente == 1){
 		cliente->setMensajeATraducir(msj);
