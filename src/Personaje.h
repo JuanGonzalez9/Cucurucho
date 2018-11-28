@@ -105,7 +105,7 @@ public:
 	//DISPAROS
 	void disparar(int dirX, int dirY,SDL_Texture *text);
 	void cambiarArma(int nroArma);
-	void verSiBalasPegan(Enemigo* malo);
+	bool verSiBalasPegan(Enemigo* malo);
 	void dibujarBalas(SDL_Renderer* renderer);
 	bool puedeDisparar();
 	void refreshBullets();

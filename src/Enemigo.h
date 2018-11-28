@@ -13,7 +13,7 @@ public:
 	virtual ~Enemigo();
 
 	//GETTER SETTER
-	void perderVida();
+	bool perderVida();
 	bool derrotado();
 	bool esActivo();
 	int obtenerCoordenadaActiva();

@@ -48,7 +48,10 @@ public:
 		cMuereEnemigo,
 		cAccionSalto,
 		cAgarrarItem,
-		cModoInmortal
+		cModoInmortal, //musica
+		cMusica1,
+		cMusica2,
+		cMusica3
 	};
 	eSonido chunkActual;
 
@@ -71,6 +74,8 @@ public:
 
 	void escucharSonido(eSonido idSonido);
 	void escucharSonido(eSonido idSonido,int channel);
+	bool estaSonandoCanal(int canal);
+	void stopCanal(int canal);
 
 	// Control de volumen
 	void subirVolumenMusica();

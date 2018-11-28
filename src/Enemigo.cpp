@@ -68,16 +68,18 @@ Enemigo::Enemigo(int x,int y,int life) {
 	inmune = 0;
 }
 
-void Enemigo::perderVida(){
+bool Enemigo::perderVida(){
 
 	if(inmune > 0){
-		return;
+		return false;
 	}
 
 	vidas--;
 	if (this->derrotado()){
 		activo=false;
+		return true;
 	}
+	return false;
 }
 
 bool Enemigo::derrotado(){

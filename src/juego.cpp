@@ -832,14 +832,15 @@ void juego::manejar_eventos ()
 			if(algunoEstaEnGodMode()){
 				godModeDesactivadoParaTodos();
 				printf("DESACTIVANDO GOD MODE\n");
-				sePuedePedirGodMode = 100;
+				sePuedePedirGodMode = 10;
 			
 			}
 			else{
 				printf("ACTIVANDO GOD MODE\n");
 				godModeParaTodos();
+				
 				armador->agregarChunk(Constantes::modoInmortal);
-				sePuedePedirGodMode = 100;
+				sePuedePedirGodMode = 10;
 
 			}
 		}
@@ -1376,10 +1377,10 @@ void juego::actualizar ()
 	int posXItem=0;
 	while (i<vectorEnemigos.size()){
 		if(vectorEnemigos[i]->esActivo()){
-			boby.verSiBalasPegan(vectorEnemigos[i]);
-			boby2.verSiBalasPegan(vectorEnemigos[i]);
-			boby3.verSiBalasPegan(vectorEnemigos[i]);
-			boby4.verSiBalasPegan(vectorEnemigos[i]);
+			if(boby.verSiBalasPegan(vectorEnemigos[i])) armador->agregarChunk(Constantes::muere);
+			if(boby2.verSiBalasPegan(vectorEnemigos[i])) armador->agregarChunk(Constantes::muere);
+			if(boby3.verSiBalasPegan(vectorEnemigos[i])) armador->agregarChunk(Constantes::muere);
+			if(boby4.verSiBalasPegan(vectorEnemigos[i])) armador->agregarChunk(Constantes::muere);
 
 			if (vectorEnemigos[i]->derrotado()){
 				//pruebo suerte!

@@ -111,20 +111,41 @@ int JuegoCliente::jugador() const
 
 void JuegoCliente::setMensajeDelServidor(string msj){
 	p.parsear(msj,cantJugadores,numeroDeJugador);
+
 	if(nivel == 1 && p.getNivel() == 3){
 		actualizarNivel2();
 		nivel = 3;
+		laMusica->stopCanal(0);
 	}
 	else{
 		if(nivel == 1 && p.getNivel() == 2){
 			actualizarNivel1();
 			nivel = 2;
+			laMusica->stopCanal(0);
 		}
 		else if(nivel == 2 && p.getNivel() == 3){
 			actualizarNivel2();
-			nivel = 3;	
+			nivel = 3;
+			laMusica->stopCanal(0);	
 		}
 	}
+	
+	Musica::eSonido sonido;
+	switch(nivel){
+		case(1):
+			sonido = Musica::cMusica1;
+			break;
+		case(2):
+			sonido = Musica::cMusica2;
+			break;
+		case(3):
+			sonido = Musica::cMusica3;
+			break;
+		default:
+			break;
+	}
+	laMusica->volumenSonido(sonido, 30);
+	if(!laMusica->estaSonandoCanal(0) && !laMusica->estaSonandoCanal(4)) laMusica->escucharSonido(sonido);
 }
 
 void JuegoCliente::actualizarFondos(){
@@ -412,7 +433,15 @@ void JuegoCliente::reproducirSonidos(){
 				laMusica->escucharSonido(Musica::cShotgun,2);
 				break;
 			case (Constantes::modoInmortal):
-				laMusica->escucharSonido(Musica::cModoInmortal,0);
+				/*if(laMusica->estaSonandoCanal(4)) laMusica->stopCanal(4);
+				else{
+					laMusica->stopCanal(0);
+					laMusica->volumenSonido(Musica::cModoInmortal, 30);
+					laMusica->escucharSonido(Musica::cModoInmortal,4);
+				}*/
+				break;
+			case (Constantes::muere):
+				laMusica->escucharSonido(Musica::cMuereEnemigo,1);
 				break;
 			default:
 				cout<<"sonido desconocido"<<endl;

@@ -320,15 +320,17 @@ void Personaje::pararse(){
 	}
 }*/
 
-void Personaje::verSiBalasPegan(Enemigo* malo){
+bool Personaje::verSiBalasPegan(Enemigo* malo){
+	bool murioAlguien = false;
 	int i=0;
 	while (i<bullets.size()){
 		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
 			puntaje += malo->obtenerPuntaje();
-			malo->perderVida();
+			if(malo->perderVida()) murioAlguien = true;
 			bullets.erase(bullets.begin() + i);
 		}else i++;
 	}
+	return murioAlguien; 
 }
 
 void Personaje::dibujarBalas(SDL_Renderer* renderer){

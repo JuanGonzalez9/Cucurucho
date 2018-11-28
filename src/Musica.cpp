@@ -10,7 +10,7 @@
 // ---- CONSTRUCTOR ----
 Musica::Musica() {
 	Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048);
-	Mix_AllocateChannels(4);
+	Mix_AllocateChannels(5);
 	setVolumenMusica(50);
 	volumenSonidos = 50;
 	musicaActual = mSinMusica;
@@ -19,7 +19,10 @@ Musica::Musica() {
 	//vMusica.push_back(cargarMusica("intro"));
 	vMusica.push_back(cargarMusica("musica1"));
 	//vMusica.push_back(cargarMusica("Aggressor")); // jefe final 1
+	vMusica.push_back(cargarMusica("musica2"));
+	vMusica.push_back(cargarMusica("musica3"));
 	vMusica.push_back(cargarMusica("modoInmortal"));
+
 
 	//--- Cargar chunks
 	// armas
@@ -38,7 +41,12 @@ Musica::Musica() {
 	vSonidos.push_back(cargarSonido("salto"));
 	vSonidos.push_back(cargarSonido("agarrarItem"));
 
+	//musica
+	
 	vSonidos.push_back(cargarSonido("modoInmortal"));
+	vSonidos.push_back(cargarSonido("musica1"));
+	vSonidos.push_back(cargarSonido("musica2"));
+	vSonidos.push_back(cargarSonido("musica3"));
 }
 
 // ------- GETTER SETTER -----
@@ -77,6 +85,14 @@ void Musica::tocarMusica(eMusica iDMusica){
 			}
 	}
 
+}
+
+bool Musica::estaSonandoCanal(int canal){
+	return Mix_Playing(canal);
+}
+
+void Musica::stopCanal(int canal){
+	Mix_HaltChannel(canal);
 }
 
 void Musica::pararMusica(){
