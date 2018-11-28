@@ -93,6 +93,26 @@ void EntidadDibujable::retrocederOrigen(int velocidad){
 	rectOrigen.x -= velocidad;
 }
 
+int EntidadDibujable::getRectDestX(){
+	return(rectDestino.x);
+}
+
+void EntidadDibujable::increaseRectDestX(int x){
+	rectDestino.x +=x;
+}
+
+int EntidadDibujable::getRectDestY(){
+	return(rectDestino.y);
+}
+
+void EntidadDibujable::increaseRectDestY(int y){
+	rectDestino.y +=y;
+}
+
+
+
+
+
 bool EntidadDibujable::collision(SDL_Rect rect1,SDL_Rect rect2){
 	if(rect1.y >= rect2.y + rect2.h)
 		return false;

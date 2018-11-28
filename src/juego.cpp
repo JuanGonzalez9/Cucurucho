@@ -113,9 +113,9 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	vectorEnemigos.push_back(nuevoEnemigo);
 	*/
 
-	this->cargarEnemigosNivel1(8);
-	this->cargarEnemigosNivel2(8);
-	this->cargarEnemigosNivel3(8);
+	this->cargarEnemigosNivel1(this->obtenerCantidadDeEnemigos(1));
+	this->cargarEnemigosNivel2(this->obtenerCantidadDeEnemigos(2));
+	this->cargarEnemigosNivel3(this->obtenerCantidadDeEnemigos(3));
 	///////////////////////////////////////////////////////////
 
 	//CARGO LOS ICONOS DE VIDAS///////////////////////////
@@ -176,8 +176,18 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	gameover4.obtenerTextura("//configuracion//items//gameoverhud//sprite", renderer);
 	/////////////////////////////////////////////////
 
+	//Cargo carteles
+	cartelLv1.setRectOrigen(0,0,210,120);
+	cartelLv1.setRectDestino(64,200,210,120);
+	cartelLv1.obtenerTextura("//configuracion//items//cartel1//sprite", renderer);
 
+	cartelLv2.setRectOrigen(0,0,210,120);
+	cartelLv2.setRectDestino(110,430,210,120);
+	cartelLv2.obtenerTextura("//configuracion//items//cartel2//sprite", renderer);
 
+	cartelLv3.setRectOrigen(0,0,210,120);
+	cartelLv3.setRectDestino(100,180,210,120);
+	cartelLv3.obtenerTextura("//configuracion//items//cartel3//sprite", renderer);
 
 	//jefes default
 
@@ -540,6 +550,14 @@ void juego::manejar_eventos ()
 		}
 		/////////////////////////////////////////////////////
 		coordenada +=d3;
+
+		if((nivel==1)&&(cartelLv1.getRectDestX()>=-210)){
+			cartelLv1.increaseRectDestX(-d3);
+		}
+		if((nivel==3)&&(cartelLv3.getRectDestX()>=-210)){
+			cartelLv3.increaseRectDestX(-d3);
+		}
+
 
 	}else{
 		//esto es lo que pasa si el fondo no scrollea.
@@ -1063,6 +1081,11 @@ void juego::actualizar ()
 			balasEnemigas[i]->empujarAtras(maxVel, nivel);
 		}
 		////////////////////////////////////////////////
+
+		if((nivel==2)&&(cartelLv2.getRectDestY()>=600)){
+			cartelLv2.increaseRectDestY(maxVel);
+		}
+
 		coordenada -=maxVel;
 
 		fondo1.avanzarOrigenY(maxVel/3);
@@ -1816,6 +1839,19 @@ void juego::dibujar ()
 		else{
 			enemigoNivel1->~Enemigo(); // Esto no libera memoria
 		}
+	}
+
+	//dibujo carteles
+	if((nivel==1)&&(cartelLv1.getRectDestX()>=-210)){
+		cartelLv1.dibujar(renderer);
+	}
+
+	if((nivel==2)&&(cartelLv2.getRectDestY()>=600)){
+		cartelLv2.dibujar(renderer);
+	}
+
+	if((nivel==3)&&(cartelLv3.getRectDestX()>=-210)){
+		cartelLv3.dibujar(renderer);
 	}
 
 	//dibujar enemigos

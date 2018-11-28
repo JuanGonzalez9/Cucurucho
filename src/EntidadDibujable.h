@@ -30,6 +30,10 @@ public:
 	void setRectOrigen(int x,int y,int w,int h);
 	void setRectDestino(int x,int y,int w,int h);
 	void setPos(int x,int y);
+	int getRectDestX();
+	int getRectDestY();
+	void increaseRectDestX(int x);
+	void increaseRectDestY(int y);
 
 
 	// METODOS

@@ -5,9 +5,9 @@ R"(<?xml version="1.0"?>
   </debug>
   <cantidad_jugadores>1</cantidad_jugadores>
   <cantidad_enemigos>
-  	<nivel_1>41</nivel_1>
-  	<nivel_2>42</nivel_2>
-  	<nivel_3>43</nivel_3>
+  	<nivel_1>12</nivel_1>
+  	<nivel_2>13</nivel_2>
+  	<nivel_3>14</nivel_3>
   </cantidad_enemigos>
   <dialogo>
     <logo_c>imagenes/logo_c.png</logo_c>
@@ -123,6 +123,15 @@ R"(<?xml version="1.0"?>
     <gameoverhud>
       <sprite>imagenes/gameover.png</sprite>
     </gameoverhud>
+    <cartel1>
+      <sprite>imagenes/cartel1.png</sprite>
+    </cartel1>
+    <cartel2>
+      <sprite>imagenes/cartel2.png</sprite>
+    </cartel2>
+    <cartel3>
+      <sprite>imagenes/cartel3.png</sprite>
+    </cartel3>
   </items>
   <plataformas>
     <piedra>

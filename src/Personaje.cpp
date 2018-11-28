@@ -477,7 +477,7 @@ void Personaje::refreshBullets(){
 
 bool Personaje::puedeDisparar(){
 
-	if(shootTimer <= 0)
+	if((shootTimer <= 0)&&(hitPoints>0))
 		return true;
 
 	return false;
