@@ -511,7 +511,7 @@ void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_venta
 
 		std::cout << "Iniciando ciclo\n";
 		int mostrando_score = 0;
-	 	while (!a.salir && (j.jugando () || mostrando_score)) {
+	 	while (!a.salir) {
 	 		if (!mostrar_ventana) {
 				cfg.esperar_vblank ();
 			}
@@ -521,6 +521,9 @@ void correr_servidor (std::string dir, unsigned short puerto, bool mostrar_venta
 
 			if (mostrando_score) {
 				mostrando_score--;
+				if (!mostrando_score && !j.jugando()) {
+					break;
+				}
 			} else {
 				// Leo de la memoria el estado de las teclas de todos los jugadores.
 				// Esta informacion se recibe del usuario en comunicar_cliente que corre en a.usuarios[i].hilo.

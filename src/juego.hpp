@@ -51,6 +51,7 @@ public:
 	int obtenerPuntaje(int jugador, bool resetear = false);
 	void serializar_puntaje (std::stringstream &ss);
 	int obtenerCantidadDeEnemigos(int nivel);
+	void terminar();
 
 protected:
 	puntajes &pts;
