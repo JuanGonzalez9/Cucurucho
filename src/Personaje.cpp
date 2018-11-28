@@ -298,7 +298,7 @@ void Personaje::pararse(){
 		estado = Quieto;
 }
 
-void Personaje::verSiBalasPegan(Enemigo* malo){
+/*void Personaje::verSiBalasPegan(Enemigo* malo){
 	/*
 	for(unsigned i=0; i<bullets.size();i++){
 		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
@@ -307,6 +307,7 @@ void Personaje::verSiBalasPegan(Enemigo* malo){
 			}
 	}
 	*/
+	/*
 	int i=0;
 	while (i<bullets.size()){
 		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
@@ -315,6 +316,17 @@ void Personaje::verSiBalasPegan(Enemigo* malo){
 			if (malo->derrotado()) {
 				puntaje = puntaje + 50;
 			}
+		}else i++;
+	}
+}*/
+
+void Personaje::verSiBalasPegan(Enemigo* malo){
+	int i=0;
+	while (i<bullets.size()){
+		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
+			puntaje += malo->obtenerPuntaje();
+			malo->perderVida();
+			bullets.erase(bullets.begin() + i);
 		}else i++;
 	}
 }

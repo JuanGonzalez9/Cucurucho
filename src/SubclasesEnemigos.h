@@ -101,7 +101,7 @@ public:
 	void tenerInvisibilidad();
 	void setMarcaPasos(int valor);
 	
-
+	int obtenerPuntaje();
 
 protected:
 	juego* j;

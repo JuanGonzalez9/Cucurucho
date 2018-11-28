@@ -56,6 +56,7 @@ public:
 	virtual string serializar();
 	virtual void setMarcaPasos(int valor);
 	bool estoyEnEscena(int x,int y,int w,int h);
+	virtual int obtenerPuntaje();
 	bool visible;
 
 protected:

@@ -282,6 +282,13 @@ void Enemigo::setMarcaPasos(int valor){
 	//SE REDEFINE EN LAS CLASES HIJAS
 }
 
+int Enemigo::obtenerPuntaje(){
+	int score=0;
+	if(vidas==1)
+		score=50;
+	return score;
+}
+
 bool Enemigo::estoyEnEscena(int x,int y,int w,int h){
 	int unCacho = 300;
 	if(coordenadaX + rectDestino.w <= x) return false;

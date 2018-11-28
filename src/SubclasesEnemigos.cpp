@@ -552,6 +552,13 @@ void MonstruoFinal::dispararMisiles(int coordenadaX,int coordenadaY, int level){
 	
 }
 
+int MonstruoFinal::obtenerPuntaje(){
+	int score=10;
+	if(vidas==1)
+		score=500;
+	return score;
+}
+
 void MonstruoFinal::tenerInmunidad(){
 	inmune = 40; //1seg de inmunidad
 }
