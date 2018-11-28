@@ -8,6 +8,7 @@
 #include "Sprite.h"
 #include <string>
 #include <iostream>
+#include "Musica.h"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ public:
 	void setMensajeDelServidor(string msj);
 	void dibujar();
 	void manejarEventos();
+	void reproducirSonidos();
 	int jugador() const;
 	void establecerPuntaje(int puntaje);
 	virtual ~JuegoCliente();
@@ -53,6 +55,8 @@ private:
 
 	vector<DatosBalaEnemiga*> vDatosBalaEnemiga;
 	vector<Bullet*> vBalaEnemiga;
+
+	Musica* laMusica;
 };
 
 #endif /* JUEGOCLIENTE_H_ */

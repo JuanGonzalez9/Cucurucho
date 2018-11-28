@@ -513,13 +513,15 @@ void Personaje::dejarDeApuntar(){
 	direccionDisparo = Centro;
 }
 
-void Personaje::saltar(){
+bool Personaje::saltar(){
 	//esto podria cambiar si tenemos estados como SaltandoYAvanzando o Saltando y otra cosa
 	//deberia decir if(esta en una plataforma)
 	if( !saltando && !grisado ){
 		velocidadY = - maximaVelocidadY;
 		saltando = true;
+		return true;
 	}
+	return false;
 }
 
 void Personaje::caer(){

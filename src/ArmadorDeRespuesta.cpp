@@ -36,6 +36,10 @@ ArmadorDeRespuesta::ArmadorDeRespuesta() {
 		puntaje[i] = aux5;
 	}
 
+	string aux6(MENSAJE_CHUNKS,'0');
+	chunks = aux6;
+	resetChunks = aux6;
+
 }
 
 // --------------- setter getter
@@ -141,6 +145,16 @@ void ArmadorDeRespuesta::setPuntaje(int pj,int puntos){
 	puntaje[pj] = pasarAStringDeTamanio(MENSAJE_PUNTAJE,puntos);
 }
 
+void ArmadorDeRespuesta::agregarChunk(Constantes::TipoChunk nuevo){
+	for(unsigned i = 0; i < chunks.length(); i++){
+		if(chunks[i] == to_string(nuevo)[0])
+			break;
+		if(chunks[i] == '0'){
+			chunks[i] = to_string(nuevo)[0];
+			break;	
+		}
+	}
+}
 
 //------------ METODOS ------------
 string ArmadorDeRespuesta::fondoToString(int f){
@@ -274,10 +288,13 @@ string ArmadorDeRespuesta::dameLaRespuestaPara(int jugadores, DatosPersonaje* da
 		respuesta += puntaje[i];
 	}
 
+	respuesta += chunks;
+
 	strBalas = resetBalas;
 	strBalasEnemigas = resetBalasEnemigas;
 	mensajeEnemigo = resetEnemigos;
 	mensajeItems = resetItems;	
+	chunks = resetChunks;
 
 	return respuesta;
 

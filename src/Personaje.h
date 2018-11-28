@@ -88,7 +88,7 @@ public:
 	void desgrisar(Plataformas plataformas, int nivel);
 
 	//ANIMACIONES
-	void saltar();
+	bool saltar();
 	void avanzar();
 	void retroceder();
 	void agacharse();

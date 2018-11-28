@@ -90,6 +90,9 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 	etiqueta_puntos.color (color);
 	etiqueta_puntos.borde (2, color_borde);
 	agregar (&etiqueta_puntos, false);
+
+	// musica
+	laMusica = new Musica();
 }
 
 void JuegoCliente::establecerPuntaje(int puntaje)
@@ -382,6 +385,45 @@ void JuegoCliente::dibujar(){
 	
 	establecerPuntaje(p.getPuntaje());
 	contenedor_principal::dibujar ();
+}
+
+void JuegoCliente::reproducirSonidos(){
+	string sonidos = p.getChunks();
+
+	for(int i = 0;i < sonidos.length();i++){
+		Constantes::TipoChunk aReproducir = (Constantes::TipoChunk) (sonidos[i] - '0');
+		
+		switch(aReproducir){
+			case (Constantes::sinChunk):
+				break;
+			case (Constantes::chunkSalto):
+				laMusica->escucharSonido(Musica::cAccionSalto,1);
+				break;
+			case (Constantes::disparaPistola):
+				laMusica->escucharSonido(Musica::cPistol,2);
+				break;
+			case (Constantes::disparaAmetralladora):
+				laMusica->escucharSonido(Musica::cAmetralladora,2);
+				break;
+			case (Constantes::disparaBazooka):
+				laMusica->escucharSonido(Musica::cBazooka,2);
+				break;
+			case (Constantes::disparaEscopeta):
+				laMusica->escucharSonido(Musica::cShotgun,2);
+				break;
+			case (Constantes::modoInmortal):
+				laMusica->escucharSonido(Musica::cModoInmortal,0);
+				break;
+			default:
+				cout<<"sonido desconocido"<<endl;
+				break;
+		
+		
+		}
+
+		if(p.alguienPerdioVida()) laMusica->escucharSonido(Musica::cPierdeVidaJugador,3);
+		if(p.alguienMurio()) laMusica->escucharSonido(Musica::cMuereJugador,3);
+	}
 }
 
 JuegoCliente::~JuegoCliente() {

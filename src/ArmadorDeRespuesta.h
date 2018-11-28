@@ -41,6 +41,8 @@ public:
 	void setMensajeVidas(string vidas);
 	void setPuntaje(int pj,int puntos);
 
+	void agregarChunk(Constantes::TipoChunk);
+
 	string pasarAStringDeTamanio(int tamanio,int valor);
 	//.......metodos...........................
 	/*string dameLaRespuesta();*/
@@ -65,6 +67,9 @@ private:
 
 	vector<string> puntaje;
 	string resetPuntaje;
+
+	string chunks;
+	string resetChunks;
 
 	string fondoToString(int f);
 	string posicionToString(int p);

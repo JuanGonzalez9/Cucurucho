@@ -125,6 +125,7 @@ protected:
 	bool apretandoGodMode(const Uint8* state);
 	bool alguienQuiereGodMode();
 	void godModeParaTodos();
+	void sumarChunkDisparo(Personaje::Arma arma);
 
 
 };

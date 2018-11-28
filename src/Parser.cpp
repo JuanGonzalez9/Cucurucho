@@ -14,6 +14,11 @@ Parser::Parser() {
 	vidas = {3,3,3,3};
 	iframes.resize(4);
 	iframes = {0,0,0,0};
+
+	perdioVida = false;
+	murio = false;
+
+	chunksAReproducir = "0000";
 }
 
 void Parser::parsear(string msj,int jugadores,int numeroDeJugador){
@@ -54,6 +59,7 @@ void Parser::parsear(string msj,int jugadores,int numeroDeJugador){
 	parsearBalasEnemigas(msj);
 	parsearVidas(msj);
 	parsearPuntaje(msj,numeroDeJugador);
+	parsearChunks(msj);
 }
 
 void Parser::parsearEnemigos(string msj){
@@ -145,8 +151,18 @@ void Parser::parsearVidas(string msj){
 
 	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS + MENSAJE_BALAS_ENEMIGAS;
 
+	perdioVida = false;
+	murio = false;
+
 	for(int j = 0; j < iframes.size(); j++){
-		if(vidas[j] > (msj[i+j] - '0')) iframes[j] = 90;
+		if(vidas[j] > (msj[i+j] - '0')){
+			iframes[j] = 90;
+			perdioVida = true;
+		} 
+		if(vidas[j] == 1 && (msj[i+j] - '0') == 0){
+			perdioVida = false;
+			murio = true;
+		}
 	}
 
 	vidas.clear();
@@ -161,6 +177,12 @@ void Parser::parsearPuntaje(string msj,int pj){
 	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS + MENSAJE_BALAS_ENEMIGAS + MENSAJE_VIDAS;
 
 	this->puntaje = dameElInt(msj.substr(i + pj * MENSAJE_PUNTAJE,MENSAJE_PUNTAJE));
+}
+
+void Parser::parsearChunks(string msj){
+	int i = 13 + RESPUESTA_PERSONAJE * cantJugadores + MENSAJE_CANT_BALAS * 4 + TAMANIO_POS_BALAS * MAX_BALAS + RESPUESTA_ENEMIGO + MENSAJE_ENEMIGOS + MENSAJE_ITEMS + MENSAJE_BALAS_ENEMIGAS + MENSAJE_VIDAS + (MENSAJE_PUNTAJE * 4);
+
+	this->chunksAReproducir = msj.substr(i , MENSAJE_CHUNKS);
 }
 
 DatosPersonaje* Parser::dameAlBobyNumero(int numeroDePersonaje){
@@ -336,6 +358,14 @@ int Parser::getIframes(int pj){
 	return iframes[pj - 1];
 }
 
+bool Parser::alguienPerdioVida(){
+	return perdioVida;
+}
+
+bool Parser::alguienMurio(){
+	return murio;
+}
+
 void Parser::refreshIframes(){
 	for(int i = 0; i < iframes.size();i++){
 		if(iframes[i] > 0) iframes[i]--;
@@ -346,6 +376,9 @@ int Parser::getPuntaje(){
 	return puntaje;
 }
 
+string Parser::getChunks(){
+	return chunksAReproducir;
+}
 Parser::~Parser() {
 }
 

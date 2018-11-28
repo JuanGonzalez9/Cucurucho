@@ -103,6 +103,7 @@ void comunicar_servidor (datos_comunicacion *dc, datos_sincronizacion *ds, Juego
 			string respuestaSinParsear(respuestaServidor);
 			juego->setMensajeDelServidor(respuestaSinParsear);
 			juego->manejarEventos();
+			juego->reproducirSonidos();
 			juego->dibujar();
 			juego->presentar();
 		}

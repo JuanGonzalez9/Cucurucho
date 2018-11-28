@@ -40,7 +40,10 @@ public:
 	vector<int> getCantBalas();
 	int getVidaPersonaje(int pj);
 	int getIframes(int pj);
+	bool alguienPerdioVida();
+	bool alguienMurio();
 	int getPuntaje();
+	string getChunks();
 
 	//..........METODO........
 	void parsear(string msj,int jugadores,int numeroDeJugador);
@@ -79,10 +82,15 @@ private:
 
 	vector<int> vidas;
 	void parsearVidas(string msj);
+	bool perdioVida;
+	bool murio;
 
 	vector<int> iframes;
 	int puntaje;
 	void parsearPuntaje(string msj,int pj);
+
+	string chunksAReproducir;
+	void parsearChunks(string msj);
 
 };
 

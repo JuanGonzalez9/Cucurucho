@@ -621,7 +621,7 @@ void juego::manejar_eventos ()
 	}
 	else{
 		if(cliente->quiereAccion(Constantes::salto)){
-			boby.saltar();	
+			if(boby.saltar() && !boby.muerto()) armador->agregarChunk(Constantes::chunkSalto);	
 		}
 	}
 
@@ -629,22 +629,26 @@ void juego::manejar_eventos ()
 		boby2.bajar();		
 	}
 	else{
-		if(cliente2->quiereAccion(Constantes::salto))
-				boby2.saltar();
+		if(cliente2->quiereAccion(Constantes::salto)){
+			if(boby2.saltar() && !boby2.muerto()) armador->agregarChunk(Constantes::chunkSalto);
+			
+		}
 	}
 	if(cliente3->quiereAccion(Constantes::salto) && cliente3->quiereAccion(Constantes::abajo) && !boby3.estaSaltando()){
 		boby3.bajar();		
 	}
 	else{
-		if(cliente3->quiereAccion(Constantes::salto))
-				boby3.saltar();
+		if(cliente3->quiereAccion(Constantes::salto)){
+			if(boby3.saltar() && !boby3.muerto()) armador->agregarChunk(Constantes::chunkSalto);
+		}
 	}
 	if(cliente4->quiereAccion(Constantes::salto) && cliente4->quiereAccion(Constantes::abajo) && !boby4.estaSaltando()){
 		boby4.bajar();		
 	}
 	else{
-		if(cliente4->quiereAccion(Constantes::salto))
-				boby4.saltar();
+		if(cliente4->quiereAccion(Constantes::salto)){
+			if(boby4.saltar() && !boby4.muerto()) armador->agregarChunk(Constantes::chunkSalto);
+		}
 	}
 
 
@@ -695,6 +699,8 @@ void juego::manejar_eventos ()
 			if(!boby.estaMirandoALaDerecha())
 				posBala = -10;
 			boby.disparar(posBala,direccionDeBala*10,textura_bala);
+			Personaje::Arma arma = (Personaje::Arma) boby.getArma();
+			sumarChunkDisparo(arma);
 		}
 	}
 
@@ -711,6 +717,8 @@ void juego::manejar_eventos ()
 			if(!boby2.estaMirandoALaDerecha())
 				posBala = -10;
 			boby2.disparar(posBala,direccionDeBala*10,textura_bala2);
+			Personaje::Arma arma = (Personaje::Arma) boby2.getArma();
+			sumarChunkDisparo(arma);
 		}
 	}
 
@@ -727,6 +735,8 @@ void juego::manejar_eventos ()
 			if(!boby3.estaMirandoALaDerecha())
 				posBala = -10;
 			boby3.disparar(posBala,direccionDeBala*10,textura_bala3);
+			Personaje::Arma arma = (Personaje::Arma) boby3.getArma();
+			sumarChunkDisparo(arma);
 		}
 	}
 
@@ -743,6 +753,8 @@ void juego::manejar_eventos ()
 			if(!boby4.estaMirandoALaDerecha())
 				posBala = -10;
 			boby4.disparar(posBala,direccionDeBala*10,textura_bala4);
+			Personaje::Arma arma = (Personaje::Arma) boby4.getArma();
+			sumarChunkDisparo(arma);
 		}
 	}
 
@@ -827,6 +839,7 @@ void juego::manejar_eventos ()
 		else{*/
 			printf("ACTIVANDO GOD MODE\n");
 			godModeParaTodos();
+			armador->agregarChunk(Constantes::modoInmortal);
 			SDL_Delay(50);
 
 		//}
@@ -906,6 +919,25 @@ void juego::actualizarNivel1(){
 	boby4.setCoordenadaX(0+650);
 	boby4.setCoordenadaY(3600-(600-400));
 	
+}
+
+void juego::sumarChunkDisparo(Personaje::Arma arma){
+	switch(arma){
+		case (Personaje::Pistola):
+			armador->agregarChunk(Constantes::disparaPistola);
+			break;
+		case (Personaje::Ametralladora):
+			armador->agregarChunk(Constantes::disparaAmetralladora);
+			break;
+		case (Personaje::Escopeta):
+			armador->agregarChunk(Constantes::disparaEscopeta);
+			break;
+		case (Personaje::Bazooka):
+			armador->agregarChunk(Constantes::disparaBazooka);
+			break;
+		default:
+			break;
+	}
 }
 
 void juego::actualizarNivel2(){
