@@ -312,7 +312,6 @@ void Turret::setMarcaPasos(int valor){
 	if(valor - 1 < 0) marcapasos = 11;
 	else marcapasos = valor - 1;
 	
-	cout<<marcapasos<<endl;
 	rectOrigen.x = marcapasos * 34;
 }
 
