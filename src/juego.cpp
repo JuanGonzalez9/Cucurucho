@@ -191,17 +191,17 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 
 	//jefes default
 
-	enemigoNivel1 = new MonstruoFinalNivel1(this,8000-252,150,5);
+	enemigoNivel1 = new MonstruoFinalNivel1(this,8000-252,150,15);
 	enemigoNivel1->obtenerTextura("//configuracion//personajes//enemigo1//sprite", renderer);
 	//((MonstruoFinalNivel1*) enemigoNivel1)->posicionar();
 	vectorEnemigos.push_back(enemigoNivel1);
 
-	enemigoNivel2 = new MonstruoFinalNivel2(this,230,80,7);
+	enemigoNivel2 = new MonstruoFinalNivel2(this,230,80,30);
 	enemigoNivel2->obtenerTextura("//configuracion//personajes//enemigo2//sprite", renderer);
 	vectorEnemigos.push_back(enemigoNivel2);
 
 
-	enemigoNivel3 = new MonstruoFinalNivel3(this,8000-280,150,10);
+	enemigoNivel3 = new MonstruoFinalNivel3(this,8000-280,150,50);
 	enemigoNivel3->obtenerTextura("//configuracion//personajes//enemigo3//sprite", renderer);
 	vectorEnemigos.push_back(enemigoNivel3);
 
@@ -1889,11 +1889,26 @@ void juego::dibujar ()
 	// Copio el resultado
 	SDL_RenderCopy (renderer, textura_objetivo, nullptr, nullptr);
 
-	if(nivel == 1 && boby.estaCercaDelFinalDelNivel1()){
-		if(!enemigoNivel1->derrotado())
-			enemigoNivel1->dibujar(renderer);
-		else{
-			enemigoNivel1->~Enemigo(); // Esto no libera memoria
+	if(nivel == 1){
+		if(enemigoNivel1->derrotado()){
+			//delete(enemigoNivel1);
+			cambioNivel=true; 
+		}
+	}
+	if(nivel == 2){
+		if(enemigoNivel2->derrotado()){
+			//delete(enemigoNivel2);
+			cambioNivel=true; 
+		}
+	}
+
+	if(nivel == 3){
+		if(enemigoNivel3->derrotado()){
+			//delete(enemigoNivel2);
+			for (int i = 0; i < num_jugadores; i++){
+				pts.puntos (i, nivel-1, obtenerPuntaje(i, true));
+			}
+			termino=true;
 		}
 	}
 

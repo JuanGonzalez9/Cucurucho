@@ -440,7 +440,7 @@ void MonstruoFinal::dispararBalasFuego(int coordenadaX,int coordenadaY,int level
 
 	if (level == 2){
 		vel_x=3;
-		vel_y=-5;
+		vel_y=0;
 	}
 	else{
 		vel_x=-1;
@@ -450,7 +450,7 @@ void MonstruoFinal::dispararBalasFuego(int coordenadaX,int coordenadaY,int level
 	for(int i = 0; i<6 ; i++){
 		vel_x+=(-i);
 		vel_y++;		
-		nuevaBala = new Bullet(coordenadaX,coordenadaY,vel_x,vel_y,2,100);
+		nuevaBala = new Bullet(coordenadaX,coordenadaY,vel_x,vel_y,4,100);
 		nuevaBala->obtenerTextura("//configuracion//items//bala_fuego//sprite", j->dameElRender());
 		nuevaBala->setTipoBala(Constantes::balaFuego);
 		nuevaBala->actualizarRectOrigenOriginal();
@@ -478,8 +478,14 @@ void MonstruoFinal::dispararBalasFuego2(int coordenadaX,int coordenadaY, int lev
 
 	for(int i = 0; i<6 ; i++){
 		//vel_x+=(-i);
-		vel_y--;		
-		nuevaBala = new Bullet(coordenadaX,coordenadaY,vel_x,vel_y,2,100);
+		if (level == 2){
+			vel_y++;
+		}
+		else{
+			vel_y--;
+		} 
+
+		nuevaBala = new Bullet(coordenadaX,coordenadaY,vel_x,vel_y,4,100);
 		nuevaBala->obtenerTextura("//configuracion//items//bala_fuego_2//sprite", j->dameElRender());
 		nuevaBala->setTipoBala(Constantes::balaFuego2);
 		nuevaBala->actualizarRectOrigenOriginal();
@@ -493,6 +499,7 @@ void MonstruoFinal::dispararBalasFuego2(int coordenadaX,int coordenadaY, int lev
 
 void MonstruoFinal::dispararMisiles(int coordenadaX,int coordenadaY, int level){
 	//OJO CON TOCAR VALORES... O NO SE PARSEARAN...
+	
 	int vel_x;
 	int vel_y;
 	Bullet * nuevaBala;
@@ -509,7 +516,7 @@ void MonstruoFinal::dispararMisiles(int coordenadaX,int coordenadaY, int level){
 	for(int i = 0; i<6 ; i++){
 		
 		vel_y++;		
-		nuevaBala = new Bullet(coordenadaX,coordenadaY+(i*4),vel_x,vel_y,2,100);
+		nuevaBala = new Bullet(coordenadaX,coordenadaY+(i*4),vel_x,vel_y,4,100);
 		if(level==2){
 			vel_x--;
 			nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
@@ -525,30 +532,7 @@ void MonstruoFinal::dispararMisiles(int coordenadaX,int coordenadaY, int level){
 			j->agregarBalaEnemigo(nuevaBala);
 		}
 	}
-	/*
 	
-	Bullet * nuevaBala;
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
-	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
-	nuevaBala->actualizarRectOrigenOriginal();
-	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
-	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
-	nuevaBala->actualizarRectOrigenOriginal();
-	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
-	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
-	nuevaBala->actualizarRectOrigenOriginal();
-	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
-	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
-	nuevaBala->actualizarRectOrigenOriginal();
-	j->agregarBalaEnemigo(nuevaBala);
-	nuevaBala = new Bullet(coordenadaX,coordenadaY,-5,0,2,100);
-	nuevaBala->obtenerTextura("//configuracion//items//bala_misil//sprite", j->dameElRender());
-	nuevaBala->actualizarRectOrigenOriginal();
-	j->agregarBalaEnemigo(nuevaBala);
-	*/
 	
 }
 
@@ -559,12 +543,18 @@ int MonstruoFinal::obtenerPuntaje(){
 	return score;
 }
 
+void MonstruoFinal::setMarcaPasos(int valor){
+	
+}
+
+
+
 void MonstruoFinal::tenerInmunidad(){
-	inmune = 40; //1seg de inmunidad
+	inmune = 10; //1seg de inmunidad
 }
 
 void MonstruoFinal::tenerInvisibilidad(){
-	invisible = 40; // en juego evitar que se dibuje
+	invisible = 10; // en juego evitar que se dibuje
 	visible = false;
 }
 
@@ -581,10 +571,6 @@ void MonstruoFinal::explotar(){
 //void MonstruoFinal::hazLoTuyo(){
 //	
 //}
-
-void MonstruoFinal::setMarcaPasos(int valor){
-	//no hace nada
-}
 
 MonstruoFinal::~MonstruoFinal(){}
 
@@ -637,6 +623,15 @@ void MonstruoFinalNivel1::hazLoTuyo(){
 		}
 	}
 
+	if (contador_marcos % 30 == 0) {
+        marco++;
+        rectOrigen.x = marco*(160);
+        if (marco > 2) {
+        	rectOrigen.x = 0;
+            marco = 0;
+        }
+    }
+
 
 } 
 
@@ -646,17 +641,17 @@ void MonstruoFinalNivel2::hazLoTuyo(){
 		contador_marcos++;
 		if(estado==comenzo){
 			estado=disparando_fuego;
-			dispararBalasFuego(350,200,2);
+			dispararBalasFuego(400,160,2);
 			
 		}
 		if(estado==disparando_fuego && contador_marcos>200){
 			estado=disparando_fuego2;
-			dispararBalasFuego2(350,150,2);
+			dispararBalasFuego2(400,160,2);
 			
 		}
 		if(estado==disparando_fuego2 && contador_marcos>300){
 			estado=disparando_misiles;
-			dispararMisiles(350,200,2);
+			dispararMisiles(400,160,2);
 			
 		}
 		if(estado==disparando_misiles && contador_marcos>400){
@@ -665,6 +660,21 @@ void MonstruoFinalNivel2::hazLoTuyo(){
 			
 		}
 	}
+
+	if (contador_marcos % 30 == 0) {
+        marco++;
+        rectOrigen.y = marco*(114);
+        rectOrigen.h = 114;
+        
+
+        if (marco > 2) {
+        	rectOrigen.y = 4;
+            marco = 0;
+            rectOrigen.h = 110;
+        }
+
+    }
+
 }
 
 void MonstruoFinalNivel3::hazLoTuyo(){
@@ -695,18 +705,52 @@ void MonstruoFinalNivel3::hazLoTuyo(){
 			contador_marcos=0;
 			estado=comenzo;
 		}
+
+
 	}
+
+	if (contador_marcos % 20 == 0) {
+        marco++;
+        rectOrigen.y = marco*(190);
+        if (marco > 2) {
+        	rectOrigen.y = 0;
+            marco = 0;
+        }
+
+    }
+}
+
+void MonstruoFinalNivel1::setMarcaPasos(int valor){
+	
+}
+
+void MonstruoFinalNivel2::setMarcaPasos(int valor){
+	
+}
+
+void MonstruoFinalNivel3::setMarcaPasos(int valor){
+	
 }
 
 
+
 MonstruoFinalNivel1::MonstruoFinalNivel1(juego* j,int x, int y, int life):
-MonstruoFinal( j,x,  y, life, 7300, 1 ){}
+MonstruoFinal( j,x,  y, life, 7300, 1 ){
+	rectOrigen = {0,0,160,180};
+	rectDestino = {x,y,252,240};
+}
 
 MonstruoFinalNivel2::MonstruoFinalNivel2(juego* j,int x, int y, int life):
-MonstruoFinal(j, x, y, life, 115, 2){}
+MonstruoFinal(j, x, y, life, 0, 2){
+	rectOrigen = {0,4,280,110};
+	rectDestino = {(800-280*2)/2,y,280*2,114*2};
+}
 
 MonstruoFinalNivel3::MonstruoFinalNivel3(juego* j,int x, int y, int life):
-MonstruoFinal( j, x,  y,  life , 7400 , 3){}
+MonstruoFinal( j, x,  y,  life , 7400 , 3){
+	rectOrigen = {0,0,150,190};
+	rectDestino = {x,y,150*2,190*2};
+}
 
 MonstruoFinalNivel1::~MonstruoFinalNivel1(){}
 MonstruoFinalNivel2::~MonstruoFinalNivel2(){}
@@ -716,7 +760,6 @@ string MonstruoFinalNivel1::serializar(){
 
 
 	string serial = to_string(Constantes::MonstruoNivel1);
-	serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marcapasos);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 	//rectDestino.x < 1 ? 1 : rectDestino.x
@@ -725,30 +768,16 @@ string MonstruoFinalNivel1::serializar(){
 
 string MonstruoFinalNivel2::serializar(){
 	string serial = to_string(Constantes::MonstruoNivel2);
-	serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marcapasos);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
-	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
+	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,0);
 
 	return serial;
 }
 
 string MonstruoFinalNivel3::serializar(){
 	string serial = to_string(Constantes::MonstruoNivel3);
-	serial += Utils::pasarAStringDeTamanio(MARCAPASOS,marcapasos);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.x);
 	serial += Utils::pasarAStringDeTamanio(RESPUESTA_POSY,rectDestino.y);
 
 	return serial;
-}
-
-void MonstruoFinalNivel1::setMarcaPasos(int valor){
-	//no hace nada
-}
-
-void MonstruoFinalNivel2::setMarcaPasos(int valor){
-	//no hace nada
-}
-
-void MonstruoFinalNivel3::setMarcaPasos(int valor){
-	//no hace nada
 }
