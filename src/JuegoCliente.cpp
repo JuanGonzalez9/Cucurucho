@@ -290,14 +290,11 @@ void JuegoCliente::dibujarEnemigos(){
 		//cout<<"(x,y) "<<x<<" , "<<y<<endl;
 		//if(tipo == Constantes::turret || tipo == Constantes::marcianito){
 			vEnemigos[tipo-1]->setMarcaPasos(marcaPasos);
-<<<<<<< HEAD
 		//}
-=======
-		}
 		if(tipo == Constantes::alien){
 			((alien*)vEnemigos[tipo-1])->actualizar();
 		}
->>>>>>> cambio
+
 		vEnemigos[tipo-1]->setPos(x,y);
 		vEnemigos[tipo-1]->dibujar(renderer);
 	}
