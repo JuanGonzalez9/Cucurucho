@@ -1,4 +1,5 @@
 #include "JuegoCliente.h"
+#include "alien.hpp"
 
 extern "C"
 {
@@ -44,6 +45,10 @@ JuegoCliente::JuegoCliente(ventana &v, int cantidadJugadores,int numeroDeJugador
 
 	nuevoEnemigo = new Paracaidas(600,-86,1,2000,1);
 	nuevoEnemigo->obtenerTextura("//configuracion//personajes//parachute//sprite", renderer);
+	vEnemigos.push_back(nuevoEnemigo);
+
+	nuevoEnemigo = new alien(this, 400, 245, 1, 0, 1);
+	//((alien*)nuevoEnemigo)->limitar(300, 500);
 	vEnemigos.push_back(nuevoEnemigo);
 
 	//Texturas Items
@@ -285,7 +290,14 @@ void JuegoCliente::dibujarEnemigos(){
 		//cout<<"(x,y) "<<x<<" , "<<y<<endl;
 		//if(tipo == Constantes::turret || tipo == Constantes::marcianito){
 			vEnemigos[tipo-1]->setMarcaPasos(marcaPasos);
+<<<<<<< HEAD
 		//}
+=======
+		}
+		if(tipo == Constantes::alien){
+			((alien*)vEnemigos[tipo-1])->actualizar();
+		}
+>>>>>>> cambio
 		vEnemigos[tipo-1]->setPos(x,y);
 		vEnemigos[tipo-1]->dibujar(renderer);
 	}
