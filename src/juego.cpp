@@ -1238,6 +1238,7 @@ void juego::actualizar ()
 		i=0;
 		while (i<balasEnemigas.size()){
 			if (collision(boby.getRectaDestino(),balasEnemigas[i]->getRectaDestino())){
+				delete balasEnemigas[i];
 				balasEnemigas.erase(balasEnemigas.begin() + i);
 				boby.perderVida();
 			}else i++;
@@ -1271,6 +1272,7 @@ void juego::actualizar ()
 		i=0;
 		while (i<balasEnemigas.size()){
 			if (collision(boby2.getRectaDestino(),balasEnemigas[i]->getRectaDestino())){
+				delete balasEnemigas[i];
 				balasEnemigas.erase(balasEnemigas.begin() + i);
 				boby2.perderVida();
 			}else i++;
@@ -1302,6 +1304,7 @@ void juego::actualizar ()
 		i=0;
 		while (i<balasEnemigas.size()){
 			if (collision(boby3.getRectaDestino(),balasEnemigas[i]->getRectaDestino())){
+				delete balasEnemigas[i];
 				balasEnemigas.erase(balasEnemigas.begin() + i);
 				boby3.perderVida();
 			}else i++;
@@ -1333,6 +1336,7 @@ void juego::actualizar ()
 		i=0;
 		while (i<balasEnemigas.size()){
 			if (collision(boby4.getRectaDestino(),balasEnemigas[i]->getRectaDestino())){
+				delete balasEnemigas[i];
 				balasEnemigas.erase(balasEnemigas.begin() + i);
 				boby4.perderVida();
 			}else i++;
@@ -1486,8 +1490,10 @@ void juego::actualizar ()
 	//borro las balas que exceden su rango para que no sigan hasta el infinito
 	i=0;
 	while (i<balasEnemigas.size()){
-		if (balasEnemigas[i]->getDuracion() ==0)
+		if (balasEnemigas[i]->getDuracion() ==0){
+			delete balasEnemigas[i];
 			balasEnemigas.erase(balasEnemigas.begin() + i);
+		}
 		else i++;
 	}
 
