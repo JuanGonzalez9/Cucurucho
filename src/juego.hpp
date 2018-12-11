@@ -102,7 +102,7 @@ protected:
 	//iconos de vidas
 	EntidadDibujable vida11, vida12, vida13, vida21, vida22, vida23, vida31, vida32, vida33;
 	EntidadDibujable vida41, vida42, vida43, gameover1, gameover2, gameover3, gameover4;
-
+	EntidadDibujable godmode1, godmode2, godmode3, godmode4;
 	EntidadDibujable cartelLv1, cartelLv2, cartelLv3;
 
 	void dibujarVidas();

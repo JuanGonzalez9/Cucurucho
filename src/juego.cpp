@@ -177,6 +177,22 @@ juego::juego (ventana &v, int cantidadJugadores, puntajes &pts):
 	gameover4.setRectOrigen(0,0,120,40);
 	gameover4.setRectDestino(675,555,120,40);
 	gameover4.obtenerTextura("//configuracion//items//gameoverhud//sprite", renderer);
+
+	godmode1.setRectOrigen(0,0,120,40);
+	godmode1.setRectDestino(5,5,120,40);
+	godmode1.obtenerTextura("//configuracion//items//godmodehud//sprite", renderer);
+
+	godmode2.setRectOrigen(0,0,120,40);
+	godmode2.setRectDestino(675,5,120,40);
+	godmode2.obtenerTextura("//configuracion//items//godmodehud//sprite", renderer);
+
+	godmode3.setRectOrigen(0,0,120,40);
+	godmode3.setRectDestino(5,555,120,40);
+	godmode3.obtenerTextura("//configuracion//items//godmodehud//sprite", renderer);
+
+	godmode4.setRectOrigen(0,0,120,40);
+	godmode4.setRectDestino(675,555,120,40);
+	godmode4.obtenerTextura("//configuracion//items//godmodehud//sprite", renderer);
 	/////////////////////////////////////////////////
 
 	//Cargo carteles
@@ -1863,11 +1879,14 @@ void juego::dibujarVidas(){
 
 	nrovidas=boby.obtenerVidas();
 	if(nrovidas>0){
-		vida11.dibujar(renderer);
-		if(nrovidas>1)
-			vida12.dibujar(renderer);
-		if(nrovidas>2)
-			vida13.dibujar(renderer);
+		if(!boby.esGOD()){
+			vida11.dibujar(renderer);
+			if(nrovidas>1)
+				vida12.dibujar(renderer);
+			if(nrovidas>2)
+				vida13.dibujar(renderer);
+		}else
+			godmode1.dibujar(renderer);
 	} else{
 		gameover1.dibujar(renderer);
 	}
@@ -1875,11 +1894,31 @@ void juego::dibujarVidas(){
 	if(num_jugadores>=2){
 		nrovidas=boby2.obtenerVidas();
 			if(nrovidas>0){
-				vida21.dibujar(renderer);
-			if(nrovidas>1)
-				vida22.dibujar(renderer);
-			if(nrovidas>2)
-				vida23.dibujar(renderer);
+				if(!boby2.esGOD()){
+					vida21.dibujar(renderer);
+				if(nrovidas>1)
+					vida22.dibujar(renderer);
+				if(nrovidas>2)
+					vida23.dibujar(renderer);
+			} else
+				godmode2.dibujar(renderer);
+		} else{
+			gameover2.dibujar(renderer);
+		}
+	}
+
+
+	if(num_jugadores>=2){
+		nrovidas=boby2.obtenerVidas();
+			if(nrovidas>0){
+				if(!boby2.esGOD()){
+					vida21.dibujar(renderer);
+				if(nrovidas>1)
+					vida22.dibujar(renderer);
+				if(nrovidas>2)
+					vida23.dibujar(renderer);
+			} else
+				godmode2.dibujar(renderer);
 		} else{
 			gameover2.dibujar(renderer);
 		}
@@ -1888,11 +1927,14 @@ void juego::dibujarVidas(){
 	if(num_jugadores>=3){
 		nrovidas=boby3.obtenerVidas();
 			if(nrovidas>0){
-				vida31.dibujar(renderer);
-			if(nrovidas>1)
-				vida32.dibujar(renderer);
-			if(nrovidas>2)
-				vida33.dibujar(renderer);
+				if(!boby3.esGOD()){
+					vida31.dibujar(renderer);
+				if(nrovidas>1)
+					vida32.dibujar(renderer);
+				if(nrovidas>2)
+					vida33.dibujar(renderer);
+			} else
+				godmode3.dibujar(renderer);
 		} else{
 			gameover3.dibujar(renderer);
 		}
@@ -1903,11 +1945,14 @@ void juego::dibujarVidas(){
 	if(num_jugadores>=4){
 		nrovidas=boby4.obtenerVidas();
 			if(nrovidas>0){
-				vida41.dibujar(renderer);
-			if(nrovidas>1)
-				vida42.dibujar(renderer);
-			if(nrovidas>2)
-				vida43.dibujar(renderer);
+				if(!boby4.esGOD()){
+					vida41.dibujar(renderer);
+				if(nrovidas>1)
+					vida42.dibujar(renderer);
+				if(nrovidas>2)
+					vida43.dibujar(renderer);
+			} else
+				godmode4.dibujar(renderer);
 		} else{
 			gameover4.dibujar(renderer);
 		}

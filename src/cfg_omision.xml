@@ -123,6 +123,9 @@ R"(<?xml version="1.0"?>
     <gameoverhud>
       <sprite>imagenes/gameover.png</sprite>
     </gameoverhud>
+    <godmodehud>
+      <sprite>imagenes/godmode.png</sprite>
+    </godmodehud>
     <cartel1>
       <sprite>imagenes/cartel1.png</sprite>
     </cartel1>
