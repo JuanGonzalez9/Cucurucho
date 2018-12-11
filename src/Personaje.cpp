@@ -298,28 +298,6 @@ void Personaje::pararse(){
 		estado = Quieto;
 }
 
-/*void Personaje::verSiBalasPegan(Enemigo* malo){
-	/*
-	for(unsigned i=0; i<bullets.size();i++){
-		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
-			malo->perderVida();
-			bullets.erase(bullets.begin() + i);
-			}
-	}
-	*/
-	/*
-	int i=0;
-	while (i<bullets.size()){
-		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
-			malo->perderVida();
-			bullets.erase(bullets.begin() + i);
-			if (malo->derrotado()) {
-				puntaje = puntaje + 50;
-			}
-		}else i++;
-	}
-}*/
-
 bool Personaje::verSiBalasPegan(Enemigo* malo){
 	bool murioAlguien = false;
 	int i=0;
@@ -327,6 +305,7 @@ bool Personaje::verSiBalasPegan(Enemigo* malo){
 		if(! malo->derrotado() && collision(bullets[i]->getRectaDestino(),malo->getRectaDestino())){
 			puntaje += malo->obtenerPuntaje();
 			if(malo->perderVida()) murioAlguien = true;
+			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
 		}else i++;
 	}
@@ -481,8 +460,10 @@ void Personaje::refreshBullets(){
 	//borro las balas que exceden su rango para que no sigan hasta el infinito
 	int i=0;
 	while (i<bullets.size()){
-		if (bullets[i]->getDuracion() ==0)
+		if (bullets[i]->getDuracion() ==0){
+			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
+		}
 		else i++;
 	}
 	if(shootTimer > 0)

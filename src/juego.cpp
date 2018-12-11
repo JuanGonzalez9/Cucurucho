@@ -1253,6 +1253,7 @@ void juego::actualizar ()
 				vectorItems[i]->perderVida();
 				pickup= vectorItems[i]->darContenido();
 				boby.cambiarArma(pickup);
+				delete vectorItems[i];
 				vectorItems.erase(vectorItems.begin() + i);
 			}else i++;
 		}
@@ -1286,6 +1287,7 @@ void juego::actualizar ()
 				vectorItems[i]->perderVida();
 				pickup= vectorItems[i]->darContenido();
 				boby2.cambiarArma(pickup);
+				delete vectorItems[i];
 				vectorItems.erase(vectorItems.begin() + i);
 			}else i++;
 		}
@@ -1318,6 +1320,7 @@ void juego::actualizar ()
 				vectorItems[i]->perderVida();
 				pickup= vectorItems[i]->darContenido();
 				boby3.cambiarArma(pickup);
+				delete vectorItems[i];
 				vectorItems.erase(vectorItems.begin() + i);
 			}else i++;
 		}
@@ -1350,6 +1353,7 @@ void juego::actualizar ()
 				vectorItems[i]->perderVida();
 				pickup= vectorItems[i]->darContenido();
 				boby4.cambiarArma(pickup);
+				delete vectorItems[i];
 				vectorItems.erase(vectorItems.begin() + i);
 			}else i++;
 		}
@@ -1429,6 +1433,7 @@ void juego::actualizar ()
 					if(dropItem==4) nuevoItem->obtenerTextura("//configuracion//items//bazooka//sprite", renderer);
 					vectorItems.push_back(nuevoItem);
 				}
+				delete vectorEnemigos[i];
 				vectorEnemigos.erase(vectorEnemigos.begin() + i);
 			}
 			else i++;
@@ -1461,8 +1466,10 @@ void juego::actualizar ()
 	//borro los que se pasaron del borde o estan derrotados
 	i=0;
 	while (i<vectorEnemigos.size()){
-		if ((vectorEnemigos[i]->pasaBorde(nivel))||(nivel>(vectorEnemigos[i]->obtenerNivelActivo()))||(vectorEnemigos[i]->derrotado()))
+		if ((vectorEnemigos[i]->pasaBorde(nivel))||(nivel>(vectorEnemigos[i]->obtenerNivelActivo()))||(vectorEnemigos[i]->derrotado())){
+			delete vectorEnemigos[i];
 			vectorEnemigos.erase(vectorEnemigos.begin() + i);
+		}
 		else i++;
 	}
 
@@ -1476,8 +1483,10 @@ void juego::actualizar ()
 	//borro los que se pasaron del borde o estan derrotados
 	i=0;
 	while (i<vectorItems.size()){
-		if (/*(vectorItems[i]->pasaBorde(nivel))||*/(nivel>(vectorItems[i]->obtenerNivelActivo()))||(vectorItems[i]->derrotado()))
+		if (/*(vectorItems[i]->pasaBorde(nivel))||*/(nivel>(vectorItems[i]->obtenerNivelActivo()))||(vectorItems[i]->derrotado())){
+			delete vectorItems[i];
 			vectorItems.erase(vectorItems.begin() + i);
+		}
 		else i++;
 	}
 
