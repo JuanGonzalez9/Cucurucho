@@ -23,6 +23,7 @@ EntidadDibujable::EntidadDibujable():
 // ------------ GETTER & SETTER----------------------------------------------
 // crearTextura
 void EntidadDibujable::obtenerTextura(const char* path,SDL_Renderer* renderer){
+	if(textura != NULL) SDL_DestroyTexture(textura);
 	textura = cfg.obtener_textura (path, renderer);
 }
 

@@ -894,6 +894,7 @@ void juego::actualizarNivel1(){
 	fondo1.obtenerTextura("//configuracion//escenarios//nivel2//fondo1", renderer);
 	fondo2.obtenerTextura("//configuracion//escenarios//nivel2//fondo2", renderer);
 
+	SDL_DestroyTexture(textura_fondo3);
 	SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel2//fondo3", renderer);
 	SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
 	textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
@@ -955,6 +956,7 @@ void juego::actualizarNivel2(){
 	fondo1.obtenerTextura("//configuracion//escenarios//nivel3//fondo1", renderer);
 	fondo2.obtenerTextura("//configuracion//escenarios//nivel3//fondo2", renderer);
 
+	SDL_DestroyTexture(textura_fondo3);
 	SDL_Texture* textura_fondo3_temp = cfg.obtener_textura ("//configuracion//escenarios//nivel3//fondo3", renderer);
 	SDL_QueryTexture (textura_fondo3_temp, nullptr, nullptr, &mundo_w, &mundo_h);
 	textura_fondo3 =plataformas.crearTexturaParaElFondo(textura_fondo3_temp,renderer,mundo_w,mundo_h);
