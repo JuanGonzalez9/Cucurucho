@@ -380,10 +380,20 @@ void JuegoCliente::dibujarJugadores(){
 
 void JuegoCliente::dibujameLasVidas(){
 
-	boby.setVidas(p.getVidaPersonaje(1));
-	boby2.setVidas(p.getVidaPersonaje(2));
-	boby3.setVidas(p.getVidaPersonaje(3));
-	boby4.setVidas(p.getVidaPersonaje(4));
+	int vidas1 = p.getVidaPersonaje(1);
+	int vidas2 = p.getVidaPersonaje(2);
+	int vidas3 = p.getVidaPersonaje(3);
+	int vidas4 = p.getVidaPersonaje(4);
+
+	if(vidas1 == 4 || vidas2 == 4 || vidas3 == 4 || vidas4 == 4){
+		godModeParaTodos();
+	}
+	else{
+		boby.setVidas(vidas1);
+		boby2.setVidas(vidas2);
+		boby3.setVidas(vidas3);
+		boby4.setVidas(vidas4);
+	}
 
 	dibujarVidas();
 }

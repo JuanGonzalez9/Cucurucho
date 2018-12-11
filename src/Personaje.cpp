@@ -681,6 +681,7 @@ void Personaje::perderVida(){
 }
 
 int Personaje::obtenerVidas(){
+	if(godmode) return 4;
 	return hitPoints;
 }
 
