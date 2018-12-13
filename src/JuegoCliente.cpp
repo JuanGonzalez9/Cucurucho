@@ -389,6 +389,7 @@ void JuegoCliente::dibujameLasVidas(){
 		godModeParaTodos();
 	}
 	else{
+		godModeDesactivadoParaTodos();
 		boby.setVidas(vidas1);
 		boby2.setVidas(vidas2);
 		boby3.setVidas(vidas3);
